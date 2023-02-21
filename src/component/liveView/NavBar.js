@@ -35,7 +35,7 @@ const NavBar = ({ handleOpenSideBar, typeDisplaySide }) => {
       <Box className={classes.nav}>
         <Box
           className={`${classes.itemNav} ${
-            typeDisplaySide == "Device" ? classes.itemActive : ""
+            typeDisplaySide === "Device" ? classes.itemActive : ""
           }`}
           onClick={() => handleOpenSideBar("Device")}
         >
@@ -46,7 +46,7 @@ const NavBar = ({ handleOpenSideBar, typeDisplaySide }) => {
         </Box>
         <Box
           className={`${classes.itemNav} ${
-            typeDisplaySide == "Event" ? classes.itemActive : ""
+            typeDisplaySide === "Event" ? classes.itemActive : ""
           }`}
           onClick={() => handleOpenSideBar("Event")}
         >
@@ -57,7 +57,7 @@ const NavBar = ({ handleOpenSideBar, typeDisplaySide }) => {
         </Box>
         <Box
           className={`${classes.itemNav} ${
-            typeDisplaySide == "View" ? classes.itemActive : ""
+            typeDisplaySide === "View" ? classes.itemActive : ""
           }`}
           onClick={() => handleOpenSideBar("View")}
         >
@@ -68,7 +68,7 @@ const NavBar = ({ handleOpenSideBar, typeDisplaySide }) => {
         </Box>
         <Box
           className={`${classes.itemNav} ${
-            typeDisplaySide == "Plan" ? classes.itemActive : ""
+            typeDisplaySide === "Plan" ? classes.itemActive : ""
           }`}
           onClick={() => handleOpenSideBar("Plan")}
         >
