@@ -75,7 +75,8 @@ const useStyles = makeStyles({
   },
 });
 
-const HeaderLiveView = () => {
+const HeaderLiveView = (props) => {
+  const { setIsFullScreen } = props;
   const classes = useStyles();
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef);
@@ -336,7 +337,9 @@ const HeaderLiveView = () => {
               alt="save as"
               style={{ paddingTop: 13, width: 24 }}
             />
-            <Typography style={{ fontSize: 10 }}>Save As</Typography>
+            <Typography style={{ fontSize: 9, whiteSpace: "nowrap" }}>
+              Save As
+            </Typography>
           </Box>
           <Box
             style={{
@@ -363,7 +366,10 @@ const HeaderLiveView = () => {
           <Box>
             <SaveIcon fontSize="medium" style={{ fontSize: 32 }} />
           </Box>
-          <Box style={{ marginLeft: 10 }}>
+          <Box
+            style={{ marginLeft: 10, cursor: "pointer" }}
+            onClick={setIsFullScreen}
+          >
             <FullscreenIcon fontSize="medium" style={{ fontSize: 32 }} />
           </Box>
         </Box>
