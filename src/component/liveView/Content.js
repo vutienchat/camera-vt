@@ -3,7 +3,7 @@ import React from "react";
 const Content = () => {
   return (
     <React.Fragment>
-      <Box style={{ width: "80%" }}>H1</Box>
+      <Box style={{ width: "-webkit-fill-available" }}>H1</Box>
     </React.Fragment>
   );
 };

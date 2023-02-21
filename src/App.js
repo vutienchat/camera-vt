@@ -7,7 +7,7 @@ function App() {
   return (
     <React.Fragment>
       <Box style={{ padding: 10 }}>
-        <LiveView abc={123} />
+        <LiveView />
       </Box>
     </React.Fragment>
   );

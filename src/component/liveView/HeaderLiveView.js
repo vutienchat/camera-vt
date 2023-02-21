@@ -126,9 +126,8 @@ const HeaderLiveView = () => {
     tempData.push({
       ...tempData[taskIndx],
       id: tempData.length + 1,
-      label: `${tempData[taskIndx].label} (${
-        tempData[taskIndx].duplicate + 1
-      })`,
+      label: `${tempData[taskIndx].label} (${tempData[taskIndx].duplicate +
+        1})`,
       duplicate: 0,
       isNew: true,
     });
