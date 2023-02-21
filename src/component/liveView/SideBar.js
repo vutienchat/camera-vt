@@ -75,6 +75,9 @@ const SideBar = () => {
         {data.map((item, index) => {
           return (
             <TreeItem
+              onLabelClick={(e) => {
+                e.preventDefault();
+              }}
               key={item.id}
               label={
                 <Box

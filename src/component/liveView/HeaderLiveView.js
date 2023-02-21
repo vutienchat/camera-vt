@@ -18,6 +18,7 @@ import ModalRenameTask from "../modal/ModalRenameTask";
 import ModalDeleteTask from "../modal/ModalDeleteTask";
 import ModalCloseTask from "../modal/ModalCloseTask";
 import Clean from "../../asset/image/Mask Group 739.png";
+import SaveAs from "../../asset/image/Group 8862.png";
 
 const dataHeader = [
   { id: 1, label: "Task 1", duplicate: 0, default: 1 },
@@ -83,6 +84,7 @@ const HeaderLiveView = () => {
   const [isShowPopUpSelect, setIsShowPopupSelect] = useState(false);
   const [isShowModalRename, setIsShowModalRename] = useState(false);
   const [isShowModalDelete, setIsShowModalDelete] = useState(false);
+  const [isModalSave, setIsModalSave] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleAddNewTask = () => {
@@ -97,6 +99,7 @@ const HeaderLiveView = () => {
       id: data.length + 1,
       label: `task ${data.length + 1}`,
       isNew: true,
+      duplicate: 0,
       default: 1,
     });
     setData([...temp]);
@@ -261,13 +264,17 @@ const HeaderLiveView = () => {
               </Box>
             </Box>
           )}
-          <Box>
-            <SaveIcon fontSize="medium" style={{ paddingTop: "13px" }} />
+          <Box className="flex-col-center">
+            <SaveIcon style={{ fontSize: 32, paddingTop: 10 }} />
             <Typography style={{ fontSize: 9 }}>Save</Typography>
           </Box>
-          <Box>
-            <SaveIcon fontSize="medium" style={{ paddingTop: "13px" }} />
-            <Typography style={{ fontSize: 9 }}>Save As</Typography>
+          <Box className="flex-col-center">
+            <img
+              src={SaveAs}
+              alt="save as"
+              style={{ paddingTop: 13, width: 24 }}
+            />
+            <Typography style={{ fontSize: 10 }}>Save As</Typography>
           </Box>
           <Box
             style={{
@@ -280,22 +287,22 @@ const HeaderLiveView = () => {
             <img src={Clean} />
           </Box>
           <Box>
-            <SaveIcon fontSize="medium" />
+            <SaveIcon fontSize="medium" style={{ fontSize: 32 }} />
           </Box>
           <Box>
-            <SaveIcon fontSize="medium" />
+            <SaveIcon fontSize="medium" style={{ fontSize: 32 }} />
           </Box>
           <Box>
-            <SaveIcon fontSize="medium" />
+            <SaveIcon fontSize="medium" style={{ fontSize: 32 }} />
           </Box>
           <Box>
-            <SaveIcon fontSize="medium" />
+            <SaveIcon fontSize="medium" style={{ fontSize: 32 }} />
           </Box>
           <Box>
-            <SaveIcon fontSize="medium" />
+            <SaveIcon fontSize="medium" style={{ fontSize: 32 }} />
           </Box>
           <Box style={{ marginLeft: 10 }}>
-            <FullscreenIcon fontSize="medium" />
+            <FullscreenIcon fontSize="medium" style={{ fontSize: 32 }} />
           </Box>
         </Box>
       </Box>
@@ -344,6 +351,16 @@ const HeaderLiveView = () => {
           handleCloseTask={handleCloseTask}
           skipClose={skipClose}
           setSkipClose={setSkipClose}
+        />
+      )}
+      {isModalSave && (
+        <ModalCloseTask
+          open={isModalSave}
+          handleClose={() => {
+            setIsModalSave(false);
+          }}
+          taskIndex={taskIndex}
+          handleCloseTask={handleCloseTask}
         />
       )}
     </React.Fragment>

@@ -47,6 +47,20 @@ const LiveView = memo(() => {
     createDate: new Date(),
     lastModified: new Date(),
   });
+  const [isSideBar, setIsSideBar] = useState(false);
+  const [typeDisplaySide, setTypeDisplaySide] = useState();
+
+  const handleOpenSideBar = (type) => {
+    setIsSideBar((prev) => {
+      if (typeDisplaySide === type) {
+        setTypeDisplaySide("");
+        return !prev;
+      } else {
+        setTypeDisplaySide(type);
+        return true;
+      }
+    });
+  };
 
   return (
     <React.Fragment>
@@ -61,8 +75,11 @@ const LiveView = memo(() => {
         >
           <Content />
           <Box style={{ display: "flex" }}>
-            <NavBar />
-            <SideBar />
+            <NavBar
+              handleOpenSideBar={handleOpenSideBar}
+              typeDisplaySide={typeDisplaySide}
+            />
+            {isSideBar && <SideBar />}
           </Box>
         </Box>
       </Box>
