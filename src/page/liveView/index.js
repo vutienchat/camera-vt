@@ -1,11 +1,26 @@
 import { Box } from "@material-ui/core";
-import React from "react";
+import React, { useState } from "react";
 import Content from "../../component/liveView/Content";
 import HeaderLiveView from "../../component/liveView/HeaderLiveView";
 import NavBar from "../../component/liveView/NavBar";
 import SideBar from "../../component/liveView/SideBar";
 
 const LiveView = () => {
+  const [isSideBar, setIsSideBar] = useState(false);
+  const [typeDisplaySide, setTypeDisplaySide] = useState();
+
+  const handleOpenSideBar = (type) => {
+    setIsSideBar((prev) => {
+      if (typeDisplaySide === type) {
+        setTypeDisplaySide("");
+        return !prev;
+      } else {
+        setTypeDisplaySide(type);
+        return true;
+      }
+    });
+  };
+
   return (
     <React.Fragment>
       <Box>
@@ -19,8 +34,11 @@ const LiveView = () => {
         >
           <Content />
           <Box style={{ display: "flex" }}>
-            <NavBar />
-            <SideBar />
+            <NavBar
+              handleOpenSideBar={handleOpenSideBar}
+              typeDisplaySide={typeDisplaySide}
+            />
+            {isSideBar && <SideBar />}
           </Box>
         </Box>
       </Box>
