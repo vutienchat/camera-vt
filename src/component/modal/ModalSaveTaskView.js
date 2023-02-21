@@ -61,7 +61,7 @@ const ModalSaveTaskView = ({
             fullWidth
             variant="outlined"
             size="small"
-            value={taskIndex?.label || ""}
+            value={taskIndex.label || ""}
             onChange={(e) => {
               if (e.target.value !== " ")
                 setTaskIndex({ ...taskIndex, label: e.target.value });

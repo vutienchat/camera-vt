@@ -55,7 +55,7 @@ const useStyles = makeStyles({
   },
 });
 
-const RenderDataSide = (data) => {
+const RenderDataSide = ({ data }) => {
   const classes = useStyles();
   return (
     <TreeView
@@ -63,32 +63,33 @@ const RenderDataSide = (data) => {
       defaultExpandIcon={<ArrowRightIcon style={{ fontSize: 40 }} />}
       style={{ marginLeft: 10 }}
     >
-      {data.map((item, index) => {
-        return (
-          <TreeItem
-            onLabelClick={(e) => {
-              e.preventDefault();
-            }}
-            key={item.id}
-            label={
-              <Box
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  width: "100%",
-                }}
-              >
-                <Typography>{item.label}</Typography>
-                <MoreHorizIcon style={{ paddingRight: 24 }} />
-              </Box>
-            }
-            nodeId={String(index)}
-            className={classes.isSub}
-          >
-            {item.subData && RenderDataSide(item.subData, true)}
-          </TreeItem>
-        );
-      })}
+      {data &&
+        data.map((item, index) => {
+          return (
+            <TreeItem
+              onLabelClick={(e) => {
+                e.preventDefault();
+              }}
+              key={item.id}
+              label={
+                <Box
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: "100%",
+                  }}
+                >
+                  <Typography>{item.label}</Typography>
+                  <MoreHorizIcon style={{ paddingRight: 24 }} />
+                </Box>
+              }
+              nodeId={String(index)}
+              className={classes.isSub}
+            >
+              {item.subData && RenderDataSide(item.subData, true)}
+            </TreeItem>
+          );
+        })}
     </TreeView>
   );
 };
