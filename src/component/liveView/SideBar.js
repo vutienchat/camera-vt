@@ -1,10 +1,17 @@
-import { Box, makeStyles, Typography } from "@material-ui/core";
+import {
+  Box,
+  InputAdornment,
+  makeStyles,
+  TextField,
+  Typography,
+} from "@material-ui/core";
 import React, { useState } from "react";
 import TreeView from "@material-ui/lab/TreeView";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowRightIcon from "@material-ui/icons/ArrowRight";
 import TreeItem from "@material-ui/lab/TreeItem";
-import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+import SearchIcon from "@material-ui/icons/Search";
+import RenderDataSide from "./RenderDataSide";
 import {
   dataAiIntegrated,
   dataCameDevice,
@@ -15,6 +22,7 @@ import LocationOnOutlinedIcon from "@material-ui/icons/LocationOnOutlined";
 
 const useStyles = makeStyles({
   Sub: {
+    borderBottom: "solid 1px #e5e5e5",
     "& .MuiTreeItem-content": {
       height: 50,
       flexDirection: "row-reverse",
@@ -54,7 +62,7 @@ const useStyles = makeStyles({
     height: "40px",
     alignItems: "center",
     justifyContent: "space-around",
-    borderBlock: "solid 1px gray",
+    borderBlock: "solid 1px #e5e5e5",
     cursor: "pointer",
   },
   active: {
@@ -65,46 +73,19 @@ const useStyles = makeStyles({
 const SideBar = () => {
   const classes = useStyles();
   const [selectType, setSelectType] = useState("siteGroup");
-
-  const renderData = (data) => {
-    return (
-      <TreeView
-        defaultCollapseIcon={<ArrowDropDownIcon style={{ fontSize: 40 }} />}
-        defaultExpandIcon={<ArrowRightIcon style={{ fontSize: 40 }} />}
-      >
-        {data.map((item, index) => {
-          return (
-            <TreeItem
-              onLabelClick={(e) => {
-                e.preventDefault();
-              }}
-              key={item.id}
-              label={
-                <Box
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    width: "100%",
-                  }}
-                >
-                  <Typography>{item.label}</Typography>
-                  <MoreHorizIcon style={{ paddingRight: 24 }} />
-                </Box>
-              }
-              nodeId={String(index)}
-              className={classes.isSub}
-            >
-              {item.subData && renderData(item.subData, true)}
-            </TreeItem>
-          );
-        })}
-      </TreeView>
-    );
-  };
+  const [expanded, setExpanded] = useState([]);
 
   return (
     <React.Fragment>
-      <Box style={{ width: 400, border: "solid 1px gray" }}>
+      <Box
+        style={{
+          width: 400,
+          border: "solid 1px #e5e5e5",
+          maxHeight: 975,
+          overflowY: "auto",
+          overflowX: "hidden",
+        }}
+      >
         <TreeView
           defaultCollapseIcon={
             <ArrowDropDownIcon
@@ -117,6 +98,12 @@ const SideBar = () => {
             />
           }
           className={classes.root}
+          expanded={expanded}
+          onNodeSelect={(event, nodeId) => {
+            const expandedIdx = expanded.includes(nodeId);
+            if (expandedIdx) setExpanded([]);
+            else setExpanded([nodeId]);
+          }}
         >
           <TreeItem nodeId="1" label="Camera Device" className={classes.Sub}>
             <Box>
@@ -125,10 +112,10 @@ const SideBar = () => {
               >
                 <Box
                   style={{
-                    borderRight: "solid 1px gray",
+                    borderRight: "solid 1px #e5e5e5",
                   }}
                   className={`${classes.boxHead} ${
-                    selectType == "siteGroup" ? classes.active : ""
+                    selectType === "siteGroup" ? classes.active : ""
                   }`}
                   onClick={() => setSelectType("siteGroup")}
                 >
@@ -139,7 +126,7 @@ const SideBar = () => {
                 </Box>
                 <Box
                   className={`${classes.boxHead} ${
-                    selectType == "location" ? classes.active : ""
+                    selectType === "location" ? classes.active : ""
                   }`}
                   onClick={() => setSelectType("location")}
                 >
@@ -147,7 +134,22 @@ const SideBar = () => {
                   <Typography style={{ marginRight: 25 }}>Location</Typography>
                 </Box>
               </Box>
-              {renderData(dataCameDevice)}
+              <Box style={{ marginTop: 20 }}>
+                <TextField
+                  placeholder="Search"
+                  size="small"
+                  variant="outlined"
+                  style={{ width: 365 }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <SearchIcon style={{ color: "red" }} />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Box>
+              {<RenderDataSide data={dataCameDevice} />}
             </Box>
           </TreeItem>
           <TreeItem
@@ -155,13 +157,58 @@ const SideBar = () => {
             label="AI Integrated Device"
             className={classes.Sub}
           >
-            {renderData(dataAiIntegrated)}
+            <Box style={{ marginTop: 20 }}>
+              <TextField
+                placeholder="Search"
+                size="small"
+                variant="outlined"
+                style={{ width: 365 }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon style={{ color: "red" }} />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Box>
+            {<RenderDataSide data={dataAiIntegrated} />}
           </TreeItem>
           <TreeItem nodeId="3" label="eMAP" className={classes.Sub}>
-            {renderData(dataEMAP)}
+            <Box style={{ marginTop: 20 }}>
+              <TextField
+                placeholder="Search"
+                size="small"
+                variant="outlined"
+                style={{ width: 365 }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon style={{ color: "red" }} />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Box>
+            {<RenderDataSide data={dataEMAP} />}
           </TreeItem>
           <TreeItem nodeId="4" label="PTZ" className={classes.Sub}>
-            {renderData(dataPTZ)}
+            <Box style={{ marginTop: 20 }}>
+              <TextField
+                placeholder="Search"
+                size="small"
+                variant="outlined"
+                style={{ width: 365 }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon style={{ color: "red" }} />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Box>
+            {<RenderDataSide data={dataPTZ} />}
           </TreeItem>
         </TreeView>
       </Box>

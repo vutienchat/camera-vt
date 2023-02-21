@@ -2,24 +2,24 @@ import {
   Box,
   Button,
   Dialog,
-  DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle,
   FormControl,
   Select,
   TextField,
   Typography,
 } from "@material-ui/core";
-import React from "react";
+import React, { useState } from "react";
 
 const ModalSaveTaskView = ({
   open,
   handleClose,
   setTaskIndex,
   taskIndex,
-  handleRename,
+  handleSaveTask,
 }) => {
+  const [value, setValue] = useState();
+
   return (
     <Dialog
       open={open}
@@ -61,24 +61,41 @@ const ModalSaveTaskView = ({
             fullWidth
             variant="outlined"
             size="small"
-            value={taskIndex.label || ""}
+            value={taskIndex?.label || ""}
             onChange={(e) => {
-              if (e.target.value != " ")
+              if (e.target.value !== " ")
                 setTaskIndex({ ...taskIndex, label: e.target.value });
             }}
           />
-        </DialogContent>
-        <FormControl fullWidth size="small">
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            label="Age"
+          <DialogContentText
+            style={{
+              marginTop: "14px",
+              fontSize: "14px",
+              color: "#333",
+              fontWeight: " 600",
+              marginBottom: "10px",
+            }}
           >
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
-          </Select>
-        </FormControl>
+            Task View Group
+          </DialogContentText>
+          <FormControl fullWidth size="small">
+            <Select
+              labelId="demo-select-small"
+              id="demo-select-small"
+              variant="outlined"
+              native
+              label={null}
+              placeholder="Task View Group"
+              aria-placeholder="center"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+            >
+              <option value={10}>Ten</option>
+              <option value={20}>Twenty</option>
+              <option value={30}>Thirty</option>
+            </Select>
+          </FormControl>
+        </DialogContent>
         <Box
           style={{
             display: "flex",
@@ -88,10 +105,10 @@ const ModalSaveTaskView = ({
         >
           <Button
             onClick={() => {
-              handleRename(taskIndex.id || "");
+              handleSaveTask();
               handleClose();
             }}
-            disabled={taskIndex.label == ""}
+            disabled={taskIndex.label === ""}
             style={{
               width: "120px",
               height: "35px",

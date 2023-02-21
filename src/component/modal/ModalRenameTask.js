@@ -2,10 +2,8 @@ import {
   Box,
   Button,
   Dialog,
-  DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle,
   TextField,
   Typography,
 } from "@material-ui/core";
@@ -61,7 +59,7 @@ const ModalRenameTask = ({
             size="small"
             value={taskIndex.label || ""}
             onChange={(e) => {
-              if (e.target.value != " ")
+              if (e.target.value !== " ")
                 setTaskIndex({ ...taskIndex, label: e.target.value });
             }}
           />
@@ -78,7 +76,7 @@ const ModalRenameTask = ({
               handleRename(taskIndex.id || "");
               handleClose();
             }}
-            disabled={taskIndex.label == ""}
+            disabled={taskIndex.label === ""}
             style={{
               width: "120px",
               height: "35px",

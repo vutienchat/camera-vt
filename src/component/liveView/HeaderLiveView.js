@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   Box,
   Button,
@@ -19,6 +19,7 @@ import ModalDeleteTask from "../modal/ModalDeleteTask";
 import ModalCloseTask from "../modal/ModalCloseTask";
 import Clean from "../../asset/image/Mask Group 739.png";
 import SaveAs from "../../asset/image/Group 8862.png";
+import ModalSaveTaskView from "../modal/ModalSaveTaskView";
 
 const dataHeader = [
   { id: 1, label: "Task 1", duplicate: 0, default: 1 },
@@ -36,6 +37,7 @@ const useStyles = makeStyles({
     alignItems: "center",
     maxWidth: "160px",
     justifyContent: "space-between",
+    cursor: "pointer",
   },
   labelTask: {
     fontFamily: "Sarabun",
@@ -76,17 +78,33 @@ const useStyles = makeStyles({
 const HeaderLiveView = (props) => {
   const { setIsFullScreen } = props;
   const classes = useStyles();
+  const wrapperRef = useRef(null);
+  useOutsideAlerter(wrapperRef);
   const [data, setData] = useState([...dataHeader]);
   const [dataIndex, setDataIndex] = useState(0);
   const [size, setSize] = useState(5);
   const [taskIndex, setTaskIndex] = useState();
   const [skipClose, setSkipClose] = useState(false);
-  const [isModalColse, setIsModalColse] = useState(false);
+  const [isModalClose, setIsModalClose] = useState(false);
   const [isShowPopUpSelect, setIsShowPopupSelect] = useState(false);
   const [isShowModalRename, setIsShowModalRename] = useState(false);
   const [isShowModalDelete, setIsShowModalDelete] = useState(false);
   const [isModalSave, setIsModalSave] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+
+  function useOutsideAlerter(ref) {
+    useEffect(() => {
+      function handleClickOutside(event) {
+        if (ref.current && !ref.current.contains(event.target)) {
+          setIsShowPopupSelect(false);
+        }
+      }
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, [ref]);
+  }
 
   const handleAddNewTask = () => {
     const temp = [...data];
@@ -107,7 +125,7 @@ const HeaderLiveView = (props) => {
   };
 
   const handleChangePagi = (type) => {
-    if (type == "next") {
+    if (type === "next") {
       setDataIndex((prev) => {
         if (prev + size >= data.length) return prev;
         return prev + size;
@@ -125,16 +143,24 @@ const HeaderLiveView = (props) => {
 
   const handleDuplicate = (id) => {
     const tempData = [...data];
-    const taskIndx = tempData.findIndex((item) => item.id == id);
-    if (taskIndx == -1) return;
+    const taskIndx = tempData.findIndex((item) => item.id === id);
+    if (taskIndx === -1) return;
     tempData.push({
       ...tempData[taskIndx],
       id: tempData.length + 1,
-      label: `${tempData[taskIndx].label} (${tempData[taskIndx].duplicate +
-        1})`,
+      label: `${tempData[taskIndx].label} (${
+        tempData[taskIndx].duplicate + 1
+      })`,
       duplicate: 0,
       isNew: true,
     });
+
+    const activeTaskIndex = tempData.findIndex((item) => item.default);
+    if (activeTaskIndex === -1) return;
+    tempData[activeTaskIndex] = {
+      ...tempData[activeTaskIndex],
+      default: 0,
+    };
 
     tempData[taskIndx] = {
       ...tempData[taskIndx],
@@ -144,14 +170,14 @@ const HeaderLiveView = (props) => {
   };
 
   const handleDelete = (id) => {
-    const temp = [...data].filter((item) => item.id != id);
+    const temp = [...data].filter((item) => item.id !== id);
     setData(temp);
   };
 
   const handleRename = (id) => {
     const tempData = [...data];
-    const taskIndx = tempData.findIndex((item) => item.id == id);
-    if (taskIndx == -1) return;
+    const taskIndx = tempData.findIndex((item) => item.id === id);
+    if (taskIndx === -1) return;
     tempData[taskIndx] = { ...taskIndex };
     setData([...tempData]);
   };
@@ -159,20 +185,50 @@ const HeaderLiveView = (props) => {
   const handleCloseTask = (id) => {
     const tempData = [...data];
     const taskIndx = tempData.findIndex((item) => item.id === id);
-    if (taskIndx == -1) return;
+    if (taskIndx === -1) return;
     if (!tempData[taskIndx].isNew) return;
-    const newTemp = tempData.filter((item) => item.id != tempData[taskIndx].id);
+    const newTemp = tempData.filter(
+      (item) => item.id !== tempData[taskIndx].id
+    );
     setData([...newTemp]);
-    setIsModalColse(false);
+    setIsModalClose(false);
   };
 
   const handleShowModalClose = (id) => {
     if (skipClose) {
       handleCloseTask(id);
     } else {
-      setIsModalColse(true);
+      setIsModalClose(true);
     }
   };
+
+  const handleSaveTask = (id) => {
+    setIsModalSave(true);
+  };
+
+  const handleChangeTask = (id) => {
+    const tempData = [...data];
+    const activeTaskIndex = tempData.findIndex((item) => item.default);
+    if (activeTaskIndex === -1) return;
+    tempData[activeTaskIndex] = {
+      ...tempData[activeTaskIndex],
+      default: 0,
+    };
+
+    const newActive = tempData.findIndex((item) => item.id === id);
+    if (newActive === -1) return;
+    tempData[newActive] = {
+      ...tempData[newActive],
+      default: 1,
+    };
+
+    setData([...tempData]);
+  };
+
+  useEffect(() => {
+    const taskActive = data.find((item) => item.default);
+    setTaskIndex({ ...taskActive });
+  }, [data]);
 
   return (
     <React.Fragment>
@@ -216,6 +272,7 @@ const HeaderLiveView = (props) => {
                   setIsShowPopupSelect={setIsShowPopupSelect}
                   setAnchorEl={setAnchorEl}
                   activeTask={item.default ? true : false}
+                  handleChangeTask={handleChangeTask}
                 />
               );
             })}
@@ -261,11 +318,16 @@ const HeaderLiveView = (props) => {
                   onClick={() => {
                     handleChangePagi("next");
                   }}
+                  style={{ cursor: "pointer" }}
                 />
               </Box>
             </Box>
           )}
-          <Box className="flex-col-center">
+          <Box
+            className="flex-col-center"
+            style={{ cursor: "pointer" }}
+            onClick={() => setIsModalSave(true)}
+          >
             <SaveIcon style={{ fontSize: 32, paddingTop: 10 }} />
             <Typography style={{ fontSize: 9 }}>Save</Typography>
           </Box>
@@ -324,8 +386,10 @@ const HeaderLiveView = (props) => {
           handleShowModalClose={handleShowModalClose}
           setTaskIndex={setTaskIndex}
           data={taskIndex}
+          wrapperRef={wrapperRef}
         />
       )}
+
       {isShowModalRename && (
         <ModalRenameTask
           open={isShowModalRename}
@@ -347,11 +411,11 @@ const HeaderLiveView = (props) => {
           taskIndex={taskIndex}
         />
       )}
-      {isModalColse && (
+      {isModalClose && (
         <ModalCloseTask
-          open={isModalColse}
+          open={isModalClose}
           handleClose={() => {
-            setIsModalColse(false);
+            setIsModalClose(false);
           }}
           taskIndex={taskIndex}
           handleCloseTask={handleCloseTask}
@@ -360,13 +424,14 @@ const HeaderLiveView = (props) => {
         />
       )}
       {isModalSave && (
-        <ModalCloseTask
+        <ModalSaveTaskView
           open={isModalSave}
           handleClose={() => {
             setIsModalSave(false);
           }}
           taskIndex={taskIndex}
-          handleCloseTask={handleCloseTask}
+          setTaskIndex={setTaskIndex}
+          handleSaveTask={handleSaveTask}
         />
       )}
     </React.Fragment>
@@ -380,8 +445,10 @@ const Task = ({
   setIsShowPopupSelect,
   setAnchorEl,
   activeTask,
+  handleChangeTask,
 }) => {
   const classes = useStyles();
+
   const handleShow = (e) => {
     setIsShowPopupSelect((prev) => !prev);
     setAnchorEl(e.currentTarget);
@@ -392,6 +459,7 @@ const Task = ({
     <Box
       key={item.id}
       className={`${classes.task} ${activeTask ? classes.activeTask : ""}`}
+      onClick={() => handleChangeTask(item.id)}
     >
       <Typography className={classes.labelTask}>{item.label}</Typography>
       <Button

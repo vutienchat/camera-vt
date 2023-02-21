@@ -54,7 +54,7 @@ const ModalCloseTask = ({
               textAlign: "center",
             }}
           >
-            Are you sure you want to colse current Task view
+            Are you sure you want to close current Task view
           </DialogContentText>
 
           <Box style={{ display: "flex" }}>

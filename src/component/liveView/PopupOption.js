@@ -32,6 +32,7 @@ const PopUpOption = ({
   setIsShowPopupSelect,
   setIsShowModalDelete,
   handleShowModalClose,
+  wrapperRef,
 }) => {
   const classes = useStyles();
   return (
@@ -44,6 +45,7 @@ const PopUpOption = ({
         border: "solid 1px #e0e0e0",
         borderRadius: "4px",
       }}
+      ref={wrapperRef}
     >
       {({ TransitionProps }) => (
         <Fade {...TransitionProps} timeout={350}>
