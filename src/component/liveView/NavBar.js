@@ -12,7 +12,6 @@ const useStyles = makeStyles({
     flexDirection: "column",
     justifyContent: "flex-start",
     alignItems: "center",
-    height: 975,
     border: " solid 2px #e5e5e5",
   },
   itemNav: {
