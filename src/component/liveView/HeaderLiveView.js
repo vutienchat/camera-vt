@@ -174,6 +174,10 @@ const HeaderLiveView = () => {
     }
   };
 
+  const handleSaveTask = (id) => {
+    setIsModalSave(true);
+  };
+
   return (
     <React.Fragment>
       <Box
@@ -265,7 +269,11 @@ const HeaderLiveView = () => {
               </Box>
             </Box>
           )}
-          <Box className="flex-col-center">
+          <Box
+            className="flex-col-center"
+            style={{ cursor: "pointer" }}
+            onClick={handleSaveTask}
+          >
             <SaveIcon style={{ fontSize: 32, paddingTop: 10 }} />
             <Typography style={{ fontSize: 9 }}>Save</Typography>
           </Box>
@@ -361,7 +369,8 @@ const HeaderLiveView = () => {
             setIsModalSave(false);
           }}
           taskIndex={taskIndex}
-          handleCloseTask={handleCloseTask}
+          setTaskIndex={setTaskIndex}
+          handleSaveTask={handleSaveTask}
         />
       )}
     </React.Fragment>

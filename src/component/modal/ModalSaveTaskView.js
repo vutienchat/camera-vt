@@ -7,6 +7,7 @@ import {
   DialogContentText,
   DialogTitle,
   FormControl,
+  MenuItem,
   Select,
   TextField,
   Typography,
@@ -18,7 +19,7 @@ const ModalSaveTaskView = ({
   handleClose,
   setTaskIndex,
   taskIndex,
-  handleRename,
+  handleSaveTask,
 }) => {
   return (
     <Dialog
@@ -88,7 +89,7 @@ const ModalSaveTaskView = ({
         >
           <Button
             onClick={() => {
-              handleRename(taskIndex.id || "");
+              handleSaveTask();
               handleClose();
             }}
             disabled={taskIndex.label == ""}
