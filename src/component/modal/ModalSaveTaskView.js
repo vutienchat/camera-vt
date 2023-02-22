@@ -80,13 +80,9 @@ const ModalSaveTaskView = ({
           </DialogContentText>
           <FormControl fullWidth size="small">
             <Select
-              labelId="demo-select-small"
-              id="demo-select-small"
-              variant="outlined"
               native
-              label={null}
-              placeholder="Task View Group"
-              aria-placeholder="center"
+              id="demo-customized-select-native"
+              variant="outlined"
               value={value}
               onChange={(e) => setValue(e.target.value)}
             >

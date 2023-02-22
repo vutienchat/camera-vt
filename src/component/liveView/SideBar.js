@@ -5,20 +5,16 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import TreeView from "@material-ui/lab/TreeView";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowRightIcon from "@material-ui/icons/ArrowRight";
 import TreeItem from "@material-ui/lab/TreeItem";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
-import SearchIcon from "@material-ui/icons/Search";
-import {
-  dataAiIntegrated,
-  dataCameDevice,
-  dataEMAP,
-  dataPTZ,
-} from "./dataSideBar";
-import RenderDataSide from "./RenderDataSide";
+import ViewSideDevice from "./ViewSideDevice";
+import ViewSideTaskWall from "./ViewSideTaskWall";
+import PopUpOptionSideBar from "./PopUpOptionSideBar";
+import { dataInit } from "./dataSideBar";
 
 const useStyles = makeStyles({
   Sub: {
@@ -26,6 +22,7 @@ const useStyles = makeStyles({
     "& .MuiTreeItem-content": {
       height: 50,
       flexDirection: "row-reverse",
+      borderBottom: "solid 2px #e5e5e5",
 
       "& .MuiTreeItem-label": {
         height: "100%",
@@ -39,6 +36,7 @@ const useStyles = makeStyles({
     "& .MuiTreeItem-content": {
       height: 50,
       flexDirection: "row",
+      borderBottom: "none",
       "& .MuiTreeItem-label": {
         height: "100%",
         display: "flex",
@@ -79,92 +77,133 @@ const useStyles = makeStyles({
     maxHeight: 975,
     overflowY: "auto",
     overflowX: "hidden",
+    position: "relative",
   },
 });
 
-const SideBar = () => {
-  const classes = useStyles();
-  const [selectType, setSelectType] = useState("siteGroup");
-  const [expanded, setExpanded] = useState([]);
-
-  const renderData = (data) => {
-    return (
-      <TreeView
-        defaultCollapseIcon={<ArrowDropDownIcon style={{ fontSize: 40 }} />}
-        defaultExpandIcon={<ArrowRightIcon style={{ fontSize: 40 }} />}
-        style={{ marginLeft: 10 }}
-      >
-        {data.map((item, index) => {
-          return (
-            <TreeItem
-              onLabelClick={(e) => {
-                e.preventDefault();
-              }}
-              key={item.id}
-              label={
-                <Box
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    width: "100%",
+export const renderData = (data, classes, handleShowPopupSelect) => {
+  return (
+    <TreeView
+      defaultCollapseIcon={<ArrowDropDownIcon style={{ fontSize: 40 }} />}
+      defaultExpandIcon={<ArrowRightIcon style={{ fontSize: 40 }} />}
+      style={{ marginLeft: 10 }}
+    >
+      {data.map((item, index) => {
+        return (
+          <TreeItem
+            onLabelClick={(e) => {
+              e.preventDefault();
+            }}
+            key={item.id}
+            label={
+              <Box
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  width: "100%",
+                }}
+              >
+                <Typography>{item.label}</Typography>
+                <MoreHorizIcon
+                  style={{ paddingRight: 24 }}
+                  onClick={(e) => {
+                    handleShowPopupSelect && handleShowPopupSelect(e);
                   }}
-                >
-                  <Typography>{item.label}</Typography>
-                  <MoreHorizIcon style={{ paddingRight: 24 }} />
-                </Box>
-              }
-              nodeId={String(index)}
-              className={classes.isSub}
-            >
-              {item.subData && renderData(item.subData, true)}
-            </TreeItem>
-          );
-        })}
-      </TreeView>
-    );
+                />
+              </Box>
+            }
+            nodeId={String(index)}
+            className={classes.isSub || ""}
+          >
+            {item.subData && renderData(item.subData, classes)}
+          </TreeItem>
+        );
+      })}
+    </TreeView>
+  );
+};
+
+const SideBar = ({ typeDisplaySide }) => {
+  const classes = useStyles();
+  const wrapperRef = useRef(null);
+  useOutsideAlerter(wrapperRef);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [isShowPopUpSelect, setIsShowPopupSelect] = useState(false);
+  const [typeDisplay, setTypeDisplay] = useState("");
+
+  function useOutsideAlerter(ref) {
+    useEffect(() => {
+      function handleClickOutside(event) {
+        if (ref.current && !ref.current.contains(event.target)) {
+          setIsShowPopupSelect(false);
+        }
+      }
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, [ref]);
+  }
+
+  const handleShowPopupSelect = (e, type) => {
+    setIsShowPopupSelect((prev) => !prev);
+    setAnchorEl(e.currentTarget);
+    setTypeDisplay(type);
+  };
+
+  const handleAddSubGroup = (id, data) => {
+    if (!id) {
+      dataInit.push({
+        label: "test ",
+        id: "test",
+        parentId: "",
+      });
+    } else {
+    }
+  };
+
+  const renderSideBar = (type) => {
+    let view;
+    switch (type) {
+      case "Device":
+        view = <ViewSideDevice classes={classes} />;
+        break;
+      case "Event":
+        view = "Event";
+        break;
+      case "View":
+        view = (
+          <ViewSideTaskWall
+            classes={classes}
+            handleShowPopupSelect={handleShowPopupSelect}
+            handleAddSubGroup={handleAddSubGroup}
+          />
+        );
+        break;
+      case "Plan":
+        view = "Plan";
+        break;
+      default:
+        view = <ViewSideDevice classes={classes} />;
+        break;
+    }
+
+    return view;
   };
 
   return (
     <React.Fragment>
-      <Box className={classes.sideBar}>
-        <TreeView
-          defaultCollapseIcon={
-            <ArrowDropDownIcon className={classes.iconStyle} />
-          }
-          defaultExpandIcon={<ArrowRightIcon className={classes.iconStyle} />}
-          className={classes.root}
-          expanded={expanded}
-          onNodeSelect={(event, nodeId) => {
-            const expandedIdx = expanded.includes(nodeId);
-            if (expandedIdx) setExpanded([]);
-            else setExpanded([nodeId]);
-          }}
-        >
-          <TreeItem nodeId="1" label="Camera Device" className={classes.Sub}>
-            <RenderDataSide
-              renderData={renderData}
-              data={dataCameDevice}
-              selectType={selectType}
-              setSelectType={setSelectType}
-              classes={classes}
-              isCamera={true}
-            />
-          </TreeItem>
-          <TreeItem
-            nodeId="2"
-            label="AI Integrated Device"
-            className={classes.Sub}
-          >
-            <RenderDataSide renderData={renderData} data={dataAiIntegrated} />
-          </TreeItem>
-          <TreeItem nodeId="3" label="eMAP" className={classes.Sub}>
-            <RenderDataSide renderData={renderData} data={dataEMAP} />
-          </TreeItem>
-          <TreeItem nodeId="4" label="PTZ" className={classes.Sub}>
-            <RenderDataSide renderData={renderData} data={dataPTZ} />
-          </TreeItem>
-        </TreeView>
-      </Box>
+      <Box className={classes.sideBar}>{renderSideBar(typeDisplaySide)}</Box>
+      {isShowPopUpSelect && (
+        <PopUpOptionSideBar
+          open={isShowPopUpSelect}
+          anchorEl={anchorEl}
+          typeDisplay={typeDisplay}
+          wrapperRef={wrapperRef}
+          handleAddSubGroup={handleAddSubGroup}
+          setIsShowPopupSelect={setIsShowPopupSelect}
+        />
+      )}
     </React.Fragment>
   );
 };

@@ -10,6 +10,8 @@ const RenderDataSide = ({
   selectType,
   setSelectType,
   isCamera,
+  isSearch,
+  handleShowPopupSelect,
 }) => {
   return (
     <>
@@ -39,22 +41,24 @@ const RenderDataSide = ({
         </Box>
       )}
 
-      <Box style={{ marginTop: 20 }}>
-        <TextField
-          placeholder="Search"
-          size="small"
-          variant="outlined"
-          style={{ width: 365 }}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon style={{ color: "red" }} />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Box>
-      {renderData(data)}
+      {isSearch && (
+        <Box style={{ marginTop: 20 }}>
+          <TextField
+            placeholder="Search"
+            size="small"
+            variant="outlined"
+            style={{ width: 365 }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon style={{ color: "red" }} />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </Box>
+      )}
+      {renderData(data, classes, handleShowPopupSelect)}
     </>
   );
 };

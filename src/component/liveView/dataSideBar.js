@@ -100,3 +100,21 @@ export const dataPTZ = [
     ],
   },
 ];
+
+export const dataInit = [
+  {
+    id: randomId(),
+    label: "Group 1",
+    parentId: "",
+  },
+  {
+    id: randomId(),
+    label: "Group 2",
+    parentId: "",
+  },
+  {
+    id: randomId(),
+    label: "Group 3",
+    parentId: "",
+  },
+];
