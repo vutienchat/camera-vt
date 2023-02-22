@@ -327,7 +327,7 @@ const HeaderLiveView = (props) => {
             display: "flex",
             justifyContent: "inherit",
             alignItems: "center",
-            width: 400,
+            width: 500,
           }}
         >
           {data.length > 5 && (

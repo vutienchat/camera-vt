@@ -131,7 +131,7 @@ const LiveView = memo(() => {
               handleOpenSideBar={handleOpenSideBar}
               typeDisplaySide={typeDisplaySide}
             />
-            {isSideBar && <SideBar />}
+            {isSideBar && <SideBar typeDisplaySide={typeDisplaySide} />}
           </Box>
         </Box>
       </Box>
