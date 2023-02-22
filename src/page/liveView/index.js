@@ -109,7 +109,10 @@ const LiveView = memo(() => {
   return (
     <React.Fragment>
       <Box>
-        <HeaderLiveView setIsFullScreen={() => setIsFullScreen(true)} />
+        <HeaderLiveView
+          setIsFullScreen={() => setIsFullScreen(true)}
+          taskLive={taskLive}
+        />
         <Box
           style={{
             display: "flex",

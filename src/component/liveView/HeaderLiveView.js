@@ -5,6 +5,7 @@ import {
   FormControl,
   Select,
   Typography,
+  ClickAwayListener,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
@@ -20,6 +21,10 @@ import ModalCloseTask from "../modal/ModalCloseTask";
 import Clean from "../../asset/image/Mask Group 739.png";
 import SaveAs from "../../asset/image/Group 8862.png";
 import ModalSaveTaskView from "../modal/ModalSaveTaskView";
+import CustomGrid from "../../asset/image/Mask_Group_728.png";
+import { OptionGridTask } from ".";
+import { ModalCustomGrid } from "../modal";
+import BorderColorIcon from "@material-ui/icons/BorderColor";
 
 const dataHeader = [
   { id: 1, label: "Task 1", duplicate: 0, default: 1 },
@@ -40,7 +45,6 @@ const useStyles = makeStyles({
     cursor: "pointer",
   },
   labelTask: {
-    fontFamily: "Sarabun",
     fontSize: "16px",
     fontWeight: "bold",
     fontStretch: "normal",
@@ -73,10 +77,37 @@ const useStyles = makeStyles({
   activeTask: {
     borderBottom: "solid 1px red",
   },
+  numberGrid: {
+    display: "block",
+    border: "1px solid black",
+    borderRadius: "4px",
+    padding: "4px",
+    marginRight: "8px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    "&:hover": { opacity: 0.4 },
+  },
+  buttonCustomGrid: {
+    width: "min-content",
+    border: "1px solid black",
+    borderRadius: "4px",
+    padding: "2px",
+    paddingBottom: 0,
+    cursor: "pointer",
+    "&:hover": { opacity: 0.4 },
+  },
+  popUpCustomGrid: {
+    position: "absolute",
+    background: "white",
+    border: "1px solid #e2e2e2",
+    borderRadius: "8px",
+    padding: "12px",
+    right: 0,
+  },
 });
 
 const HeaderLiveView = (props) => {
-  const { setIsFullScreen } = props;
+  const { setIsFullScreen, taskLive } = props;
   const classes = useStyles();
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef);
@@ -91,6 +122,8 @@ const HeaderLiveView = (props) => {
   const [isShowModalDelete, setIsShowModalDelete] = useState(false);
   const [isModalSave, setIsModalSave] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [isShowPopupCustom, setIsShowPopupCustom] = useState(false);
+  const [isShowModalCustomGrid, setIsShowModalCustomGrid] = useState(false);
 
   function useOutsideAlerter(ref) {
     useEffect(() => {
@@ -148,9 +181,8 @@ const HeaderLiveView = (props) => {
     tempData.push({
       ...tempData[taskIndx],
       id: tempData.length + 1,
-      label: `${tempData[taskIndx].label} (${
-        tempData[taskIndx].duplicate + 1
-      })`,
+      label: `${tempData[taskIndx].label} (${tempData[taskIndx].duplicate +
+        1})`,
       duplicate: 0,
       isNew: true,
     });
@@ -242,12 +274,7 @@ const HeaderLiveView = (props) => {
           boxSizing: "border-box",
         }}
       >
-        <Box
-          style={{
-            display: "flex",
-            justifyContent: "flex-start",
-          }}
-        >
+        <Box style={{ display: "flex", justifyContent: "flex-start" }}>
           <Box style={{ paddingLeft: 12, marginRight: 30 }}>
             <FormControl fullWidth size="small" style={{ width: 212 }}>
               <Select
@@ -351,21 +378,37 @@ const HeaderLiveView = (props) => {
           >
             <img src={Clean} />
           </Box>
-          <Box>
-            <SaveIcon fontSize="medium" style={{ fontSize: 32 }} />
-          </Box>
-          <Box>
-            <SaveIcon fontSize="medium" style={{ fontSize: 32 }} />
-          </Box>
-          <Box>
-            <SaveIcon fontSize="medium" style={{ fontSize: 32 }} />
-          </Box>
-          <Box>
-            <SaveIcon fontSize="medium" style={{ fontSize: 32 }} />
-          </Box>
-          <Box>
-            <SaveIcon fontSize="medium" style={{ fontSize: 32 }} />
-          </Box>
+          <OptionGridTask />
+
+          <ClickAwayListener onClickAway={() => setIsShowPopupCustom(false)}>
+            <Box style={{ position: "relative" }}>
+              <img
+                src={CustomGrid}
+                alt="customGrid"
+                style={{ width: 24, cursor: "pointer" }}
+                onClick={() => setIsShowPopupCustom(true)}
+              />
+              {isShowPopupCustom ? (
+                <Box className={classes.popUpCustomGrid}>
+                  <Box>
+                    <OptionGridTask />
+                  </Box>
+                  <Box style={{ display: "flex" }}>
+                    <span className={classes.numberGrid}>25</span>
+                    <span className={classes.numberGrid}>36</span>
+                  </Box>
+                  <hr />
+                  <Box
+                    className={classes.buttonCustomGrid}
+                    onClick={() => setIsShowModalCustomGrid(true)}
+                  >
+                    <BorderColorIcon />
+                  </Box>
+                </Box>
+              ) : null}
+            </Box>
+          </ClickAwayListener>
+
           <Box
             style={{ marginLeft: 10, cursor: "pointer" }}
             onClick={setIsFullScreen}
@@ -374,6 +417,14 @@ const HeaderLiveView = (props) => {
           </Box>
         </Box>
       </Box>
+      {isShowModalCustomGrid && (
+        <ModalCustomGrid
+          handleClose={() => setIsShowModalCustomGrid(false)}
+          dataGrid={taskLive.grid}
+          sizeGrid={taskLive.size}
+        />
+      )}
+
       {isShowPopUpSelect && (
         <PopupOption
           open={isShowPopUpSelect}

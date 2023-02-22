@@ -21,7 +21,7 @@ const ScreenTask = memo((props) => {
             color: "white",
             textAlign: "end",
             pointerEvents: "none",
-            webkitUserSelect: "none",
+            WebkitUserSelect: "none",
             userSelect: "none",
           }}
         >
