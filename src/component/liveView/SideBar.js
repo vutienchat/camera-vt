@@ -107,7 +107,7 @@ export const renderData = (data, classes, handleShowPopupSelect) => {
                 <MoreHorizIcon
                   style={{ paddingRight: 24 }}
                   onClick={(e) => {
-                    handleShowPopupSelect && handleShowPopupSelect(e);
+                    handleShowPopupSelect && handleShowPopupSelect(e, "", item);
                   }}
                 />
               </Box>
@@ -130,6 +130,8 @@ const SideBar = ({ typeDisplaySide }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [isShowPopUpSelect, setIsShowPopupSelect] = useState(false);
   const [typeDisplay, setTypeDisplay] = useState("");
+  const [indexGroup, setIndexGroup] = useState();
+  const [dataGroup, setDataGroup] = useState([...dataInit]);
 
   function useOutsideAlerter(ref) {
     useEffect(() => {
@@ -145,10 +147,11 @@ const SideBar = ({ typeDisplaySide }) => {
     }, [ref]);
   }
 
-  const handleShowPopupSelect = (e, type) => {
+  const handleShowPopupSelect = (e, type, indexGroup) => {
     setIsShowPopupSelect((prev) => !prev);
     setAnchorEl(e.currentTarget);
     setTypeDisplay(type);
+    setIndexGroup(indexGroup);
   };
 
   const handleAddSubGroup = (id, data) => {
@@ -159,6 +162,13 @@ const SideBar = ({ typeDisplaySide }) => {
         parentId: "",
       });
     } else {
+      if (data.subData) {
+        data.subData.push({
+          label: "test ",
+          id: "test 1",
+          parentId: id,
+        });
+      }
     }
   };
 

@@ -40,6 +40,7 @@ const PopupOptionSideBar = ({
   setIsShowPopupSelect,
   wrapperRef,
   typeDisplay,
+  handleAddSubGroup,
 }) => {
   const classes = useStyles();
   return (
@@ -68,6 +69,7 @@ const PopupOptionSideBar = ({
               <Typography
                 onClick={() => {
                   setIsShowPopupSelect(false);
+                  handleAddSubGroup();
                 }}
                 className={classes.textOption}
               >

@@ -117,4 +117,14 @@ export const dataInit = [
     label: "Group 3",
     parentId: "",
   },
+  {
+    id: randomId(),
+    label: "Group 4",
+    parentId: "",
+  },
+  {
+    id: randomId(),
+    label: "Group 5",
+    parentId: "",
+  },
 ];
