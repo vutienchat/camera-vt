@@ -7,7 +7,6 @@ import {
   Typography,
 } from "@material-ui/core";
 import { OptionGridTask } from "../liveView";
-import { type } from "@testing-library/user-event/dist/type";
 
 const checkIsMerge = (gridList) => {
   const countGridList = gridList.length;
@@ -76,7 +75,31 @@ const ModalCustomGrid = ({ handleClose, dataGrid, sizeGrid }) => {
     const countSize = listMerge.filter((grid) => grid.x === listMerge[0].x)
       .length;
 
-    setGridTMP();
+    setGridTMP((gridTMPPrev) => {
+      return gridTMPPrev.reduce((dataTMP, gridItem) => {
+        if (!keyMergeList.includes(gridItem.key)) {
+          return [...dataTMP, gridItem];
+        }
+
+        if (gridItem.key === keyMergeList[0]) {
+          return [
+            ...dataTMP,
+            {
+              ...gridItem,
+              size: countSize,
+              merge: keyMergeList,
+            },
+          ];
+        }
+
+        return [...dataTMP];
+      }, []);
+    });
+    setListMerge([]);
+  };
+
+  const handleSplitGrid = () => {
+    console.log(gridTMP);
   };
 
   return (
@@ -135,6 +158,7 @@ const ModalCustomGrid = ({ handleClose, dataGrid, sizeGrid }) => {
                         border: `1px solid`,
                         borderBlockColor: "#fff",
                         boxSizing: "border-box",
+                        color: "white",
                       }}
                     />
                   );
@@ -157,7 +181,7 @@ const ModalCustomGrid = ({ handleClose, dataGrid, sizeGrid }) => {
               })}
             </Box>
           </Box>
-          <Box>
+          <Box style={{ display: "flex", justifyContent: "space-between" }}>
             <OptionGridTask
               onClickCustomSize={(sizeGrid) => {
                 setSizeTMP(sizeGrid);
@@ -180,6 +204,13 @@ const ModalCustomGrid = ({ handleClose, dataGrid, sizeGrid }) => {
               }}
               typeOption={"model"}
             />
+            <Box>
+              <Button disabled={!isMergeGrid} onClick={handleMergeGrid}>
+                Merge
+              </Button>
+              <Button onClick={handleSplitGrid}>Split</Button>
+              <Button>Clean</Button>
+            </Box>
           </Box>
         </DialogContent>
         <Box style={{ display: "flex", justifyContent: "space-around" }}>
