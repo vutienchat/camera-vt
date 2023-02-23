@@ -7,6 +7,8 @@ import {
   SideBar,
 } from "../../component/liveView";
 
+const sizeDefault = 1;
+
 const LiveView = memo(() => {
   const [planLiveDetail, setPlanLiveDetail] = useState({
     id: "string",
@@ -50,7 +52,7 @@ const LiveView = memo(() => {
 
   const [taskLive, setTaskLive] = useState({
     id: "id Task 3",
-    size: 3,
+    size: sizeDefault,
     name: "Name Task",
     active: true,
     groupId: "a57w4867s5ad75sa76as4d",
@@ -58,8 +60,8 @@ const LiveView = memo(() => {
     no: 3,
     grid: []
       .concat(
-        ...Array.from({ length: 3 }, (_, x) => {
-          return Array.from({ length: 3 }, (_, y) => {
+        ...Array.from({ length: sizeDefault }, (_, x) => {
+          return Array.from({ length: sizeDefault }, (_, y) => {
             return {
               x: x + 1,
               y: y + 1,
@@ -106,19 +108,51 @@ const LiveView = memo(() => {
     });
   };
 
+  const handleUpdateGridData = (gridData, sizeGrid) => {
+    setTaskLive((taskLivePrev) => {
+      return {
+        ...taskLivePrev,
+        size: sizeGrid,
+        grid: gridData.map((gridScreenItem) => {
+          const deviceDetail = taskLivePrev.grid.find(
+            (gridOldItem) => gridOldItem.key === gridScreenItem.key
+          );
+
+          return {
+            ...gridScreenItem,
+            screenDetail: deviceDetail ? deviceDetail.screenDetail : [],
+          };
+        }),
+      };
+    });
+  };
+
+  const handleCleanTask = () => {
+    setTaskLive((taskLivePrev) => {
+      return {
+        ...taskLivePrev,
+        grid: taskLivePrev.grid.map((gridScreenItem) => {
+          return { ...gridScreenItem, screenDetail: [] };
+        }),
+      };
+    });
+  };
+
   return (
     <React.Fragment>
       <Box>
         <HeaderLiveView
           setIsFullScreen={() => setIsFullScreen(true)}
           taskLive={taskLive}
+          onUpdateGridData={handleUpdateGridData}
+          handleCleanTask={handleCleanTask}
         />
         <Box
           style={{
             display: "flex",
             justifyContent: "space-between",
             marginBlock: 24,
-            minHeight: "808px",
+            //minHeight: "808px",
           }}
         >
           <Content

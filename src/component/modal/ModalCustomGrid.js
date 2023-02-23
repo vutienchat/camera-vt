@@ -30,12 +30,13 @@ const checkIsMerge = (gridList) => {
   );
 };
 
-const ModalCustomGrid = ({ handleClose, dataGrid, sizeGrid }) => {
+const ModalCustomGrid = ({ handleClose, dataGrid, sizeGrid, handleSubmit }) => {
   const [gridTMP, setGridTMP] = useState([]);
   const [sizeTMP, setSizeTMP] = useState(3);
   const [heightScreen, setHeightScreen] = useState(0);
   const refScreen = useRef(null);
   const [listMerge, setListMerge] = useState([]);
+  const [keyGridSlipt, setKeyGridSlipt] = useState(0);
 
   useEffect(() => setGridTMP(dataGrid), [dataGrid]);
   useEffect(() => setSizeTMP(sizeGrid), [sizeGrid]);
@@ -68,6 +69,7 @@ const ModalCustomGrid = ({ handleClose, dataGrid, sizeGrid }) => {
             return 0;
           })
     );
+    setKeyGridSlipt(0);
   };
 
   const handleMergeGrid = () => {
@@ -99,7 +101,35 @@ const ModalCustomGrid = ({ handleClose, dataGrid, sizeGrid }) => {
   };
 
   const handleSplitGrid = () => {
-    console.log(gridTMP);
+    setGridTMP((gridTMPPrev) => {
+      return gridTMPPrev
+        .reduce((dataTMP, gridItem) => {
+          if (keyGridSlipt === gridItem.key) {
+            return [...dataTMP].concat(
+              gridItem.merge.map((keyMerge) => ({
+                x:
+                  keyMerge % sizeTMP === 0
+                    ? Math.floor(keyMerge / sizeTMP)
+                    : Math.floor(keyMerge / sizeTMP) + 1,
+                y: keyMerge % sizeTMP || sizeTMP,
+                size: 1,
+                merge: [],
+                key: keyMerge,
+              }))
+            );
+          }
+
+          return [...dataTMP, gridItem];
+        }, [])
+        .sort((a, b) => {
+          const keyA = a.key;
+          const keyB = b.key;
+          if (keyA < keyB) return -1;
+          if (keyA > keyB) return 1;
+          return 0;
+        });
+    });
+    setKeyGridSlipt(0);
   };
 
   return (
@@ -130,6 +160,7 @@ const ModalCustomGrid = ({ handleClose, dataGrid, sizeGrid }) => {
               height: "320px",
               border: "2px solid black",
               boxSizing: "border-box",
+              marginBottom: "10px",
             }}
             ref={refScreen}
           >
@@ -156,9 +187,14 @@ const ModalCustomGrid = ({ handleClose, dataGrid, sizeGrid }) => {
                         gridRowStart: gridItem.x,
                         gridRowEnd: gridItem.x + gridItem.size,
                         border: `1px solid`,
-                        borderBlockColor: "#fff",
                         boxSizing: "border-box",
-                        color: "white",
+                        cursor: "pointer",
+                        borderBlockColor: keyGridSlipt ? "red" : "white",
+                        color: keyGridSlipt ? "red" : "white",
+                      }}
+                      onClick={() => {
+                        setKeyGridSlipt(gridItem.key);
+                        setListMerge([]);
                       }}
                     />
                   );
@@ -208,7 +244,9 @@ const ModalCustomGrid = ({ handleClose, dataGrid, sizeGrid }) => {
               <Button disabled={!isMergeGrid} onClick={handleMergeGrid}>
                 Merge
               </Button>
-              <Button onClick={handleSplitGrid}>Split</Button>
+              <Button onClick={handleSplitGrid} disabled={!keyGridSlipt}>
+                Split
+              </Button>
               <Button>Clean</Button>
             </Box>
           </Box>
@@ -222,6 +260,7 @@ const ModalCustomGrid = ({ handleClose, dataGrid, sizeGrid }) => {
               color: "#fff",
               fontWeight: "600",
             }}
+            onClick={() => handleSubmit(gridTMP, sizeTMP)}
           >
             OK
           </Button>
