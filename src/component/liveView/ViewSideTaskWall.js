@@ -28,7 +28,7 @@ const useStyles = makeStyles({
   },
 });
 
-const ViewSideTaskWall = ({ classes, handleShowPopupSelect }) => {
+const ViewSideTaskWall = ({ classes, handleShowPopupSelect, dataGroup }) => {
   const classView = useStyles();
   const [selectType, setSelectType] = useState("siteGroup");
 
@@ -97,7 +97,7 @@ const ViewSideTaskWall = ({ classes, handleShowPopupSelect }) => {
         >
           <RenderDataSide
             renderData={renderData}
-            data={dataInit}
+            data={dataGroup}
             selectType={selectType}
             setSelectType={setSelectType}
             classes={classes}
