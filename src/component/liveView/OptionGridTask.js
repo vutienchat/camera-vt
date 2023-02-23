@@ -1,11 +1,15 @@
 import React, { memo } from "react";
 import { Box, Button } from "@material-ui/core";
-import SaveIcon from "@material-ui/icons/Save";
 import { makeStyles } from "@material-ui/styles";
+import GridX1 from "../../asset/image/Mask Group 724.png";
+import GridX2 from "../../asset/image/Mask Group 725.png";
+import GridX3 from "../../asset/image/Group 8852.png";
+import GridX4 from "../../asset/image/Group 8853.png";
 
 const useStyles = makeStyles({
   buttonGrid: {
     cursor: "pointer",
+    marginRight: "8px",
     "&:hover": { opacity: 0.4 },
   },
   numberGrid: {
@@ -24,7 +28,7 @@ const useStyles = makeStyles({
 const OptionGridTask = memo((props) => {
   const classes = useStyles();
 
-  const { onClickCustomSize, typeOption } = props;
+  const { onClickCustomSize = () => null, typeOption } = props;
   return (
     <Box style={{ display: "flex" }}>
       <Box
@@ -34,7 +38,7 @@ const OptionGridTask = memo((props) => {
         }}
         className={classes.buttonGrid}
       >
-        <SaveIcon fontSize="medium" style={{ fontSize: 32 }} />
+        <img src={GridX1} alt="GridX1" style={{ width: 24 }} />
       </Box>
       <Box
         onClick={(e) => {
@@ -43,7 +47,7 @@ const OptionGridTask = memo((props) => {
         }}
         className={classes.buttonGrid}
       >
-        <SaveIcon fontSize="medium" style={{ fontSize: 32 }} />
+        <img src={GridX2} alt="GridX2" style={{ width: 24 }} />
       </Box>
       <Box
         onClick={(e) => {
@@ -52,7 +56,7 @@ const OptionGridTask = memo((props) => {
         }}
         className={classes.buttonGrid}
       >
-        <SaveIcon fontSize="medium" style={{ fontSize: 32 }} />
+        <img src={GridX3} alt="GridX3" style={{ width: 24 }} />
       </Box>
       <Box
         onClick={(e) => {
@@ -61,7 +65,7 @@ const OptionGridTask = memo((props) => {
         }}
         className={classes.buttonGrid}
       >
-        <SaveIcon fontSize="medium" style={{ fontSize: 32 }} />
+        <img src={GridX4} alt="GridX4" style={{ width: 24 }} />
       </Box>
       {typeOption === "model" && (
         <Box style={{ display: "flex" }}>

@@ -25,6 +25,10 @@ import CustomGrid from "../../asset/image/Mask_Group_728.png";
 import { OptionGridTask } from ".";
 import { ModalCustomGrid } from "../modal";
 import BorderColorIcon from "@material-ui/icons/BorderColor";
+import DashboardIcon from "@material-ui/icons/Dashboard";
+import ViewQuiltIcon from "@material-ui/icons/ViewQuilt";
+import { dataGridCustomX4_1, dataGridCustomX4_2 } from "./dataSideBar";
+import { getDataGridBySize } from "./javascript";
 
 const dataHeader = [
   { id: 1, label: "Task 1", duplicate: 0, default: 1 },
@@ -107,7 +111,12 @@ const useStyles = makeStyles({
 });
 
 const HeaderLiveView = (props) => {
-  const { setIsFullScreen, taskLive } = props;
+  const {
+    setIsFullScreen,
+    taskLive,
+    onUpdateGridData,
+    handleCleanTask,
+  } = props;
   const classes = useStyles();
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef);
@@ -234,9 +243,7 @@ const HeaderLiveView = (props) => {
     }
   };
 
-  const handleSaveTask = (id) => {
-    setIsModalSave(true);
-  };
+  const handleSaveTask = (id) => setIsModalSave(true);
 
   const handleChangeTask = (id) => {
     const tempData = [...data];
@@ -333,18 +340,14 @@ const HeaderLiveView = (props) => {
           {data.length > 5 && (
             <Box style={{ display: "flex" }}>
               <Box
-                onClick={() => {
-                  handleChangePagi("prev");
-                }}
+                onClick={() => handleChangePagi("prev")}
                 style={{ cursor: "pointer" }}
               >
                 <ChevronLeftIcon />
               </Box>
               <Box>
                 <ChevronRightIcon
-                  onClick={() => {
-                    handleChangePagi("next");
-                  }}
+                  onClick={() => handleChangePagi("next")}
                   style={{ cursor: "pointer" }}
                 />
               </Box>
@@ -376,9 +379,13 @@ const HeaderLiveView = (props) => {
               textAlign: "center",
             }}
           >
-            <img src={Clean} />
+            <img src={Clean} onClick={handleCleanTask} />
           </Box>
-          <OptionGridTask />
+          <OptionGridTask
+            onClickCustomSize={(sizeGrid) =>
+              onUpdateGridData(getDataGridBySize(sizeGrid), sizeGrid)
+            }
+          />
 
           <ClickAwayListener onClickAway={() => setIsShowPopupCustom(false)}>
             <Box style={{ position: "relative" }}>
@@ -390,12 +397,34 @@ const HeaderLiveView = (props) => {
               />
               {isShowPopupCustom ? (
                 <Box className={classes.popUpCustomGrid}>
-                  <Box>
-                    <OptionGridTask />
+                  <Box style={{ display: "flex" }}>
+                    <OptionGridTask
+                      onClickCustomSize={(sizeGrid) =>
+                        onUpdateGridData(getDataGridBySize(sizeGrid), sizeGrid)
+                      }
+                    />
+                    <DashboardIcon
+                      style={{ cursor: "pointer" }}
+                      onClick={() => onUpdateGridData(dataGridCustomX4_1, 4)}
+                    />
+                    <ViewQuiltIcon
+                      style={{ cursor: "pointer" }}
+                      onClick={() => onUpdateGridData(dataGridCustomX4_2, 4)}
+                    />
                   </Box>
                   <Box style={{ display: "flex" }}>
-                    <span className={classes.numberGrid}>25</span>
-                    <span className={classes.numberGrid}>36</span>
+                    <span
+                      className={classes.numberGrid}
+                      onClick={() => onUpdateGridData(getDataGridBySize(5), 5)}
+                    >
+                      25
+                    </span>
+                    <span
+                      className={classes.numberGrid}
+                      onClick={() => onUpdateGridData(getDataGridBySize(6), 6)}
+                    >
+                      36
+                    </span>
                   </Box>
                   <hr />
                   <Box
@@ -420,6 +449,10 @@ const HeaderLiveView = (props) => {
       {isShowModalCustomGrid && (
         <ModalCustomGrid
           handleClose={() => setIsShowModalCustomGrid(false)}
+          handleSubmit={(dataGrid, sizeGrid) => {
+            onUpdateGridData(dataGrid, sizeGrid);
+            setIsShowModalCustomGrid(false);
+          }}
           dataGrid={taskLive.grid}
           sizeGrid={taskLive.size}
         />
