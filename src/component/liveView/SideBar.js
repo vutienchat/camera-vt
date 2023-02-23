@@ -119,8 +119,13 @@ export const renderData = (data, classes, handleShowPopupSelect) => {
               nodeId={String(index)}
               className={classes.isSub || ""}
             >
-              {item.nodeChildren && item.nodeChildren.length
-                ? renderData(item.nodeChildren, classes, handleShowPopupSelect)
+              {(item.nodeChildren && item.nodeChildren.length) ||
+              (item.listTask && item.listTask.length)
+                ? renderData(
+                    [...item.nodeChildren, ...item.listTask],
+                    classes,
+                    handleShowPopupSelect
+                  )
                 : null}
             </TreeItem>
           );
@@ -171,7 +176,10 @@ const SideBar = ({ typeDisplaySide, data, setData }) => {
       data &&
       [...data, ...dataInitTask].reduce((abc, nodeTree) => {
         if (nodeTree.parentId === "") {
-          return [...abc, { ...getGroupTree(nodeTree, data) }];
+          return [
+            ...abc,
+            { ...getGroupTree(nodeTree, [...data, ...dataInitTask]) },
+          ];
         }
         return [...abc];
       }, []);
