@@ -6,6 +6,7 @@ import {
   NavBar,
   SideBar,
 } from "../../component/liveView";
+import { dataInit } from "../../component/liveView/dataSideBar";
 
 const LiveView = memo(() => {
   const [planLiveDetail, setPlanLiveDetail] = useState({
@@ -74,10 +75,10 @@ const LiveView = memo(() => {
     lastModified: new Date(),
     createDate: new Date(),
   });
-
   const [isSideBar, setIsSideBar] = useState(false);
   const [typeDisplaySide, setTypeDisplaySide] = useState();
   const [isFullScreen, setIsFullScreen] = useState(false);
+  const [dataSideGroup, setDataSideGroup] = useState([...dataInit]);
 
   const escFunction = useCallback(
     (event) => {
@@ -131,7 +132,13 @@ const LiveView = memo(() => {
               handleOpenSideBar={handleOpenSideBar}
               typeDisplaySide={typeDisplaySide}
             />
-            {isSideBar && <SideBar typeDisplaySide={typeDisplaySide} />}
+            {isSideBar && (
+              <SideBar
+                typeDisplaySide={typeDisplaySide}
+                data={dataSideGroup}
+                setData={setDataSideGroup}
+              />
+            )}
           </Box>
         </Box>
       </Box>

@@ -3,12 +3,15 @@ export const getGroupTree = (nodeGroup, listGroup) => {
     (groupItem) => groupItem.parentId === nodeGroup.id
   );
 
+  const listTasks = listGroup.filter((item) => item.groupId === nodeGroup.id);
+
   if (listNodeChildren.length) {
     return {
       ...nodeGroup,
       nodeChildren: listNodeChildren.map((nodeChildren) => ({
         ...getGroupTree(nodeChildren, listGroup),
       })),
+      listTask: [...listTasks],
     };
   }
 
