@@ -15,6 +15,7 @@ import ViewSideDevice from "./ViewSideDevice";
 import ViewSideTaskWall from "./ViewSideTaskWall";
 import PopUpOptionSideBar from "./PopUpOptionSideBar";
 import { dataInit } from "./dataSideBar";
+import { getGroupTree } from "./javascript";
 
 const useStyles = makeStyles({
   Sub: {
@@ -49,10 +50,9 @@ const useStyles = makeStyles({
     "& .MuiTreeItem-label": {
       backgroundColor: "#fff !important",
     },
-    "& .MuiTreeItem-root.Mui-selected > .MuiTreeItem-content .MuiTreeItem-label:hover, .MuiTreeItem-root.Mui-selected:focus > .MuiTreeItem-content .MuiTreeItem-label ":
-      {
-        backgroundColor: "#fff !important",
-      },
+    "& .MuiTreeItem-root.Mui-selected > .MuiTreeItem-content .MuiTreeItem-label:hover, .MuiTreeItem-root.Mui-selected:focus > .MuiTreeItem-content .MuiTreeItem-label ": {
+      backgroundColor: "#fff !important",
+    },
   },
   boxHead: {
     display: "flex",
@@ -131,7 +131,19 @@ const SideBar = ({ typeDisplaySide }) => {
   const [isShowPopUpSelect, setIsShowPopupSelect] = useState(false);
   const [typeDisplay, setTypeDisplay] = useState("");
   const [indexGroup, setIndexGroup] = useState();
-  const [dataGroup, setDataGroup] = useState([...dataInit]);
+  const [dataGroup, setDataGroup] = useState(dataInit);
+
+  useEffect(() => {
+    console.log(
+      dataInit.reduce((abc, nodeTree) => {
+        if (nodeTree.parentId === "") {
+          return [...abc, { ...getGroupTree(nodeTree, dataInit) }];
+        }
+
+        return [...abc];
+      }, [])
+    );
+  }, []);
 
   function useOutsideAlerter(ref) {
     useEffect(() => {
