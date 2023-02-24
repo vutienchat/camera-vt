@@ -107,16 +107,13 @@ const useStyles = makeStyles({
     borderRadius: "8px",
     padding: "12px",
     right: 0,
+    zIndex: 1,
   },
 });
 
 const HeaderLiveView = (props) => {
-  const {
-    setIsFullScreen,
-    taskLive,
-    onUpdateGridData,
-    handleCleanTask,
-  } = props;
+  const { setIsFullScreen, taskLive, onUpdateGridData, handleCleanTask } =
+    props;
   const classes = useStyles();
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef);
@@ -190,8 +187,9 @@ const HeaderLiveView = (props) => {
     tempData.push({
       ...tempData[taskIndx],
       id: tempData.length + 1,
-      label: `${tempData[taskIndx].label} (${tempData[taskIndx].duplicate +
-        1})`,
+      label: `${tempData[taskIndx].label} (${
+        tempData[taskIndx].duplicate + 1
+      })`,
       duplicate: 0,
       isNew: true,
     });
@@ -483,6 +481,7 @@ const HeaderLiveView = (props) => {
           handleRename={handleRename}
           taskIndex={taskIndex}
           setTaskIndex={setTaskIndex}
+          type={"task"}
         />
       )}
       {isShowModalDelete && (

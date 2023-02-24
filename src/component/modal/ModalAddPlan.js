@@ -17,22 +17,26 @@ import {
 } from "@material-ui/core";
 import React from "react";
 import AddIcon from "@material-ui/icons/Add";
+import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
+import BorderColorIcon from "@material-ui/icons/BorderColor";
+import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 
 const ModalAddPlan = ({
   open,
   handleClose,
-  setIndexGroup,
   indexGroup,
   handleAddSubGroup,
-  subGroupAdd,
-  setSubGroupAdd,
   isDisabled,
-  messageErr,
+  data,
+  detailPlan,
+  setDetailPlan,
+  handleSavePlan,
 }) => {
   return (
     <Dialog
       open={open}
-      //   onClose={handleClose}
+      onClose={handleClose}
       aria-labelledby="draggable-dialog-title"
       maxWidth="md"
     >
@@ -65,7 +69,14 @@ const ModalAddPlan = ({
           >
             <Box style={{ display: "flex", alignItems: "center" }}>
               <Typography style={{ paddingRight: 10 }}>Plan Name:</Typography>
-              <TextField variant="outlined" size="small" />
+              <TextField
+                variant="outlined"
+                size="small"
+                value={detailPlan.name || ""}
+                onChange={(e) =>
+                  setDetailPlan({ ...detailPlan, name: e.target.value })
+                }
+              />
             </Box>
             <Box style={{ display: "flex", alignItems: "center" }}>
               <Typography>Plan Type:</Typography>
@@ -78,16 +89,20 @@ const ModalAddPlan = ({
                   native
                   id="demo-customized-select-native"
                   variant="outlined"
+                  defaultValue={"MANUAL"}
+                  onChange={(e) =>
+                    setDetailPlan({ ...detailPlan, type: e.target.value })
+                  }
                 >
-                  <option value={10}>Ten</option>
-                  <option value={20}>Twenty</option>
-                  <option value={30}>Thirty</option>
+                  <option value={"MANUAL"}>MANUAL</option>
+                  <option value={"SCHEDULE"}>SCHEDULE</option>
+                  <option value={"TOUR"}>TOUR</option>
                 </Select>
               </FormControl>
             </Box>
           </Box>
 
-          <DialogContentText
+          <Box
             style={{
               marginTop: "14px",
               marginBottom: "10px",
@@ -112,35 +127,77 @@ const ModalAddPlan = ({
                 Add Task View
               </i>
             </Box>
-          </DialogContentText>
+          </Box>
 
           <TableContainer style={{ paddingBottom: 30 }}>
-            <Table aria-label="simple table">
+            <Table aria-label="simple table" size="small">
               <TableHead style={{ height: 10 }}>
-                <TableRow style={{ border: "solid 1px", height: 15 }}>
+                <TableRow
+                  style={{
+                    border: "1px solid rgba(224, 224, 224, 1)",
+                    height: 15,
+                  }}
+                >
                   <TableCell align="center" width={10} style={{ padding: 10 }}>
                     No
                   </TableCell>
-                  <TableCell align="center" style={{ padding: 10 }}>
+                  <TableCell
+                    align="center"
+                    style={{
+                      padding: 10,
+                      borderLeft: "1px solid rgba(224, 224, 224, 1)",
+                    }}
+                  >
                     Task Name
                   </TableCell>
-                  <TableCell align="center" style={{ padding: 10 }}>
+                  <TableCell
+                    align="center"
+                    style={{
+                      padding: 10,
+                      borderLeft: "1px solid rgba(224, 224, 224, 1)",
+                    }}
+                  >
                     Operation
                   </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {/* {rows.map((row) => (
-            <TableRow key={row.name}>
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell align="right">{row.calories}</TableCell>
-              <TableCell align="right">{row.fat}</TableCell>
-              <TableCell align="right">{row.carbs}</TableCell>
-              <TableCell align="right">{row.protein}</TableCell>
-            </TableRow>
-          ))} */}
+                {data.map((plan, index) => (
+                  <TableRow key={plan.id}>
+                    <TableCell
+                      component="th"
+                      scope="row"
+                      style={{ borderLeft: "1px solid rgba(224, 224, 224, 1)" }}
+                    >
+                      {index}
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      style={{ borderLeft: "1px solid rgba(224, 224, 224, 1)" }}
+                    >
+                      {plan.label}
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      style={{
+                        borderInline: "1px solid rgba(224, 224, 224, 1)",
+                      }}
+                    >
+                      <Box
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <ArrowDropDownIcon fontSize="large" />
+                        <ArrowDropUpIcon fontSize="large" />
+                        <BorderColorIcon style={{ padding: "0 10px 0 5px" }} />
+                        <DeleteOutlineIcon />
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
           </TableContainer>
@@ -154,10 +211,8 @@ const ModalAddPlan = ({
         >
           <Button
             onClick={() => {
-              if (!isDisabled) {
-                handleAddSubGroup(indexGroup ? indexGroup.id : "");
-                handleClose();
-              }
+              handleClose();
+              handleSavePlan();
             }}
             // disabled={taskIndex.label === ""}
             style={{

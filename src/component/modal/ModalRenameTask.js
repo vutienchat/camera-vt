@@ -15,6 +15,7 @@ const ModalRenameTask = ({
   setTaskIndex,
   taskIndex,
   handleRename,
+  type,
 }) => {
   return (
     <Dialog
@@ -33,7 +34,9 @@ const ModalRenameTask = ({
             padding: "20px 0 10px 0",
           }}
         >
-          <Typography style={{ fontWeight: 800 }}>Rename Task View</Typography>
+          <Typography style={{ fontWeight: 800 }}>
+            {type === "task" ? " Rename Task View" : "Rename"}
+          </Typography>
           <Typography
             style={{ fontWeight: 600, cursor: "pointer" }}
             onClick={handleClose}
@@ -51,7 +54,7 @@ const ModalRenameTask = ({
               marginBottom: "10px",
             }}
           >
-            Task View Name
+            {type === "task" ? " Task View Name" : " Task View Group Name"}
           </DialogContentText>
           <TextField
             fullWidth

@@ -15,7 +15,7 @@ import ViewSideDevice from "./ViewSideDevice";
 import ViewSideTaskWall from "./ViewSideTaskWall";
 import PopUpOptionSideBar from "./PopUpOptionSideBar";
 import { getGroupTree } from "./javascript";
-import { ModalAddGroup, ModalAddPlan } from "../modal/index";
+import { ModalAddGroup, ModalAddPlan, ModalRenameTask } from "../modal/index";
 import { dataInitTask } from "./dataSideBar";
 
 const useStyles = makeStyles({
@@ -93,48 +93,83 @@ export const renderData = (data, classes, handleShowPopupSelect) => {
       {data &&
         data.map((item, index) => {
           return (
-            <TreeItem
-              onLabelClick={(e) => {
-                e.preventDefault();
-              }}
-              key={item.id}
-              label={
-                <Box
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    width: "100%",
-                  }}
-                >
-                  <Typography>{item.label}</Typography>
-                  <MoreHorizIcon
-                    style={{ paddingRight: 24 }}
-                    onClick={(e) => {
-                      handleShowPopupSelect &&
-                        handleShowPopupSelect(e, "", item);
+            <Box key={index}>
+              <TreeItem
+                onLabelClick={(e) => {
+                  e.preventDefault();
+                }}
+                key={item.id}
+                label={
+                  <Box
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      width: "100%",
                     }}
-                  />
-                </Box>
-              }
-              nodeId={String(index)}
-              className={classes.isSub || ""}
-            >
-              {(item.nodeChildren && item.nodeChildren.length) ||
-              (item.listTask && item.listTask.length)
-                ? renderData(
-                    [...item.nodeChildren, ...item.listTask],
-                    classes,
-                    handleShowPopupSelect
-                  )
-                : null}
-            </TreeItem>
+                  >
+                    <Typography>{item.label}</Typography>
+                    <MoreHorizIcon
+                      style={{ paddingRight: 24 }}
+                      onClick={(e) => {
+                        handleShowPopupSelect &&
+                          handleShowPopupSelect(e, "", item);
+                      }}
+                    />
+                  </Box>
+                }
+                nodeId={String(index)}
+                className={classes.isSub || ""}
+              >
+                <>
+                  {item.nodeChildren && item.nodeChildren.length
+                    ? renderData(
+                        item.nodeChildren,
+                        classes,
+                        handleShowPopupSelect
+                      )
+                    : null}
+                  {item.listTask && item.listTask.length
+                    ? item.listTask.map((child, index) => {
+                        return (
+                          <TreeItem
+                            onLabelClick={(e) => {
+                              e.preventDefault();
+                            }}
+                            key={child.id}
+                            label={
+                              <Box
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  width: "100%",
+                                }}
+                              >
+                                <Typography>{child.label}</Typography>
+                                <MoreHorizIcon
+                                  style={{ paddingRight: 24 }}
+                                  onClick={(e) => {
+                                    handleShowPopupSelect &&
+                                      handleShowPopupSelect(e, "task", child);
+                                  }}
+                                />
+                              </Box>
+                            }
+                            nodeId={String(index)}
+                            className={classes.isSub || ""}
+                          ></TreeItem>
+                        );
+                      })
+                    : null}
+                </>
+              </TreeItem>
+            </Box>
           );
         })}
     </TreeView>
   );
 };
 
-const SideBar = ({ typeDisplaySide, data, setData }) => {
+const SideBar = ({ typeDisplaySide, data, setData, setListPlan, listPlan }) => {
   const classes = useStyles();
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef);
@@ -147,7 +182,13 @@ const SideBar = ({ typeDisplaySide, data, setData }) => {
   const [subGroupAdd, setSubGroupAdd] = useState();
   const [isDisabled, setDisabled] = useState(false);
   const [messageErr, setMessageErr] = useState("");
-  const [isModalAddPlan, setIsModalAddPlan] = useState(true);
+  const [isModalAddPlan, setIsModalAddPlan] = useState(false);
+  const [isShowModalRename, setIsShowModalRename] = useState(false);
+  const [listTaskInPlan, setListTaskInPlan] = useState([]);
+  const [detailPlan, setDetailPlan] = useState({
+    name: `Plan ${listPlan.length + 1}`,
+    type: "MANUAL",
+  });
 
   useEffect(() => {
     let disable = false;
@@ -165,7 +206,11 @@ const SideBar = ({ typeDisplaySide, data, setData }) => {
       disable = true;
     }
 
-    if (indexGroup && indexGroup.nodeChildren.length > 100) {
+    if (
+      indexGroup &&
+      indexGroup.nodeChildren &&
+      indexGroup.nodeChildren.length > 100
+    ) {
       disable = true;
     }
     setDisabled(disable);
@@ -256,6 +301,49 @@ const SideBar = ({ typeDisplaySide, data, setData }) => {
     return view;
   };
 
+  const listPlans = [...listTaskInPlan];
+  const handleAddToPlan = (data) => {
+    setIsModalAddPlan(true);
+    const listPlanIds = [...listPlans].map((item) => item.id);
+    if (data && data.listTask && data.listTask.length) {
+      data.listTask.forEach((group) => {
+        const taskIndex = dataInitTask.findIndex(
+          (task) => task.id === group.id
+        );
+        if (
+          taskIndex !== -1 &&
+          !listPlanIds.includes(dataInitTask[taskIndex].id)
+        )
+          listPlans.push({ ...dataInitTask[taskIndex] });
+      });
+    }
+    if (data && typeDisplay === "task") {
+      const taskIndex = dataInitTask.findIndex((task) => task.id === data.id);
+      if (taskIndex !== -1 && !listPlanIds.includes(dataInitTask[taskIndex].id))
+        listPlans.push({ ...dataInitTask[taskIndex] });
+    }
+    if (data && data.nodeChildren && data.nodeChildren.length) {
+      data.nodeChildren.forEach((item) => {
+        handleAddToPlan(item);
+      });
+    }
+    setListTaskInPlan([...listPlans]);
+  };
+
+  const handleSavePlan = () => {
+    const temp = [...listPlan];
+    temp.push({ ...detailPlan, planTaskVideo: [...listTaskInPlan] });
+    setListPlan([...temp]);
+  };
+
+  const handleRename = (id) => {
+    const tempData = [...data];
+    const groupIdx = tempData.findIndex((item) => item.id === id);
+    if (groupIdx !== -1) tempData[groupIdx] = { ...indexGroup };
+
+    setData([...tempData]);
+  };
+
   return (
     <React.Fragment>
       <Box className={classes.sideBar}>{renderSideBar(typeDisplaySide)}</Box>
@@ -267,7 +355,13 @@ const SideBar = ({ typeDisplaySide, data, setData }) => {
           wrapperRef={wrapperRef}
           setIsShowPopupSelect={setIsShowPopupSelect}
           setIsModalAddGroup={setIsModalAddGroup}
+          openModalRename={() => {
+            setIsShowModalRename(true);
+          }}
           data={indexGroup}
+          handleAddToPlan={() => {
+            handleAddToPlan(indexGroup);
+          }}
         />
       )}
       {isModalAddGroup && (
@@ -287,6 +381,22 @@ const SideBar = ({ typeDisplaySide, data, setData }) => {
         <ModalAddPlan
           open={isModalAddPlan}
           handleClose={() => setIsModalAddPlan(false)}
+          data={listTaskInPlan}
+          setDetailPlan={setDetailPlan}
+          detailPlan={detailPlan}
+          handleSavePlan={handleSavePlan}
+        />
+      )}
+      {isShowModalRename && (
+        <ModalRenameTask
+          open={isShowModalRename}
+          handleClose={() => {
+            setIsShowModalRename(false);
+          }}
+          handleRename={handleRename}
+          taskIndex={indexGroup}
+          setTaskIndex={setIndexGroup}
+          type={typeDisplay}
         />
       )}
     </React.Fragment>
