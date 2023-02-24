@@ -5,3 +5,4 @@ export { default as PopupOption } from "./PopupOption.js";
 export { default as SideBar } from "./SideBar.js";
 export { default as ScreenTask } from "./ScreenTask.js";
 export { default as OptionGridTask } from "./OptionGridTask.js";
+export { default as VideoScreenDetail } from "./VideoScreenDetail.js";
