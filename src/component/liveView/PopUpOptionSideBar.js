@@ -40,6 +40,8 @@ const PopupOptionSideBar = ({
   wrapperRef,
   typeDisplay,
   setIsModalAddGroup,
+  handleAddToPlan,
+  openModalRename,
 }) => {
   const classes = useStyles();
   return (
@@ -63,20 +65,22 @@ const PopupOptionSideBar = ({
               background: "#fff",
             }}
           >
-            <Box className={classes.optionTask}>
-              <AddIcon style={{ paddingLeft: 10 }} />{" "}
-              <Typography
-                onClick={() => {
-                  setIsShowPopupSelect(false);
-                  setIsModalAddGroup(true);
-                }}
-                className={classes.textOption}
-              >
-                Add Sub Group
-              </Typography>
-            </Box>
+            {typeDisplay !== "task" && (
+              <Box className={classes.optionTask}>
+                <AddIcon style={{ paddingLeft: 10 }} />{" "}
+                <Typography
+                  onClick={() => {
+                    setIsShowPopupSelect(false);
+                    setIsModalAddGroup(true);
+                  }}
+                  className={classes.textOption}
+                >
+                  Add Sub Group
+                </Typography>
+              </Box>
+            )}
 
-            {typeDisplay == "main" ? (
+            {typeDisplay === "main" ? (
               <Box className={classes.optionTask}>
                 <PlayCircleOutlineIcon style={{ paddingLeft: 10 }} />
                 <Typography
@@ -95,6 +99,7 @@ const PopupOptionSideBar = ({
                   <Typography
                     onClick={() => {
                       setIsShowPopupSelect(false);
+                      handleAddToPlan([data.id]);
                     }}
                     className={classes.textOption}
                   >
@@ -128,6 +133,7 @@ const PopupOptionSideBar = ({
                   <Typography
                     onClick={() => {
                       setIsShowPopupSelect(false);
+                      openModalRename();
                     }}
                     className={classes.textOption}
                   >

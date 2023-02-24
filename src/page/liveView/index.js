@@ -81,6 +81,7 @@ const LiveView = memo(() => {
   const [typeDisplaySide, setTypeDisplaySide] = useState();
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [dataSideGroup, setDataSideGroup] = useState([...dataInit]);
+  const [listPlan, setListPlan] = useState([]);
 
   const escFunction = useCallback(
     (event) => {
@@ -171,6 +172,8 @@ const LiveView = memo(() => {
                 typeDisplaySide={typeDisplaySide}
                 data={dataSideGroup}
                 setData={setDataSideGroup}
+                listPlan={listPlan}
+                setListPlan={setListPlan}
               />
             )}
           </Box>
