@@ -80,7 +80,7 @@ const ScreenTask = memo((props) => {
     // { url: video1, stayTime: 400 },
   ];
 
-  if (screenDetail.screenDetail.length !== 0) {
+  if (screenDetail.screenDetail.length === 0) {
     return (
       <Box
         style={{

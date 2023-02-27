@@ -16,6 +16,8 @@ const ModalRenameTask = ({
   taskIndex,
   handleRename,
   type,
+  isDisabled,
+  messageErr,
 }) => {
   return (
     <Dialog
@@ -60,12 +62,19 @@ const ModalRenameTask = ({
             fullWidth
             variant="outlined"
             size="small"
+            error={isDisabled}
             value={taskIndex.label || ""}
             onChange={(e) => {
               if (e.target.value !== " ")
-                setTaskIndex({ ...taskIndex, label: e.target.value });
+                setTaskIndex({
+                  ...taskIndex,
+                  label: e.target.value.substring(0, 32),
+                });
             }}
           />
+          {messageErr && isDisabled && (
+            <Typography style={{ color: "red" }}>{messageErr}</Typography>
+          )}
         </DialogContent>
         <Box
           style={{
