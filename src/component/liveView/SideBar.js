@@ -51,10 +51,9 @@ const useStyles = makeStyles({
     "& .MuiTreeItem-label": {
       backgroundColor: "#fff !important",
     },
-    "& .MuiTreeItem-root.Mui-selected > .MuiTreeItem-content .MuiTreeItem-label:hover, .MuiTreeItem-root.Mui-selected:focus > .MuiTreeItem-content .MuiTreeItem-label ":
-      {
-        backgroundColor: "#fff !important",
-      },
+    "& .MuiTreeItem-root.Mui-selected > .MuiTreeItem-content .MuiTreeItem-label:hover, .MuiTreeItem-root.Mui-selected:focus > .MuiTreeItem-content .MuiTreeItem-label ": {
+      backgroundColor: "#fff !important",
+    },
   },
   boxHead: {
     display: "flex",
@@ -228,6 +227,7 @@ const SideBar = ({ typeDisplaySide, data, setData, setListPlan, listPlan }) => {
         }
         return [...abc];
       }, []);
+    console.log(parseData);
     setDataGroup([...parseData]);
   }, [data, dataInitTask]);
 

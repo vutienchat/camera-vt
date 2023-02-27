@@ -51,20 +51,6 @@ const RenderVideoView = memo((props) => {
     <Box style={{ height: "100%" }}>
       {Object.keys(deviceLive).length !== 0 && (
         <VideoScreenDetail deviceLive={deviceLive} />
-        // <Box style={{ height: "100%", position: "relative" }}>
-        //   <video
-        //     style={{ width: "100%", height: "100%", objectFit: "cover" }}
-        //     controls={false}
-        //     autoPlay
-        //   >
-        //     <source src={deviceLive.url} type="video/mp4" />
-        //   </video>
-        //   {/* <iframe
-        //     style={{ width: "100%", height: "100%" }}
-        //     src={deviceLive.url}
-        //     controls={false}
-        //   ></iframe> */}
-        // </Box>
       )}
     </Box>
   );
@@ -80,7 +66,7 @@ const ScreenTask = memo((props) => {
     // { url: video1, stayTime: 400 },
   ];
 
-  if (screenDetail.screenDetail.length !== 0) {
+  if (screenDetail.screenDetail.length === 0) {
     return (
       <Box
         style={{
@@ -107,6 +93,7 @@ const ScreenTask = memo((props) => {
       </Box>
     );
   }
+
   return (
     <Box style={{ backgroundColor: "#e2e2e2", width: "100%", height: "100%" }}>
       <RenderVideoView deviceList={deviceList} />

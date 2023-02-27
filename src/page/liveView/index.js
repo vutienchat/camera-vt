@@ -7,8 +7,109 @@ import {
   SideBar,
 } from "../../component/liveView";
 import { dataInit } from "../../component/liveView/dataSideBar";
-
+import { getGroupTree } from "../../component/liveView/javascript";
 const sizeDefault = 1;
+
+const nodeListWithoutDevices = [
+  {
+    id: "123",
+    parentId: "",
+    label: "HNQC",
+    groupType: 20,
+    deviceList: null,
+    address: null,
+    auto: true,
+    children: [],
+  },
+  {
+    id: "1234",
+    parentId: "123",
+    label: "HNQC2",
+    groupType: 20,
+    deviceList: null,
+    address: null,
+    auto: true,
+    children: [],
+  },
+  {
+    id: "1235",
+    parentId: "1234",
+    label: "HNQC3",
+    groupType: 20,
+    deviceList: null,
+    address: null,
+    auto: true,
+    children: [],
+  },
+
+  {
+    id: "12352",
+    parentId: "1235",
+    label: "HNQC4",
+    groupType: 20,
+    deviceList: null,
+    address: null,
+    auto: true,
+    children: [],
+  },
+];
+
+const convertListToTree = (list, key) => {
+  const { parentKey, displayKey, mappingKey } = key;
+  let convertedList = [];
+  list.length > 0 &&
+    list.forEach((element) => {
+      if (element[parentKey].length === 0) {
+        let newIem = { ...element, [parentKey]: "0" };
+        convertedList.push(newIem);
+      } else {
+        convertedList.push(element);
+      }
+    });
+
+  let map = {},
+    node,
+    roots = [],
+    i;
+
+  for (i = 0; i < convertedList.length; i += 1) {
+    map[convertedList[i].id] = i;
+    convertedList[i].children = [];
+  }
+
+  for (i = 0; i < convertedList.length; i += 1) {
+    node = convertedList[i];
+    if (node[parentKey] !== "0" && map[node[parentKey]] !== undefined) {
+      convertedList[map[node[parentKey]]].children.push({
+        ...node,
+        [displayKey]: node[mappingKey],
+      });
+    } else {
+      roots.push({
+        ...node,
+        [displayKey]: node[mappingKey],
+      });
+    }
+  }
+  return roots;
+};
+
+const flattenTree = (root, key) => {
+  let flatten = [Object.assign({}, root)];
+
+  delete flatten[0][key];
+
+  if (root[key] && root[key].length > 0) {
+    return flatten
+      .concat(root[key])
+      .map((child) => flattenTree(child, key))
+      .reduce((a, b) => a.concat(b), []);
+  }
+
+  return flatten;
+};
+
+const filterTreeNode = () => {};
 
 const LiveView = memo(() => {
   const [planLiveDetail, setPlanLiveDetail] = useState({
@@ -50,6 +151,33 @@ const LiveView = memo(() => {
     createDate: new Date(),
     lastModified: new Date(),
   });
+
+  useEffect(() => {
+    const allGates = {
+      id: "0",
+      text: "allGates",
+      children: convertListToTree(nodeListWithoutDevices, {
+        parentKey: "parentId",
+        mappingKey: "label",
+        displayKey: "text",
+      }),
+    };
+
+    console.log(allGates.children);
+    //.0 console.log(getGroupTree(dataInit));
+    let dataChildren = flattenTree(
+      { children: [allGates.children] },
+      "children"
+    ).filter((value) => Object.keys(value).length !== 0);
+
+    console.log(dataChildren);
+
+    // let searchedData = filterTreeNode(dataChildren, filter, {
+    //   parentKey: "parentId",
+    //   mappingKey: "label",
+    //   displayKey: "text",
+    // });
+  }, []);
 
   const [taskLive, setTaskLive] = useState({
     id: "id Task 3",

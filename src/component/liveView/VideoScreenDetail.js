@@ -124,6 +124,7 @@ const VideoScreenDetail = memo((props) => {
     if (!videoRef || !videoRef.current) return;
     const timeVolume = setTimeout(() => {
       videoRef.current.muted = false;
+      videoRef.current.volume = parseInt(60) / 100;
     }, 2000);
 
     return () => clearTimeout(timeVolume);
