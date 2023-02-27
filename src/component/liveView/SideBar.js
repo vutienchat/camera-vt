@@ -82,7 +82,7 @@ const useStyles = makeStyles({
   },
 });
 
-export const renderData = (data, classes, handleShowPopupSelect) => {
+export const renderData = (data, classes, handleShowPopupSelect, isNoIcon) => {
   return (
     <TreeView
       defaultCollapseIcon={<ArrowDropDownIcon style={{ fontSize: 40 }} />}
@@ -107,13 +107,15 @@ export const renderData = (data, classes, handleShowPopupSelect) => {
                     }}
                   >
                     <Typography>{item.label}</Typography>
-                    <MoreHorizIcon
-                      style={{ paddingRight: 24 }}
-                      onClick={(e) => {
-                        handleShowPopupSelect &&
-                          handleShowPopupSelect(e, "", item);
-                      }}
-                    />
+                    {!isNoIcon && (
+                      <MoreHorizIcon
+                        style={{ paddingRight: 24 }}
+                        onClick={(e) => {
+                          handleShowPopupSelect &&
+                            handleShowPopupSelect(e, "", item);
+                        }}
+                      />
+                    )}
                   </Box>
                 }
                 nodeId={String(index)}
@@ -124,7 +126,8 @@ export const renderData = (data, classes, handleShowPopupSelect) => {
                     ? renderData(
                         item.nodeChildren,
                         classes,
-                        handleShowPopupSelect
+                        handleShowPopupSelect,
+                        isNoIcon
                       )
                     : null}
                   {item.listTask && item.listTask.length
@@ -192,10 +195,16 @@ const SideBar = ({ typeDisplaySide, data, setData, setListPlan, listPlan }) => {
   useEffect(() => {
     let disable = false;
 
-    if (!subGroupAdd || subGroupAdd.trim().length === 0) {
+    if (
+      !subGroupAdd ||
+      subGroupAdd.trim().length === 0 ||
+      (indexGroup &&
+        (!indexGroup.label || indexGroup.label.trim().length === 0))
+    ) {
       setMessageErr("This field is required");
       disable = true;
     }
+
     if (data.map((item) => item.label).includes(subGroupAdd)) {
       setMessageErr("That name is not valid");
       disable = true;
@@ -212,6 +221,18 @@ const SideBar = ({ typeDisplaySide, data, setData, setListPlan, listPlan }) => {
     ) {
       disable = true;
     }
+
+    if (indexGroup && Object.keys(indexGroup).length) {
+      const tempData = [...data]
+        .filter((item) => item.id !== indexGroup.id)
+        .map((it) => it.label);
+
+      if (tempData.includes(indexGroup.label)) {
+        disable = true;
+        setMessageErr("That name is not valid");
+      }
+    }
+
     setDisabled(disable);
   }, [subGroupAdd, data, typeDisplay, indexGroup, dataGroup]);
 
@@ -397,6 +418,8 @@ const SideBar = ({ typeDisplaySide, data, setData, setListPlan, listPlan }) => {
           taskIndex={indexGroup}
           setTaskIndex={setIndexGroup}
           type={typeDisplay}
+          isDisabled={isDisabled}
+          messageErr={messageErr}
         />
       )}
     </React.Fragment>

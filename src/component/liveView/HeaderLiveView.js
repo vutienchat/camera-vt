@@ -27,8 +27,15 @@ import { ModalCustomGrid } from "../modal";
 import BorderColorIcon from "@material-ui/icons/BorderColor";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import ViewQuiltIcon from "@material-ui/icons/ViewQuilt";
-import { dataGridCustomX4_1, dataGridCustomX4_2 } from "./dataSideBar";
-import { getDataGridBySize } from "./javascript";
+import {
+  dataGridCustomX4_1,
+  dataGridCustomX4_2,
+  dataInit,
+  dataInitTask,
+} from "./dataSideBar";
+import { getDataGridBySize, getGroupTree } from "./javascript";
+import HeaderPopup from "./HeaderPopup";
+import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 
 const dataHeader = [
   { id: 1, label: "Task 1", duplicate: 0, default: 1 },
@@ -109,11 +116,32 @@ const useStyles = makeStyles({
     right: 0,
     zIndex: 1,
   },
+  contentSearch: {
+    borderRadius: "4px",
+    fontSize: 14,
+    color: "black",
+    padding: "11px 11px 11px 22px",
+    width: "100%",
+    cursor: "pointer",
+    border: "solid 1.5px #d3d3d3",
+    background: "#fff",
+    "&:hover": {
+      boxShadow: "rgba(0, 0,0, 0.24) 0px 3px 8px",
+    },
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
 });
 
 const HeaderLiveView = (props) => {
-  const { setIsFullScreen, taskLive, onUpdateGridData, handleCleanTask } =
-    props;
+  const {
+    setIsFullScreen,
+    taskLive,
+    onUpdateGridData,
+    handleCleanTask,
+    dataSideGroup,
+  } = props;
   const classes = useStyles();
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef);
@@ -130,6 +158,8 @@ const HeaderLiveView = (props) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [isShowPopupCustom, setIsShowPopupCustom] = useState(false);
   const [isShowModalCustomGrid, setIsShowModalCustomGrid] = useState(false);
+  const [isShowPopupSearch, setIsShowPopupSearch] = useState(false);
+  const [dataGroup, setDataGroup] = useState();
 
   function useOutsideAlerter(ref) {
     useEffect(() => {
@@ -267,6 +297,18 @@ const HeaderLiveView = (props) => {
     setTaskIndex({ ...taskActive });
   }, [data]);
 
+  useEffect(() => {
+    const parseData =
+      dataSideGroup &&
+      [...dataSideGroup].reduce((abc, nodeTree) => {
+        if (nodeTree.parentId === "") {
+          return [...abc, { ...getGroupTree(nodeTree, [...dataSideGroup]) }];
+        }
+        return [...abc];
+      }, []);
+    setDataGroup([...parseData]);
+  }, [data, dataInitTask]);
+
   return (
     <React.Fragment>
       <Box
@@ -280,18 +322,25 @@ const HeaderLiveView = (props) => {
         }}
       >
         <Box style={{ display: "flex", justifyContent: "flex-start" }}>
-          <Box style={{ paddingLeft: 12, marginRight: 30 }}>
-            <FormControl fullWidth size="small" style={{ width: 212 }}>
-              <Select
-                native
-                id="demo-customized-select-native"
-                variant="outlined"
+          <Box
+            style={{
+              paddingLeft: 12,
+              marginRight: 70,
+              width: 300,
+            }}
+          >
+            <Box sx={{ width: 300, position: "relative" }}>
+              <Box
+                className={classes.contentSearch}
+                onClick={() => setIsShowPopupSearch((prev) => !prev)}
               >
-                <option value={10}>Ten</option>
-                <option value={20}>Twenty</option>
-                <option value={30}>Thirty</option>
-              </Select>
-            </FormControl>
+                <span>Owner Organization</span>
+                <ArrowDropDownIcon />
+              </Box>
+            </Box>
+            {isShowPopupSearch && (
+              <HeaderPopup listData={dataGroup || []} textSearch="search" />
+            )}
           </Box>
           <Box style={{ display: "flex" }}>
             {data.slice(dataIndex, dataIndex + size).map((item) => {

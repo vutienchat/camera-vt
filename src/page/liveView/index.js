@@ -276,6 +276,7 @@ const LiveView = memo(() => {
           taskLive={taskLive}
           onUpdateGridData={handleUpdateGridData}
           handleCleanTask={handleCleanTask}
+          dataSideGroup={dataSideGroup}
         />
         <Box
           style={{
