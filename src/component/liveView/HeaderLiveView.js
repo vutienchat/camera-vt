@@ -141,6 +141,7 @@ const HeaderLiveView = (props) => {
     onUpdateGridData,
     handleCleanTask,
     dataSideGroup,
+    groupDeviceList,
   } = props;
   const classes = useStyles();
   const wrapperRef = useRef(null);
@@ -217,9 +218,8 @@ const HeaderLiveView = (props) => {
     tempData.push({
       ...tempData[taskIndx],
       id: tempData.length + 1,
-      label: `${tempData[taskIndx].label} (${
-        tempData[taskIndx].duplicate + 1
-      })`,
+      label: `${tempData[taskIndx].label} (${tempData[taskIndx].duplicate +
+        1})`,
       duplicate: 0,
       isNew: true,
     });
@@ -339,7 +339,10 @@ const HeaderLiveView = (props) => {
               </Box>
             </Box>
             {isShowPopupSearch && (
-              <HeaderPopup listData={dataGroup || []} textSearch="search" />
+              <HeaderPopup
+                listData={groupDeviceList || []}
+                textSearch="search"
+              />
             )}
           </Box>
           <Box style={{ display: "flex" }}>

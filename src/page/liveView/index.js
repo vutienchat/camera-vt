@@ -52,6 +52,26 @@ const nodeListWithoutDevices = [
     auto: true,
     children: [],
   },
+  {
+    id: "142234",
+    parentId: "123",
+    label: "HNQC332",
+    groupType: 20,
+    deviceList: null,
+    address: null,
+    auto: true,
+    children: [],
+  },
+  {
+    id: "123512",
+    parentId: "1234",
+    label: "HNQ33C3",
+    groupType: 20,
+    deviceList: null,
+    address: null,
+    auto: true,
+    children: [],
+  },
 ];
 
 const convertListToTree = (list, key) => {
@@ -74,13 +94,13 @@ const convertListToTree = (list, key) => {
 
   for (i = 0; i < convertedList.length; i += 1) {
     map[convertedList[i].id] = i;
-    convertedList[i].children = [];
+    convertedList[i].nodeChildren = [];
   }
 
   for (i = 0; i < convertedList.length; i += 1) {
     node = convertedList[i];
     if (node[parentKey] !== "0" && map[node[parentKey]] !== undefined) {
-      convertedList[map[node[parentKey]]].children.push({
+      convertedList[map[node[parentKey]]].nodeChildren.push({
         ...node,
         [displayKey]: node[mappingKey],
       });
@@ -109,7 +129,57 @@ const flattenTree = (root, key) => {
   return flatten;
 };
 
-const filterTreeNode = () => {};
+// const filterTreeNode = (treeNodes, filterString, key) => {
+//   console.log(treeNodes);
+//   const matchedNodesName = treeNodes.filter((item) => {
+//     //console.log(
+//     //item.label.toLowerCase().indexOf(`${filterString.toLowerCase()}`) !== -1;
+//     //);
+//     // item.label.toLowerCase()
+//     //   .indexOf(`${filterString.toLowerCase()}`)
+//     //   .map((item) => item.label);
+//   });
+
+//   console.log(matchedNodesName);
+// };
+
+const getAllNodeParent = (nodeParentId, nodeTree, listNodeTMP, listNode) => {
+  if (
+    listNode.some((node) => node.id === nodeParentId) ||
+    listNodeTMP.some((node) => node.id === nodeParentId)
+  ) {
+    return [...listNodeTMP];
+  }
+
+  const nodeParent = nodeTree.find((node) => node.id === nodeParentId);
+
+  if (!nodeParent || Object.keys(nodeParent).length === 0) {
+    return [...listNodeTMP];
+  }
+
+  if (nodeParent.parentId) {
+    return getAllNodeParent(
+      nodeParent.parentId,
+      nodeTree,
+      [...listNodeTMP, { ...nodeParent }],
+      listNode
+    );
+  }
+  return [...listNodeTMP, { ...nodeParent }];
+};
+
+const flattenTreeNode = (root, keyWord) => {
+  return root.reduce((listNode, node) => {
+    let nodeTMP = [];
+    if (node.label.toLowerCase().indexOf(`${keyWord.toLowerCase()}`) !== -1) {
+      if (node.parentId) {
+        nodeTMP = getAllNodeParent(node.parentId, root, nodeTMP, listNode);
+      }
+      return [...listNode, node].concat(nodeTMP);
+    }
+    return [...listNode];
+  }, []);
+};
 
 const LiveView = memo(() => {
   const [planLiveDetail, setPlanLiveDetail] = useState({
@@ -152,33 +222,6 @@ const LiveView = memo(() => {
     lastModified: new Date(),
   });
 
-  useEffect(() => {
-    const allGates = {
-      id: "0",
-      text: "allGates",
-      children: convertListToTree(nodeListWithoutDevices, {
-        parentKey: "parentId",
-        mappingKey: "label",
-        displayKey: "text",
-      }),
-    };
-
-    console.log(allGates.children);
-    //.0 console.log(getGroupTree(dataInit));
-    let dataChildren = flattenTree(
-      { children: [allGates.children] },
-      "children"
-    ).filter((value) => Object.keys(value).length !== 0);
-
-    console.log(dataChildren);
-
-    // let searchedData = filterTreeNode(dataChildren, filter, {
-    //   parentKey: "parentId",
-    //   mappingKey: "label",
-    //   displayKey: "text",
-    // });
-  }, []);
-
   const [taskLive, setTaskLive] = useState({
     id: "id Task 3",
     size: sizeDefault,
@@ -209,6 +252,7 @@ const LiveView = memo(() => {
   const [typeDisplaySide, setTypeDisplaySide] = useState();
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [dataSideGroup, setDataSideGroup] = useState([...dataInit]);
+  const [groupDeviceList, setGroupDeviceList] = useState();
   const [listPlan, setListPlan] = useState([]);
 
   const escFunction = useCallback(
@@ -219,6 +263,34 @@ const LiveView = memo(() => {
     },
     [isFullScreen]
   );
+
+  useEffect(() => {
+    // const allGates = {
+    //   id: "0",
+    //   text: "allGates",
+    //   children: convertListToTree(nodeListWithoutDevices, {
+    //     parentKey: "parentId",
+    //     mappingKey: "label",
+    //     displayKey: "text",
+    //   }),
+    // };
+
+    const groupDeviceFind = convertListToTree(
+      flattenTreeNode(nodeListWithoutDevices, "332"),
+      {
+        parentKey: "parentId",
+        mappingKey: "label",
+        displayKey: "text",
+      }
+    ).reduce((nodeList, node) => {
+      if (nodeList.some((nodeTmp) => nodeTmp.id === node.id)) {
+        return [...nodeList];
+      }
+      return [...nodeList, node];
+    }, []);
+
+    setGroupDeviceList(groupDeviceFind);
+  }, []);
 
   useEffect(() => {
     document.addEventListener("keydown", escFunction, false);
@@ -277,6 +349,7 @@ const LiveView = memo(() => {
           onUpdateGridData={handleUpdateGridData}
           handleCleanTask={handleCleanTask}
           dataSideGroup={dataSideGroup}
+          groupDeviceList={groupDeviceList}
         />
         <Box
           style={{

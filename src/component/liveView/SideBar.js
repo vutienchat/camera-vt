@@ -94,9 +94,7 @@ export const renderData = (data, classes, handleShowPopupSelect, isNoIcon) => {
           return (
             <Box key={index}>
               <TreeItem
-                onLabelClick={(e) => {
-                  e.preventDefault();
-                }}
+                onLabelClick={(e) => e.preventDefault()}
                 key={item.id}
                 label={
                   <Box
