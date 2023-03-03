@@ -13,10 +13,13 @@ import TreeItem from "@material-ui/lab/TreeItem";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import ViewSideDevice from "./ViewSideDevice";
 import ViewSideTaskWall from "./ViewSideTaskWall";
+import ViewSidePlan from "./ViewSidePlan";
 import PopUpOptionSideBar from "./PopUpOptionSideBar";
 import { getGroupTree } from "./javascript";
 import { ModalAddGroup, ModalAddPlan, ModalRenameTask } from "../modal/index";
 import { dataInitTask } from "./dataSideBar";
+import { red } from "@material-ui/core/colors";
+import ModalAddPlanSchedule from "../modal/ModalAddPlanSchedule";
 
 const useStyles = makeStyles({
   Sub: {
@@ -53,7 +56,7 @@ const useStyles = makeStyles({
     },
     "& .MuiTreeItem-root.Mui-selected > .MuiTreeItem-content .MuiTreeItem-label:hover, .MuiTreeItem-root.Mui-selected:focus > .MuiTreeItem-content .MuiTreeItem-label ": {
       backgroundColor: "#fff !important",
-    },
+    }
   },
   boxHead: {
     display: "flex",
@@ -80,6 +83,11 @@ const useStyles = makeStyles({
     overflowX: "hidden",
     position: "relative",
   },
+  outlined: {
+    "& .MuiSelect-outlined": {
+      padding: '10px !important',
+    }
+  }
 });
 
 export const renderData = (data, classes, handleShowPopupSelect, isNoIcon) => {
@@ -122,43 +130,43 @@ export const renderData = (data, classes, handleShowPopupSelect, isNoIcon) => {
                 <>
                   {item.nodeChildren && item.nodeChildren.length
                     ? renderData(
-                        item.nodeChildren,
-                        classes,
-                        handleShowPopupSelect,
-                        isNoIcon
-                      )
+                      item.nodeChildren,
+                      classes,
+                      handleShowPopupSelect,
+                      isNoIcon
+                    )
                     : null}
                   {item.listTask && item.listTask.length
                     ? item.listTask.map((child, index) => {
-                        return (
-                          <TreeItem
-                            onLabelClick={(e) => {
-                              e.preventDefault();
-                            }}
-                            key={child.id}
-                            label={
-                              <Box
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "space-between",
-                                  width: "100%",
+                      return (
+                        <TreeItem
+                          onLabelClick={(e) => {
+                            e.preventDefault();
+                          }}
+                          key={child.id}
+                          label={
+                            <Box
+                              style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                width: "100%",
+                              }}
+                            >
+                              <Typography>{child.label}</Typography>
+                              <MoreHorizIcon
+                                style={{ paddingRight: 24 }}
+                                onClick={(e) => {
+                                  handleShowPopupSelect &&
+                                    handleShowPopupSelect(e, "task", child);
                                 }}
-                              >
-                                <Typography>{child.label}</Typography>
-                                <MoreHorizIcon
-                                  style={{ paddingRight: 24 }}
-                                  onClick={(e) => {
-                                    handleShowPopupSelect &&
-                                      handleShowPopupSelect(e, "task", child);
-                                  }}
-                                />
-                              </Box>
-                            }
-                            nodeId={String(index)}
-                            className={classes.isSub || ""}
-                          ></TreeItem>
-                        );
-                      })
+                              />
+                            </Box>
+                          }
+                          nodeId={String(index)}
+                          className={classes.isSub || ""}
+                        ></TreeItem>
+                      );
+                    })
                     : null}
                 </>
               </TreeItem>
@@ -185,6 +193,8 @@ const SideBar = ({ typeDisplaySide, data, setData, setListPlan, listPlan }) => {
   const [isModalAddPlan, setIsModalAddPlan] = useState(false);
   const [isShowModalRename, setIsShowModalRename] = useState(false);
   const [listTaskInPlan, setListTaskInPlan] = useState([]);
+  const [isModalAddPlanSchedule, setIsModalAddPlanSchedule] = useState(false);
+
   const [detailPlan, setDetailPlan] = useState({
     name: `Plan ${listPlan.length + 1}`,
     type: "MANUAL",
@@ -270,10 +280,9 @@ const SideBar = ({ typeDisplaySide, data, setData, setListPlan, listPlan }) => {
     setTypeDisplay(type);
     setIndexGroup(indexGroup);
     setSubGroupAdd(
-      `Sub Group  ${
-        indexGroup && indexGroup.nodeChildren
-          ? indexGroup.nodeChildren.length + 1
-          : ""
+      `Sub Group  ${indexGroup && indexGroup.nodeChildren
+        ? indexGroup.nodeChildren.length + 1
+        : ""
       }`
     );
   };
@@ -310,7 +319,11 @@ const SideBar = ({ typeDisplaySide, data, setData, setListPlan, listPlan }) => {
         );
         break;
       case "Plan":
-        view = "Plan";
+        view = <ViewSidePlan
+          classes={classes}
+          data={listTaskInPlan}
+          onOpenModalAddPlanSchedule={(isOpen) => setIsModalAddPlanSchedule(isOpen)}
+        />;
         break;
       default:
         view = <ViewSideDevice classes={classes} />;
@@ -401,6 +414,18 @@ const SideBar = ({ typeDisplaySide, data, setData, setListPlan, listPlan }) => {
           open={isModalAddPlan}
           handleClose={() => setIsModalAddPlan(false)}
           data={listTaskInPlan}
+          classes={classes}
+          setDetailPlan={setDetailPlan}
+          detailPlan={detailPlan}
+          handleSavePlan={handleSavePlan}
+        />
+      )}
+      {isModalAddPlanSchedule && (
+        <ModalAddPlanSchedule
+          open={isModalAddPlanSchedule}
+          handleClose={() => setIsModalAddPlanSchedule(false)}
+          data={listTaskInPlan}
+          classes={classes}
           setDetailPlan={setDetailPlan}
           detailPlan={detailPlan}
           handleSavePlan={handleSavePlan}

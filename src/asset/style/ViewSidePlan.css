@@ -1,0 +1,77 @@
+.plan-container {
+    height: 100%;
+}
+
+.plan-header {
+    padding: 10px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    border-bottom: 2px solid red;
+}
+
+.plan-header-icon {
+    position: absolute;
+    left: 6px;
+}
+
+.plan-header-title {}
+
+.plan-current-container {
+    padding: 7px;
+    margin-top: 12px;
+    height: calc(50% - 43px);
+    border-bottom: 2px solid #F1F1F1;
+}
+
+.plan-current-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 12px;
+}
+
+.plan-current-title {
+    font-weight: 600;
+}
+
+.plan-current-edit {}
+
+.plan-list-container {
+    height: calc(50% - 55px);
+    padding: 7px;
+    margin-top: 12px;
+}
+
+.plan-list-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 12px;
+}
+
+.plan-list-title {
+    font-weight: 600;
+}
+
+.plan-list-edit {
+    color: red;
+    cursor: pointer;
+}
+
+.plan-list-edit i {
+    text-decoration: underline;
+    font-size: 13px;
+}
+
+.table-plan {
+    border: 1px solid #dddddd;
+    padding: 3px;
+    text-align: center;
+}
+
+.plan-container .MuiTableCell-root {
+    font-size: 10px!important;
+}
+
+.plan-container .MuiTableCell-sizeSmall {
+    padding: 5px;
+}
