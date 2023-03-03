@@ -1,76 +1,132 @@
 import React, { useState } from "react";
-import { TreeItem, TreeView } from "@material-ui/lab";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowRightIcon from "@material-ui/icons/ArrowRight";
 import RenderDataSide from "./RenderDataSide";
-import { Box, Typography } from "@material-ui/core";
-import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import {
-  dataAiIntegrated,
-  dataCameDevice,
-  dataEMAP,
-  dataPTZ,
-} from "./dataSideBar";
+  Box,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Collapse,
+} from "@material-ui/core";
+import { dataAiIntegrated, dataCameDevice, dataEMAP } from "./dataSideBar";
 import { renderData } from "./SideBar";
 
 const ViewSideDevice = ({ classes }) => {
-  const [expanded, setExpanded] = useState([]);
   const [selectType, setSelectType] = useState("siteGroup");
+
+  const [open, setOpen] = React.useState("");
+  const [openPTZ, setOpenPTZ] = React.useState("");
+
+  const handleClick = (value) => {
+    if (open === value) {
+      setOpen("");
+      return;
+    }
+    setOpen(value);
+  };
 
   return (
     <React.Fragment>
-      <TreeView
-        defaultCollapseIcon={
-          <ArrowDropDownIcon className={classes.iconStyle} />
-        }
-        defaultExpandIcon={<ArrowRightIcon className={classes.iconStyle} />}
-        className={classes.root}
-        expanded={expanded}
-        onNodeSelect={(event, nodeId) => {
-          const expandedIdx = expanded.includes(nodeId);
-          if (expandedIdx) setExpanded([]);
-          else setExpanded([nodeId]);
-        }}
-      >
-        <TreeItem nodeId="1" label="Camera Device" className={classes.Sub}>
-          <RenderDataSide
-            renderData={renderData}
-            data={dataCameDevice}
-            selectType={selectType}
-            setSelectType={setSelectType}
-            classes={classes}
-            isCamera={true}
-            isSearch={true}
-          />
-        </TreeItem>
-        <TreeItem
-          nodeId="2"
-          label="AI Integrated Device"
-          className={classes.Sub}
+      <Box style={{ height: "100%", display: "flex", flexDirection: "column" }}>
+        <List
+          style={{
+            marginBottom: open === 1 ? "auto" : 0,
+            height: open === 1 ? "100%" : "auto",
+          }}
         >
-          <RenderDataSide
-            renderData={renderData}
-            data={dataAiIntegrated}
-            classes={classes}
-            isSearch={true}
-          />
-        </TreeItem>
-        <TreeItem nodeId="3" label="eMAP" className={classes.Sub}>
-          <RenderDataSide
-            renderData={renderData}
-            data={dataEMAP}
-            classes={classes}
-            isSearch={true}
-          />
-        </TreeItem>
-        <TreeItem nodeId="4" label="PTZ" className={classes.Sub}>
-          <RenderDataSide
-            renderData={renderData}
-            data={dataPTZ}
-            classes={classes}
-          />
-        </TreeItem>
-      </TreeView>
+          <ListItem button onClick={() => handleClick(1)}>
+            <ListItemIcon>
+              {open === 1 ? <ArrowDropDownIcon /> : <ArrowRightIcon />}
+            </ListItemIcon>
+            <ListItemText primary="Namee Device" />
+          </ListItem>
+          <Collapse in={open === 1} timeout="auto" unmountOnExit>
+            <List
+              component="div"
+              disablePadding
+              style={{
+                position: "absolute",
+                bottom: 0,
+                top: "60px",
+                overflow: "auto",
+              }}
+            >
+              <RenderDataSide
+                renderData={renderData}
+                data={dataCameDevice}
+                selectType={selectType}
+                setSelectType={setSelectType}
+                classes={classes}
+                isCamera={true}
+                isSearch={true}
+              />
+            </List>
+          </Collapse>
+        </List>
+        <List
+          style={{
+            marginBottom: open === 2 ? "auto" : 0,
+            height: open === 2 ? "100%" : "auto",
+          }}
+        >
+          <ListItem button onClick={() => handleClick(2)}>
+            <ListItemIcon>
+              {open === 2 ? <ArrowDropDownIcon /> : <ArrowRightIcon />}
+            </ListItemIcon>
+            <ListItemText primary="Namee Device" />
+          </ListItem>
+          <Collapse in={open === 2} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <RenderDataSide
+                renderData={renderData}
+                data={dataAiIntegrated}
+                classes={classes}
+                isSearch={true}
+              />
+            </List>
+          </Collapse>
+        </List>
+        <List
+          style={{
+            marginBottom: open === 3 ? "auto" : 0,
+            height: open === 3 ? "100%" : "auto",
+          }}
+        >
+          <ListItem button onClick={() => handleClick(3)}>
+            <ListItemIcon>
+              {open === 3 ? <ArrowDropDownIcon /> : <ArrowRightIcon />}
+            </ListItemIcon>
+            <ListItemText primary="Namee Device" />
+          </ListItem>
+          <Collapse in={open === 3} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <RenderDataSide
+                renderData={renderData}
+                data={dataEMAP}
+                classes={classes}
+                isSearch={true}
+              />
+            </List>
+          </Collapse>
+        </List>
+        <List>
+          <ListItem button onClick={() => setOpenPTZ(!openPTZ)}>
+            <ListItemIcon>
+              {openPTZ ? <ArrowDropDownIcon /> : <ArrowRightIcon />}
+            </ListItemIcon>
+            <ListItemText primary="PTZ" />
+          </ListItem>
+          <Collapse in={openPTZ} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItem button className={classes.nested}>
+                <ListItemText primary="Starred" />
+              </ListItem>
+            </List>
+          </Collapse>
+        </List>
+      </Box>
     </React.Fragment>
   );
 };
