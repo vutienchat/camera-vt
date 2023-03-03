@@ -8,7 +8,7 @@ import {
 } from "../../component/liveView";
 import { dataInit } from "../../component/liveView/dataSideBar";
 import { getGroupTree } from "../../component/liveView/javascript";
-const sizeDefault = 1;
+const sizeDefault = 3;
 
 const nodeListWithoutDevices = [
   {

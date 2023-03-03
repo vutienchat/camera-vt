@@ -15,7 +15,12 @@ import ViewSideDevice from "./ViewSideDevice";
 import ViewSideTaskWall from "./ViewSideTaskWall";
 import PopUpOptionSideBar from "./PopUpOptionSideBar";
 import { getGroupTree } from "./javascript";
-import { ModalAddGroup, ModalAddPlan, ModalRenameTask } from "../modal/index";
+import {
+  ModalAddGroup,
+  ModalAddPlan,
+  ModalDeleteTask,
+  ModalRenameTask,
+} from "../modal/index";
 import { dataInitTask } from "./dataSideBar";
 
 const useStyles = makeStyles({
@@ -51,9 +56,10 @@ const useStyles = makeStyles({
     "& .MuiTreeItem-label": {
       backgroundColor: "#fff !important",
     },
-    "& .MuiTreeItem-root.Mui-selected > .MuiTreeItem-content .MuiTreeItem-label:hover, .MuiTreeItem-root.Mui-selected:focus > .MuiTreeItem-content .MuiTreeItem-label ": {
-      backgroundColor: "#fff !important",
-    },
+    "& .MuiTreeItem-root.Mui-selected > .MuiTreeItem-content .MuiTreeItem-label:hover, .MuiTreeItem-root.Mui-selected:focus > .MuiTreeItem-content .MuiTreeItem-label ":
+      {
+        backgroundColor: "#fff !important",
+      },
   },
   boxHead: {
     display: "flex",
@@ -175,15 +181,16 @@ const SideBar = ({ typeDisplaySide, data, setData, setListPlan, listPlan }) => {
   useOutsideAlerter(wrapperRef);
   const [anchorEl, setAnchorEl] = useState(null);
   const [isShowPopUpSelect, setIsShowPopupSelect] = useState(false);
+  const [isShowModalRename, setIsShowModalRename] = useState(false);
+  const [isModalAddGroup, setIsModalAddGroup] = useState(false);
+  const [isModalAddPlan, setIsModalAddPlan] = useState(false);
+  const [isDisabled, setDisabled] = useState(false);
+  const [isModalDeleteGroup, setIsModalDeleteGroup] = useState(false);
   const [typeDisplay, setTypeDisplay] = useState("");
   const [indexGroup, setIndexGroup] = useState();
   const [dataGroup, setDataGroup] = useState();
-  const [isModalAddGroup, setIsModalAddGroup] = useState(false);
   const [subGroupAdd, setSubGroupAdd] = useState();
-  const [isDisabled, setDisabled] = useState(false);
   const [messageErr, setMessageErr] = useState("");
-  const [isModalAddPlan, setIsModalAddPlan] = useState(false);
-  const [isShowModalRename, setIsShowModalRename] = useState(false);
   const [listTaskInPlan, setListTaskInPlan] = useState([]);
   const [detailPlan, setDetailPlan] = useState({
     name: `Plan ${listPlan.length + 1}`,
@@ -237,7 +244,9 @@ const SideBar = ({ typeDisplaySide, data, setData, setListPlan, listPlan }) => {
   useEffect(() => {
     const parseData =
       data &&
-      [...data, ...dataInitTask].reduce((abc, nodeTree) => {
+      [...data].reduce((abc, nodeTree) => {
+        console.log("abc", abc);
+        console.log("nodeTree", nodeTree);
         if (nodeTree.parentId === "") {
           return [
             ...abc,
@@ -246,9 +255,11 @@ const SideBar = ({ typeDisplaySide, data, setData, setListPlan, listPlan }) => {
         }
         return [...abc];
       }, []);
-    console.log(parseData);
     setDataGroup([...parseData]);
   }, [data, dataInitTask]);
+
+  // console.log(dataGroup);
+  // console.log(indexGroup);
 
   function useOutsideAlerter(ref) {
     useEffect(() => {
@@ -363,6 +374,13 @@ const SideBar = ({ typeDisplaySide, data, setData, setListPlan, listPlan }) => {
     setData([...tempData]);
   };
 
+  const handleDeleteGroup = (id) => {
+    const tempData = [...data];
+    const newData = tempData.filter((item) => item.id !== id);
+    // console.log(newData);
+    setData([...newData]);
+  };
+
   return (
     <React.Fragment>
       <Box className={classes.sideBar}>{renderSideBar(typeDisplaySide)}</Box>
@@ -381,6 +399,7 @@ const SideBar = ({ typeDisplaySide, data, setData, setListPlan, listPlan }) => {
           handleAddToPlan={() => {
             handleAddToPlan(indexGroup);
           }}
+          openModalDelete={() => setIsModalDeleteGroup(true)}
         />
       )}
       {isModalAddGroup && (
@@ -420,6 +439,12 @@ const SideBar = ({ typeDisplaySide, data, setData, setListPlan, listPlan }) => {
           messageErr={messageErr}
         />
       )}
+      <ModalDeleteTask
+        open={isModalDeleteGroup}
+        handleClose={() => setIsModalDeleteGroup(false)}
+        taskIndex={indexGroup}
+        handleDelete={handleDeleteGroup}
+      />
     </React.Fragment>
   );
 };

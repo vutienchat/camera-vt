@@ -218,8 +218,9 @@ const HeaderLiveView = (props) => {
     tempData.push({
       ...tempData[taskIndx],
       id: tempData.length + 1,
-      label: `${tempData[taskIndx].label} (${tempData[taskIndx].duplicate +
-        1})`,
+      label: `${tempData[taskIndx].label} (${
+        tempData[taskIndx].duplicate + 1
+      })`,
       duplicate: 0,
       isNew: true,
     });
@@ -292,6 +293,10 @@ const HeaderLiveView = (props) => {
     setData([...tempData]);
   };
 
+  const handleOpenPopupSearch = () => {
+    setIsShowPopupSearch((prev) => !prev);
+  };
+
   useEffect(() => {
     const taskActive = data.find((item) => item.default);
     setTaskIndex({ ...taskActive });
@@ -322,29 +327,35 @@ const HeaderLiveView = (props) => {
         }}
       >
         <Box style={{ display: "flex", justifyContent: "flex-start" }}>
-          <Box
-            style={{
-              paddingLeft: 12,
-              marginRight: 70,
-              width: 300,
+          <ClickAwayListener
+            onClickAway={() => {
+              setIsShowPopupSearch(false);
             }}
           >
-            <Box sx={{ width: 300, position: "relative" }}>
-              <Box
-                className={classes.contentSearch}
-                onClick={() => setIsShowPopupSearch((prev) => !prev)}
-              >
-                <span>Owner Organization</span>
-                <ArrowDropDownIcon />
+            <Box
+              style={{
+                paddingLeft: 12,
+                marginRight: 70,
+                width: 300,
+              }}
+            >
+              <Box sx={{ width: 300, position: "relative" }}>
+                <Box
+                  className={classes.contentSearch}
+                  onClick={handleOpenPopupSearch}
+                >
+                  <span>Owner Organization</span>
+                  <ArrowDropDownIcon />
+                </Box>
               </Box>
+              {isShowPopupSearch && (
+                <HeaderPopup
+                  listData={groupDeviceList || []}
+                  textSearch="search"
+                />
+              )}
             </Box>
-            {isShowPopupSearch && (
-              <HeaderPopup
-                listData={groupDeviceList || []}
-                textSearch="search"
-              />
-            )}
-          </Box>
+          </ClickAwayListener>
           <Box style={{ display: "flex" }}>
             {data.slice(dataIndex, dataIndex + size).map((item) => {
               return (
@@ -567,6 +578,7 @@ const HeaderLiveView = (props) => {
           taskIndex={taskIndex}
           setTaskIndex={setTaskIndex}
           handleSaveTask={handleSaveTask}
+          dataGroup={dataGroup}
         />
       )}
     </React.Fragment>
