@@ -578,6 +578,7 @@ const HeaderLiveView = (props) => {
           taskIndex={taskIndex}
           setTaskIndex={setTaskIndex}
           handleSaveTask={handleSaveTask}
+          dataGroup={dataGroup}
         />
       )}
     </React.Fragment>

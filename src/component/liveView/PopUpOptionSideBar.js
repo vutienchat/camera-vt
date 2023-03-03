@@ -42,6 +42,7 @@ const PopupOptionSideBar = ({
   setIsModalAddGroup,
   handleAddToPlan,
   openModalRename,
+  openModalDelete,
 }) => {
   const classes = useStyles();
   return (
@@ -144,6 +145,7 @@ const PopupOptionSideBar = ({
                   <DeleteOutlineIcon style={{ paddingLeft: 10 }} />
                   <Typography
                     onClick={() => {
+                      openModalDelete();
                       setIsShowPopupSelect(false);
                     }}
                     className={classes.textOption}
