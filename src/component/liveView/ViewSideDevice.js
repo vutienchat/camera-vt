@@ -78,7 +78,16 @@ const ViewSideDevice = ({ classes }) => {
             <ListItemText primary="Namee Device" />
           </ListItem>
           <Collapse in={open === 2} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
+            <List
+              component="div"
+              disablePadding
+              style={{
+                position: "absolute",
+                bottom: 0,
+                top: "60px",
+                overflow: "auto",
+              }}
+            >
               <RenderDataSide
                 renderData={renderData}
                 data={dataAiIntegrated}
@@ -101,7 +110,16 @@ const ViewSideDevice = ({ classes }) => {
             <ListItemText primary="Namee Device" />
           </ListItem>
           <Collapse in={open === 3} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
+            <List
+              component="div"
+              disablePadding
+              style={{
+                position: "absolute",
+                bottom: 0,
+                top: "60px",
+                overflow: "auto",
+              }}
+            >
               <RenderDataSide
                 renderData={renderData}
                 data={dataEMAP}
