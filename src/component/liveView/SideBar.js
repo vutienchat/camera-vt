@@ -1,10 +1,4 @@
-import {
-  Box,
-  InputAdornment,
-  makeStyles,
-  TextField,
-  Typography,
-} from "@material-ui/core";
+import { Box, makeStyles, Typography } from "@material-ui/core";
 import React, { useEffect, useRef, useState } from "react";
 import TreeView from "@material-ui/lab/TreeView";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
@@ -20,6 +14,7 @@ import {
   ModalAddPlan,
   ModalDeleteTask,
   ModalRenameTask,
+  ModalMove,
 } from "../modal/index";
 import { dataInitTask } from "./dataSideBar";
 
@@ -197,6 +192,8 @@ const SideBar = ({ typeDisplaySide, data, setData, setListPlan, listPlan }) => {
     type: "MANUAL",
   });
 
+  const [objectSelectMove, setObjectSelectMove] = useState({});
+
   useEffect(() => {
     let disable = false;
 
@@ -245,8 +242,6 @@ const SideBar = ({ typeDisplaySide, data, setData, setListPlan, listPlan }) => {
     const parseData =
       data &&
       [...data].reduce((abc, nodeTree) => {
-        console.log("abc", abc);
-        console.log("nodeTree", nodeTree);
         if (nodeTree.parentId === "") {
           return [
             ...abc,
@@ -257,9 +252,6 @@ const SideBar = ({ typeDisplaySide, data, setData, setListPlan, listPlan }) => {
       }, []);
     setDataGroup([...parseData]);
   }, [data, dataInitTask]);
-
-  // console.log(dataGroup);
-  // console.log(indexGroup);
 
   function useOutsideAlerter(ref) {
     useEffect(() => {
@@ -381,9 +373,24 @@ const SideBar = ({ typeDisplaySide, data, setData, setListPlan, listPlan }) => {
     setData([...newData]);
   };
 
+  const handleOpenModalMove = (objectSelect, typeDisplay) => {
+    setIsShowPopupSelect(false);
+    setObjectSelectMove({ ...objectSelect, typeDisplay: typeDisplay });
+  };
+
   return (
     <React.Fragment>
       <Box className={classes.sideBar}>{renderSideBar(typeDisplaySide)}</Box>
+
+      {Object.keys(objectSelectMove).length !== 0 && (
+        <ModalMove
+          handleClose={() => setObjectSelectMove({})}
+          handleMoveTask={() => console.log("move")}
+          objectSelectMove={objectSelectMove}
+          groupData={data}
+          taskData={dataInitTask}
+        />
+      )}
       {isShowPopUpSelect && (
         <PopUpOptionSideBar
           open={isShowPopUpSelect}
@@ -392,6 +399,7 @@ const SideBar = ({ typeDisplaySide, data, setData, setListPlan, listPlan }) => {
           wrapperRef={wrapperRef}
           setIsShowPopupSelect={setIsShowPopupSelect}
           setIsModalAddGroup={setIsModalAddGroup}
+          handleOpenModalMove={handleOpenModalMove}
           openModalRename={() => {
             setIsShowModalRename(true);
           }}

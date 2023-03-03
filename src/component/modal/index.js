@@ -5,3 +5,4 @@ export { default as ModalRenameTask } from "./ModalRenameTask.js";
 export { default as ModalSaveTaskView } from "./ModalSaveTaskView.js";
 export { default as ModalAddPlan } from "./ModalAddPlan.js";
 export { default as ModalAddGroup } from "./ModalAddGroup.js";
+export { default as ModalMove } from "./ModalMove.js";

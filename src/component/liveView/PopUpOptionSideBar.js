@@ -43,6 +43,7 @@ const PopupOptionSideBar = ({
   handleAddToPlan,
   openModalRename,
   openModalDelete,
+  handleOpenModalMove,
 }) => {
   const classes = useStyles();
   return (
@@ -121,9 +122,7 @@ const PopupOptionSideBar = ({
                 <Box className={classes.optionTask}>
                   <OpenWithIcon style={{ paddingLeft: 10 }} />
                   <Typography
-                    onClick={() => {
-                      setIsShowPopupSelect(false);
-                    }}
+                    onClick={() => handleOpenModalMove(data, typeDisplay)}
                     className={classes.textOption}
                   >
                     Move

@@ -194,7 +194,7 @@ const HeaderLiveView = (props) => {
     setData([...temp]);
   };
 
-  const handleChangePagi = (type) => {
+  const handleChangePage = (type) => {
     if (type === "next") {
       setDataIndex((prev) => {
         if (prev + size >= data.length) return prev;
@@ -401,14 +401,14 @@ const HeaderLiveView = (props) => {
           {data.length > 5 && (
             <Box style={{ display: "flex" }}>
               <Box
-                onClick={() => handleChangePagi("prev")}
+                onClick={() => handleChangePage("prev")}
                 style={{ cursor: "pointer" }}
               >
                 <ChevronLeftIcon />
               </Box>
               <Box>
                 <ChevronRightIcon
-                  onClick={() => handleChangePagi("next")}
+                  onClick={() => handleChangePage("next")}
                   style={{ cursor: "pointer" }}
                 />
               </Box>

@@ -40,7 +40,7 @@ const ViewSideDevice = ({ classes }) => {
             <ListItemIcon>
               {open === 1 ? <ArrowDropDownIcon /> : <ArrowRightIcon />}
             </ListItemIcon>
-            <ListItemText primary="Namee Device" />
+            <ListItemText primary="Name Device" />
           </ListItem>
           <Collapse in={open === 1} timeout="auto" unmountOnExit>
             <List
@@ -75,7 +75,7 @@ const ViewSideDevice = ({ classes }) => {
             <ListItemIcon>
               {open === 2 ? <ArrowDropDownIcon /> : <ArrowRightIcon />}
             </ListItemIcon>
-            <ListItemText primary="Namee Device" />
+            <ListItemText primary="Name Device" />
           </ListItem>
           <Collapse in={open === 2} timeout="auto" unmountOnExit>
             <List
@@ -107,7 +107,7 @@ const ViewSideDevice = ({ classes }) => {
             <ListItemIcon>
               {open === 3 ? <ArrowDropDownIcon /> : <ArrowRightIcon />}
             </ListItemIcon>
-            <ListItemText primary="Namee Device" />
+            <ListItemText primary="Name Device" />
           </ListItem>
           <Collapse in={open === 3} timeout="auto" unmountOnExit>
             <List
