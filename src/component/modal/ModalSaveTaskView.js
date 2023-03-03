@@ -1,15 +1,42 @@
 import {
   Box,
   Button,
+  ClickAwayListener,
   Dialog,
   DialogContent,
   DialogContentText,
   FormControl,
+  makeStyles,
   Select,
   TextField,
   Typography,
 } from "@material-ui/core";
 import React, { useState } from "react";
+import RenderDataGroup from "../liveView/RenderDataGroup";
+import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+
+const useStyles = makeStyles({
+  contentSearch: {
+    borderRadius: "4px",
+    fontSize: 14,
+    color: "black",
+    padding: "11px 11px 11px 22px",
+    cursor: "pointer",
+    border: "solid 1.5px #d3d3d3",
+    background: "#fff",
+    "&:hover": {
+      boxShadow: "rgba(0, 0,0, 0.24) 0px 3px 8px",
+    },
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  root: {
+    "& .MuiDialog-paper": {
+      overflowY: "unset",
+    },
+  },
+});
 
 const ModalSaveTaskView = ({
   open,
@@ -17,14 +44,18 @@ const ModalSaveTaskView = ({
   setTaskIndex,
   taskIndex,
   handleSaveTask,
+  dataGroup,
 }) => {
+  const classes = useStyles();
   const [value, setValue] = useState();
+  const [isShowPopupSearch, setIsShowPopupSearch] = useState(false);
 
   return (
     <Dialog
-      open={open}
+      open={true}
       onClose={handleClose}
       aria-labelledby="draggable-dialog-title"
+      className={classes.root}
     >
       <Box style={{ width: 450 }}>
         <Box
@@ -78,19 +109,32 @@ const ModalSaveTaskView = ({
           >
             Task View Group
           </DialogContentText>
-          <FormControl fullWidth size="small">
-            <Select
-              native
-              id="demo-customized-select-native"
-              variant="outlined"
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
+          <ClickAwayListener
+            onClickAway={() => {
+              setIsShowPopupSearch(false);
+            }}
+          >
+            <Box
+              style={{
+                width: 400,
+              }}
             >
-              <option value={10}>Ten</option>
-              <option value={20}>Twenty</option>
-              <option value={30}>Thirty</option>
-            </Select>
-          </FormControl>
+              <Box sx={{ width: 400, position: "relative" }}>
+                <Box
+                  className={classes.contentSearch}
+                  onClick={() => {
+                    setIsShowPopupSearch((prev) => !prev);
+                  }}
+                >
+                  <span>View Group</span>
+                  <ArrowDropDownIcon />
+                </Box>
+              </Box>
+              {isShowPopupSearch && (
+                <RenderDataGroup data={dataGroup} width={370} />
+              )}
+            </Box>
+          </ClickAwayListener>
         </DialogContent>
         <Box
           style={{
