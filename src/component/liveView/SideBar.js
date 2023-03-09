@@ -20,6 +20,7 @@ import {
 import { dataInitTask } from "./dataSideBar";
 import { red } from "@material-ui/core/colors";
 import ModalAddPlanSchedule from "../modal/ModalAddPlanSchedule";
+import ModalPlayTask from "../modal/ModalPlayTask";
 
 const useStyles = makeStyles({
   Sub: {
@@ -55,9 +56,9 @@ const useStyles = makeStyles({
       backgroundColor: "#fff !important",
     },
     "& .MuiTreeItem-root.Mui-selected > .MuiTreeItem-content .MuiTreeItem-label:hover, .MuiTreeItem-root.Mui-selected:focus > .MuiTreeItem-content .MuiTreeItem-label ":
-      {
-        backgroundColor: "#fff !important",
-      },
+    {
+      backgroundColor: "#fff !important",
+    },
   },
   boxHead: {
     display: "flex",

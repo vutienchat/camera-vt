@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../asset/style/ViewSidePlan.css";
 import Plan from "../../asset/image/Mask Group 736.png";
 import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
-import {Table, TableBody} from '@material-ui/core';
+import { Table, TableBody } from '@material-ui/core';
 //import Table from '@material-ui/core/Table';
 //import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -13,6 +13,7 @@ import TableRow from '@material-ui/core/TableRow';
 import SettingsIcon from '@material-ui/icons/Settings';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
+import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
 import { Box } from "@material-ui/core";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import {
@@ -22,10 +23,11 @@ import {
     dataPTZ,
 } from "./dataSideBar";
 import { renderData } from "./SideBar";
+import ModalPlayTask from "../modal/ModalPlayTask";
 
 const data = [
     {
-        id: 1, name: 'tên plan', type: 'MANUAL', description: 'mô tả',
+        id: 1, name: 'tên plan', type: 'MANUAL', description: 'mô tả', active: true,
         planVideoDetails: [
             {
                 taskId: 1,
@@ -97,11 +99,20 @@ const data = [
 
 const ViewSidePlan = ({ classes, onOpenModalAddPlanSchedule }) => {
     const [rowSelected, setRowSelected] = useState(1);
-    const [typeSelected, setTypeSelected] = useState(data[0].type);
+    const [typeSelected, setTypeSelected] = useState();
+    const [isOpenModalConfirmPlay, setIsOpenModalConfirmPlay] = useState(false);
+
+    useEffect(() => {
+        onClickRowPlanList({ plan: data[0], index: 0 })
+    }, [])
 
     const onClickRowPlanList = ({ plan, index }) => {
         setRowSelected(plan);
         setTypeSelected(data[index].type);
+    }
+
+    const onClickConfirmButton = () => {
+        
     }
 
     return (
@@ -155,7 +166,7 @@ const ViewSidePlan = ({ classes, onOpenModalAddPlanSchedule }) => {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {rowSelected.planVideoDetails?.map((plan, index) => (
+                                        {rowSelected.planVideoDetails.map((plan, index) => (
                                             <TableRow key={plan.id}>
                                                 <TableCell
                                                     component="th"
@@ -233,7 +244,7 @@ const ViewSidePlan = ({ classes, onOpenModalAddPlanSchedule }) => {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {rowSelected?.planVideoDetails?.map((planDetail, index) => (
+                                        {rowSelected.planVideoDetails.map((planDetail, index) => (
                                             <TableRow key={planDetail.planVideoId}>
                                                 <TableCell
                                                     component="th"
@@ -329,7 +340,7 @@ const ViewSidePlan = ({ classes, onOpenModalAddPlanSchedule }) => {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {rowSelected?.planVideoDetails?.map((planDetail, index) => (
+                                        {rowSelected.planVideoDetails.map((planDetail, index) => (
                                             <TableRow key={planDetail.planVideoId}>
                                                 <TableCell
                                                     component="th"
@@ -483,9 +494,17 @@ const ViewSidePlan = ({ classes, onOpenModalAddPlanSchedule }) => {
                                                     borderRight: "1px solid rgba(224, 224, 224, 1)",
                                                 }}
                                             >
-                                                <PlayCircleOutlineIcon style={{ fontSize: '18px' }} />
+                                                {plan.active ?
+                                                    <PlayCircleOutlineIcon style={{ fontSize: '18px' }}
+                                                        onClick={() => {
+                                                            console.log("checkkk");
+                                                            setIsOpenModalConfirmPlay(true);
+                                                        }}
+                                                    /> :
+                                                    <PauseCircleOutlineIcon style={{ fontSize: '18px' }} />
+                                                }
                                                 <SettingsIcon style={{ fontSize: '18px' }} />
-                                                <DeleteOutlineIcon style={{ fontSize: '18px' }} />
+                                                <DeleteOutlineIcon color={plan.active ? "disabled" : "inherit"} style={{ fontSize: '18px' }} />
                                             </TableCell>
                                         </TableRow>
                                     ))}
@@ -495,6 +514,13 @@ const ViewSidePlan = ({ classes, onOpenModalAddPlanSchedule }) => {
                     </Box>
                 </Box>
             </Box>
+            {isOpenModalConfirmPlay &&
+                <ModalPlayTask
+                    open={isOpenModalConfirmPlay}
+                    handleClose={() => setIsOpenModalConfirmPlay(false)}
+                    handleConfirm={onClickConfirmButton}
+                />
+            }
         </React.Fragment>
     );
 };
