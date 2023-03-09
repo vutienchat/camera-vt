@@ -29,7 +29,7 @@ import {
 import View from "../../asset/image/Mask Group 735.png";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import ShareIcon from "@material-ui/icons/Share";
-import { CheckBox } from "@material-ui/icons";
+import Checkbox from '@material-ui/core/Checkbox';
 
 const useStyles = makeStyles({
     root: {
@@ -38,9 +38,59 @@ const useStyles = makeStyles({
         },
         "& .MuiTreeItem-root.Mui-selected > .MuiTreeItem-content .MuiTreeItem-label:hover, .MuiTreeItem-root.Mui-selected:focus > .MuiTreeItem-content .MuiTreeItem-label ": {
             backgroundColor: "#fff !important",
+        },
+        "& .MuiTreeItem-iconContainer": {
+            marginRight: '20px',
+        },
+        "& .MuiFormControlLabel-root": {
+            width: '100%',
+        },
+        "& .MuiFormControlLabel-root div": {
+            width: '100%',
         }
     },
 });
+
+const data = {
+    id: "0",
+    name: "Parent",
+    children: [
+        {
+            id: "1",
+            name: "Child - 1"
+        },
+        {
+            id: "3",
+            name: "Child - 3",
+            children: [
+                {
+                    id: "4",
+                    name: "Child - 4",
+                    children: [
+                        {
+                            id: "7",
+                            name: "Child - 7"
+                        },
+                        {
+                            id: "8",
+                            name: "Child - 8"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            id: "5",
+            name: "Child - 5",
+            children: [
+                {
+                    id: "6",
+                    name: "Child - 6"
+                }
+            ]
+        }
+    ]
+};
 
 const ModalAddTaskView = ({
     open,
@@ -48,34 +98,87 @@ const ModalAddTaskView = ({
     indexGroup,
     handleAddSubGroup,
     isDisabled,
-    data,
+    // data,
     detailPlan,
     setDetailPlan,
     handleSavePlan,
 }) => {
-    const [selected, setSelected] = useState();
-    const [expanded, setExpanded] = useState();
-
+    const [selected, setSelected] = useState([]);
     const classes = useStyles();
 
-    const handleToggle = (event, nodeIds) => {
-        if (event.target.nodeName !== "svg") {
-            return;
-        }
-        setExpanded(nodeIds);
-    };
+    function getChildById(node, id) {
+        let array = [];
 
-    const handleSelect = (event, nodeIds) => {
-        if (event.target.nodeName === "svg") {
-            return;
+        function getAllChild(nodes = null) {
+            if (nodes === null) return [];
+            array.push(nodes.id);
+            if (Array.isArray(nodes.children)) {
+                nodes.children.forEach(node => {
+                    array = [...array, ...getAllChild(node)];
+                    array = array.filter((v, i) => array.indexOf(v) === i);
+                });
+            }
+            return array;
         }
-        const first = nodeIds[0];
-        if (selected.includes(first)) {
-            setSelected(selected.filter(id => id !== first));
-        } else {
-            setSelected([first, ...selected]);
+        
+
+        function getNodeById(nodes, id) {
+            if (nodes.id === id) {
+                return nodes;
+            } else if (Array.isArray(nodes.children)) {
+                let result = null;
+                nodes.children.forEach(node => {
+                    if (!!getNodeById(node, id)) {
+                        result = getNodeById(node, id);
+                    }
+                });
+                return result;
+            }
+
+            return null;
         }
-    };
+
+        return getAllChild(getNodeById(node, id));
+    }
+
+    function getOnChange(checked, nodes) {
+        const allNode = getChildById(data, nodes.id);
+        let array = checked
+            ? [...selected, ...allNode]
+            : selected.filter(value => !allNode.includes(value));
+
+        array = array.filter((v, i) => array.indexOf(v) === i);
+
+        setSelected(array);
+    }
+
+    const renderTree = (nodes) => (
+        <TreeItem
+            key={nodes.id}
+            nodeId={nodes.id}
+            label={
+                <FormControlLabel
+                    control={
+                        <Box style={{ display: 'flex', justifyContent: 'space-between', widthL: '100%', alignItems: 'center' }}>
+                            {nodes.name}
+                            <Checkbox
+                                checked={selected.some(item => item === nodes.id)}
+                                onChange={event =>
+                                    getOnChange(event.currentTarget.checked, nodes)
+                                }
+                                onClick={e => e.stopPropagation()}
+                            />
+                        </Box>
+                    }
+                    key={nodes.id}
+                />
+            }
+        >
+            {Array.isArray(nodes.children)
+                ? nodes.children.map(node => renderTree(node))
+                : null}
+        </TreeItem>
+    );
 
     return (
         <Dialog
@@ -105,9 +208,14 @@ const ModalAddTaskView = ({
                 </Box>
                 <DialogContent style={{ marginTop: 15 }}>
                     <Box>
-                        <Typography style={{ fontWeight: '600', fontSize: '13px' }}>
-                            Select Task View
-                        </Typography>
+                        <Box>
+                            <Typography style={{ fontWeight: '600', fontSize: '13px' }}>
+                                Select Task View
+                            </Typography>
+                            <Typography style={{ fontWeight: '600', fontSize: '13px' }}>
+                                selected ({selected.length}/24)
+                            </Typography>
+                        </Box>
                         <Box style={{ marginTop: 20, border: '1px solid #f2f2f2' }}>
                             <TextField
                                 placeholder="Search"
@@ -122,6 +230,7 @@ const ModalAddTaskView = ({
                                 }}
                             />
                             <TreeView
+                                style={{ height: '300px', overflowY: 'auto', overflowX: 'hidden' }}
                                 defaultCollapseIcon={
                                     <ArrowDropDownIcon
                                         style={{ fontSize: 40, marginLeft: 10, zIndex: 1 }}
@@ -129,28 +238,9 @@ const ModalAddTaskView = ({
                                 defaultExpandIcon={
                                     <ArrowRightIcon style={{ fontSize: 40, marginLeft: 10, zIndex: 1 }} />
                                 }
-                                expanded={expanded}
-                                selected={selected}
-                                onNodeToggle={handleToggle}
-                                onNodeSelect={handleSelect}
-                                multiSelect
                                 className={classes.root}
                             >
-                                <TreeItem nodeId="1" label={<Box style={{ display: 'flex', justifyContent: 'space-between' }}>Applications<CheckBox /></Box>}>
-                                    <TreeItem nodeId="2" label="Calendar" endIcon={
-                                        <CheckBox />
-                                    } />
-                                    <TreeItem nodeId="3" label="Chrome" />
-                                    <TreeItem nodeId="4" label="Webstorm" />
-                                </TreeItem>
-                                <TreeItem nodeId="5" label="Documents">
-                                    <TreeItem nodeId="6" label="Material-UI">
-                                        <TreeItem nodeId="7" label="src">
-                                            <TreeItem nodeId="8" label="index.js" />
-                                            <TreeItem nodeId="9" label="tree-view.js" />
-                                        </TreeItem>
-                                    </TreeItem>
-                                </TreeItem>
+                                {renderTree(data)}
                             </TreeView>
                         </Box>
                     </Box>
@@ -197,5 +287,6 @@ const ModalAddTaskView = ({
         </Dialog>
     );
 };
+
 
 export default React.memo(ModalAddTaskView);
