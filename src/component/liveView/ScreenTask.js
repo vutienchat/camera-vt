@@ -6,7 +6,14 @@ import video3 from "../../asset/image/video3.mp4";
 import { VideoScreenDetail } from ".";
 
 const RenderVideoView = memo((props) => {
-  const { deviceList } = props;
+  const {
+    deviceList,
+    isSideBar,
+    isDeviceOfScreenRecord,
+    setScreenRecording,
+    screenRecording,
+    resetScreen,
+  } = props;
   const countDevice = deviceList ? deviceList.length : 0;
   const [deviceLive, setDeviceLive] = useState("");
   const [indexStart, setIndexStart] = useState(0);
@@ -39,6 +46,9 @@ const RenderVideoView = memo((props) => {
 
   useEffect(() => {
     if (stayTimeLive === 0) return;
+    if (isDeviceOfScreenRecord) {
+      setScreenRecording("");
+    }
     const timer = setTimeout(() => {
       setIndexStart((indexPrev) =>
         indexPrev === countDevice - 1 ? 0 : indexPrev + 1
@@ -50,23 +60,30 @@ const RenderVideoView = memo((props) => {
   return (
     <Box style={{ height: "100%" }}>
       {Object.keys(deviceLive).length !== 0 && (
-        <VideoScreenDetail deviceLive={deviceLive} />
+        <VideoScreenDetail
+          deviceLive={deviceLive}
+          isSideBar={isSideBar}
+          setScreenRecording={setScreenRecording}
+          screenRecording={screenRecording}
+          isDeviceOfScreenRecord={isDeviceOfScreenRecord}
+          resetScreen={resetScreen}
+        />
       )}
     </Box>
   );
 });
 
 const ScreenTask = memo((props) => {
-  const { screenDetail } = props;
+  const { screenDetail, screenRecording } = props;
   const deviceList = [
-    { url: video1, stayTime: 260 },
+    { url: video1, stayTime: 260, id: 1 },
     // { url: video2, stayTime: 370 },
     // { url: video3, stayTime: 440 },
     // { url: video2, stayTime: 380 },
     // { url: video1, stayTime: 400 },
   ];
 
-  if (screenDetail.screenDetail.length === 0) {
+  if (screenDetail.screenDetail.length !== 0) {
     return (
       <Box
         style={{
@@ -96,7 +113,14 @@ const ScreenTask = memo((props) => {
 
   return (
     <Box style={{ backgroundColor: "#e2e2e2", width: "100%", height: "100%" }}>
-      <RenderVideoView deviceList={deviceList} />
+      <RenderVideoView
+        screenDetail={screenDetail}
+        setScreenRecording={() => props.setScreenRecording(screenDetail.key)}
+        resetScreen={() => props.setScreenRecording("")}
+        deviceList={deviceList}
+        isDeviceOfScreenRecord={screenRecording === screenDetail.key}
+        screenRecording={screenRecording}
+      />
     </Box>
   );
 });

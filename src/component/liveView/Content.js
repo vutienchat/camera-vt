@@ -1,4 +1,10 @@
-import React, { memo, useRef, useState, useLayoutEffect } from "react";
+import React, {
+  memo,
+  useRef,
+  useState,
+  useLayoutEffect,
+  useEffect,
+} from "react";
 import { Box } from "@material-ui/core";
 import { ScreenTask } from ".";
 
@@ -6,6 +12,9 @@ const ContentLiveView = memo((props) => {
   const { taskLive, isFullScreen, isSideBar } = props;
   const refContentLiveView = useRef(null);
   const [heightScreen, setHeightScreen] = useState(220);
+  const [screenRecording, setScreenRecording] = useState("");
+
+  useEffect(() => setScreenRecording(""), [taskLive]);
 
   useLayoutEffect(() => {
     const updateSize = () => {
@@ -56,14 +65,24 @@ const ContentLiveView = memo((props) => {
                   gridRowEnd: gridItem.x + gridItem.size,
                 }}
               >
-                <ScreenTask screenDetail={gridItem} />
+                <ScreenTask
+                  screenDetail={gridItem}
+                  isSideBar={isSideBar}
+                  screenRecording={screenRecording}
+                  setScreenRecording={setScreenRecording}
+                />
               </Box>
             );
           }
 
           return (
             <Box key={gridItem.key} style={{ height: "100%" }}>
-              <ScreenTask screenDetail={gridItem} />
+              <ScreenTask
+                screenDetail={gridItem}
+                isSideBar={isSideBar}
+                screenRecording={screenRecording}
+                setScreenRecording={setScreenRecording}
+              />
             </Box>
           );
         })}
