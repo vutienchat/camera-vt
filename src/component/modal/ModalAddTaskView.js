@@ -18,10 +18,13 @@ import {
     Paper
 } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import AddIcon from "@material-ui/icons/Add";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
-import { TreeItem, TreeView } from "@material-ui/lab";
+import {
+    TreeItem,
+    // TreeView 
+} from "@material-ui/lab";
 import ArrowRightIcon from "@material-ui/icons/ArrowRight";
 import {
     makeStyles,
@@ -30,6 +33,10 @@ import View from "../../asset/image/Mask Group 735.png";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import ShareIcon from "@material-ui/icons/Share";
 import Checkbox from '@material-ui/core/Checkbox';
+import TreeView from 'devextreme-react/tree-view';
+import SelectBox from 'devextreme-react/select-box';
+import 'devextreme/dist/css/dx.light.css';
+
 
 const useStyles = makeStyles({
     root: {
@@ -51,7 +58,7 @@ const useStyles = makeStyles({
     },
 });
 
-const data = {
+const data = [{
     id: "0",
     name: "Parent",
     children: [
@@ -90,7 +97,7 @@ const data = {
             ]
         }
     ]
-};
+}];
 
 const ModalAddTaskView = ({
     open,
@@ -104,7 +111,14 @@ const ModalAddTaskView = ({
     handleSavePlan,
 }) => {
     const [selected, setSelected] = useState([]);
+    const [dataTree, setDataTree] = useState(data);
+    const treeViewRef = useRef(null);
+
     const classes = useStyles();
+
+    function treeView() {
+        return treeViewRef.current.instance;
+    }
 
     function getChildById(node, id) {
         let array = [];
@@ -120,9 +134,10 @@ const ModalAddTaskView = ({
             }
             return array;
         }
-        
+
 
         function getNodeById(nodes, id) {
+            console.log(nodes, id);
             if (nodes.id === id) {
                 return nodes;
             } else if (Array.isArray(nodes.children)) {
@@ -133,6 +148,16 @@ const ModalAddTaskView = ({
                     }
                 });
                 return result;
+            } else if (Array.isArray(nodes)) {
+                let result = null;
+                nodes.forEach(item => {
+                    item.children.forEach(node => {
+                        if (!!getNodeById(node, id)) {
+                            result = getNodeById(node, id);
+                        }
+                    });
+                })
+                return result;
             }
 
             return null;
@@ -142,7 +167,8 @@ const ModalAddTaskView = ({
     }
 
     function getOnChange(checked, nodes) {
-        const allNode = getChildById(data, nodes.id);
+        console.log(nodes, 'check nodes');
+        const allNode = getChildById(dataTree, nodes.id);
         let array = checked
             ? [...selected, ...allNode]
             : selected.filter(value => !allNode.includes(value));
@@ -152,8 +178,32 @@ const ModalAddTaskView = ({
         setSelected(array);
     }
 
-    const renderTree = (nodes) => (
-        <TreeItem
+    const handleSearch = (e) => {
+        // let value = document.querySelector('.k-textbox').value
+        let newData = search(data, e.target.value)
+        setDataTree(newData);
+    }
+
+    const search = (items, term) => {
+        return items.reduce((acc, item) => {
+            if (contains(item.name, term)) {
+                acc.push(item);
+            } else if (item.children && item.children.length > 0) {
+                let newItems = search(item.children, term);
+                if (newItems && newItems.length > 0) {
+                    acc.push({ name: item.name, children: newItems, id: item.id });
+                }
+            }
+            return acc;
+        }, []);
+    }
+
+    const contains = (text, term) => {
+        return text.toLowerCase().indexOf(term.toLowerCase()) >= 0;
+    }
+
+    const renderTree = (nodes) => {
+        return <TreeItem
             key={nodes.id}
             nodeId={nodes.id}
             label={
@@ -178,7 +228,27 @@ const ModalAddTaskView = ({
                 ? nodes.children.map(node => renderTree(node))
                 : null}
         </TreeItem>
-    );
+    };
+
+    const treeViewSelectionChanged = (e) => {
+        syncSelection(e.component);
+    }
+
+    const treeViewContentReady = (e) => {
+        syncSelection(e.component);
+    }
+
+    const syncSelection = (treeView) => {
+        const selectedEmployees = treeView
+            .getSelectedNodes()
+            .map((node) => node.itemData);
+
+        setSelected(selectedEmployees)
+    }
+
+    function renderTreeViewItem(item) {
+        return `${item.fullName}`;
+    }
 
     return (
         <Dialog
@@ -208,28 +278,17 @@ const ModalAddTaskView = ({
                 </Box>
                 <DialogContent style={{ marginTop: 15 }}>
                     <Box>
-                        <Box>
-                            <Typography style={{ fontWeight: '600', fontSize: '13px' }}>
+                        <Box style={{ display: 'flex' }}>
+                            <Typography style={{ fontWeight: '560', fontSize: '12px' }}>
                                 Select Task View
                             </Typography>
-                            <Typography style={{ fontWeight: '600', fontSize: '13px' }}>
-                                selected ({selected.length}/24)
+                            <Typography style={{ fontWeight: '500', fontSize: '12px', color: 'red', marginLeft: '10px' }}>
+                                (selected {selected.length}/24)
                             </Typography>
                         </Box>
-                        <Box style={{ marginTop: 20, border: '1px solid #f2f2f2' }}>
-                            <TextField
-                                placeholder="Search"
-                                size="small"
-                                variant="outlined"
-                                InputProps={{
-                                    startAdornment: (
-                                        <InputAdornment position="start">
-                                            <SearchIcon style={{ color: "red" }} />
-                                        </InputAdornment>
-                                    ),
-                                }}
-                            />
-                            <TreeView
+                        <Box
+                            style={{ marginTop: 10, border: '1px solid #f2f2f2', borderRadius: '5px', padding: '10px' }}>
+                            {/* <TreeView
                                 style={{ height: '300px', overflowY: 'auto', overflowX: 'hidden' }}
                                 defaultCollapseIcon={
                                     <ArrowDropDownIcon
@@ -240,8 +299,29 @@ const ModalAddTaskView = ({
                                 }
                                 className={classes.root}
                             >
-                                {renderTree(data)}
-                            </TreeView>
+                                {Array.isArray(dataTree) ?
+                                    (dataTree.map((item, index) => renderTree(item))) :
+                                    renderTree(dataTree)
+                                }
+                            </TreeView> */}
+
+                            <TreeView
+                                id="treeview"
+                                ref={treeViewRef}
+                                width={235}
+                                height={320}
+                                items={employees}
+                                selectNodesRecursive={true}
+                                // selectByClick={this.state.selectByClick}
+                                showCheckBoxesMode={"normal"}
+                                selectionMode={"multiple"}
+                                onSelectionChanged={treeViewSelectionChanged}
+                                onContentReady={treeViewContentReady}
+                                itemRender={renderTreeViewItem}
+                                searchMode={"contains"}
+                                searchExpr={"fullName"}
+                                searchEnabled={true}
+                            />
                         </Box>
                     </Box>
                 </DialogContent>
@@ -287,6 +367,77 @@ const ModalAddTaskView = ({
         </Dialog>
     );
 };
+
+const employees = [{
+    id: 1,
+    fullName: 'John Heart',
+    prefix: 'Dr.',
+    position: 'CEO',
+    expanded: true,
+    items: [{
+        id: 2,
+        fullName: 'Samantha Bright',
+        prefix: 'Dr.',
+        position: 'COO',
+        expanded: true,
+        items: [{
+            id: 3,
+            fullName: 'Kevin Carter',
+            prefix: 'Mr.',
+            position: 'Shipping Manager',
+        }, {
+            id: 14,
+            fullName: 'Victor Norris',
+            prefix: 'Mr.',
+            selected: true,
+            position: 'Shipping Assistant',
+        }],
+    }, {
+        id: 4,
+        fullName: 'Brett Wade',
+        prefix: 'Mr.',
+        position: 'IT Manager',
+        expanded: true,
+        items: [{
+            id: 5,
+            fullName: 'Amelia Harper',
+            prefix: 'Mrs.',
+            position: 'Network Admin',
+        }, {
+            id: 6,
+            fullName: 'Wally Hobbs',
+            prefix: 'Mr.',
+            position: 'Programmer',
+        }, {
+            id: 7,
+            fullName: 'Brad Jameson',
+            prefix: 'Mr.',
+            position: 'Programmer',
+        }, {
+            id: 8,
+            fullName: 'Violet Bailey',
+            prefix: 'Ms.',
+            position: 'Jr Graphic Designer',
+        }],
+    }, {
+        id: 9,
+        fullName: 'Barb Banks',
+        prefix: 'Mrs.',
+        position: 'Support Manager',
+        expanded: true,
+        items: [{
+            id: 10,
+            fullName: 'Kelly Rodriguez',
+            prefix: 'Ms.',
+            position: 'Support Assistant',
+        }, {
+            id: 11,
+            fullName: 'James Anderson',
+            prefix: 'Mr.',
+            position: 'Support Assistant',
+        }],
+    }],
+}];
 
 
 export default React.memo(ModalAddTaskView);

@@ -75,3 +75,41 @@
 .plan-container .MuiTableCell-sizeSmall {
     padding: 5px;
 }
+
+.dx-treeview-item-with-checkbox .dx-checkbox {
+    left: unset !important;
+    right: 0;
+}
+
+.dx-treeview-with-search .dx-texteditor.dx-editor-outlined {
+    width: 230px;
+}
+
+.dx-treeview-with-search .dx-scrollbar-vertical {
+    right: -12px !important;
+}
+
+.dx-treeview-with-search > .dx-scrollable {
+    padding: 0px 5px !important;
+}
+
+.dx-treeview-item-with-checkbox .dx-treeview-item {
+    padding-left: 6px !important;
+}
+
+.dx-checkbox-indeterminate .dx-checkbox-icon::before {
+    background-color: transparent !important;
+}
+
+.dx-searchbox .dx-icon-search::before {
+    color: red !important;
+}
+
+.dx-checkbox-checked .dx-checkbox-icon {
+    color: #000 !important;
+}
+
+.dx-treeview-toggle-item-visibility.dx-treeview-toggle-item-visibility-opened::before {
+    margin-left: -14px;
+    font-size: 30px;
+}
