@@ -34,6 +34,7 @@ const useStyles = makeStyles({
   root: {
     "& .MuiDialog-paper": {
       overflowY: "unset",
+      borderRadius: "12px",
     },
   },
 });
@@ -57,92 +58,109 @@ const ModalSaveTaskView = ({
       aria-labelledby="draggable-dialog-title"
       className={classes.root}
     >
-      <Box style={{ width: 450 }}>
+      <Box style={{ width: 500, height: 300 }}>
         <Box
           style={{
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent: "center",
             alignItems: "center",
-            borderBottom: "solid 2px #c9c9c9",
             marginInline: "24px",
-            padding: "20px 0 10px 0",
+            padding: "30px 0 10px 0",
           }}
         >
-          <Typography style={{ fontWeight: 800 }}>Save Task View</Typography>
-          <Typography
-            style={{ fontWeight: 600, cursor: "pointer" }}
-            onClick={handleClose}
-          >
-            X
+          <Typography style={{ fontWeight: 800, fontSize: "21px" }}>
+            Save Task View
           </Typography>
         </Box>
         <DialogContent>
-          <DialogContentText
-            style={{
-              marginTop: "14px",
-              fontSize: "14px",
-              color: "#333",
-              fontWeight: " 600",
-              marginBottom: "10px",
-            }}
+          <Box
+            style={{ display: "flex", alignItems: "center", marginBottom: 16 }}
           >
-            Task View Name
-          </DialogContentText>
-          <TextField
-            fullWidth
-            variant="outlined"
-            size="small"
-            value={taskIndex.label || ""}
-            onChange={(e) => {
-              if (e.target.value !== " ")
-                setTaskIndex({ ...taskIndex, label: e.target.value });
-            }}
-          />
-          <DialogContentText
-            style={{
-              marginTop: "14px",
-              fontSize: "14px",
-              color: "#333",
-              fontWeight: " 600",
-              marginBottom: "10px",
-            }}
-          >
-            Task View Group
-          </DialogContentText>
-          <ClickAwayListener
-            onClickAway={() => {
-              setIsShowPopupSearch(false);
-            }}
-          >
-            <Box
+            <DialogContentText
               style={{
-                width: 400,
+                color: "#333",
+                fontWeight: " 600",
+                marginBottom: "0",
+                marginRight: "20px",
+                fontSize: "16px",
               }}
             >
-              <Box sx={{ width: 400, position: "relative" }}>
-                <Box
-                  className={classes.contentSearch}
-                  onClick={() => {
-                    setIsShowPopupSearch((prev) => !prev);
-                  }}
-                >
-                  <span>View Group</span>
-                  <ArrowDropDownIcon />
+              Task View Name
+            </DialogContentText>
+            <TextField
+              fullWidth
+              variant="outlined"
+              size="small"
+              style={{ width: 300 }}
+              value={taskIndex.label || ""}
+              onChange={(e) => {
+                if (e.target.value !== " ")
+                  setTaskIndex({ ...taskIndex, label: e.target.value });
+              }}
+            />
+          </Box>
+          <Box style={{ display: "flex", alignItems: "center" }}>
+            <DialogContentText
+              style={{
+                color: "#333",
+                fontWeight: " 600",
+                marginBottom: "0",
+                marginRight: "20px",
+                fontSize: "16px",
+              }}
+            >
+              Task View Group
+            </DialogContentText>
+            <ClickAwayListener
+              onClickAway={() => {
+                setIsShowPopupSearch(false);
+              }}
+            >
+              <Box
+                style={{
+                  width: 300,
+                }}
+              >
+                <Box sx={{ width: 300, position: "relative" }}>
+                  <Box
+                    className={classes.contentSearch}
+                    onClick={() => {
+                      setIsShowPopupSearch((prev) => !prev);
+                    }}
+                  >
+                    <span>View Group</span>
+                    <ArrowDropDownIcon />
+                  </Box>
                 </Box>
+                {isShowPopupSearch && (
+                  <RenderDataGroup data={dataGroup} width={277} />
+                )}
               </Box>
-              {isShowPopupSearch && (
-                <RenderDataGroup data={dataGroup} width={370} />
-              )}
-            </Box>
-          </ClickAwayListener>
+            </ClickAwayListener>
+          </Box>
         </DialogContent>
         <Box
           style={{
             display: "flex",
-            justifyContent: "space-around",
-            padding: "20px 0 10px 0",
+            justifyContent: "center",
+            padding: "20px 0 26px 0",
           }}
         >
+          <Button
+            onClick={handleClose}
+            style={{
+              width: "150px",
+              height: "48px",
+              background: "#fff",
+              color: "#333",
+              fontWeight: "600",
+              border: "solid 1px ",
+              borderRadius: "4px",
+              marginRight: 16,
+            }}
+          >
+            Cancel
+          </Button>
           <Button
             onClick={() => {
               handleSaveTask();
@@ -150,27 +168,16 @@ const ModalSaveTaskView = ({
             }}
             disabled={taskIndex.label === ""}
             style={{
-              width: "120px",
-              height: "35px",
+              width: "150px",
+              height: "48px",
               background: "#dd3d4b",
               color: "#fff",
               fontWeight: "600",
+              borderRadius: "4px",
+              marginLeft: 16,
             }}
           >
             Save
-          </Button>
-          <Button
-            onClick={handleClose}
-            style={{
-              width: "120px",
-              height: "35px",
-              background: "#fff",
-              color: "#333",
-              fontWeight: "600",
-              border: "solid 1px ",
-            }}
-          >
-            Cancel
           </Button>
         </Box>
       </Box>

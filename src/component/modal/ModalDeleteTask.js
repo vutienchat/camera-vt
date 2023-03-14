@@ -17,13 +17,12 @@ const ModalDeleteTask = React.memo(
         onClose={handleClose}
         aria-labelledby="draggable-dialog-title"
       >
-        <Box style={{ width: 400 }}>
+        <Box style={{ width: 480 }}>
           <Box
             style={{
               display: "flex",
-              justifyContent: "space-between",
+              justifyContent: "center",
               alignItems: "center",
-              borderBottom: "solid 2px #c9c9c9",
               marginInline: "24px",
               padding: "20px 0 10px 0",
             }}
@@ -31,22 +30,15 @@ const ModalDeleteTask = React.memo(
             <Typography style={{ fontWeight: 800 }}>
               Delete Task View
             </Typography>
-            <Typography
-              style={{ fontWeight: 600, cursor: "pointer" }}
-              onClick={handleClose}
-            >
-              X
-            </Typography>
           </Box>
           <DialogContent>
             <DialogContentText
               style={{
                 marginTop: "14px",
-                fontSize: "14px",
+                fontSize: "18px",
                 color: "#333",
                 fontWeight: " 600",
                 marginBottom: "10px",
-                textAlign: "center",
               }}
             >
               Are you sure you want to delete this Task view
@@ -54,7 +46,7 @@ const ModalDeleteTask = React.memo(
             <DialogContentText
               style={{
                 marginTop: "14px",
-                fontSize: "14px",
+                fontSize: "16px",
                 color: "#333",
                 marginBottom: "10px",
               }}
@@ -66,30 +58,14 @@ const ModalDeleteTask = React.memo(
             style={{
               display: "flex",
               justifyContent: "space-around",
-              padding: "20px 0 10px 0",
+              padding: "20px 0 40px 0",
             }}
           >
             <Button
-              autoFocus
-              onClick={() => {
-                handleDelete(taskIndex[idName] || taskIndex.id);
-                handleClose();
-              }}
-              style={{
-                width: "120px",
-                height: "35px",
-                background: "#dd3d4b",
-                color: "#fff",
-                fontWeight: "600",
-              }}
-            >
-              <DeleteOutlineIcon fontSize="small" /> Delete
-            </Button>
-            <Button
               onClick={handleClose}
               style={{
-                width: "120px",
-                height: "35px",
+                width: "150px",
+                height: "48px",
                 background: "#fff",
                 color: "#333",
                 fontWeight: "600",
@@ -97,6 +73,22 @@ const ModalDeleteTask = React.memo(
               }}
             >
               Cancel
+            </Button>
+            <Button
+              autoFocus
+              onClick={() => {
+                handleDelete(taskIndex[idName] || taskIndex.id);
+                handleClose();
+              }}
+              style={{
+                width: "150px",
+                height: "48px",
+                background: "#dd3d4b",
+                color: "#fff",
+                fontWeight: "600",
+              }}
+            >
+              Delete
             </Button>
           </Box>
         </Box>

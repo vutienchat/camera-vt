@@ -13,7 +13,7 @@ const useStyles = makeStyles({
     background: "#fff",
     color: "#333",
     position: "absolute",
-    width: 300,
+    zIndex: 1,
   },
   itemGroupSearch: {
     borderRadius: "4px ",
@@ -41,9 +41,10 @@ const useStyles = makeStyles({
     "& .MuiTreeItem-label": {
       backgroundColor: "#fff !important",
     },
-    "& .MuiTreeItem-root.Mui-selected > .MuiTreeItem-content .MuiTreeItem-label:hover, .MuiTreeItem-root.Mui-selected:focus > .MuiTreeItem-content .MuiTreeItem-label ": {
-      backgroundColor: "#fff !important",
-    },
+    "& .MuiTreeItem-root.Mui-selected > .MuiTreeItem-content .MuiTreeItem-label:hover, .MuiTreeItem-root.Mui-selected:focus > .MuiTreeItem-content .MuiTreeItem-label ":
+      {
+        backgroundColor: "#fff !important",
+      },
   },
 });
 

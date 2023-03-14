@@ -4,10 +4,20 @@ import {
   Dialog,
   DialogContent,
   DialogContentText,
+  makeStyles,
   TextField,
   Typography,
 } from "@material-ui/core";
 import React from "react";
+const useStyles = makeStyles({
+  modal: {
+    "& .MuiPaper-rounded": {
+      width: 500,
+      height: 245,
+      borderRadius: 12,
+    },
+  },
+});
 
 const ModalRenameTask = ({
   open,
@@ -19,46 +29,44 @@ const ModalRenameTask = ({
   isDisabled,
   messageErr,
 }) => {
+  const classes = useStyles();
   return (
     <Dialog
       open={open}
+      className={classes.modal}
       onClose={handleClose}
       aria-labelledby="draggable-dialog-title"
     >
-      <Box style={{ width: 450 }}>
+      <Box style={{ width: 500 }}>
         <Box
           style={{
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent: "center",
             alignItems: "center",
-            borderBottom: "solid 2px #c9c9c9",
             marginInline: "24px",
-            padding: "20px 0 10px 0",
+            padding: "20px 0 20px 0",
           }}
         >
-          <Typography style={{ fontWeight: 800 }}>
+          <Typography
+            style={{ fontWeight: 800, textAlign: "center", fontSize: "21px" }}
+          >
             {type === "task" ? " Rename Task View" : "Rename"}
           </Typography>
-          <Typography
-            style={{ fontWeight: 600, cursor: "pointer" }}
-            onClick={handleClose}
-          >
-            X
-          </Typography>
         </Box>
-        <DialogContent>
+        <DialogContent style={{ display: "flex", alignItems: "center" }}>
           <DialogContentText
             style={{
-              marginTop: "14px",
-              fontSize: "14px",
+              marginRight: "20px",
+              fontSize: "16px",
               color: "#333",
               fontWeight: " 600",
-              marginBottom: "10px",
+              marginBottom: 0,
             }}
           >
             {type === "task" ? " Task View Name" : " Task View Group Name"}
           </DialogContentText>
           <TextField
+            style={{ width: 300 }}
             fullWidth
             variant="outlined"
             size="small"
@@ -79,10 +87,25 @@ const ModalRenameTask = ({
         <Box
           style={{
             display: "flex",
-            justifyContent: "space-around",
-            padding: "20px 0 10px 0",
+            justifyContent: "center",
+            padding: "42px 0 10px 0",
           }}
         >
+          <Button
+            onClick={handleClose}
+            style={{
+              width: "150px",
+              height: "48px",
+              background: "#fff",
+              color: "#333",
+              fontWeight: "600",
+              border: "solid 1px ",
+              borderRadius: "4px",
+              marginRight: 16,
+            }}
+          >
+            Cancel
+          </Button>
           <Button
             onClick={() => {
               handleRename(taskIndex.id || "");
@@ -90,27 +113,16 @@ const ModalRenameTask = ({
             }}
             disabled={taskIndex.label === ""}
             style={{
-              width: "120px",
-              height: "35px",
+              width: "150px",
+              height: "48px",
               background: "#dd3d4b",
               color: "#fff",
               fontWeight: "600",
+              borderRadius: "4px",
+              marginLeft: 16,
             }}
           >
             Save
-          </Button>
-          <Button
-            onClick={handleClose}
-            style={{
-              width: "120px",
-              height: "35px",
-              background: "#fff",
-              color: "#333",
-              fontWeight: "600",
-              border: "solid 1px ",
-            }}
-          >
-            Cancel
           </Button>
         </Box>
       </Box>

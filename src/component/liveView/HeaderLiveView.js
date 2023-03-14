@@ -46,7 +46,7 @@ const dataHeader = [
 
 const useStyles = makeStyles({
   task: {
-    width: "160px",
+    width: "155px",
     height: "38px",
     border: "solid 1px #ebebeb",
     display: "flex",
@@ -87,6 +87,8 @@ const useStyles = makeStyles({
   },
   activeTask: {
     borderBottom: "solid 1px red",
+    border: "solid 1px #ebebeb",
+    backgroundColor: "#e2e2e2",
   },
   numberGrid: {
     display: "block",
@@ -120,14 +122,10 @@ const useStyles = makeStyles({
     borderRadius: "4px",
     fontSize: 14,
     color: "black",
-    padding: "11px 11px 11px 22px",
-    width: "100%",
+    padding: "7px 11px 7px 22px",
     cursor: "pointer",
     border: "solid 1.5px #d3d3d3",
     background: "#fff",
-    "&:hover": {
-      boxShadow: "rgba(0, 0,0, 0.24) 0px 3px 8px",
-    },
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
@@ -192,6 +190,11 @@ const HeaderLiveView = (props) => {
       default: 1,
     });
     setData([...temp]);
+    console.log(dataIndex);
+    setDataIndex((prev) => {
+      if (prev + size >= data.length + 1) return prev;
+      return prev + size;
+    });
   };
 
   const handleChangePage = (type) => {
@@ -237,6 +240,10 @@ const HeaderLiveView = (props) => {
       duplicate: tempData[taskIndx].duplicate + 1,
     };
     setData([...tempData]);
+    setDataIndex((prev) => {
+      if (prev + size >= data.length + 1) return prev;
+      return prev + size;
+    });
   };
 
   const handleDelete = (id) => {
@@ -326,7 +333,14 @@ const HeaderLiveView = (props) => {
           boxSizing: "border-box",
         }}
       >
-        <Box style={{ display: "flex", justifyContent: "flex-start" }}>
+        <Box
+          style={{
+            display: "flex",
+            justifyContent: "flex-start",
+            alignItems: "center",
+          }}
+        >
+          <Box className="sidebar-resources-categories">Live View</Box>
           <ClickAwayListener
             onClickAway={() => {
               setIsShowPopupSearch(false);
@@ -334,12 +348,11 @@ const HeaderLiveView = (props) => {
           >
             <Box
               style={{
-                paddingLeft: 12,
-                marginRight: 70,
-                width: 300,
+                marginRight: 16,
+                width: 280,
               }}
             >
-              <Box sx={{ width: 300, position: "relative" }}>
+              <Box sx={{ width: 280, position: "relative" }}>
                 <Box
                   className={classes.contentSearch}
                   onClick={handleOpenPopupSearch}
@@ -399,17 +412,36 @@ const HeaderLiveView = (props) => {
           }}
         >
           {data.length > 5 && (
-            <Box style={{ display: "flex" }}>
+            <Box
+              style={{
+                display: "flex",
+                justifyContent: "space-around",
+                width: "80px",
+                borderRight: "1px solid rgb(112, 112, 112)",
+                paddingRight: 15,
+              }}
+            >
               <Box
                 onClick={() => handleChangePage("prev")}
-                style={{ cursor: "pointer" }}
+                style={{
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  border: "solid 1px #939393",
+                }}
               >
                 <ChevronLeftIcon />
               </Box>
               <Box>
                 <ChevronRightIcon
                   onClick={() => handleChangePage("next")}
-                  style={{ cursor: "pointer" }}
+                  style={{
+                    cursor: "pointer",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    border: "solid 1px #939393",
+                  }}
                 />
               </Box>
             </Box>
@@ -614,6 +646,8 @@ const Task = ({
           display: "flex",
           alignItems: "center",
           cursor: "pointer",
+          width: 30,
+          minWidth: 30,
         }}
         onClick={(e) => {
           handleShow(e);
