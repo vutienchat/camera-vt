@@ -34,13 +34,28 @@ const ViewSideDevice = ({ classes }) => {
           style={{
             marginBottom: open === 1 ? "auto" : 0,
             height: open === 1 ? "100%" : "auto",
+            padding: 4,
           }}
         >
-          <ListItem button onClick={() => handleClick(1)}>
+          <ListItem
+            button
+            onClick={() => handleClick(1)}
+            style={{
+              background: open === 1 ? "#ebebeb" : "",
+              fontWeight: open === 1 ? "bold" : "",
+            }}
+            className={classes.buttonDevice}
+          >
             <ListItemIcon>
               {open === 1 ? <ArrowDropDownIcon /> : <ArrowRightIcon />}
             </ListItemIcon>
-            <ListItemText primary="Name Device" />
+            <ListItemText
+              children={
+                <span style={{ fontWeight: open === 1 ? "bold" : "" }}>
+                  Name Device
+                </span>
+              }
+            />
           </ListItem>
           <Collapse in={open === 1} timeout="auto" unmountOnExit>
             <List
@@ -51,6 +66,7 @@ const ViewSideDevice = ({ classes }) => {
                 bottom: 0,
                 top: "60px",
                 overflow: "auto",
+                left: 0,
               }}
             >
               <RenderDataSide
@@ -69,13 +85,28 @@ const ViewSideDevice = ({ classes }) => {
           style={{
             marginBottom: open === 2 ? "auto" : 0,
             height: open === 2 ? "100%" : "auto",
+            padding: 4,
           }}
         >
-          <ListItem button onClick={() => handleClick(2)}>
+          <ListItem
+            button
+            onClick={() => handleClick(2)}
+            className={classes.buttonDevice}
+            style={{
+              background: open === 2 ? "#ebebeb" : "",
+            }}
+          >
             <ListItemIcon>
               {open === 2 ? <ArrowDropDownIcon /> : <ArrowRightIcon />}
             </ListItemIcon>
-            <ListItemText primary="Name Device" />
+            <ListItemText
+              children={
+                <span style={{ fontWeight: open === 2 ? "bold" : "" }}>
+                  Name Device
+                </span>
+              }
+              style={{ fontWeight: open === 2 ? "bold" : "" }}
+            />
           </ListItem>
           <Collapse in={open === 2} timeout="auto" unmountOnExit>
             <List
@@ -100,16 +131,36 @@ const ViewSideDevice = ({ classes }) => {
         <List
           style={{
             marginBottom: open === 3 ? "auto" : 0,
+            padding: 4,
             height: open === 3 ? "100%" : "auto",
           }}
         >
-          <ListItem button onClick={() => handleClick(3)}>
+          <ListItem
+            button
+            onClick={() => handleClick(3)}
+            className={classes.buttonDevice}
+            style={{
+              background: open === 3 ? "#ebebeb" : "",
+              fontWeight: open === 1 ? "bold" : "",
+            }}
+          >
             <ListItemIcon>
               {open === 3 ? <ArrowDropDownIcon /> : <ArrowRightIcon />}
             </ListItemIcon>
-            <ListItemText primary="Name Device" />
+            <ListItemText
+              children={
+                <span style={{ fontWeight: open === 3 ? "bold" : "" }}>
+                  Name Device
+                </span>
+              }
+            />
           </ListItem>
-          <Collapse in={open === 3} timeout="auto" unmountOnExit>
+          <Collapse
+            in={open === 3}
+            timeout="auto"
+            unmountOnExit
+            style={{ padding: 4 }}
+          >
             <List
               component="div"
               disablePadding
@@ -129,12 +180,27 @@ const ViewSideDevice = ({ classes }) => {
             </List>
           </Collapse>
         </List>
-        <List>
-          <ListItem button onClick={() => setOpenPTZ(!openPTZ)}>
+        <List
+          style={{
+            padding: 4,
+          }}
+        >
+          <ListItem
+            button
+            onClick={() => setOpenPTZ(!openPTZ)}
+            className={classes.buttonDevice}
+            style={{
+              background: openPTZ ? "#ebebeb" : "",
+            }}
+          >
             <ListItemIcon>
               {openPTZ ? <ArrowDropDownIcon /> : <ArrowRightIcon />}
             </ListItemIcon>
-            <ListItemText primary="PTZ" />
+            <ListItemText
+              children={
+                <span style={{ fontWeight: openPTZ ? "bold" : "" }}>PTZ</span>
+              }
+            />
           </ListItem>
           <Collapse in={openPTZ} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>

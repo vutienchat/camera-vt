@@ -21,9 +21,12 @@ const useStyles = makeStyles({
     alignItems: "center",
     paddingBlock: "20px",
     cursor: "pointer",
+    width: 58,
+    height: 72,
   },
   itemActive: {
-    color: "red",
+    background: "#e2e2e2",
+    fontWeight: "bold",
   },
 });
 

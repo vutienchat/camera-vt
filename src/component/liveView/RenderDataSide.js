@@ -16,7 +16,9 @@ const RenderDataSide = ({
   return (
     <>
       {isCamera && (
-        <Box style={{ display: "flex", width: "400px", marginLeft: "-17px" }}>
+        <Box
+          style={{ display: "flex", width: "344px", justifyContent: "center" }}
+        >
           <Box
             style={{
               borderRight: "solid 1px #e5e5e5",
@@ -26,8 +28,7 @@ const RenderDataSide = ({
             }`}
             onClick={() => setSelectType("siteGroup")}
           >
-            <LocationOnOutlinedIcon />
-            <Typography style={{ marginRight: 25 }}>Site Group</Typography>
+            <Typography>Site Group</Typography>
           </Box>
           <Box
             className={`${classes.boxHead} ${
@@ -35,19 +36,25 @@ const RenderDataSide = ({
             }`}
             onClick={() => setSelectType("location")}
           >
-            <LocationOnOutlinedIcon />
-            <Typography style={{ marginRight: 25 }}>Location</Typography>
+            <Typography>Location</Typography>
           </Box>
         </Box>
       )}
 
       {isSearch && (
-        <Box style={{ marginTop: 20 }}>
+        <Box
+          style={{
+            marginTop: 20,
+            display: "flex",
+            justifyContent: "center",
+            marginBottom: 10,
+          }}
+        >
           <TextField
             placeholder="Search"
-            size="small"
+            size="medium"
             variant="outlined"
-            style={{ width: 365 }}
+            style={{ width: 320 }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">

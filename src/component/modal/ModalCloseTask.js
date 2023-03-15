@@ -24,24 +24,17 @@ const ModalCloseTask = ({
       onClose={handleClose}
       aria-labelledby="draggable-dialog-title"
     >
-      <Box style={{ width: 400 }}>
+      <Box style={{ width: 480 }}>
         <Box
           style={{
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent: "center",
             alignItems: "center",
-            borderBottom: "solid 2px #c9c9c9",
             marginInline: "24px",
             padding: "20px 0 10px 0",
           }}
         >
-          <Typography style={{ fontWeight: 800 }}>Rename Task View</Typography>
-          <Typography
-            style={{ fontWeight: 600, cursor: "pointer" }}
-            onClick={handleClose}
-          >
-            X
-          </Typography>
+          <Typography style={{ fontWeight: 800 }}>Close Task View</Typography>
         </Box>
         <DialogContent>
           <DialogContentText
@@ -51,7 +44,6 @@ const ModalCloseTask = ({
               color: "#333",
               fontWeight: " 600",
               marginBottom: "10px",
-              textAlign: "center",
             }}
           >
             Are you sure you want to close current Task view
@@ -63,6 +55,7 @@ const ModalCloseTask = ({
               onChange={() => {
                 setSkipClose((prev) => !prev);
               }}
+              style={{ paddingLeft: 0 }}
             />
             <DialogContentText
               style={{

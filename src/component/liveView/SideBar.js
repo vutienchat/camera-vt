@@ -40,14 +40,18 @@ const useStyles = makeStyles({
   },
   isSub: {
     "& .MuiTreeItem-content": {
-      height: 50,
+      height: 40,
       flexDirection: "row",
+      paddingBottom: "10px",
       borderBottom: "none",
       "& .MuiTreeItem-label": {
         height: "100%",
         display: "flex",
         alignItems: "center",
         background: "#fff",
+      },
+      "& .MuiTreeItem-iconContainer": {
+        paddingLeft: "20px",
       },
     },
   },
@@ -56,21 +60,25 @@ const useStyles = makeStyles({
       backgroundColor: "#fff !important",
     },
     "& .MuiTreeItem-root.Mui-selected > .MuiTreeItem-content .MuiTreeItem-label:hover, .MuiTreeItem-root.Mui-selected:focus > .MuiTreeItem-content .MuiTreeItem-label ":
-    {
-      backgroundColor: "#fff !important",
-    },
+      {
+        backgroundColor: "#fff !important",
+      },
   },
   boxHead: {
     display: "flex",
-    flex: "1",
     height: "40px",
+    width: 160,
     alignItems: "center",
-    justifyContent: "space-around",
-    borderBlock: "solid 1px #e5e5e5",
+    justifyContent: "center",
+    border: "solid 1px #e5e5e5",
     cursor: "pointer",
   },
   active: {
     borderBottom: "solid 2px red",
+    background: "#e2e2e2",
+    "& p": {
+      fontWeight: "bold",
+    },
   },
   iconStyle: {
     fontSize: "40px  !important",
@@ -78,7 +86,7 @@ const useStyles = makeStyles({
     zIndex: 1,
   },
   sideBar: {
-    width: 400,
+    width: 344,
     border: "solid 1px #e5e5e5",
     maxHeight: 975,
     overflowY: "auto",
@@ -87,9 +95,13 @@ const useStyles = makeStyles({
   },
   outlined: {
     "& .MuiSelect-outlined": {
-      padding: '10px !important',
-    }
-  }
+      padding: "10px !important",
+    },
+  },
+  buttonDevice: {
+    height: 40,
+    border: "solid 1px #ebebeb ",
+  },
 });
 
 export const renderData = (data, classes, handleShowPopupSelect, isNoIcon) => {
@@ -97,7 +109,7 @@ export const renderData = (data, classes, handleShowPopupSelect, isNoIcon) => {
     <TreeView
       defaultCollapseIcon={<ArrowDropDownIcon style={{ fontSize: 40 }} />}
       defaultExpandIcon={<ArrowRightIcon style={{ fontSize: 40 }} />}
-      style={{ marginLeft: 10 }}
+      // style={{ marginLeft: 10 }}
     >
       {data &&
         data.map((item, index) => {
@@ -132,43 +144,43 @@ export const renderData = (data, classes, handleShowPopupSelect, isNoIcon) => {
                 <>
                   {item.nodeChildren && item.nodeChildren.length
                     ? renderData(
-                      item.nodeChildren,
-                      classes,
-                      handleShowPopupSelect,
-                      isNoIcon
-                    )
+                        item.nodeChildren,
+                        classes,
+                        handleShowPopupSelect,
+                        isNoIcon
+                      )
                     : null}
                   {item.listTask && item.listTask.length
                     ? item.listTask.map((child, index) => {
-                      return (
-                        <TreeItem
-                          onLabelClick={(e) => {
-                            e.preventDefault();
-                          }}
-                          key={child.id}
-                          label={
-                            <Box
-                              style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                width: "100%",
-                              }}
-                            >
-                              <Typography>{child.label}</Typography>
-                              <MoreHorizIcon
-                                style={{ paddingRight: 24 }}
-                                onClick={(e) => {
-                                  handleShowPopupSelect &&
-                                    handleShowPopupSelect(e, "task", child);
+                        return (
+                          <TreeItem
+                            onLabelClick={(e) => {
+                              e.preventDefault();
+                            }}
+                            key={child.id}
+                            label={
+                              <Box
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  width: "100%",
                                 }}
-                              />
-                            </Box>
-                          }
-                          nodeId={String(index)}
-                          className={classes.isSub || ""}
-                        ></TreeItem>
-                      );
-                    })
+                              >
+                                <Typography>{child.label}</Typography>
+                                <MoreHorizIcon
+                                  style={{ paddingRight: 24 }}
+                                  onClick={(e) => {
+                                    handleShowPopupSelect &&
+                                      handleShowPopupSelect(e, "task", child);
+                                  }}
+                                />
+                              </Box>
+                            }
+                            nodeId={String(index)}
+                            className={classes.isSub || ""}
+                          ></TreeItem>
+                        );
+                      })
                     : null}
                 </>
               </TreeItem>
@@ -284,9 +296,10 @@ const SideBar = ({ typeDisplaySide, data, setData, setListPlan, listPlan }) => {
     setTypeDisplay(type);
     setIndexGroup(indexGroup);
     setSubGroupAdd(
-      `Sub Group  ${indexGroup && indexGroup.nodeChildren
-        ? indexGroup.nodeChildren.length + 1
-        : ""
+      `Sub Group  ${
+        indexGroup && indexGroup.nodeChildren
+          ? indexGroup.nodeChildren.length + 1
+          : ""
       }`
     );
   };
@@ -323,11 +336,15 @@ const SideBar = ({ typeDisplaySide, data, setData, setListPlan, listPlan }) => {
         );
         break;
       case "Plan":
-        view = <ViewSidePlan
-          classes={classes}
-          data={listTaskInPlan}
-          onOpenModalAddPlanSchedule={(isOpen) => setIsModalAddPlanSchedule(isOpen)}
-        />;
+        view = (
+          <ViewSidePlan
+            classes={classes}
+            data={listTaskInPlan}
+            onOpenModalAddPlanSchedule={(isOpen) =>
+              setIsModalAddPlanSchedule(isOpen)
+            }
+          />
+        );
         break;
       default:
         view = <ViewSideDevice classes={classes} />;
