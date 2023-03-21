@@ -1,44 +1,45 @@
 .plan-container {
     height: 100%;
+    padding: 13px 12px;
+    box-sizing: border-box;
 }
 
 .plan-header {
-    padding: 10px;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    border-bottom: 2px solid red;
+    /* padding: 13px 12px 0px 12px; */
+    /* border-bottom: 2px solid red; */
 }
 
-.plan-header-icon {
-    position: absolute;
-    left: 6px;
+.plan-header-title {
+    font-size: 16px;
+    font-weight: bold;
 }
-
-.plan-header-title {}
 
 .plan-current-container {
-    padding: 7px;
-    margin-top: 12px;
-    height: calc(50% - 43px);
+    /* padding: 7px; */
+    margin-top: 16px;
+    height: calc(50% - 37px);
     border-bottom: 2px solid #F1F1F1;
 }
 
 .plan-current-header {
     display: flex;
     justify-content: space-between;
-    padding: 4px 12px;
+    margin-bottom: 12px;
 }
 
 .plan-current-title {
-    font-weight: 600;
+    font-weight: bold;
+    font-size: 14px;
 }
 
-.plan-current-edit {}
+.plan-current-edit {
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+}
 
 .plan-list-container {
-    height: calc(50% - 55px);
-    padding: 7px;
+    height: calc(50% - 37px);
     margin-top: 12px;
 }
 
@@ -69,7 +70,7 @@
 }
 
 .plan-container .MuiTableCell-root {
-    font-size: 10px!important;
+    /* font-size: 10px!important; */
 }
 
 .plan-container .MuiTableCell-sizeSmall {
@@ -82,14 +83,24 @@
 }
 
 .dx-treeview-with-search .dx-texteditor.dx-editor-outlined {
-    width: 230px;
+    width: 270px;
+    height: 48px;
+    border: 1.5px solid #d3d3d3;
+}
+
+.textbox-search {
+    height: 48px;
+}
+
+.textbox-search .MuiInputBase-root {
+    height: 100%;
 }
 
 .dx-treeview-with-search .dx-scrollbar-vertical {
     right: -12px !important;
 }
 
-.dx-treeview-with-search > .dx-scrollable {
+.dx-treeview-with-search>.dx-scrollable {
     padding: 0px 5px !important;
 }
 
@@ -112,4 +123,73 @@
 .dx-treeview-toggle-item-visibility.dx-treeview-toggle-item-visibility-opened::before {
     margin-left: -14px;
     font-size: 30px;
+}
+
+.checkbox-custom input {
+    height: 48px;
+    box-sizing: border-box;
+    border: 1.5px solid #d3d3d3;
+    border-radius: 4px;
+    width: 320px;
+    font-size: 16px;
+    padding: 14px 16px 13px 16px;
+}
+
+.checkbox-custom .MuiTypography-body1 {
+    padding-right: 13px;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.checkbox-custom .MuiFormControl-fullWidth {
+    height: 48px;
+    width: 320px;
+}
+
+.checkbox-custom .MuiFormControl-fullWidth .MuiOutlinedInput-root {
+    height: 100%;
+}
+/* 
+.MuiPopover-paper {
+    padding: 16px;
+    min-width: 232px !important;
+    box-sizing: border-box;
+    height: 168px !important;
+} */
+
+.MuiPopover-paper .MuiMenu-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    padding: 0px !important;
+}
+
+.MuiPopover-paper .Mui-selected {
+    font-weight: bold;
+}
+
+.MuiSelect-select:focus {
+    background-color: transparent !important;
+}
+
+.MuiPopover-paper .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border-color: #d3d3d3;
+}
+
+#custom-scroll-bar::-webkit-scrollbar {
+	width: 8px;
+	background-color: #F5F5F5;
+}
+
+#custom-scroll-bar::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px #d3d3d3;
+	background-color: #d3d3d3;
+}
+
+#custom-scroll-bar::-webkit-scrollbar-track {
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0);
+	border-radius: 10px;
+	background-color: #F5F5F5;
 }

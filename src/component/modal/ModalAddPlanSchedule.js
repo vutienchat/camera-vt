@@ -23,7 +23,7 @@ import {
 import { TreeItem, TreeView } from "@material-ui/lab";
 import SearchIcon from "@material-ui/icons/Search";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
-import React, { memo, useEffect, useState, useCallback, useMemo } from "react";
+import React, { memo, useEffect, useState, useCallback, useMemo, useRef } from "react";
 import ArrowRightIcon from "@material-ui/icons/ArrowRight";
 import AddIcon from "@material-ui/icons/Add";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
@@ -34,14 +34,25 @@ import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import Checkbox from '@material-ui/core/Checkbox';
 import ModalAddTaskView from "./ModalAddTaskView";
 import ModalDeleteTask from "./ModalDeleteTask";
+import DownArrow from "../../../src/asset/image/arrow_down_icon.png";
+import UpArrow from "../../../src/asset/image/arrow_up_icon.png";
+import TrashBin from "../../../src/asset/image/trash_bin_icon.png";
+import TriangleDown from "../../../src/asset/image/triangle_down_icon.png";
 
 const useStyles = makeStyles({
     root: {
         "& .MuiIconButton-label": {
-            color: "red !important",
+            color: "#c9c9c9 !important",
+        },
+        "& .MuiIconButton-label .MuiSvgIcon-root": {
+            width: "26px",
+            height: "26px",
         },
         "& .MuiTreeItem-iconContainer": {
-            marginRight: '20px',
+            marginRight: '16px',
+        },
+        "& .MuiTreeItem-iconContainer img": {
+            marginLeft: '-2px !important',
         },
         "& .MuiTreeItem-label:hover": {
             backgroundColor: "transparent",
@@ -52,28 +63,64 @@ const useStyles = makeStyles({
     },
     styleTable: {
         overflowY: "auto",
-        maxHeight: "200px",
+        maxHeight: "288px",
+        "& .MuiTableCell-stickyHeader": {
+            backgroundColor: "#ebebeb",
+            height: "48px",
+            boxSizing: "border-box",
+            lineHeight: "0"
+        },
+        "& .MuiTableCell-root": {
+            // padding: "14px 16px 13px 16px",
+            height: "48px",
+            boxSizing: "border-box",
+            borderBottom: "2px solid #E5E5E5 !important"
+        },
     },
     paddingSelect: {
         "& .MuiSelect-outlined.MuiSelect-outlined": {
-            padding: "5px 12px",
-        }
+            padding: "5px 5px",
+        },
+        padding: "1px 5px !important",
     },
     outlined: {
         "& .MuiSelect-outlined": {
             padding: '10px !important',
+        },
+        "& .MuiSelect-root": {
+            fontSize: '16px !important',
+            color: '#939393'
         }
     },
     dropDownSelectTask: {
         backgroundColor: '#fff',
         // position: 'absolute',
-        border: '1px solid #E9E9E9',
+        // border: '1px solid #E9E9E9',
         borderRadius: '5px',
-        padding: '10px',
+        padding: '16px',
         zIndex: '9',
-        width: '175px',
-        height: '160px',
+        width: '302px',
+        height: '277px',
         overflowY: 'auto',
+        boxSizing: 'border-box'
+    },
+    selectCustom: {
+        "& .MuiSelect-selectMenu": {
+            padding: "10px !important"
+        },
+        "& .MuiPopover-paper": {
+            padding: "10px !important",
+        }
+    },
+    selectTypeCustom: {
+        top: "200px !important",
+        padding: "16px",
+        minWidth: "232px !important",
+        boxSizing: "border-box",
+        height: "168px !important",
+        "& li": {
+            minHeight: "40px !important",
+        }
     }
 });
 
@@ -148,17 +195,36 @@ const ModalAddPlanSchedule = ({
 
     useEffect(() => {
         switch (detailPlan.type) {
-            case "MANUAL":
-                setArrayHeader([{ label: "No" }, { label: "Task Name" }, { label: "Operation" }]);
+            case 1:
+                setArrayHeader([
+                    { label: "No.", width: 2 },
+                    { label: "Task Name", width: 400 },
+                    { label: "Operation", width: 250 }
+                ]);
                 break;
-            case "TOUR":
-                setArrayHeader([{ label: "No" }, { label: "Task Name" }, { label: "Stay time" }, { label: "Operation" }]);
+            case 2:
+                setArrayHeader([
+                    { label: "No.", width: 1 },
+                    { label: "Task Name", width: 340 },
+                    { label: "Stay time", width: 160 },
+                    { label: "Operation", width: 160 }
+                ]);
                 break;
-            case "SCHEDULE":
-                setArrayHeader([{ label: "No" }, { label: "Task Name" }, { label: "Start time" }, { label: "End time" }, { label: "Operation" }]);
+            case 3:
+                setArrayHeader([
+                    { label: "No.", width: 1 },
+                    { label: "Task Name", width: 330 },
+                    { label: "Start time", width: 150 },
+                    { label: "End time", width: 150 },
+                    { label: "Operation", width: 150 }
+                ]);
                 break;
             default:
-                setArrayHeader([{ label: "No" }, { label: "Task Name" }, { label: "Operation" }]);
+                setArrayHeader([
+                    { label: "No.", width: 2 },
+                    { label: "Task Name", width: 400 },
+                    { label: "Operation", width: 250 }
+                ]);
                 break;
         }
     }, [detailPlan.type]);
@@ -185,39 +251,33 @@ const ModalAddPlanSchedule = ({
                 open={open}
                 onClose={handleClose}
                 aria-labelledby="draggable-dialog-title"
-                maxWidth="md"
+                maxWidth="1000px"
             >
-                <Box style={{ width: 900 }}>
+                <Box style={{ width: 1000, height: 861, position: "relative" }}>
                     <Box
                         style={{
                             display: "flex",
-                            justifyContent: "space-between",
                             alignItems: "center",
-                            borderBottom: "solid 2px #c9c9c9",
-                            marginInline: "24px",
-                            padding: "20px 0 10px 0",
+                            justifyContent: "center",
+                            padding: "23px 0 30px 0",
+                            // marginBottom: '30px'
                         }}
                     >
-                        <Typography style={{ fontWeight: 800 }}>Add Plan</Typography>
-                        <Typography
-                            style={{ fontWeight: 600, cursor: "pointer" }}
-                            onClick={handleClose}
-                        >
-                            X
-                        </Typography>
+                        <Typography style={{ fontWeight: 'bold', fontSize: '21px' }}>Add Plan</Typography>
                     </Box>
-                    <DialogContent style={{ marginTop: 15 }}>
+                    <DialogContent style={{ paddingTop: '0px' }}>
                         <Box
                             style={{
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "space-between",
-                                marginBottom: "25px",
+                                marginBottom: "16px",
                             }}
                         >
-                            <Box style={{ display: "flex", alignItems: "center" }}>
-                                <Typography style={{ paddingRight: 10, fontWeight: '600' }}>Plan Name:</Typography>
+                            <Box className="checkbox-custom" style={{ display: "flex", alignItems: "center" }}>
+                                <Typography>Plan Name:</Typography>
                                 <TextField
+                                    className="checkbox-custom"
                                     variant="outlined"
                                     size="small"
                                     value={detailPlan.name || ""}
@@ -226,54 +286,67 @@ const ModalAddPlanSchedule = ({
                                     }
                                 />
                             </Box>
-                            <Box style={{ display: "flex", alignItems: "center" }}>
-                                <Typography style={{ fontWeight: '600' }}>Plan Type:</Typography>
+                            <Box className="checkbox-custom" style={{ display: "flex", alignItems: "center" }}>
+                                <Typography>Plan Type:</Typography>
                                 <FormControl
                                     fullWidth
                                     size="small"
-                                    style={{ width: 212, paddingLeft: 10 }}
                                 >
                                     <Select
-                                        native
-                                        id="demo-customized-select-native"
-                                        variant="outlined"
-                                        defaultValue={"MANUAL"}
+                                        // value={age}
                                         onChange={(e) =>
                                             setDetailPlan({ ...detailPlan, type: e.target.value })
                                         }
+                                        classes={"tesst-cass-d"}
+                                        className={`checkkkk-from ${classes.selectCustom}`}
+                                        displayEmpty
+                                        MenuProps={{
+                                            anchorOrigin: {
+                                                vertical: "bottom",
+                                                horizontal: "right"
+                                            },
+                                            transformOrigin: {
+                                                vertical: "top",
+                                                horizontal: "right"
+                                            },
+                                            getContentAnchorEl: null,
+                                            classes: { paper: classes.selectTypeCustom }
+                                        }}
+                                        variant="outlined"
+                                        inputProps={{ 'aria-label': 'Without label' }}
                                     >
-                                        <option value={"MANUAL"}>Manual Plan</option>
-                                        <option value={"TOUR"}>Tour Plan</option>
-                                        <option value={"SCHEDULE"}>Schedule Plan</option>
+                                        <MenuItem value={1}>Manual</MenuItem>
+                                        <MenuItem value={2}>TOUR</MenuItem>
+                                        <MenuItem value={3}>SCHEDULE</MenuItem>
                                     </Select>
                                 </FormControl>
                             </Box>
                         </Box>
                         <Box
                             style={{
-                                marginTop: "14px",
                                 marginBottom: "10px",
                                 display: "flex",
                                 justifyContent: "space-between",
                             }}
                         >
                             <Typography
-                                style={{ fontSize: "14px", color: "#333", fontWeight: " 600" }}
+                                style={{ fontSize: "18px", fontWeight: "bold" }}
                             >
                                 Plan Details
                             </Typography>
                             <Box style={{ display: "flex", alignItems: "center", cursor: "pointer" }}
                                 onClick={() => setIsOpenModalAddTaskView(true)}>
-                                <AddIcon color="secondary" />
-                                <i
+                                <AddIcon color="secondary" style={{ fontSize: '27px' }} />
+                                <Typography
                                     style={{
-                                        fontSize: "12px",
+                                        fontSize: "18px",
                                         color: "red",
                                         textDecoration: "underline",
+                                        fontWeight: "bold",
                                     }}
                                 >
                                     Add Task View
-                                </i>
+                                </Typography>
                             </Box>
                         </Box>
                         <RenderTablePlan
@@ -286,76 +359,91 @@ const ModalAddPlanSchedule = ({
                             classes={classes}
                             setTaskViewDelete={setTaskViewDelete}
                         />
-                        <Box>
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        className={classes.root}
-                                        // inputProps={{ 'aria-label': 'primary checkbox' }}
-                                        onChange={(e) => {
-                                            console.log(e)
-                                            setDetailPlan({ ...detailPlan, playThisTask: e.target.checked })
-                                        }}
-                                        value={detailPlan.playThisTask || false}
-                                    />
-                                }
+                        {detailPlan.type === 3 &&
+                            <Box>
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            className={classes.root}
+                                            // inputProps={{ 'aria-label': 'primary checkbox' }}
+                                            onChange={(e) => {
+                                                console.log(e)
+                                                setDetailPlan({ ...detailPlan, playThisTask: e.target.checked })
+                                            }}
+                                            value={detailPlan.playThisTask || false}
+                                        />
+                                    }
 
-                                label="Play this Task View for the Time Remaining"
-                            />
-                            <Select
-                                native
-                                id="demo-customized-select-native"
-                                variant="outlined"
-                                className={classes.outlined}
-                                style={{ width: '100px', fontSize: '12px', padding: '0px' }}
-                                defaultValue={"MANUAL"}
-                                size="small"
-                                onChange={(e) =>
-                                    setDetailPlan({ ...detailPlan, type: e.target.value })
-                                }
-                            >
-                                <option value={"MANUAL"}>Manual </option>
-                                <option value={"TOUR"}>Tour</option>
-                                <option value={"SCHEDULE"}>Schedule</option>
-                            </Select>
-                        </Box>
+                                    label="Play this Task View for the Time Remaining"
+                                />
+                                <Select
+                                    native
+                                    id="demo-customized-select-native"
+                                    variant="outlined"
+                                    className={classes.outlined}
+                                    style={{ width: '200px', height: '48px', fontSize: '12px', padding: '0px' }}
+                                    defaultValue={1}
+                                    size="small"
+                                    onChange={(e) =>
+                                        setDetailPlan({ ...detailPlan, type: e.target.value })
+                                    }
+                                >
+                                    <option value={1}>Manual </option>
+                                    <option value={2}>Tour</option>
+                                    <option value={3}>Schedule</option>
+                                </Select>
+                            </Box>
+                        }
                     </DialogContent>
                     <Box
                         style={{
                             display: "flex",
                             justifyContent: "space-around",
-                            padding: "20px 0 10px 0",
+                            position: "absolute",
+                            bottom: "0",
+                            boxSizing: "border-box",
+                            width: "100%",
                         }}
                     >
-                        <Button
-                            onClick={() => {
-                                handleClose();
-                                handleSavePlan();
-                            }}
+                        <Box
                             style={{
-                                width: "120px",
-                                height: "35px",
-                                background: "#dd3d4b",
-                                color: "#fff",
-                                fontWeight: "600",
-                            }}
-                            disabled={isDisabled}
-                        >
-                            Save
-                        </Button>
-                        <Button
-                            onClick={handleClose}
-                            style={{
-                                width: "120px",
-                                height: "35px",
-                                background: "#fff",
-                                color: "#333",
-                                fontWeight: "600",
-                                border: "solid 1px ",
-                            }}
-                        >
-                            Cancel
-                        </Button>
+                                display: "flex",
+                                padding: "23.5px 24px 24px",
+                                borderTop: "0.5px solid #8d8e91",
+                                width: "90%",
+                                justifyContent: "center",
+                            }}>
+                            <Button
+                                onClick={handleClose}
+                                style={{
+                                    width: "150px",
+                                    height: "48px",
+                                    background: "#fff",
+                                    color: "#333",
+                                    fontWeight: "600",
+                                    border: "solid 1px ",
+                                    marginRight: "32px"
+                                }}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                onClick={() => {
+                                    handleClose();
+                                    handleSavePlan();
+                                }}
+                                style={{
+                                    width: "150px",
+                                    height: "48px",
+                                    background: "#dd3d4b",
+                                    color: "#fff",
+                                    fontWeight: "600"
+                                }}
+                                disabled={isDisabled}
+                            >
+                                Save
+                            </Button>
+                        </Box>
                     </Box>
                 </Box>
             </Dialog>
@@ -372,7 +460,6 @@ const ModalAddPlanSchedule = ({
                     handleClose={() => setTaskViewDelete(null)}
                     handleDelete={handleDeleteTask}
                     taskIndex={taskViewDelete}
-                    idName={"taskId"}
                 />
             }
         </React.Fragment>
@@ -387,20 +474,25 @@ const RenderTablePlan = memo(({ header = [], bodyContent = [], typePlan, onChang
     const open = useMemo(() => Boolean(selectTaskView), [selectTaskView]);
     const id = useMemo(() => (open ? "simple-popover" : undefined), [open]);
 
+    const onNodeSelect = (node) => {
+        console.log(node);
+    }
+
     return (
         <React.Fragment>
-            <TableContainer style={{ paddingBottom: 30 }} className={classes.styleTable}>
-                <Table aria-label="simple table" size="small">
+            <TableContainer style={{ paddingBottom: 30, maxHeight: "288px" }} className={classes.styleTable}>
+                <Table aria-label="simple table" size="small" stickyHeader>
                     <TableHead style={{ height: 15 }}>
                         <TableRow
                             style={{
-                                border: "1px solid rgba(224, 224, 224, 1)",
+                                border: "2px solid #E5E5E5",
                                 height: 15,
+                                backgroundColor: "#ebebeb"
                             }}
                         >
-                            {header.map((item, index) => {
+                            {header.map((item, index, array) => {
                                 return (
-                                    <TableCell key={index} align="center" style={{ fontWeight: "600", padding: 3, ...index >= 1 ? { borderLeft: "1px solid rgba(224, 224, 224, 1)" } : {} }}>
+                                    <TableCell width={item.width} key={index} align={(index !== 1) ? "center" : "left"} style={{ fontWeight: "bold", padding: "14px 16px 13px 16px", ...index >= 1 ? { borderLeft: "2px solid #E5E5E5" } : {} }}>
                                         {item.label}
                                     </TableCell>
                                 )
@@ -422,142 +514,99 @@ const RenderTablePlan = memo(({ header = [], bodyContent = [], typePlan, onChang
                             // />
                             <TableRow>
                                 <TableCell
-                                    width={2}
                                     component="th"
                                     scope="row"
                                     align="center"
-                                    style={{ borderLeft: "1px solid rgba(224, 224, 224, 1)" }}
+                                    style={{ padding: "14px 16px 13px 16px" }}
                                 >
                                     {index + 1}
                                 </TableCell>
                                 <TableCell
-                                    width={120}
                                     align="center"
-                                    style={{ borderLeft: "1px solid rgba(224, 224, 224, 1)", position: 'relative' }}
+                                    style={{ borderLeft: "2px solid #E5E5E5", padding: "14px 16px 13px 16px", position: 'relative' }}
                                 >
-                                    <Box style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                                        <Typography style={{ fontSize: '16px' }}>
+                                    <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <Typography style={{ fontSize: '16px', lineHeight: "0" }}>
                                             {listTask.find(item => item.taskId === planTask.taskId).name}
                                         </Typography>
-                                        {indexRowEdit === index &&
-                                            <React.Fragment>
-                                                {/* // <ClickAwayListener onClickAway={() => setIsOpenSelectTaskView(false)}>
-                                            //     <Box> */}
-                                                <ArrowDropDownIcon style={{ fontSize: '35px', height: '20px', cursor: 'pointer' }} onClick={(e) => setSelectTaskView(e.currentTarget)} />
-                                                {/* //         {isOpenSelectTaskView &&
-                                            //             <Box className={classes.dropDownSelectTask}>
-                                            //                 <RenderTreeViewTask classes={classes} />
-                                            //             </Box>
-                                            //         }
-                                            //     </Box>
-
-                                            // </ClickAwayListener> */}
+                                        <React.Fragment>
+                                            {/* {(!open || indexRowEdit !== index) && */}
+                                            <img src={TriangleDown}
+                                                style={{
+                                                    height: '20px', width: "20px",
+                                                    ...(open && indexRowEdit === index ? { rotate: '180deg' } : {})
+                                                }}
+                                                onClick={(e) => {
+                                                    setSelectTaskView(e.currentTarget);
+                                                    setIndexRowEdit(index);
+                                                }} />
+                                            {/* } */}
+                                            {indexRowEdit === index &&
                                                 <Popover
                                                     id={id}
+                                                    className="chekc-popover"
                                                     open={open}
                                                     anchorEl={selectTaskView}
                                                     onClose={() => setSelectTaskView(null)}
                                                     anchorOrigin={{
-                                                        vertical: "bottom",
-                                                        horizontal: "left"
+                                                        vertical: 30,
+                                                        horizontal: 21
                                                     }}
                                                     transformOrigin={{
                                                         vertical: "top",
-                                                        horizontal: "left"
+                                                        horizontal: "right"
                                                     }}
                                                 >
                                                     <Box className={classes.dropDownSelectTask}>
-                                                        <RenderTreeViewTask classes={classes} />
+                                                        <RenderTreeViewTask classes={classes} onNodeSelect={onNodeSelect} />
                                                     </Box>
                                                 </Popover>
-                                            </React.Fragment>
-                                        }
+                                            }
+                                        </React.Fragment>
                                     </Box>
                                 </TableCell>
-                                {typePlan === "TOUR" && (
+                                {typePlan === 2 && (
                                     <TableCell
-                                        width={150}
                                         align="center"
-                                        style={{ borderLeft: "1px solid rgba(224, 224, 224, 1)" }}
+                                        style={{ borderLeft: "2px solid #E5E5E5", padding: "9px 16px 7px" }}
                                     >
-                                        {indexRowEdit === index ?
-                                            <RenderSelectTime
-                                                handleChange={({ value, name }) => onChangeValue({ value, name: "stayTime", subName: name, index })}
-                                                valueTime={planTask.stayTime}
-                                                classes={classes}
-                                            />
-                                            :
-                                            <Typography style={{ fontSize: '16px' }}>
-                                                {
-                                                    `${planTask.stayTime.h < 10 ? `0${planTask.stayTime.h}` : `${planTask.stayTime.h}`} : 
-                                            ${planTask.stayTime.m < 10 ? `0${planTask.stayTime.m}` : `${planTask.stayTime.m}`} : 
-                                            ${planTask.stayTime.s < 10 ? `0${planTask.stayTime.s}` : `${planTask.stayTime.s}`}`
-                                                }
-                                            </Typography>
-                                        }
+                                        <RenderSelectTime
+                                            handleChange={({ value, name }) => onChangeValue({ value, name: "stayTime", subName: name, index })}
+                                            valueTime={planTask.stayTime}
+                                            classes={classes}
+                                        />
                                     </TableCell>
                                 )}
-                                {typePlan === "SCHEDULE" && (
-                                    indexRowEdit === index ?
-                                        <React.Fragment>
-                                            <TableCell
-                                                width={150}
-                                                align="center"
-                                                style={{ borderLeft: "1px solid rgba(224, 224, 224, 1)" }}
-                                            >
-                                                <RenderSelectTime
-                                                    handleChange={({ value, name }) => onChangeValue({ value, name: "startTime", subName: name, index })}
-                                                    valueTime={planTask.startTime}
-                                                    classes={classes}
-                                                />
-                                            </TableCell>
-                                            <TableCell
-                                                width={150}
-                                                align="center"
-                                                style={{ borderLeft: "1px solid rgba(224, 224, 224, 1)" }}
-                                            >
-                                                <RenderSelectTime
-                                                    handleChange={({ value, name }) => onChangeValue({ value, name: "endTime", subName: name, index })}
-                                                    valueTime={planTask.endTime}
-                                                    classes={classes}
-                                                />
-                                            </TableCell>
-                                        </React.Fragment> :
-                                        <React.Fragment>
-                                            <TableCell
-                                                width={150}
-                                                align="center"
-                                                style={{ borderLeft: "1px solid rgba(224, 224, 224, 1)" }}
-                                            >
-                                                <Typography style={{ fontSize: '16px' }}>
-                                                    {`
-                                            ${planTask.startTime.h < 10 ? `0${planTask.startTime.h}` : `${planTask.startTime.h}`} : 
-                                            ${planTask.startTime.m < 10 ? `0${planTask.startTime.m}` : `${planTask.startTime.m}`} : 
-                                            ${planTask.startTime.s < 10 ? `0${planTask.startTime.s}` : `${planTask.startTime.s}`}
-                                            `}
-                                                </Typography>
-                                            </TableCell>
-                                            <TableCell
-                                                width={150}
-                                                align="center"
-                                                style={{ borderLeft: "1px solid rgba(224, 224, 224, 1)" }}
-                                            >
-                                                <Typography style={{ fontSize: '16px' }}>
-                                                    {`
-                                            ${planTask.endTime.h < 10 ? `0${planTask.endTime.h}` : `${planTask.endTime.h}`} : 
-                                            ${planTask.endTime.m < 10 ? `0${planTask.endTime.m}` : `${planTask.endTime.m}`} : 
-                                            ${planTask.endTime.s < 10 ? `0${planTask.endTime.s}` : `${planTask.endTime.s}`}
-                                            `}
-                                                </Typography>
-                                            </TableCell>
-                                        </React.Fragment>
+                                {typePlan === 3 && (
+                                    <React.Fragment>
+                                        <TableCell
+                                            align="center"
+                                            style={{ borderLeft: "2px solid #E5E5E5", padding: "9px 16px 7px" }}
+                                        >
+                                            <RenderSelectTime
+                                                handleChange={({ value, name }) => onChangeValue({ value, name: "startTime", subName: name, index })}
+                                                valueTime={planTask.startTime}
+                                                classes={classes}
+                                            />
+                                        </TableCell>
+                                        <TableCell
+                                            align="center"
+                                            style={{ borderLeft: "2px solid #E5E5E5", padding: "9px 16px 7px" }}
+                                        >
+                                            <RenderSelectTime
+                                                handleChange={({ value, name }) => onChangeValue({ value, name: "endTime", subName: name, index })}
+                                                valueTime={planTask.endTime}
+                                                classes={classes}
+                                            />
+                                        </TableCell>
+                                    </React.Fragment>
                                 )}
                                 <TableCell
                                     align="center"
                                     style={{
-                                        borderInline: "1px solid rgba(224, 224, 224, 1)",
+                                        borderLeft: "2px solid #E5E5E5",
+                                        padding: "14px 16px 13px 16px"
                                     }}
-                                    width={50}
                                 >
                                     <Box
                                         style={{
@@ -566,15 +615,16 @@ const RenderTablePlan = memo(({ header = [], bodyContent = [], typePlan, onChang
                                             alignItems: "center",
                                         }}
                                     >
-                                        <ArrowDropDownIcon fontSize="large" color={index === (bodyContent.length - 1) ? 'disabled' : 'inherit'}
+                                        <img src={DownArrow}
+                                            style={{ marginRight: "16px", cursor: "pointer", ...(index === (bodyContent.length - 1) ? { opacity: 0.5 } : { opacity: 1 }) }}
                                             onClick={() => {
                                                 if (index === (bodyContent.length - 1)) return;
                                                 let dataArray = [...bodyContent];
                                                 [dataArray[index], dataArray[index + 1]] = [dataArray[index + 1], dataArray[index]];
                                                 onChangeTableValue([...dataArray]);
-                                            }}
-                                        />
-                                        <ArrowDropUpIcon fontSize="large" color={index === 0 ? 'disabled' : 'inherit'}
+                                            }} />
+                                        <img src={UpArrow}
+                                            style={{ marginRight: "16px", cursor: "pointer", ...(index === 0 ? { opacity: 0.5 } : { opacity: 1 }) }}
                                             onClick={() => {
                                                 if (index === 0) return;
                                                 let dataArray = [...bodyContent];
@@ -582,19 +632,28 @@ const RenderTablePlan = memo(({ header = [], bodyContent = [], typePlan, onChang
                                                 onChangeTableValue([...dataArray]);
                                             }}
                                         />
-                                        {indexRowEdit !== index ?
-                                            <BorderColorIcon
-                                                style={{ padding: "0 10px 0 5px" }}
-                                                onClick={() => setIndexRowEdit(index)}
-                                            /> :
-                                            <SaveIcon
-                                                style={{ padding: "0 10px 0 5px" }}
-                                                onClick={() => setIndexRowEdit(-1)}
-                                            />
-                                        }
-                                        <DeleteOutlineIcon
+                                        <img src={TrashBin} style={{ cursor: "pointer" }}
                                             onClick={() => setTaskViewDelete(planTask)}
                                         />
+                                        {/* <ArrowDropDownIcon fontSize="large" color={index === (bodyContent.length - 1) ? 'disabled' : 'inherit'}
+                                            onClick={() => {
+                                                if (index === (bodyContent.length - 1)) return;
+                                                let dataArray = [...bodyContent];
+                                                [dataArray[index], dataArray[index + 1]] = [dataArray[index + 1], dataArray[index]];
+                                                onChangeTableValue([...dataArray]);
+                                            }}
+                                        /> */}
+                                        {/* <ArrowDropUpIcon fontSize="large" color={index === 0 ? 'disabled' : 'inherit'}
+                                            onClick={() => {
+                                                if (index === 0) return;
+                                                let dataArray = [...bodyContent];
+                                                [dataArray[index], dataArray[index - 1]] = [dataArray[index - 1], dataArray[index]];
+                                                onChangeTableValue([...dataArray]);
+                                            }}
+                                        /> */}
+                                        {/* <DeleteOutlineIcon
+                                            onClick={() => setTaskViewDelete(planTask)}
+                                        /> */}
                                     </Box>
                                 </TableCell>
                             </TableRow>
@@ -628,7 +687,7 @@ const RenderSelectTime = ({ handleChange, valueTime, classes }) => {
                 MenuProps={MenuProps}
                 variant="outlined"
                 className={classes.paddingSelect}
-                inputProps={{ 'aria-label': 'Without label', IconComponent: () => null }}
+                inputProps={{ 'aria-label': 'Without label', IconComponent: () => <img style={{ width: "12px" }} src={TriangleDown} /> }}
             >
                 {listHours.map((value, index) => {
                     return (
@@ -646,7 +705,7 @@ const RenderSelectTime = ({ handleChange, valueTime, classes }) => {
                 MenuProps={MenuProps}
                 variant="outlined"
                 className={classes.paddingSelect}
-                inputProps={{ 'aria-label': 'Without label', IconComponent: () => null }}
+                inputProps={{ 'aria-label': 'Without label', IconComponent: () => <img style={{ width: "12px" }} src={TriangleDown} /> }}
             >
                 {listMinutes.map((value, index) => {
                     return (
@@ -664,7 +723,7 @@ const RenderSelectTime = ({ handleChange, valueTime, classes }) => {
                 MenuProps={MenuProps}
                 variant="outlined"
                 className={classes.paddingSelect}
-                inputProps={{ 'aria-label': 'Without label', IconComponent: () => null }}
+                inputProps={{ 'aria-label': 'Without label', IconComponent: () => <img style={{ width: "12px" }} src={TriangleDown} /> }}
             >
                 {listMinutes.map((value, index) => {
                     return (
@@ -678,28 +737,28 @@ const RenderSelectTime = ({ handleChange, valueTime, classes }) => {
     )
 }
 
-const dataTreeView = {
-    id: "0",
+const dataTreeView = [{
+    id: 0,
     name: "Parent",
     children: [
         {
-            id: "1",
+            id: 1,
             name: "Child - 1"
         },
         {
-            id: "3",
+            id: 3,
             name: "Child - 3",
             children: [
                 {
-                    id: "4",
+                    id: 4,
                     name: "Child - 4",
                     children: [
                         {
-                            id: "7",
+                            id: 7,
                             name: "Child - 7"
                         },
                         {
-                            id: "8",
+                            id: 8,
                             name: "Child - 8"
                         }
                     ]
@@ -707,30 +766,153 @@ const dataTreeView = {
             ]
         },
         {
-            id: "5",
+            id: 5,
             name: "Child - 5",
             children: [
                 {
-                    id: "6",
+                    id: 6,
                     name: "Child - 6"
                 }
             ]
         }
     ]
-};
+}];
 
-const RenderTreeViewTask = ({ classes }) => {
+const employees = [{
+    id: 1,
+    name: 'John Heart',
+    prefix: 'Dr.',
+    position: 'CEO',
+    nodeChildren: [{
+        id: 2,
+        name: 'Samantha Bright',
+        prefix: 'Dr.',
+        position: 'COO',
+        nodeChildren: [{
+            id: 3,
+            name: 'Kevin Carter',
+            prefix: 'Mr.',
+            position: 'Shipping Manager',
+        }, {
+            id: 14,
+            name: 'Victor Norris',
+            prefix: 'Mr.',
+            selected: true,
+            position: 'Shipping Assistant',
+        }],
+    }, {
+        id: 4,
+        name: 'Brett Wade',
+        prefix: 'Mr.',
+        position: 'IT Manager',
+        nodeChildren: [{
+            id: 5,
+            name: 'Amelia Harper',
+            prefix: 'Mrs.',
+            position: 'Network Admin',
+        }, {
+            id: 6,
+            name: 'Wally Hobbs',
+            prefix: 'Mr.',
+            position: 'Programmer',
+        }, {
+            id: 7,
+            name: 'Brad Jameson',
+            prefix: 'Mr.',
+            position: 'Programmer',
+        }, {
+            id: 8,
+            name: 'Violet Bailey',
+            prefix: 'Ms.',
+            position: 'Jr Graphic Designer',
+        }],
+    }, {
+        id: 9,
+        name: 'Barb Banks',
+        prefix: 'Mrs.',
+        position: 'Support Manager',
+        nodeChildren: [{
+            id: 10,
+            name: 'Kelly Rodriguez',
+            prefix: 'Ms.',
+            position: 'Support Assistant',
+        }, {
+            id: 11,
+            name: 'James Anderson',
+            prefix: 'Mr.',
+            position: 'Support Assistant',
+        }],
+    }],
+}];
 
-    const renderTree = (nodes) => (
-        <TreeItem
+const RenderTreeViewTask = ({ classes, onNodeSelect }) => {
+
+    const [selected, setSelected] = useState([]);
+
+    const [dataTree, setDataTree] = useState(employees);
+    const [nodeChildLast, setNodeChildLast] = useState([]);
+    const treeViewRef = useRef(null);
+
+    const handleSearch = (e) => {
+        // let value = document.querySelector('.k-textbox').value
+        console.log(e.target.value);
+        let newData = search(employees, e.target.value)
+        setDataTree(newData);
+    }
+
+    useEffect(() => {
+        getChildLastNode(employees);
+    }, [])
+
+    const getChildLastNode = (data) => {
+        if (!Array.isArray(data)) {
+            nodeChildLast.push(data.id);
+            setNodeChildLast([...nodeChildLast])
+        } else {
+            data.forEach(item => {
+                if (item.nodeChildren) {
+                    getChildLastNode(item.nodeChildren);
+                } else {
+                    getChildLastNode(item);
+                }
+            });
+        }
+    }
+
+    const handleSelectNode = (node) => {
+        if (nodeChildLast.includes(node)) onNodeSelect(node);
+        else return;
+    }
+
+    console.log(nodeChildLast);
+
+    const search = (items, term) => {
+        return items.reduce((acc, item) => {
+            if (contains(item.name, term)) {
+                acc.push(item);
+            } else if (item.nodeChildren && item.nodeChildren.length > 0) {
+                let newItems = search(item.nodeChildren, term);
+                if (newItems && newItems.length > 0) {
+                    acc.push({ name: item.name, nodeChildren: newItems, id: item.id });
+                }
+            }
+            return acc;
+        }, []);
+    }
+
+    const contains = (text, term) => {
+        return text.toLowerCase().indexOf(term.toLowerCase()) >= 0;
+    }
+
+    const renderTree = (nodes) => {
+
+        return <TreeItem
             key={nodes.id}
             nodeId={nodes.id}
             label={
                 <FormControlLabel
                     control={
-                        <Box
-                        // style={{ display: 'flex', justifyContent: 'space-between', widthL: '100%', alignItems: 'center' }}
-                        >
+                        <Box style={{ display: 'flex', justifyContent: 'space-between', widthL: '100%', alignItems: 'center' }}>
                             {nodes.name}
                         </Box>
                     }
@@ -738,21 +920,25 @@ const RenderTreeViewTask = ({ classes }) => {
                 />
             }
         >
-            {Array.isArray(nodes.children)
-                ? nodes.children.map(node => renderTree(node))
+            {Array.isArray(nodes.nodeChildren)
+                ? nodes.nodeChildren.map(node => renderTree(node))
                 : null}
         </TreeItem>
-    );
+    };
+
     return (
         <Box>
             <TextField
+                onChange={handleSearch}
                 placeholder="Search"
+                style={{ fontSize: "16px", fontWeight: "500", width: "100%", marginBottom: "16px" }}
                 size="small"
                 variant="outlined"
+                className="textbox-search"
                 InputProps={{
                     startAdornment: (
                         <InputAdornment position="start">
-                            <SearchIcon style={{ color: "red" }} />
+                            <SearchIcon style={{ color: "#939393" }} />
                         </InputAdornment>
                     ),
                 }}
@@ -760,15 +946,21 @@ const RenderTreeViewTask = ({ classes }) => {
             <TreeView
                 style={{ overflowY: 'auto', overflowX: 'hidden' }}
                 defaultCollapseIcon={
-                    <ArrowDropDownIcon
-                        style={{ fontSize: 40, marginLeft: 10, zIndex: 1 }}
+                    <img src={TriangleDown}
+                        style={{ marginLeft: 10, zIndex: 1, width: '20px' }}
                     />}
                 defaultExpandIcon={
-                    <ArrowRightIcon style={{ fontSize: 40, marginLeft: 10, zIndex: 1 }} />
+                    <img src={TriangleDown}
+                        style={{ marginLeft: 10, zIndex: 1, width: '20px', rotate: '-90deg' }}
+                    />
                 }
                 className={classes.root}
+                onNodeSelect={(e, value) => handleSelectNode(value)}
             >
-                {renderTree(dataTreeView)}
+                {Array.isArray(dataTree) ?
+                    (dataTree.map((item, index) => renderTree(item))) :
+                    renderTree(dataTree)
+                }
             </TreeView>
         </Box>
     )

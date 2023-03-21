@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../../asset/style/ViewSidePlan.css";
 import Plan from "../../asset/image/Mask Group 736.png";
+import editIcon from "../../asset/image/Edit_icon.png";
 import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
 import { Table, TableBody } from '@material-ui/core';
@@ -11,8 +12,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import SettingsIcon from '@material-ui/icons/Settings';
-import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
-import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
+import DeleteIcon from '@material-ui/icons/Delete';
+import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
 import { Box } from "@material-ui/core";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
@@ -24,10 +25,51 @@ import {
 } from "./dataSideBar";
 import { renderData } from "./SideBar";
 import ModalPlayTask from "../modal/ModalPlayTask";
+import {
+    makeStyles,
+} from "@material-ui/core";
+
+const useStyles = makeStyles({
+    tableCustom: {
+        "& .MuiTable-root .MuiTableCell-root": {
+            boxSizing: "border-box",
+            fontWeight: 500,
+            // fontSize: "14px !important",
+            padding: '6px 12px',
+            letterSpacing: "0px !important"
+        },
+        "& .MuiTableRow-head": {
+            lineHeight: "0px",
+            backgroundColor: "#ebebeb !important",
+            borderColor: "#d3d3d3 !important"
+        },
+        "& .MuiTableCell-head": {
+            lineHeight: "0px"
+        }
+    },
+    tableCustom2: {
+        "& .MuiTable-root .MuiTableCell-root": {
+            boxSizing: "border-box",
+            fontWeight: "bold !important",
+            fontSize: "10px !important",
+            padding: '6px 8px 4px 8px !important',
+            lineHeight: "13px !important",
+            letterSpacing: "0px !important"
+        },
+        "& .MuiTableRow-head": {
+            lineHeight: "0px",
+            backgroundColor: "#ebebeb",
+            borderColor: "#d3d3d3 !important",
+        },
+        "& .MuiTable-root .MuiTableCell-body": {
+            fontWeight: "500 !important"
+        }
+    }
+});
 
 const data = [
     {
-        id: 1, name: 'tên plan', type: 'MANUAL', description: 'mô tả', active: true,
+        id: 1, name: 'tên plan', type: 1, description: 'mô tả', active: true,
         planVideoDetails: [
             {
                 taskId: 1,
@@ -97,14 +139,44 @@ const data = [
     }
 ]
 
-const ViewSidePlan = ({ classes, onOpenModalAddPlanSchedule }) => {
+const ViewSidePlan = ({ onOpenModalAddPlanSchedule }) => {
     const [rowSelected, setRowSelected] = useState(1);
     const [typeSelected, setTypeSelected] = useState();
+    const [styles, setStyles] = useState({});
     const [isOpenModalConfirmPlay, setIsOpenModalConfirmPlay] = useState(false);
+
+    const classes = useStyles();
 
     useEffect(() => {
         onClickRowPlanList({ plan: data[0], index: 0 })
     }, [])
+
+    useEffect(() => {
+        let styleVar;
+        if (typeSelected === "MANUAL") {
+            styleVar = {
+                fontSize: "14px",
+                widthNo: 48,
+                widthName: 186,
+                widthStatus: 86,
+                padding: '6px 12px',
+            };
+        } else if (typeSelected === "TOUR") {
+            styleVar = {
+                fontSize: "12px",
+                widthNo: 27,
+                widthName: 102,
+                widthStayTime: 66,
+                widthRemainTime: 82,
+                padding: "9px 8px 7px 8px"
+            };
+        } else {
+            styleVar = {
+                fontSize: "12px"
+            };
+        }
+        setStyles(styleVar);
+    }, [typeSelected])
 
     const onClickRowPlanList = ({ plan, index }) => {
         setRowSelected(plan);
@@ -112,399 +184,332 @@ const ViewSidePlan = ({ classes, onOpenModalAddPlanSchedule }) => {
     }
 
     const onClickConfirmButton = () => {
-        
+
     }
 
     return (
         <React.Fragment>
-            <Box className={"plan-container"}>
-                <Box className="plan-header"
-                    style={{ display: 'flex' }}
-                >
-                    <Box className="plan-header-icon">
-                        <img src={Plan} />
-                    </Box>
+            <Box className="plan-container">
+                <Box className="plan-header">
                     <Box className="plan-header-title">Plan Schedule</Box>
                 </Box>
                 <Box className="plan-current-container">
                     <Box className="plan-current-header">
                         <Box className="plan-current-title">Current Plan</Box>
                         <Box className="plan-current-edit">
-                            <EditIcon style={{ fontSize: '15px' }} />
-                            <span style={{ fontWeight: '500' }}>Edit</span>
+                            <img src={editIcon} style={{ width: '16px', height: '16px', marginRight: '8px' }} />
+                            <span
+                                style={{
+                                    fontWeight: '500',
+                                    fontSize: '14px',
+                                    textDecoration: 'underline',
+                                    color: '#dd3d4b'
+                                }}>Edit
+                            </span>
                         </Box>
                     </Box>
                     <Box style={{ display: 'flex', justifyContent: 'center' }}>
-                        {typeSelected === 'MANUAL' &&
-                            <TableContainer style={{ paddingBottom: 20 }}>
-                                <Table aria-label="simple table" size="small">
-                                    <TableHead>
-                                        <TableRow
-                                            style={{
-                                                border: "1px solid rgba(224, 224, 224, 1)",
-                                                height: 5
-                                            }}
-                                        >
-                                            <TableCell align="center" width={10} style={{
-                                                padding: '7px 10px',
-                                                fontWeight: 700,
-                                                fontSize: '12px'
-                                            }}>
-                                                No.
-                                            </TableCell>
-                                            <TableCell
-                                                align="center"
-                                                style={{
-                                                    padding: '7px 10px',
-                                                    borderLeft: "1px solid rgba(224, 224, 224, 1)",
-                                                    fontWeight: 700,
-                                                    fontSize: '12px'
-                                                }}
-                                            >
-                                                Task Name
-                                            </TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {rowSelected.planVideoDetails.map((plan, index) => (
-                                            <TableRow key={plan.id}>
-                                                <TableCell
-                                                    component="th"
-                                                    align="center"
-                                                    scope="row"
-                                                    style={{ borderLeft: "1px solid rgba(224, 224, 224, 1)" }}
-                                                >
-                                                    {index < 10 ? `0${index + 1}` : `${index + 1}`}
-                                                </TableCell>
-                                                <TableCell
-                                                    align="center"
-                                                    style={{
-                                                        borderLeft: "1px solid rgba(224, 224, 224, 1)",
-                                                        borderRight: "1px solid rgba(224, 224, 224, 1)",
-                                                    }}
-                                                >
-                                                    {rowSelected.name}
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        }
-                        {typeSelected === 'TOUR' &&
-                            <TableContainer style={{ paddingBottom: 20 }}>
-                                <Table aria-label="simple table" size="small">
-                                    <TableHead>
-                                        <TableRow
-                                            style={{
-                                                border: "1px solid rgba(224, 224, 224, 1)",
-                                                height: 5
-                                            }}
-                                        >
-                                            <TableCell align="center" width={10} style={{
-                                                padding: '7px 10px',
-                                                fontWeight: 700,
-                                                fontSize: '12px'
-                                            }}>
-                                                No.
-                                            </TableCell>
-                                            <TableCell
-                                                align="center"
-                                                style={{
-                                                    padding: '7px 10px',
-                                                    borderLeft: "1px solid rgba(224, 224, 224, 1)",
-                                                    fontWeight: 700,
-                                                    fontSize: '12px'
-                                                }}
-                                            >
-                                                Task Name
-                                            </TableCell>
-                                            <TableCell
-                                                align="center"
-                                                style={{
-                                                    padding: '7px 10px',
-                                                    borderLeft: "1px solid rgba(224, 224, 224, 1)",
-                                                    fontWeight: 700,
-                                                    fontSize: '12px'
-                                                }}
-                                            >
-                                                Stay Time
-                                            </TableCell>
-                                            <TableCell
-                                                align="center"
-                                                style={{
-                                                    padding: '7px 10px',
-                                                    borderLeft: "1px solid rgba(224, 224, 224, 1)",
-                                                    fontWeight: 700,
-                                                    fontSize: '12px'
-                                                }}
-                                            >
-                                                Remain Time
-                                            </TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {rowSelected.planVideoDetails.map((planDetail, index) => (
-                                            <TableRow key={planDetail.planVideoId}>
-                                                <TableCell
-                                                    component="th"
-                                                    align="center"
-                                                    scope="row"
-                                                    style={{ borderLeft: "1px solid rgba(224, 224, 224, 1)" }}
-                                                >
-                                                    {index < 10 ? `0${index + 1}` : `${index + 1}`}
-                                                </TableCell>
-                                                <TableCell
-                                                    align="center"
-                                                    style={{
-                                                        borderLeft: "1px solid rgba(224, 224, 224, 1)",
-                                                        borderRight: "1px solid rgba(224, 224, 224, 1)",
-                                                    }}
-                                                >
-                                                    {rowSelected.name}
-                                                </TableCell>
-                                                <TableCell
-                                                    align="center"
-                                                    style={{
-                                                        borderLeft: "1px solid rgba(224, 224, 224, 1)",
-                                                        borderRight: "1px solid rgba(224, 224, 224, 1)",
-                                                    }}
-                                                >
-                                                    {`${planDetail.stayTime.h < 10 ? `0${planDetail.stayTime.h + 1}` : `${planDetail.stayTime.h + 1}`}:${planDetail.stayTime.m < 10 ? `0${planDetail.stayTime.m + 1}` : `${planDetail.stayTime.m + 1}`}:${planDetail.stayTime.s < 10 ? `0${planDetail.stayTime.s + 1}` : `${planDetail.stayTime.s + 1}`}`}
-                                                </TableCell>
-                                                <TableCell
-                                                    align="center"
-                                                    style={{
-                                                        borderLeft: "1px solid rgba(224, 224, 224, 1)",
-                                                        borderRight: "1px solid rgba(224, 224, 224, 1)",
-                                                    }}
-                                                >
-                                                    {planDetail.remainTime}
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        }
-                        {typeSelected === 'SCHEDULE' &&
-                            <TableContainer style={{ paddingBottom: 20 }}>
-                                <Table aria-label="simple table" size="small">
-                                    <TableHead>
-                                        <TableRow
-                                            style={{
-                                                border: "1px solid rgba(224, 224, 224, 1)",
-                                                height: 5
-                                            }}
-                                        >
-                                            <TableCell align="center" width={10} style={{
-                                                padding: '7px 10px',
-                                                fontWeight: 700,
-                                                fontSize: '12px'
-                                            }}>
-                                                No.
-                                            </TableCell>
-                                            <TableCell
-                                                align="center"
-                                                style={{
-                                                    padding: '7px 10px',
-                                                    borderLeft: "1px solid rgba(224, 224, 224, 1)",
-                                                    fontWeight: 700,
-                                                    fontSize: '12px'
-                                                }}
-                                            >
-                                                Task Name
-                                            </TableCell>
-                                            <TableCell
-                                                align="center"
-                                                style={{
-                                                    padding: '7px 10px',
-                                                    borderLeft: "1px solid rgba(224, 224, 224, 1)",
-                                                    fontWeight: 700,
-                                                    fontSize: '12px'
-                                                }}
-                                            >
-                                                Start Time
-                                            </TableCell>
-                                            <TableCell
-                                                align="center"
-                                                style={{
-                                                    padding: '7px 10px',
-                                                    borderLeft: "1px solid rgba(224, 224, 224, 1)",
-                                                    fontWeight: 700,
-                                                    fontSize: '12px'
-                                                }}
-                                            >
-                                                End Time
-                                            </TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {rowSelected.planVideoDetails.map((planDetail, index) => (
-                                            <TableRow key={planDetail.planVideoId}>
-                                                <TableCell
-                                                    component="th"
-                                                    align="center"
-                                                    scope="row"
-                                                    style={{ borderLeft: "1px solid rgba(224, 224, 224, 1)" }}
-                                                >
-                                                    {index < 10 ? `0${index + 1}` : `${index + 1}`}
-                                                </TableCell>
-                                                <TableCell
-                                                    align="center"
-                                                    style={{
-                                                        borderLeft: "1px solid rgba(224, 224, 224, 1)",
-                                                        borderRight: "1px solid rgba(224, 224, 224, 1)",
-                                                    }}
-                                                >
-                                                    {rowSelected.name}
-                                                </TableCell>
-                                                <TableCell
-                                                    align="center"
-                                                    style={{
-                                                        borderLeft: "1px solid rgba(224, 224, 224, 1)",
-                                                        borderRight: "1px solid rgba(224, 224, 224, 1)",
-                                                    }}
-                                                >
-                                                    {`${planDetail.startTime.h < 10 ? `0${planDetail.startTime.h + 1}` : `${planDetail.startTime.h + 1}`}:${planDetail.startTime.m < 10 ? `0${planDetail.startTime.m + 1}` : `${planDetail.startTime.m + 1}`}:${planDetail.startTime.s < 10 ? `0${planDetail.startTime.s + 1}` : `${planDetail.startTime.s + 1}`}`}
-                                                </TableCell>
-                                                <TableCell
-                                                    align="center"
-                                                    style={{
-                                                        borderLeft: "1px solid rgba(224, 224, 224, 1)",
-                                                        borderRight: "1px solid rgba(224, 224, 224, 1)",
-                                                    }}
-                                                >
-                                                    {`${planDetail.endTime.h < 10 ? `0${planDetail.endTime.h + 1}` : `${planDetail.endTime.h + 1}`}:${planDetail.endTime.m < 10 ? `0${planDetail.endTime.m + 1}` : `${planDetail.endTime.m + 1}`}:${planDetail.endTime.s < 10 ? `0${planDetail.endTime.s + 1}` : `${planDetail.endTime.s + 1}`}`}
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        }
-                    </Box>
-                </Box>
-                <Box className="plan-list-container">
-                    <Box className="plan-list-header">
-                        <Box className="plan-list-title">Plan List</Box>
-                        <Box className="plan-list-edit" onClick={() => onOpenModalAddPlanSchedule(true)}>
-                            <AddIcon style={{ fontSize: '17px' }} />
-                            <i>Add plan</i>
-                        </Box>
-                    </Box>
-                    <Box style={{ display: 'flex', justifyContent: 'center' }}>
-                        <TableContainer style={{ paddingBottom: 20 }}>
+
+                        <TableContainer className={classes.tableCustom} style={{ paddingBottom: 20 }}>
                             <Table aria-label="simple table" size="small">
                                 <TableHead>
                                     <TableRow
                                         style={{
-                                            border: "1px solid rgba(224, 224, 224, 1)",
+                                            border: "1px solid #d3d3d3",
+                                            backgroundColor: "#ebebeb"
+                                        }}
+                                        height={32}
+                                    >
+                                        <TableCell align="center"
+                                            style={{
+                                                fontSize: styles.fontSize,
+                                                padding: styles.padding,
+                                                width: styles.widthNo
+                                            }}>
+                                            No
+                                        </TableCell>
+                                        <TableCell
+                                            style={{
+                                                borderLeft: "1px solid #d3d3d3",
+                                                fontSize: styles.fontSize,
+                                                padding: styles.padding
+                                            }}
+                                            width={styles.widthName}
+                                        >
+                                            Task name
+                                        </TableCell>
+                                        {typeSelected === 'MANUAL' &&
+                                            <TableCell
+                                                style={{
+                                                    borderLeft: "1px solid #d3d3d3",
+                                                    fontSize: styles.fontSize,
+                                                    padding: styles.padding
+                                                }}
+                                                width={styles.widthStatus}
+                                            >
+                                                Status
+                                            </TableCell>
+                                        }
+                                        {typeSelected === 'TOUR' &&
+                                            <React.Fragment>
+                                                <TableCell
+                                                    style={{
+                                                        borderLeft: "1px solid #d3d3d3",
+                                                        fontSize: styles.fontSize,
+                                                        padding: styles.padding
+                                                    }}
+                                                    width={styles.widthStayTime}
+                                                >
+                                                    Stay Time
+                                                </TableCell>
+                                                <TableCell
+                                                    style={{
+                                                        borderLeft: "1px solid #d3d3d3",
+                                                        fontSize: styles.fontSize,
+                                                        padding: styles.padding
+                                                    }}
+                                                    width={styles.widthRemainTime}
+                                                >
+                                                    Remain Time
+                                                </TableCell>
+                                            </React.Fragment>
+                                        }
+                                        {typeSelected === 'SCHEDULE' &&
+                                            <React.Fragment>
+                                                <TableCell
+                                                    style={{
+                                                        borderLeft: "1px solid #d3d3d3",
+                                                        fontSize: styles.fontSize,
+                                                        padding: styles.padding
+                                                    }}
+                                                >
+                                                    Start Time
+                                                </TableCell>
+                                                <TableCell
+                                                    align="center"
+                                                    style={{
+                                                        borderLeft: "1px solid #d3d3d3",
+                                                        fontSize: styles.fontSize,
+                                                        padding: styles.padding
+                                                    }}
+                                                >
+                                                    End Time
+                                                </TableCell>
+                                            </React.Fragment>
+                                        }
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {rowSelected.planVideoDetails && rowSelected.planVideoDetails.map((plan, index) => (
+                                        <TableRow key={plan.id}>
+                                            <TableCell
+                                                component="th"
+                                                align="center"
+                                                scope="row"
+                                                style={{
+                                                    borderLeft: "1px solid #d3d3d3",
+                                                    fontSize: styles.fontSize,
+                                                    padding: styles.padding,
+                                                    width: styles.widthNo
+                                                }}
+                                            >
+                                                {index < 10 ? `0${index + 1}` : `${index + 1}`}
+                                            </TableCell>
+                                            <TableCell
+                                                style={{
+                                                    borderLeft: "1px solid #d3d3d3",
+                                                    borderRight: "1px solid #d3d3d3",
+                                                    fontSize: styles.fontSize,
+                                                    padding: styles.padding
+                                                }}
+                                                width={styles.widthName}
+                                            >
+                                                {rowSelected.name}
+                                            </TableCell>
+                                            {typeSelected === 'MANUAL' &&
+                                                <TableCell
+                                                    style={{
+                                                        borderLeft: "1px solid #d3d3d3",
+                                                        borderRight: "1px solid #d3d3d3",
+                                                        fontSize: styles.fontSize,
+                                                        padding: styles.padding
+                                                    }}
+                                                    width={styles.widthStatus}
+                                                >
+                                                    {rowSelected.status}
+                                                </TableCell>
+                                            }
+                                            {typeSelected === 'TOUR' &&
+                                                <React.Fragment>
+                                                    <TableCell
+                                                        align="center"
+                                                        style={{
+                                                            borderLeft: "1px solid #d3d3d3",
+                                                            borderRight: "1px solid #d3d3d3",
+                                                            fontSize: styles.fontSize,
+                                                            padding: styles.padding
+                                                        }}
+                                                        width={styles.widthStayTime}
+                                                    >
+                                                        {`${plan.stayTime.h < 10 ? `0${plan.stayTime.h + 1}` : `${plan.stayTime.h + 1}`}:${plan.stayTime.m < 10 ? `0${plan.stayTime.m + 1}` : `${plan.stayTime.m + 1}`}:${plan.stayTime.s < 10 ? `0${plan.stayTime.s + 1}` : `${plan.stayTime.s + 1}`}`}
+                                                    </TableCell>
+                                                    <TableCell
+                                                        align="center"
+                                                        style={{
+                                                            borderLeft: "1px solid #d3d3d3",
+                                                            borderRight: "1px solid #d3d3d3",
+                                                            fontSize: styles.fontSize,
+                                                            padding: styles.padding
+                                                        }}
+                                                        width={styles.widthRemainTime}
+                                                    >
+                                                        {plan.remainTime}
+                                                    </TableCell>
+                                                </React.Fragment>
+                                            }
+                                            {typeSelected === 'SCHEDULE' &&
+                                                <React.Fragment>
+                                                    <TableCell
+                                                        align="center"
+                                                        style={{
+                                                            borderLeft: "1px solid #d3d3d3",
+                                                            borderRight: "1px solid #d3d3d3",
+                                                            fontSize: styles.fontSize,
+                                                            padding: styles.padding
+                                                        }}
+                                                    >
+                                                        {`${plan.startTime.h < 10 ? `0${plan.startTime.h + 1}` : `${plan.startTime.h + 1}`}:${plan.startTime.m < 10 ? `0${plan.startTime.m + 1}` : `${plan.startTime.m + 1}`}:${plan.startTime.s < 10 ? `0${plan.startTime.s + 1}` : `${plan.startTime.s + 1}`}`}
+                                                    </TableCell>
+                                                    <TableCell
+                                                        align="center"
+                                                        style={{
+                                                            borderLeft: "1px solid #d3d3d3",
+                                                            borderRight: "1px solid #d3d3d3",
+                                                            fontSize: styles.fontSize,
+                                                            padding: styles.padding
+                                                        }}
+                                                    >
+                                                        {`${plan.endTime.h < 10 ? `0${plan.endTime.h + 1}` : `${plan.endTime.h + 1}`}:${plan.endTime.m < 10 ? `0${plan.endTime.m + 1}` : `${plan.endTime.m + 1}`}:${plan.endTime.s < 10 ? `0${plan.endTime.s + 1}` : `${plan.endTime.s + 1}`}`}
+                                                    </TableCell>
+                                                </React.Fragment>
+                                            }
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Box>
+                </Box>
+                <Box className="plan-list-container">
+                    <Box className="plan-current-header">
+                        <Box className="plan-current-title">Current Plan</Box>
+                        <Box className="plan-current-edit" onClick={() => onOpenModalAddPlanSchedule(true)}>
+                            <AddIcon style={{ fontSize: '21px', color: '#dd3d4b' }} />
+                            <span
+                                style={{
+                                    fontWeight: '500',
+                                    fontSize: '14px',
+                                    textDecoration: 'underline',
+                                    color: '#dd3d4b'
+                                }}>
+                                Add plan
+                            </span>
+                        </Box>
+                    </Box>
+                    <Box style={{ display: 'flex', justifyContent: 'center' }}>
+                        <TableContainer className={classes.tableCustom2} style={{ paddingBottom: 20 }}>
+                            <Table aria-label="simple table" size="small">
+                                <TableHead>
+                                    <TableRow
+                                        style={{
+                                            border: "1px solid #d3d3d3",
                                             height: 5
                                         }}
                                     >
-                                        <TableCell align="center" width={10} style={{
-                                            padding: '7px 10px',
-                                            fontWeight: 700,
-                                            fontSize: '12px'
-                                        }}>
-                                            No.
+                                        <TableCell
+                                            width={34}
+                                        >
+                                            No
                                         </TableCell>
                                         <TableCell
-                                            align="center"
                                             style={{
-                                                padding: '7px 10px',
-                                                borderLeft: "1px solid rgba(224, 224, 224, 1)",
-                                                fontWeight: 700,
-                                                fontSize: '12px'
+                                                borderLeft: "1px solid #d3d3d3",
                                             }}
+                                            width={85}
                                         >
                                             Plan Name
                                         </TableCell>
                                         <TableCell
-                                            align="center"
                                             style={{
-                                                padding: '7px 10px',
-                                                borderLeft: "1px solid rgba(224, 224, 224, 1)",
-                                                fontWeight: 700,
-                                                fontSize: '12px'
+                                                borderLeft: "1px solid #d3d3d3",
                                             }}
+                                            width={61}
                                         >
                                             Type
                                         </TableCell>
                                         <TableCell
-                                            align="center"
                                             style={{
-                                                padding: '7px 10px',
-                                                borderLeft: "1px solid rgba(224, 224, 224, 1)",
-                                                fontWeight: 700,
-                                                fontSize: '12px'
+                                                borderLeft: "1px solid #d3d3d3",
                                             }}
+                                            width={80}
                                         >
                                             Description
                                         </TableCell>
                                         <TableCell
-                                            align="center"
                                             style={{
-                                                padding: '7px 10px',
-                                                borderLeft: "1px solid rgba(224, 224, 224, 1)",
-                                                fontWeight: 700,
-                                                fontSize: '12px'
+                                                borderLeft: "1px solid #d3d3d3",
                                             }}
+                                            width={60}
                                         >
                                             Operation
                                         </TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {console.log(data, 'check dataa')}
                                     {data.map((plan, index) => (
                                         <TableRow key={plan.id} onClick={() => onClickRowPlanList({ index, plan })}
-                                            style={rowSelected.id === plan.id ? { backgroundColor: '#FFEEEF' } : {}}>
+                                            style={rowSelected.id === plan.id ? { backgroundColor: '#d5ecdb' } : {}}>
                                             <TableCell
-                                                align="center"
                                                 component="th"
                                                 scope="row"
-                                                style={{ borderLeft: "1px solid rgba(224, 224, 224, 1)" }}
+                                                style={{ borderLeft: "1px solid #d3d3d3" }}
                                             >
                                                 {index < 10 ? `0${index + 1}` : `${index + 1}`}
                                             </TableCell>
                                             <TableCell
-                                                align="center"
-                                                style={{ borderLeft: "1px solid rgba(224, 224, 224, 1)" }}
+                                                style={{ borderLeft: "1px solid #d3d3d3" }}
                                             >
                                                 {plan.name}
                                             </TableCell>
                                             <TableCell
-                                                align="center"
-                                                style={{ borderLeft: "1px solid rgba(224, 224, 224, 1)" }}
+                                                style={{ borderLeft: "1px solid #d3d3d3" }}
                                             >
                                                 {plan.type}
                                             </TableCell>
                                             <TableCell
-                                                align="center"
-                                                style={{ borderLeft: "1px solid rgba(224, 224, 224, 1)" }}
+                                                style={{ borderLeft: "1px solid #d3d3d3" }}
                                             >
                                                 {plan.description}
                                             </TableCell>
                                             <TableCell
-                                                align="center"
                                                 style={{
-                                                    borderLeft: "1px solid rgba(224, 224, 224, 1)",
-                                                    borderRight: "1px solid rgba(224, 224, 224, 1)",
+                                                    borderLeft: "1px solid #d3d3d3",
+                                                    borderRight: "1px solid #d3d3d3",
                                                 }}
                                             >
-                                                {plan.active ?
-                                                    <PlayCircleOutlineIcon style={{ fontSize: '18px' }}
-                                                        onClick={() => {
-                                                            console.log("checkkk");
-                                                            setIsOpenModalConfirmPlay(true);
-                                                        }}
-                                                    /> :
-                                                    <PauseCircleOutlineIcon style={{ fontSize: '18px' }} />
-                                                }
-                                                <SettingsIcon style={{ fontSize: '18px' }} />
-                                                <DeleteOutlineIcon color={plan.active ? "disabled" : "inherit"} style={{ fontSize: '18px' }} />
+                                                <Box style={{ display: "flex", justifyContent: 'space-between', alignItems: 'center' }}>
+                                                    {plan.active ?
+                                                        <PlayCircleFilledIcon style={{ fontSize: '15px' }}
+                                                            onClick={() => {
+                                                                console.log("checkkk");
+                                                                setIsOpenModalConfirmPlay(true);
+                                                            }}
+                                                        /> :
+                                                        <PauseCircleOutlineIcon style={{ fontSize: '15px' }} />
+                                                    }
+                                                    <SettingsIcon style={{ fontSize: '15px' }} />
+                                                    <DeleteIcon color={plan.active ? "disabled" : "inherit"} style={{ fontSize: '15px' }} />
+                                                </Box>
                                             </TableCell>
                                         </TableRow>
                                     ))}
