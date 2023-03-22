@@ -21,6 +21,7 @@ import { dataInitTask } from "./dataSideBar";
 import { red } from "@material-ui/core/colors";
 import ModalAddPlanSchedule from "../modal/ModalAddPlanSchedule";
 import ModalPlayTask from "../modal/ModalPlayTask";
+import ViewSideEvent from "./ViewSideEvent";
 
 const useStyles = makeStyles({
   Sub: {
@@ -324,7 +325,9 @@ const SideBar = ({ typeDisplaySide, data, setData, setListPlan, listPlan }) => {
         view = <ViewSideDevice classes={classes} />;
         break;
       case "Event":
-        view = "Event";
+        view = (
+          <ViewSideEvent/>
+        );
         break;
       case "View":
         view = (
