@@ -65,24 +65,53 @@
     background-size: 2px 100%, 100% 2px, 2px 100%, 100% 2px;
     background-position: 0 0, 0 0, 100% 0, 0 100%;
     background-repeat: no-repeat;
+    z-index: 10;
+}
+
+.box-border-conner-human {
     background-image:
         linear-gradient(0deg, #2ae07e, #2ae07e 25%, transparent 25%, transparent 75%, #2ae07e 75%),
-        linear-gradient(90deg, #2ae07e, #2ae07e 25%, transparent 25%, transparent 75%, #2ae07e 75%), 
+        linear-gradient(90deg, #2ae07e, #2ae07e 25%, transparent 25%, transparent 75%, #2ae07e 75%),
         linear-gradient(180deg, #2ae07e, #2ae07e 25%, transparent 25%, transparent 75%, #2ae07e 75%),
-        linear-gradient(270deg, #2ae07e, #2ae07e 25%, transparent 25%, transparent 75%, #2ae07e 75%)
-    ;
-    z-index: 10;
+        linear-gradient(270deg, #2ae07e, #2ae07e 25%, transparent 25%, transparent 75%, #2ae07e 75%);
+}
+
+.box-border-conner-security {
+    background-image:
+        linear-gradient(0deg, #ff3b4c, #ff3b4c 25%, transparent 25%, transparent 75%, #ff3b4c 75%),
+        linear-gradient(90deg, #ff3b4c, #ff3b4c 25%, transparent 25%, transparent 75%, #ff3b4c 75%),
+        linear-gradient(180deg, #ff3b4c, #ff3b4c 25%, transparent 25%, transparent 75%, #ff3b4c 75%),
+        linear-gradient(270deg, #ff3b4c, #ff3b4c 25%, transparent 25%, transparent 75%, #ff3b4c 75%);
+}
+
+.box-border-conner-vehicle {
+    background-image:
+        linear-gradient(0deg, #2129FF, #2129FF 25%, transparent 25%, transparent 75%, #2129FF 75%),
+        linear-gradient(90deg, #2129FF, #2129FF 25%, transparent 25%, transparent 75%, #2129FF 75%),
+        linear-gradient(180deg, #2129FF, #2129FF 25%, transparent 25%, transparent 75%, #2129FF 75%),
+        linear-gradient(270deg, #2129FF, #2129FF 25%, transparent 25%, transparent 75%, #2129FF 75%);
 }
 
 .box-border-name {
     font-size: 8px;
-    background-color: rgba(42, 224, 126, 0.5);
     height: 14px;
     width: 40px;
     text-align: center;
     margin-top: 4px;
     color: white;
     font-size: 500;
+}
+
+.box-border-name-human {
+    background-color: rgba(42, 224, 126, 0.5);
+}
+
+.box-border-name-security {
+    background-color: rgba(255, 59, 76, 0.5);
+}
+
+.box-border-name-vehicle {
+    background-color: rgba(33, 41, 255, 0.5);
 }
 
 .body-content-image img {
@@ -92,9 +121,16 @@
 
 .body-content-info {
     display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    column-gap: 25px;
+    width: 220px;
+    justify-content: space-between;
+}
+
+.body-content-column-left {
+    width: 130px;
+}
+
+.body-content-column-right {
+    width: 80px;
 }
 
 .body-content-common {
@@ -168,4 +204,192 @@
     font-size: 16px;
     font-weight: 500;
     color: #000000;
+}
+
+
+/*Modal detail css*/
+.container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.left-content {
+    width: 480px;
+    height: 270px;
+}
+
+.right-content {
+    width: 390px;
+}
+
+.content-header {
+    display: flex;
+}
+
+.content-header div {
+    width: 120px;
+    height: 120px;
+}
+
+.content-header div:nth-child(2) {
+    width: 130px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.content-header div:nth-child(2) p {
+    font-size: 24px;
+    color: #56b26e;
+    font-weight: bold;
+}
+
+.content-header img {
+    width: 120px;
+    height: 120px;
+    border-radius: 4px;
+}
+
+.content-header-left {}
+
+.content-header-center {}
+
+.content-header-right {}
+
+.content-body {}
+
+.body-atrribute-container {
+    /* padding-bottom: 17px; */
+    border-bottom: 2px solid #e5e5e5;
+}
+
+.body-atrribute-header {}
+
+.body-atrribute-content {}
+
+.body-detail-container {
+    /* padding-bottom: 17px; */
+}
+
+.body-detail-header {}
+
+.body-detail-content {}
+
+.body-header {
+    margin-bottom: 16px;
+    margin-top: 22px;
+}
+
+.body-header p {
+    font-size: 21px;
+    font-weight: bold;
+}
+
+.body-item-content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.body-item {
+    display: flex;
+    margin-bottom: 16px;
+    height: 24px;
+}
+
+.body-item img {
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+}
+
+.body-item p {
+    font-size: 16px;
+}
+
+.body-column-right {
+    width: 140px;
+}
+
+
+/* Modal Register */
+
+.register-container {
+    display: flex;
+}
+
+.register-avatar {
+    margin-right: 24px;
+}
+
+.register-information {
+    display: flex;
+}
+
+.register-information-column {}
+
+.register-information-left {
+    margin-right: 41px;
+}
+
+.register-information-left .register-information-item-label {
+    width: 140px;
+    margin-right: 10px;
+}
+
+.register-information-right .register-information-item-label {
+    width: 140px;
+    margin-right: 10px;
+}
+
+.register-information-item {
+    display: flex;
+    width: 350px;
+    height: auto;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.register-information-item:last-child {
+    margin-bottom: 0px;
+}
+
+.register-information-item-label {
+    display: flex;
+    align-items: center;
+}
+
+.register-information-item-label p {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.register-information-item-input {
+    height: 48px;
+    width: 200px;
+}
+
+.register-information-item-input>div {
+    height: 48px;
+    width: 200px;
+}
+
+.register-information-item-input .MuiOutlinedInput-root {
+    height: 48px;
+}
+
+.register-information-item-input .MuiSelect-outlined {
+    width: 89%;
+    box-sizing: border-box;
+}
+
+.register-information-item-input input[type="date"]::-webkit-calendar-picker-indicator {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="15" viewBox="0 0 24 24"><path fill="%23bbbbbb" d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/></svg>');
+}
+
+.error-item {
+    font-size: 11px;
+    color: red;
+    font-weight: 500;
+    margin-left: 150px;
 }

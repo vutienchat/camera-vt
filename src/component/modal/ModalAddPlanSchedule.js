@@ -153,6 +153,8 @@ const data = [
         taskId: 2,
         planVideoId: 2,
         startTime: { h: 10, m: 0, s: 0 },
+        dataTimeMax: {h: 12, m: 0, s: 0},
+        dataTimeMin: {h: 13, m: 0, s: 0},
         endTime: { h: 10, m: 0, s: 0 },
         stayTime: { h: 10, m: 0, s: 0 },
         no: 2,
