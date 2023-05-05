@@ -340,6 +340,12 @@ const LiveView = memo(() => {
     });
   };
 
+  useEffect(() => {
+    const arr = [[1], [2], [3], [4]];
+
+    arr.forEach((it) => {});
+  }, []);
+
   return (
     <React.Fragment>
       <Box>

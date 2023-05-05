@@ -12,6 +12,8 @@ const RenderDataSide = ({
   isCamera,
   isSearch,
   handleShowPopupSelect,
+  isMulti,
+  handleMultiSelect,
 }) => {
   return (
     <>
@@ -65,7 +67,15 @@ const RenderDataSide = ({
           />
         </Box>
       )}
-      {renderData(data, classes, handleShowPopupSelect)}
+      
+      {renderData(
+        data,
+        classes,
+        handleShowPopupSelect,
+        false,
+        isMulti,
+        handleMultiSelect
+      )}
     </>
   );
 };

@@ -44,6 +44,8 @@ const PopupOptionSideBar = ({
   openModalRename,
   openModalDelete,
   handleOpenModalMove,
+  setIsMulti,
+  handleMultiSelect,
 }) => {
   const classes = useStyles();
   return (
@@ -157,6 +159,7 @@ const PopupOptionSideBar = ({
                   <Typography
                     onClick={() => {
                       setIsShowPopupSelect(false);
+                      setIsMulti();
                     }}
                     className={classes.textOption}
                   >

@@ -4,10 +4,12 @@ import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowRightIcon from "@material-ui/icons/ArrowRight";
 import RenderDataSide from "./RenderDataSide";
 import { dataCameDevice, dataInit } from "./dataSideBar";
+import AddIcon from "@material-ui/icons/Add";
 import { renderData } from "./SideBar";
 import {
   Box,
   Button,
+  Checkbox,
   InputAdornment,
   makeStyles,
   TextField,
@@ -28,7 +30,13 @@ const useStyles = makeStyles({
   },
 });
 
-const ViewSideTaskWall = ({ classes, handleShowPopupSelect, dataGroup }) => {
+const ViewSideTaskWall = ({
+  classes,
+  handleShowPopupSelect,
+  dataGroup,
+  isMulti,
+  handleMultiSelect,
+}) => {
   const classView = useStyles();
   const [selectType, setSelectType] = useState("siteGroup");
 
@@ -81,12 +89,17 @@ const ViewSideTaskWall = ({ classes, handleShowPopupSelect, dataGroup }) => {
                 justifyContent: "space-between",
                 width: "85.5%",
                 marginLeft: 30,
+                alignItems: "center",
               }}
             >
               <Typography>Main Task View Group</Typography>
-              <MoreHorizIcon
-                onClick={(e) => handleShowPopupSelect(e, "main")}
-              />
+              {isMulti ? (
+                <Checkbox />
+              ) : (
+                <MoreHorizIcon
+                  onClick={(e) => handleShowPopupSelect(e, "main")}
+                />
+              )}
             </Box>
           }
           onLabelClick={(e) => {
@@ -103,6 +116,8 @@ const ViewSideTaskWall = ({ classes, handleShowPopupSelect, dataGroup }) => {
             classes={classes}
             isSearch={false}
             handleShowPopupSelect={handleShowPopupSelect}
+            isMulti={isMulti}
+            handleMultiSelect={handleMultiSelect}
           />
         </TreeItem>
         <TreeItem
@@ -138,25 +153,72 @@ const ViewSideTaskWall = ({ classes, handleShowPopupSelect, dataGroup }) => {
             setSelectType={setSelectType}
             classes={classes}
             isSearch={false}
+            isMulti={isMulti}
           />
         </TreeItem>
       </TreeView>
-      <Box
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          position: "absolute",
-          bottom: 20,
-          width: "100%",
-        }}
-      >
-        <Button
-          style={{ width: 250, height: 55, background: "red", color: "#fff" }}
+      {isMulti ? (
+        <Box
+          style={{
+            display: "flex",
+            alignItems: "center",
+            position: "absolute",
+            bottom: 20,
+            width: "100%",
+            border: "solid 1px #ebebeb",
+          }}
         >
-          Back To Current Plan
-        </Button>
-      </Box>
+          <Typography
+            style={{
+              width: 100,
+              lineHeight: "40px",
+              height: 40,
+              borderRight: "solid 1px #ebebeb",
+              textAlign: "center",
+            }}
+          >
+            Operation
+          </Typography>
+          <Box
+            style={{
+              display: "flex",
+              justifyContent: "space-around",
+              alignItems: "center",
+              flex: 1,
+            }}
+          >
+            <Box className="flex-col-center">
+              <AddIcon fontSize="medium" />
+              <Typography style={{ fontSize: 12 }}>Add to Plan</Typography>
+            </Box>
+            <Box className="flex-col-center">
+              <AddIcon fontSize="medium" />
+              <Typography style={{ fontSize: 12 }}>Share</Typography>
+            </Box>
+            <Box className="flex-col-center">
+              <AddIcon fontSize="medium" />
+              <Typography style={{ fontSize: 12 }}>Delete</Typography>
+            </Box>
+          </Box>
+        </Box>
+      ) : (
+        <Box
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            position: "absolute",
+            bottom: 20,
+            width: "100%",
+          }}
+        >
+          <Button
+            style={{ width: 250, height: 55, background: "red", color: "#fff" }}
+          >
+            Back To Current Plan
+          </Button>
+        </Box>
+      )}
     </React.Fragment>
   );
 };

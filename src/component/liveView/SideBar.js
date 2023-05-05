@@ -1,4 +1,4 @@
-import { Box, makeStyles, Typography } from "@material-ui/core";
+import { Box, Checkbox, makeStyles, Typography } from "@material-ui/core";
 import React, { useEffect, useRef, useState } from "react";
 import TreeView from "@material-ui/lab/TreeView";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
@@ -18,9 +18,7 @@ import {
   ModalMove,
 } from "../modal/index";
 import { dataInitTask } from "./dataSideBar";
-import { red } from "@material-ui/core/colors";
 import ModalAddPlanSchedule from "../modal/ModalAddPlanSchedule";
-import ModalPlayTask from "../modal/ModalPlayTask";
 
 const useStyles = makeStyles({
   Sub: {
@@ -51,7 +49,7 @@ const useStyles = makeStyles({
         background: "#fff",
       },
       "& .MuiTreeItem-iconContainer": {
-        paddingLeft: "20px",
+        // paddingLeft: "20px",
       },
     },
   },
@@ -104,7 +102,14 @@ const useStyles = makeStyles({
   },
 });
 
-export const renderData = (data, classes, handleShowPopupSelect, isNoIcon) => {
+export const renderData = (
+  data,
+  classes,
+  handleShowPopupSelect,
+  isNoIcon,
+  isMulti,
+  handleMultiSelect
+) => {
   return (
     <TreeView
       defaultCollapseIcon={<ArrowDropDownIcon style={{ fontSize: 40 }} />}
@@ -114,7 +119,7 @@ export const renderData = (data, classes, handleShowPopupSelect, isNoIcon) => {
       {data &&
         data.map((item, index) => {
           return (
-            <Box key={index}>
+            <Box key={index} style={{ marginLeft: 20 }}>
               <TreeItem
                 onLabelClick={(e) => e.preventDefault()}
                 key={item.id}
@@ -124,17 +129,30 @@ export const renderData = (data, classes, handleShowPopupSelect, isNoIcon) => {
                       display: "flex",
                       justifyContent: "space-between",
                       width: "100%",
+                      alignItems: "center",
                     }}
                   >
                     <Typography>{item.label}</Typography>
                     {!isNoIcon && (
-                      <MoreHorizIcon
-                        style={{ paddingRight: 24 }}
-                        onClick={(e) => {
-                          handleShowPopupSelect &&
-                            handleShowPopupSelect(e, "", item);
-                        }}
-                      />
+                      <>
+                        {isMulti ? (
+                          <Checkbox
+                            style={{ paddingRight: 25 }}
+                            onClick={(e) => {
+                              handleMultiSelect({ ...item }, e.target.checked);
+                            }}
+                            checked={item.checked || false}
+                          />
+                        ) : (
+                          <MoreHorizIcon
+                            style={{ paddingRight: 17 }}
+                            onClick={(e) => {
+                              handleShowPopupSelect &&
+                                handleShowPopupSelect(e, "", item);
+                            }}
+                          />
+                        )}
+                      </>
                     )}
                   </Box>
                 }
@@ -147,7 +165,9 @@ export const renderData = (data, classes, handleShowPopupSelect, isNoIcon) => {
                         item.nodeChildren,
                         classes,
                         handleShowPopupSelect,
-                        isNoIcon
+                        isNoIcon,
+                        isMulti,
+                        handleMultiSelect
                       )
                     : null}
                   {item.listTask && item.listTask.length
@@ -164,16 +184,21 @@ export const renderData = (data, classes, handleShowPopupSelect, isNoIcon) => {
                                   display: "flex",
                                   justifyContent: "space-between",
                                   width: "100%",
+                                  alignItems: "center",
                                 }}
                               >
                                 <Typography>{child.label}</Typography>
-                                <MoreHorizIcon
-                                  style={{ paddingRight: 24 }}
-                                  onClick={(e) => {
-                                    handleShowPopupSelect &&
-                                      handleShowPopupSelect(e, "task", child);
-                                  }}
-                                />
+                                {isMulti ? (
+                                  <Checkbox style={{ paddingRight: 25 }} />
+                                ) : (
+                                  <MoreHorizIcon
+                                    style={{ paddingRight: 17 }}
+                                    onClick={(e) => {
+                                      handleShowPopupSelect &&
+                                        handleShowPopupSelect(e, "task", child);
+                                    }}
+                                  />
+                                )}
                               </Box>
                             }
                             nodeId={String(index)}
@@ -209,6 +234,8 @@ const SideBar = ({ typeDisplaySide, data, setData, setListPlan, listPlan }) => {
   const [messageErr, setMessageErr] = useState("");
   const [listTaskInPlan, setListTaskInPlan] = useState([]);
   const [isModalAddPlanSchedule, setIsModalAddPlanSchedule] = useState(false);
+  const [isMulti, setIsMulti] = useState(false);
+  const [groupSelected, setGroupSelected] = useState([]);
 
   const [detailPlan, setDetailPlan] = useState({
     name: `Plan ${listPlan.length + 1}`,
@@ -262,13 +289,14 @@ const SideBar = ({ typeDisplaySide, data, setData, setListPlan, listPlan }) => {
   }, [subGroupAdd, data, typeDisplay, indexGroup, dataGroup]);
 
   useEffect(() => {
+    const temp = [...data];
     const parseData =
-      data &&
-      [...data].reduce((abc, nodeTree) => {
+      temp &&
+      [...temp].reduce((abc, nodeTree) => {
         if (nodeTree.parentId === "") {
           return [
             ...abc,
-            { ...getGroupTree(nodeTree, [...data, ...dataInitTask]) },
+            { ...getGroupTree(nodeTree, [...temp, ...dataInitTask]) },
           ];
         }
         return [...abc];
@@ -332,6 +360,8 @@ const SideBar = ({ typeDisplaySide, data, setData, setListPlan, listPlan }) => {
             classes={classes}
             handleShowPopupSelect={handleShowPopupSelect}
             dataGroup={dataGroup}
+            isMulti={isMulti}
+            handleMultiSelect={handleMultiSelect}
           />
         );
         break;
@@ -409,6 +439,62 @@ const SideBar = ({ typeDisplaySide, data, setData, setListPlan, listPlan }) => {
     setObjectSelectMove({ ...objectSelect, typeDisplay: typeDisplay });
   };
 
+  const tempData = [...data];
+  const handleMultiSelect = (group, checked) => {
+    const groupIdx = tempData.findIndex((item) => item.id === group.id);
+    if (groupIdx !== -1) {
+      tempData[groupIdx] = { ...tempData[groupIdx], checked: checked };
+    }
+    const listChild = tempData.filter((item) => item.parentId === group.id);
+    if (listChild && listChild.length) {
+      // const newList = listChild.map((item) => {
+      //   return { ...item, checked: checked };
+      // });
+      listChild.forEach((data) => {
+        handleMultiSelect(data, checked);
+        // const index = tempData.findIndex((it) => it.id === data.id);
+        // if (index !== -1) tempData[index] = { ...data };
+      });
+      const parentIdx = tempData.findIndex(
+        (temp) => temp.id === tempData[groupIdx].parentId
+      );
+      if (
+        !listChild
+          .map((child) => child.checked)
+          .every((value) => value === true)
+      ) {
+        if (parentIdx !== -1)
+          tempData[parentIdx] = { ...tempData[parentIdx], checked: false };
+      } else {
+        if (parentIdx !== -1)
+          tempData[parentIdx] = { ...tempData[parentIdx], checked: true };
+      }
+    } else {
+      const groupParentIdx = tempData.findIndex(
+        (it) => it.id === group.parentId
+      );
+      if (checked === false) {
+        tempData[groupParentIdx] = {
+          ...tempData[groupParentIdx],
+          checked: false,
+        };
+      } else {
+        if (
+          tempData
+            .filter((item) => item.parentId === tempData[groupParentIdx].id)
+            .map((it) => it.checked)
+            .every((value) => value === true)
+        ) {
+          tempData[groupParentIdx] = {
+            ...tempData[groupParentIdx],
+            checked: true,
+          };
+        }
+      }
+    }
+    setData([...tempData]);
+  };
+
   return (
     <React.Fragment>
       <Box className={classes.sideBar}>{renderSideBar(typeDisplaySide)}</Box>
@@ -439,6 +525,7 @@ const SideBar = ({ typeDisplaySide, data, setData, setListPlan, listPlan }) => {
             handleAddToPlan(indexGroup);
           }}
           openModalDelete={() => setIsModalDeleteGroup(true)}
+          setIsMulti={() => setIsMulti(true)}
         />
       )}
       {isModalAddGroup && (
