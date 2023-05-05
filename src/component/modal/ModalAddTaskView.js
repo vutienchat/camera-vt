@@ -23,7 +23,7 @@ import AddIcon from "@material-ui/icons/Add";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import {
     TreeItem,
-    // TreeView 
+    TreeView
 } from "@material-ui/lab";
 import ArrowRightIcon from "@material-ui/icons/ArrowRight";
 import {
@@ -33,9 +33,9 @@ import View from "../../asset/image/Mask Group 735.png";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import ShareIcon from "@material-ui/icons/Share";
 import Checkbox from '@material-ui/core/Checkbox';
-import TreeView from 'devextreme-react/tree-view';
+// import TreeView from 'devextreme-react/tree-view';
 import SelectBox from 'devextreme-react/select-box';
-import 'devextreme/dist/css/dx.light.css';
+import TriangleDown from "../../../src/asset/image/triangle_down_icon.png";
 
 
 const useStyles = makeStyles({
@@ -51,9 +51,13 @@ const useStyles = makeStyles({
         },
         "& .MuiFormControlLabel-root": {
             width: '100%',
+            fontWeight: 500
         },
         "& .MuiFormControlLabel-root div": {
             width: '100%',
+        },
+        "& .MuiTreeItem-content .MuiCheckbox-root": {
+            color: "#c9c9c9"
         }
     },
 });
@@ -95,7 +99,27 @@ const data = [{
                     name: "Child - 6"
                 }
             ]
-        }
+        },
+        {
+            id: "9",
+            name: "Child - 3",
+            children: [
+                {
+                    id: "10",
+                    name: "Child - 4",
+                    children: [
+                        {
+                            id: "11",
+                            name: "Child - 7"
+                        },
+                        {
+                            id: "12",
+                            name: "Child - 8"
+                        }
+                    ]
+                }
+            ]
+        },
     ]
 }];
 
@@ -112,6 +136,7 @@ const ModalAddTaskView = ({
 }) => {
     const [selected, setSelected] = useState([]);
     const [dataTree, setDataTree] = useState(data);
+    const [countSelected, setCountSelected] = useState(0);
     const treeViewRef = useRef(null);
 
     const classes = useStyles();
@@ -180,6 +205,7 @@ const ModalAddTaskView = ({
 
     const handleSearch = (e) => {
         // let value = document.querySelector('.k-textbox').value
+        console.log(e.target.value);
         let newData = search(data, e.target.value)
         setDataTree(newData);
     }
@@ -239,11 +265,23 @@ const ModalAddTaskView = ({
     }
 
     const syncSelection = (treeView) => {
+        let count = 0;
         const selectedEmployees = treeView
             .getSelectedNodes()
-            .map((node) => node.itemData);
-
-        setSelected(selectedEmployees)
+            .map((node) => {
+                // console.log(node);
+                return node.itemData;
+            });
+        let treeNodeSelected = treeView.getSelectedNodes();
+        treeNodeSelected.forEach(item => {
+            if (item.children.length === 0) {
+                count++;
+            }
+        });
+        setCountSelected(count);
+        console.log(count, 'check selected');
+        // console.log(treeView.get);
+        setSelected(selectedEmployees);
     }
 
     function renderTreeViewItem(item) {
@@ -257,45 +295,54 @@ const ModalAddTaskView = ({
             aria-labelledby="draggable-dialog-title"
             maxWidth="md"
         >
-            <Box style={{ width: 300 }}>
+            <Box style={{ width: 408, height: 665, position: 'relative' }}>
                 <Box
                     style={{
                         display: "flex",
-                        justifyContent: "space-between",
+                        justifyContent: "space-around",
                         alignItems: "center",
-                        borderBottom: "solid 2px #c9c9c9",
-                        marginInline: "24px",
-                        padding: "20px 0 10px 0",
+                        padding: "24px 0 0 0",
                     }}
                 >
-                    <Typography style={{ fontWeight: 800 }}>Add Plan</Typography>
-                    <Typography
-                        style={{ fontWeight: 600, cursor: "pointer" }}
-                        onClick={handleClose}
-                    >
-                        X
-                    </Typography>
+                    <Typography style={{ fontWeight: 'bold', fontSize: '24px' }}>Add task view to plan</Typography>
                 </Box>
-                <DialogContent style={{ marginTop: 15 }}>
+                <DialogContent style={{ marginTop: 24, padding: '0px 16px' }}>
                     <Box>
                         <Box style={{ display: 'flex' }}>
-                            <Typography style={{ fontWeight: '560', fontSize: '12px' }}>
+                            <Typography style={{ fontWeight: '500', fontSize: '16px' }}>
                                 Select Task View
                             </Typography>
-                            <Typography style={{ fontWeight: '500', fontSize: '12px', color: 'red', marginLeft: '10px' }}>
-                                (selected {selected.length}/24)
+                            <Typography style={{ fontWeight: '500', fontSize: '16px', color: 'red', marginLeft: '10px' }}>
+                                (selected {countSelected}/24)
                             </Typography>
                         </Box>
                         <Box
-                            style={{ marginTop: 10, border: '1px solid #f2f2f2', borderRadius: '5px', padding: '10px' }}>
-                            {/* <TreeView
-                                style={{ height: '300px', overflowY: 'auto', overflowX: 'hidden' }}
+                            style={{ marginTop: 12 }}>
+                            <TextField
+                                onChange={handleSearch}
+                                placeholder="Search by device name, device ID"
+                                size="small"
+                                variant="outlined"
+                                style={{ width: "97%" }}
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <SearchIcon style={{ color: "#939393" }} />
+                                        </InputAdornment>
+                                    ),
+                                }}
+                            />
+                            <TreeView
+                                id="custom-scroll-bar"
+                                style={{ maxHeight: '368px', overflowY: 'auto', overflowX: 'hidden', marginTop: "17px", width: "383px" }}
                                 defaultCollapseIcon={
-                                    <ArrowDropDownIcon
-                                        style={{ fontSize: 40, marginLeft: 10, zIndex: 1 }}
+                                    <img src={TriangleDown}
+                                        style={{ marginLeft: 10, zIndex: 1, width: '17px', marginBottom: '7px' }}
                                     />}
                                 defaultExpandIcon={
-                                    <ArrowRightIcon style={{ fontSize: 40, marginLeft: 10, zIndex: 1 }} />
+                                    <img src={TriangleDown}
+                                        style={{ marginLeft: 10, zIndex: 1, width: '17px', marginBottom: '7px', rotate: '-90deg' }}
+                                    />
                                 }
                                 className={classes.root}
                             >
@@ -303,9 +350,8 @@ const ModalAddTaskView = ({
                                     (dataTree.map((item, index) => renderTree(item))) :
                                     renderTree(dataTree)
                                 }
-                            </TreeView> */}
-
-                            <TreeView
+                            </TreeView>
+                            {/* <TreeView
                                 id="treeview"
                                 ref={treeViewRef}
                                 width={235}
@@ -321,7 +367,8 @@ const ModalAddTaskView = ({
                                 searchMode={"contains"}
                                 searchExpr={"fullName"}
                                 searchEnabled={true}
-                            />
+                                itemsExpr="nodeChildren"
+                            /> */}
                         </Box>
                     </Box>
                 </DialogContent>
@@ -329,39 +376,51 @@ const ModalAddTaskView = ({
                     style={{
                         display: "flex",
                         justifyContent: "space-around",
-                        padding: "20px 0 10px 0",
+                        padding: "0px 0 24px 0",
+                        position: "absolute",
+                        bottom: "0",
+                        width: "100%",
                     }}
                 >
-                    <Button
-                        onClick={() => {
-                            handleClose();
-                            handleSavePlan();
-                        }}
-                        // disabled={taskIndex.label === ""}
-                        style={{
-                            width: "120px",
-                            height: "35px",
-                            background: "#dd3d4b",
-                            color: "#fff",
-                            fontWeight: "600",
-                        }}
-                        disabled={isDisabled}
-                    >
-                        OK
-                    </Button>
-                    <Button
-                        onClick={handleClose}
-                        style={{
-                            width: "120px",
-                            height: "35px",
-                            background: "#fff",
-                            color: "#333",
-                            fontWeight: "600",
-                            border: "solid 1px ",
-                        }}
-                    >
-                        Cancel
-                    </Button>
+                    <Box style={{
+                        display: "flex",
+                        borderTop: "1px solid #8d8e91",
+                        paddingTop: "24px",
+                        width: "90%",
+                        justifyContent: "space-around",
+                    }}>
+                         <Button
+                            onClick={handleClose}
+                            style={{
+                                width: "150px",
+                                height: "48px",
+                                background: "#fff",
+                                color: "#333",
+                                fontWeight: "600",
+                                border: "solid 1px ",
+                            }}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                handleClose();
+                                handleSavePlan();
+                            }}
+                            // disabled={taskIndex.label === ""}
+                            style={{
+                                width: "150px",
+                                height: "48px",
+                                background: "#dd3d4b",
+                                color: "#fff",
+                                fontWeight: "600",
+                            }}
+                            disabled={isDisabled}
+                        >
+                            Save
+                        </Button>
+                       
+                    </Box>
                 </Box>
             </Box>
         </Dialog>
@@ -374,13 +433,13 @@ const employees = [{
     prefix: 'Dr.',
     position: 'CEO',
     expanded: true,
-    items: [{
+    nodeChildren: [{
         id: 2,
         fullName: 'Samantha Bright',
         prefix: 'Dr.',
         position: 'COO',
         expanded: true,
-        items: [{
+        nodeChildren: [{
             id: 3,
             fullName: 'Kevin Carter',
             prefix: 'Mr.',
@@ -398,7 +457,7 @@ const employees = [{
         prefix: 'Mr.',
         position: 'IT Manager',
         expanded: true,
-        items: [{
+        nodeChildren: [{
             id: 5,
             fullName: 'Amelia Harper',
             prefix: 'Mrs.',
@@ -425,7 +484,7 @@ const employees = [{
         prefix: 'Mrs.',
         position: 'Support Manager',
         expanded: true,
-        items: [{
+        nodeChildren: [{
             id: 10,
             fullName: 'Kelly Rodriguez',
             prefix: 'Ms.',

@@ -19,6 +19,8 @@ import {
 } from "../modal/index";
 import { dataInitTask } from "./dataSideBar";
 import ModalAddPlanSchedule from "../modal/ModalAddPlanSchedule";
+import ModalPlayTask from "../modal/ModalPlayTask";
+import ViewSideEvent from "./ViewSideEvent";
 
 const useStyles = makeStyles({
   Sub: {
@@ -352,7 +354,7 @@ const SideBar = ({ typeDisplaySide, data, setData, setListPlan, listPlan }) => {
         view = <ViewSideDevice classes={classes} />;
         break;
       case "Event":
-        view = "Event";
+        view = <ViewSideEvent />;
         break;
       case "View":
         view = (
