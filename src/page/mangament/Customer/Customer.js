@@ -5,6 +5,7 @@ import { useState } from "react";
 import { HeaderAction } from "../../../component/HeaderAction";
 import { ModalDetailUser } from "../../../component/modal/ModalDetailUser";
 import { ModalImport } from "../../../component/modal/ModalImport";
+import CustomerTableContent from "../../../component/customer";
 
 export const Customer = () => {
   const [openModalDetailUser, setOpenModalDetailUser] = useState(false);
@@ -67,6 +68,10 @@ export const Customer = () => {
         setOpenModalImport={setOpenModalImport}
         handleInportData={handleInportData}
       />
+      <HeaderAction />
+      <Box>
+        <CustomerTableContent />
+      </Box>
     </>
   );
 };
