@@ -1,14 +1,17 @@
 import React from "react";
-import { Box } from "@material-ui/core";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import LiveView from "./page/liveView";
+import { routes } from "./routes";
 
 function App() {
   return (
     <React.Fragment>
-      <Box style={{ padding: 10 }}>
-        <LiveView />
-      </Box>
+      <Routes>
+        {routes.map((r, i) => {
+          const Page = r.element;
+          return <Route key={i} path={r.path} element={<Page />} />;
+        })}
+      </Routes>
     </React.Fragment>
   );
 }
