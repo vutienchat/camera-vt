@@ -1,0 +1,8 @@
+{
+  "customerType": [
+    { "name": "Building", "value": "building" },
+    { "name": "Building_Edge", "value": "building_edge" },
+    { "name": "Common", "value": "common" },
+    { "name": "Company", "value": "compoany" }
+  ]
+}
