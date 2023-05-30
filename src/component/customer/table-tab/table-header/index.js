@@ -1,22 +1,18 @@
 import { Checkbox, TableCell, TableHead, TableRow } from "@material-ui/core";
+import { useContext } from "react";
+import { CustomerContext } from "../..";
 
 export const CustomerTableHeader = () => {
+  const { selectedColumns } = useContext(CustomerContext);
   return (
     <TableHead>
       <TableRow>
         <TableCell>
           <Checkbox />
         </TableCell>
-        <TableCell>ID</TableCell>
-        <TableCell>Type</TableCell>
-        <TableCell>Customer Name</TableCell>
-        <TableCell>Address</TableCell>
-        <TableCell>Phone</TableCell>
-        <TableCell>Email</TableCell>
-        <TableCell>Access Key</TableCell>
-        <TableCell>Secret Key</TableCell>
-        <TableCell>Created Date</TableCell>
-        <TableCell>Last Modified</TableCell>
+        {selectedColumns.map((column) => (
+          <TableCell key={column.id}>{column.label}</TableCell>
+        ))}
         <TableCell>Action</TableCell>
       </TableRow>
     </TableHead>

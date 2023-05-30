@@ -131,8 +131,8 @@ const content = [
 export const CustomerTableBody = () => {
   return (
     <TableBody>
-      {content.map((co) => (
-        <CustomerItemContent task={co} />
+      {content.map((col) => (
+        <CustomerItemContent task={col} />
       ))}
     </TableBody>
   );
