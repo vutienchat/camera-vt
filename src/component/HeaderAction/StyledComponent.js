@@ -35,6 +35,47 @@ export const StyledComponent = styled.div`
     .item-field-title {
       font-weight: bold;
     }
+    .item-button {
+      width: 48px;
+      height: 48px;
+      border: 1px solid #d3d3d3;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .datePicker {
+      input {
+        width: 200px;
+        height: 48px;
+        border: 1px solid #d3d3d3;
+        border-radius: 4px;
+        text-align: center;
+        cursor: pointer;
+      }
+    }
+    .react-datepicker__day,
+    .react-datepicker__day-name {
+      padding: 10px;
+    }
+    .react-datepicker__day {
+      border-radius: 99px;
+    }
+    .react-datepicker__day--in-range {
+      background: #ec1b2e;
+    }
+    .react-datepicker__day--keyboard-selected {
+      background: #ff99a2;
+    }
+    .react-datepicker__day--in-selecting-range: not(
+      .react-datepicker__day--in-range,
+      .react-datepicker__month-text--in-range,
+      .react-datepicker__quarter-text--in-range,
+      .react-datepicker__year-text--in-range){
+        background: #FFE4E6;
+      }
+    );
   }
   .select-wrapper {
     display: flex;
@@ -76,12 +117,14 @@ export const StyledComponent = styled.div`
   .option-box {
     position: absolute;
     width: calc(100% - 20px);
-    height: 300px;
+    max-height: 300px;
+    overflow: auto;
     top: calc(100% + 10px);
     left: 0;
     background-color: #fff;
     border: 1px solid #d3d3d3;
     padding: 10px;
+    z-index: 20;
     .MuiTextField-root {
       width: 100%;
     }
@@ -91,7 +134,7 @@ export const StyledComponent = styled.div`
     .list {
       padding: 0;
       flex-wrap: wrap;
-      height: 250px;
+      // height: 250px;
       overflow: auto;
       .list-item {
         padding: 0 16px;

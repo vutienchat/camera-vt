@@ -11,25 +11,45 @@ import {
 } from "@material-ui/core";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
+import ReplayIcon from "@mui/icons-material/Replay";
 import SearchIcon from "@mui/icons-material/Search";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import ReactDatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { StyledComponent } from "./StyledComponent";
 
-export const HeaderAction = () => {
+export const HeaderAction = ({
+  keyword,
+  dataSend,
+  setDataSend,
+  handeChangeSubmit,
+  reload,
+}) => {
   const [open, setOpen] = useState(false);
-
   const [listCustomerType, setListCustomerType] = useState([]);
   const [listCustomerTypeValue, setListCustomerTypeValue] = useState([]);
-  const [dataSend, setDataSend] = useState({});
+  const [options, setOptions] = useState([]);
+  const [selected, setSelected] = useState([]);
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(null);
+
+  const onChangeDate = (dates) => {
+    const [start, end] = dates;
+    setStartDate(start);
+    setEndDate(end);
+  };
 
   const getCustomerType = async () => {
     const res = await axios.get("http://localhost:3004/customerType");
     if (res.status === 200) {
       setListCustomerType(res.data);
+      setOptions(res.data.map((d) => d.value));
     }
   };
 
+  const isAllSelected =
+    options.length > 0 && selected.length === options.length;
   useEffect(() => {
     getCustomerType();
   }, []);
@@ -46,27 +66,29 @@ export const HeaderAction = () => {
     const name = e.target.name;
     const checked = e.target.checked;
     const value = e.target.value;
-    if (listCustomerTypeValue.includes(name) && !checked) {
+    if (value === "all") {
+      setSelected(selected.length === options.length ? [] : options);
+      return;
+    }
+
+    if (selected.includes(value) && !checked) {
       setListCustomerTypeValue(listCustomerTypeValue.filter((t) => t != name));
       const newDataSend = { ...dataSend };
       delete newDataSend[newDataSend.name];
       setDataSend({ ...newDataSend });
+      setSelected([...selected.filter((t) => t != value)]);
     }
-    if (!listCustomerTypeValue.includes(name) && checked) {
+    if (!selected.includes(value) && checked) {
       setListCustomerTypeValue([...listCustomerTypeValue, name]);
+      setSelected([...selected, value]);
       handeChangeSubmit(e);
     }
   };
 
-  const handeChangeSubmit = (e) => {
-    // console.log({ name: e.target.name, value: e.target.value });
-    setDataSend({ ...dataSend, [e.target.name]: e.target.value });
-  };
-
-  console.log(dataSend);
   return (
     <StyledComponent>
       <Box
+        className="header-filter"
         style={{
           display: "flex",
           justifyContent: "space-between",
@@ -75,6 +97,7 @@ export const HeaderAction = () => {
           borderRadius: "8px",
           boxShadow: "0 3px 6px 0 rgba(0, 0, 0, 0.5)",
           backgroundColor: "#fff",
+          marginBottom: 24,
         }}
       >
         <Box className="item-field">
@@ -106,9 +129,9 @@ export const HeaderAction = () => {
               <Box className="select-box">
                 <Box className="select-box" onClick={handleClick}>
                   <Box className="type-value">
-                    {listCustomerTypeValue.length === 0
+                    {selected.length === 0
                       ? "Customer Type"
-                      : listCustomerTypeValue.map((t) => t).toString()}
+                      : selected.map((t) => t).toString()}
                   </Box>
                   <Box className="">
                     {open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
@@ -143,6 +166,7 @@ export const HeaderAction = () => {
                               color="primary"
                               name="all"
                               onChange={handleCheckboxChange}
+                              checked={isAllSelected}
                             />
                           }
                           label="All type"
@@ -160,6 +184,7 @@ export const HeaderAction = () => {
                                   color="primary"
                                   name={t.name}
                                   onChange={handleCheckboxChange}
+                                  checked={selected.includes(t.value)}
                                 />
                               }
                               label={t.name}
@@ -177,7 +202,32 @@ export const HeaderAction = () => {
           </Box>
         </Box>
 
-        <Box className="item-field"></Box>
+        <Box
+          className="item-field"
+          style={{ display: "flex", alignItems: "center", gap: 16 }}
+        >
+          <Typography className="item-field-title">Date</Typography>
+          <ReactDatePicker
+            startDate={startDate}
+            endDate={endDate}
+            selectsRange
+            onChange={onChangeDate}
+            wrapperClassName="datePicker"
+            peekNextMonth
+            showMonthDropdown
+            showYearDropdown
+            dropdownMode="select"
+            monthsShown={2}
+          >
+            <Box>Xin Chào</Box>
+          </ReactDatePicker>
+        </Box>
+
+        <Box className="item-field">
+          <Box className="item-button" onClick={reload}>
+            <ReplayIcon />
+          </Box>
+        </Box>
       </Box>
     </StyledComponent>
   );
