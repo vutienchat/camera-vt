@@ -3,6 +3,7 @@ import { Box, Table } from "@material-ui/core";
 import { CustomerTableHeader } from "./table-tab/table-header";
 import { CustomerTableBody } from "./table-tab/table-body";
 import { HeaderTab } from "./header-tab";
+import { EditGroupModal } from "./modals/EditGroupModal";
 
 export const initalColumns = [
   { key: "id", label: "Id" },
@@ -33,6 +34,8 @@ const initalCheckedHeader = {
 export const CustomerContext = createContext({});
 
 export default function CustomerTableContent() {
+  const [groupDetail, setGroupDetail] = useState("");
+  const [openEditGroupModal, setOpenEditGroupModal] = useState(false);
   const [checkedColumns, setCheckedColumns] = useState(initalCheckedHeader);
 
   const selectedColumns = useMemo(() => {
@@ -40,7 +43,11 @@ export default function CustomerTableContent() {
   }, [checkedColumns]);
 
   const data = {
+    groupDetail,
     selectedColumns,
+    openEditGroupModal,
+    setOpenEditGroupModal,
+    setGroupDetail,
     checkedColumns,
     setCheckedColumns,
   };
@@ -54,6 +61,7 @@ export default function CustomerTableContent() {
           <CustomerTableBody />
         </Table>
       </Box>
+      <EditGroupModal />
     </CustomerContext.Provider>
   );
 }

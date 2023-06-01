@@ -4,6 +4,7 @@ import {
   Box,
   Checkbox,
   Collapse,
+  IconButton,
   TableCell,
   TableRow,
 } from "@material-ui/core";
@@ -15,8 +16,9 @@ import { DropdownIcon } from "../../../../../common/icons/DropdownIcon";
 import { ExpandMoreIcon } from "../../../../../common/icons/ExpandMoreIcon";
 import { InfoDetailIcon } from "../../../../../common/icons/InfoDetailIcon";
 
-export const CustomerItemContent = ({ task, parentId }) => {
-  const { selectedColumns } = useContext(CustomerContext);
+export const CustomerItemContent = ({ customerTreeList, parentId }) => {
+  const { selectedColumns, setOpenEditGroupModal, setGroupDetail } =
+    useContext(CustomerContext);
 
   const [state, setState] = useState({ parentNode: true });
   const [checked, setChecked] = useState({});
@@ -26,11 +28,66 @@ export const CustomerItemContent = ({ task, parentId }) => {
     setState(newstate);
   };
 
+  const checkParent = useCallback(
+    (th, checkT) => {
+      if (th.data.parentId !== "") {
+        let count = 0;
+
+        for (
+          let i = 0;
+          i < customerTreeList[th.data.parentId].children.length;
+          i++
+        ) {
+          if (!checkT[customerTreeList[th.data.parentId].children[i]]) {
+            count += 1;
+          }
+        }
+
+        if (count > 0) {
+          setChecked((prev) => ({
+            ...prev,
+            [th.data.parentId]: false,
+          }));
+          checkParent(customerTreeList[th], checkT);
+        } else {
+          setChecked((prev) => ({
+            ...prev,
+            [th.data.parentId]: true,
+          }));
+          checkParent(customerTreeList[th], checkT);
+        }
+      }
+    },
+    [checked]
+  );
+
+  const checkAll = (data, check) => {
+    if (data.children.length > 0) {
+      data.children.map((child) => {
+        setChecked((prev) => ({ ...prev, [child]: check }));
+        checkAll(customerTreeList[child], check);
+      });
+    }
+  };
+
   const handleChangeCheckbox = (event) => {
-    setChecked((prev) => ({
-      ...prev,
-      [event.target.value]: event.target.checked,
-    }));
+    let checkT = { ...checked };
+    if (customerTreeList[event.target.value].children.length > 0) {
+      checkT = {
+        ...checkT,
+        [event.target.value]: event.target.checked,
+      };
+      setChecked(checkT);
+      checkAll(customerTreeList[event.target.value], event.target.checked);
+      checkParent(customerTreeList[event.target.value], checkT);
+    } else {
+      checkT = {
+        ...checkT,
+        [event.target.value]: event.target.checked,
+      };
+      setChecked(checkT);
+      checkParent(customerTreeList[event.target.value], checkT);
+    }
   };
 
   const treeTable = useCallback(
@@ -41,7 +98,7 @@ export const CustomerItemContent = ({ task, parentId }) => {
             <TableCell style={{ padding: 0 }}>
               <Collapse
                 key={collapseId}
-                in={state[collapseId]}
+                in={state[parentId] && state[collapseId]}
                 timeout="auto"
                 unmountOnExit
               >
@@ -63,10 +120,11 @@ export const CustomerItemContent = ({ task, parentId }) => {
                   ) : null}
                   <Checkbox
                     value={task}
-                    checked={checked[task]}
+                    checked={checked[task] ? true : false}
                     size="small"
                     onChange={handleChangeCheckbox}
                   />
+                  {checked[task] && "okok"}
                 </Box>
               </Collapse>
             </TableCell>
@@ -74,7 +132,7 @@ export const CustomerItemContent = ({ task, parentId }) => {
               <TableCell style={{ padding: 0 }} key={key}>
                 <Collapse
                   key={collapseId}
-                  in={state[collapseId]}
+                  in={state[parentId] && state[collapseId]}
                   timeout="auto"
                   unmountOnExit
                 >
@@ -85,23 +143,30 @@ export const CustomerItemContent = ({ task, parentId }) => {
             <TableCell style={{ padding: 0 }}>
               <Collapse
                 key={collapseId}
-                in={state[collapseId]}
+                in={state[parentId] && state[collapseId]}
                 timeout="auto"
                 unmountOnExit
               >
                 <Box display="flex" alignItems="center" gridGap="10px">
                   <InfoDetailIcon />
-                  <EditIcon />
+                  <IconButton
+                    onClick={() => {
+                      setOpenEditGroupModal(true);
+                      setGroupDetail(collapseId);
+                    }}
+                  >
+                    <EditIcon />
+                  </IconButton>
                   <DeleteIcon color="#000" />
                 </Box>
               </Collapse>
             </TableCell>
           </TableRow>
-          {treeTable(contentTable, task, task)}
+          {treeTable(contentTable, task)}
         </React.Fragment>
       ));
     },
-    [state, selectedColumns]
+    [state, selectedColumns, checked]
   );
 
   return (
@@ -120,10 +185,10 @@ export const CustomerItemContent = ({ task, parentId }) => {
               justifyContent="center"
               gridGap="5px"
             >
-              {task[parentId].children.length > 0 ? (
+              {customerTreeList[parentId].children.length > 0 ? (
                 <Box
                   component="div"
-                  key={task[parentId]}
+                  key={customerTreeList[parentId]}
                   onClick={() => handleClick(parentId)}
                   style={{ paddingTop: "3px", cursor: "pointer" }}
                 >
@@ -132,6 +197,7 @@ export const CustomerItemContent = ({ task, parentId }) => {
               ) : null}
               <Checkbox
                 value={parentId}
+                checked={checked[parentId]}
                 size="small"
                 onChange={handleChangeCheckbox}
               />
@@ -146,7 +212,7 @@ export const CustomerItemContent = ({ task, parentId }) => {
               timeout="auto"
               unmountOnExit
             >
-              {task[parentId].data[key]}
+              {customerTreeList[parentId].data[key]}
             </Collapse>
           </TableCell>
         ))}
@@ -165,7 +231,7 @@ export const CustomerItemContent = ({ task, parentId }) => {
           </Collapse>
         </TableCell>
       </TableRow>
-      {treeTable(task, parentId)}
+      {treeTable(customerTreeList, parentId)}
     </React.Fragment>
   );
 };
