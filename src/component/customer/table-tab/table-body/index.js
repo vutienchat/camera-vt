@@ -2,8 +2,8 @@ import { TableBody } from "@material-ui/core";
 import React from "react";
 import { CustomerItemContent } from "./item";
 import { useEffect } from "react";
-import { dfs } from "../../../../hooks/dfs";
 import { useState } from "react";
+import { convertTreeData } from "../../../../utils";
 
 const treeData = {
   success: true,
@@ -128,62 +128,17 @@ const treeData = {
 
 export const CustomerTableBody = () => {
   const [state, setState] = useState();
-  const [count, setCount] = useState(0);
-  const [data, setData] = useState([]);
 
   useEffect(() => {
-    var g = {};
-
-    for (var tree of treeData.data) {
-      var root = tree.currentNode;
-      var nodes = tree.nodeList;
-      g = {
-        ...g,
-        [root.id]: {
-          data: root,
-          adj: [],
-        },
-      };
-
-      for (var node of nodes) {
-        g = {
-          ...g,
-          [node.id]: {
-            data: node,
-            adj: [],
-          },
-        };
-        g[node.parentId].adj.push(node.id);
-      }
-    }
-
-    setState({ ...g });
+    setState(convertTreeData(treeData.data));
   }, []);
-
-  useEffect(() => {
-    if (state) {
-      var cnt = 1;
-
-      for (var node in state) {
-        if (state[node].data.parentId == "") {
-          setCount(cnt++);
-          var parent = {
-            data: {
-              id: "",
-            },
-          };
-        }
-      }
-    }
-  }, [state]);
 
   return (
     <TableBody>
-      {Array(count)
-        .fill()
-        .map((col) => (
-          <CustomerItemContent task={col} />
-        ))}
+      {state &&
+        Array(2)
+          .fill()
+          .map((col) => <CustomerItemContent task={state} parentId={"1"} />)}
     </TableBody>
   );
 };
