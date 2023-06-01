@@ -5,7 +5,7 @@
     { "name": "Common", "value": "common" },
     { "name": "Company", "value": "company" }
   ],
-  "user": [
+  "customer": [
     {
       "id": 1,
       "name": "Customer name",
