@@ -5,7 +5,12 @@ export const DeleteButton = () => {
   return (
     <Button
       variant="contained"
-      style={{ backgroundColor: "#808080", color: "#FFFFFF" }}
+      style={{
+        backgroundColor: "#808080",
+        color: "#FFFFFF",
+        width: 125,
+        textTransform: "capitalize",
+      }}
       startIcon={<DeleteIcon color="#FFFFFF" />}
     >
       Delete

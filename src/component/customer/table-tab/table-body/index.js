@@ -1,14 +1,14 @@
 import { TableBody } from "@material-ui/core";
-import React from "react";
+import React, { useContext } from "react";
 import { CustomerItemContent } from "./item";
 import { useEffect } from "react";
 import { useState } from "react";
 import { convertTreeData } from "../../../../utils";
-import useCustomerDataList from "../../../../hooks/api/useCustomerListData";
+import { GroupContext } from "../..";
 
 export const CustomerTableBody = () => {
+  const { customer_list } = useContext(GroupContext);
   const [customerTreeList, setCustomerTreeList] = useState();
-  const { data: customer_list } = useCustomerDataList();
 
   useEffect(() => {
     if (customer_list) {

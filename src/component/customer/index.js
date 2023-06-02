@@ -4,6 +4,7 @@ import { CustomerTableHeader } from "./table-tab/table-header";
 import { CustomerTableBody } from "./table-tab/table-body";
 import { HeaderTab } from "./header-tab";
 import { EditGroupModal } from "./modals/EditGroupModal";
+import useGroupDataList from "../../hooks/api/useCustomerListData";
 
 export const initalColumns = [
   { key: "id", label: "Id" },
@@ -31,9 +32,12 @@ const initalCheckedHeader = {
   last_modified: true,
 };
 
-export const CustomerContext = createContext({});
+export const GroupContext = createContext({});
 
 export default function CustomerTableContent() {
+  const { data: customer_list, isLoading: isCustomerListLoading } =
+    useGroupDataList();
+
   const [groupDetail, setGroupDetail] = useState("");
   const [openEditGroupModal, setOpenEditGroupModal] = useState(false);
   const [checkedColumns, setCheckedColumns] = useState(initalCheckedHeader);
@@ -43,6 +47,8 @@ export default function CustomerTableContent() {
   }, [checkedColumns]);
 
   const data = {
+    customer_list,
+    isCustomerListLoading,
     groupDetail,
     selectedColumns,
     openEditGroupModal,
@@ -53,7 +59,7 @@ export default function CustomerTableContent() {
   };
 
   return (
-    <CustomerContext.Provider value={data}>
+    <GroupContext.Provider value={data}>
       <Box style={{ padding: "10px" }}>
         <HeaderTab />
         <Table size="small">
@@ -62,6 +68,6 @@ export default function CustomerTableContent() {
         </Table>
       </Box>
       <EditGroupModal />
-    </CustomerContext.Provider>
+    </GroupContext.Provider>
   );
 }

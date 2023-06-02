@@ -9,7 +9,7 @@ import {
   withStyles,
 } from "@material-ui/core";
 import { useContext, useState } from "react";
-import { CustomerContext, initalColumns } from "../..";
+import { GroupContext, initalColumns } from "../..";
 import { DropdownIcon } from "../../../../common/icons/DropdownIcon";
 import { OpenDropIcon } from "../../../../common/icons/OpenDropIcon";
 
@@ -34,7 +34,7 @@ const StyledMenu = withStyles({
 ));
 
 export const ColumnsCustom = () => {
-  const { checkedColumns, setCheckedColumns } = useContext(CustomerContext);
+  const { checkedColumns, setCheckedColumns } = useContext(GroupContext);
 
   const [anchorEl, setAnchorEl] = useState(null);
 

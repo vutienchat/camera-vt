@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@material-ui/core";
 
-import { CustomerContext } from "../../..";
+import { GroupContext } from "../../..";
 import { EditIcon } from "../../../../../common/icons/EditIcon";
 import { DeleteIcon } from "../../../../../common/icons/DeleteIcon";
 import { DropdownIcon } from "../../../../../common/icons/DropdownIcon";
@@ -18,7 +18,7 @@ import { InfoDetailIcon } from "../../../../../common/icons/InfoDetailIcon";
 
 export const CustomerItemContent = ({ customerTreeList, parentId }) => {
   const { selectedColumns, setOpenEditGroupModal, setGroupDetail } =
-    useContext(CustomerContext);
+    useContext(GroupContext);
 
   const [state, setState] = useState({ parentNode: true });
   const [checked, setChecked] = useState({});
@@ -152,7 +152,7 @@ export const CustomerItemContent = ({ customerTreeList, parentId }) => {
                   <IconButton
                     onClick={() => {
                       setOpenEditGroupModal(true);
-                      setGroupDetail(collapseId);
+                      setGroupDetail(task[collapseId]);
                     }}
                   >
                     <EditIcon />

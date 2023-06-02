@@ -1,9 +1,9 @@
 import { Checkbox, TableCell, TableHead, TableRow } from "@material-ui/core";
 import { useContext } from "react";
-import { CustomerContext } from "../..";
+import { GroupContext } from "../..";
 
 export const CustomerTableHeader = () => {
-  const { selectedColumns } = useContext(CustomerContext);
+  const { selectedColumns } = useContext(GroupContext);
   return (
     <TableHead>
       <TableRow>

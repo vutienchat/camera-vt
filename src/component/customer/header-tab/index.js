@@ -1,8 +1,10 @@
-import { Box, Checkbox, Typography } from "@material-ui/core";
+import { Box, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { AddCustomerButton } from "./actions/add-btn";
-import { ColumnsCustom } from "./actions/columns";
+import { AddGroupButton } from "./actions/add-btn";
+// import { ColumnsCustom } from "./actions/columns";
 import { DeleteButton } from "./actions/delete";
+import { ImportButton } from "./actions/import";
+import { ExportButton } from "./actions/export";
 
 export const HeaderTab = () => {
   const classes = useStyles();
@@ -10,25 +12,18 @@ export const HeaderTab = () => {
   return (
     <Box className={classes.root}>
       <Box className={classes.rootLeft}>
-        <Box className={classes.showText}>
-          <Typography>Show:</Typography>
-          <Typography>123 Results</Typography>
-        </Box>
         <Box style={{ display: "flex", gap: "20px", alignItems: "center" }}>
           <Box className={classes.showText}>
             <Typography>Selected:</Typography>
             <Typography> 10 items</Typography>
           </Box>
-          <Box className={classes.selectAll}>
-            <Typography>Selecte All</Typography>
-            <Checkbox size="small" />
-          </Box>
-          <Typography className={classes.cancelText}>Cancel</Typography>
         </Box>
       </Box>
       <Box className={classes.actions}>
-        <AddCustomerButton />
-        <ColumnsCustom />
+        <AddGroupButton />
+        <ImportButton />
+        <ExportButton />
+        {/* <ColumnsCustom /> */}
         <DeleteButton />
       </Box>
     </Box>
