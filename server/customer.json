@@ -1,0 +1,164 @@
+{
+  "data": [
+    {
+      "currentNode": {
+        "id": "1",
+        "type": "COMPANY",
+        "customer_name": "GiangVanMinh",
+        "address": "99 Kim Ma",
+        "phone": "0987654321",
+        "email": "gvm@mail.vn",
+        "parentId": "",
+        "access_key": "be0aoisud",
+        "secret_key": "be0aoisud",
+        "created_date": "10:11:12 19/08/2023",
+        "last_modified": "10:11:12 19/08/2023"
+      },
+      "nodeList": [
+        {
+          "id": "1_1",
+          "type": "COMPANY",
+          "customer_name": "GiangVanMinh",
+          "address": "99 Kim Ma",
+          "phone": "0987654321",
+          "parentId": "1",
+          "email": "gvm@mail.vn",
+          "access_key": "be0aoisud",
+          "secret_key": "be0aoisud",
+          "created_date": "10:11:12 19/08/2023",
+          "last_modified": "10:11:12 19/08/2023"
+        },
+        {
+          "id": "1_1_1",
+          "type": "COMPANY",
+          "customer_name": "GiangVanMinh",
+          "address": "99 Kim Ma",
+          "phone": "0987654321",
+          "email": "gvm@mail.vn",
+          "parentId": "1_1",
+          "access_key": "be0aoisud",
+          "secret_key": "be0aoisud",
+          "created_date": "10:11:12 19/08/2023",
+          "last_modified": "10:11:12 19/08/2023"
+        },
+        {
+          "id": "1_1_2",
+          "type": "COMPANY",
+          "customer_name": "GiangVanMinh",
+          "address": "99 Kim Ma",
+          "phone": "0987654321",
+          "email": "gvm@mail.vn",
+          "parentId": "1_1",
+          "access_key": "be0aoisud",
+          "secret_key": "be0aoisud",
+          "created_date": "10:11:12 19/08/2023",
+          "last_modified": "10:11:12 19/08/2023"
+        },
+        {
+          "id": "1_1_1_1",
+          "type": "COMPANY",
+          "customer_name": "GiangVanMinh",
+          "address": "99 Kim Ma",
+          "phone": "0987654321",
+          "email": "gvm@mail.vn",
+          "parentId": "1_1_1",
+          "access_key": "be0aoisud",
+          "secret_key": "be0aoisud",
+          "created_date": "10:11:12 19/08/2023",
+          "last_modified": "10:11:12 19/08/2023"
+        }
+      ]
+    },
+    {
+      "currentNode": {
+        "id": "2",
+        "type": "COMPANY",
+        "customer_name": "GiangVanMinh",
+        "address": "99 Kim Ma",
+        "phone": "0987654321",
+        "email": "gvm@mail.vn",
+        "parentId": "",
+        "access_key": "be0aoisud",
+        "secret_key": "be0aoisud",
+        "created_date": "10:11:12 19/08/2023",
+        "last_modified": "10:11:12 19/08/2023"
+      },
+      "nodeList": [
+        {
+          "id": "2_1",
+          "type": "COMPANY",
+          "customer_name": "GiangVanMinh",
+          "address": "99 Kim Ma",
+          "phone": "0987654321",
+          "parentId": "2",
+          "email": "gvm@mail.vn",
+          "access_key": "be0aoisud",
+          "secret_key": "be0aoisud",
+          "created_date": "10:11:12 19/08/2023",
+          "last_modified": "10:11:12 19/08/2023"
+        },
+        {
+          "id": "2_1_1",
+          "type": "COMPANY",
+          "customer_name": "GiangVanMinh",
+          "address": "99 Kim Ma",
+          "phone": "0987654321",
+          "email": "gvm@mail.vn",
+          "parentId": "2_1",
+          "access_key": "be0aoisud",
+          "secret_key": "be0aoisud",
+          "created_date": "10:11:12 19/08/2023",
+          "last_modified": "10:11:12 19/08/2023"
+        }
+      ]
+    }
+  ],
+  "customerType": [
+    { "name": "Building", "value": "building" },
+    { "name": "Building_Edge", "value": "building_edge" },
+    { "name": "Common", "value": "common" },
+    { "name": "Company", "value": "company" },
+    { "name": "Container", "value": "container" }
+  ],
+  "customer": [
+    {
+      "id": 1,
+      "name": "Customer name",
+      "email": "admin@gmail.com",
+      "phone": "12312312312",
+      "address": "1600 Amphitheatre Parkway",
+      "addressDetail": "Hanoi",
+      "parentGroup": "Group 1",
+      "customerType": "Building",
+      "accessKey": "e2f33530f54d11ed9438024225c684ce",
+      "secretKey": "e2f33530f54d11ed9438024225c684ce",
+      "createdTime": "16:10:25 29/05/2023"
+    },
+    {
+      "id": 2,
+      "name": "Customer name",
+      "email": "admin@gmail.com",
+      "phone": "12312312312",
+      "address": "1600 Amphitheatre Parkway",
+      "addressDetail": "Hanoi",
+      "parentGroup": "Group 1",
+      "customerType": "Building",
+      "accessKey": "e2f33530f54d11ed9438024225c684ce",
+      "secretKey": "e2f33530f54d11ed9438024225c684ce",
+      "createdTime": "16:10:25 29/05/2023"
+    },
+    {
+      "id": 3,
+      "name": "Customer name",
+      "email": "admin@gmail.com",
+      "phone": "12312312312",
+      "address": "1600 Amphitheatre Parkway",
+      "addressDetail": "Hanoi",
+      "parentGroup": "Group 1",
+      "customerType": "Building",
+      "accessKey": "e2f33530f54d11ed9438024225c684ce",
+      "secretKey": "e2f33530f54d11ed9438024225c684ce",
+      "createdTime": "16:10:25 29/05/2023"
+    }
+  ]
+}

@@ -74,7 +74,7 @@ export const ModalDetailUser = ({
 
   const { data } = useQuery(["customer", userId], async () => {
     if (userId) {
-      const res = await axios.get("http://localhost:3004/customer/" + userId);
+      const res = await axios.get("http://localhost:3030/customer/" + userId);
       return res;
     }
   });
