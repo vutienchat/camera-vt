@@ -1,5 +1,11 @@
-import { Box, Button, Dialog } from "@material-ui/core";
-import { DialogContent, DialogContentText, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  Typography,
+} from "@material-ui/core";
 
 export const ModalDeleteGroup = ({ groupId, handleClose, isOpen }) => {
   return (
