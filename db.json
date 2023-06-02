@@ -1,9 +1,62 @@
 {
   "customerType": [
-    { "name": "Building", "value": "building" },
-    { "name": "Building_Edge", "value": "building_edge" },
-    { "name": "Common", "value": "common" },
-    { "name": "Company", "value": "company" }
+    {
+      "name": "Building",
+      "value": "building"
+    },
+    {
+      "name": "Building_Edge",
+      "value": "building_edge"
+    },
+    {
+      "name": "Common",
+      "value": "common"
+    },
+    {
+      "name": "Company",
+      "value": "company"
+    }
+  ],
+  "groupMngt": [
+    {
+      "name": "asdfsadf",
+      "phone": "0345621565",
+      "email": "adfasdfsd",
+      "addressDetail": "asdfasdfadsfas",
+      "type": 2,
+      "id": 1
+    },
+    {
+      "name": "asdfsadf",
+      "phone": "0345621565",
+      "email": "adfasdfsd",
+      "addressDetail": "asdfasdfadsfas",
+      "type": 2,
+      "address": {
+        "province": "01",
+        "district": "002",
+        "ward": "00040"
+      },
+      "id": 2
+    },
+    {
+      "name": "group 1 ",
+      "phone": "01232131231",
+      "email": "doasdnfknsadbk",
+      "addressDetail": "asdfsadfas",
+      "type": 1,
+      "userName": "asdfkjasdkjf",
+      "password": "alsdfjlkas",
+      "repeatPassword": "asdfsadf",
+      "address": {
+        "province": "01",
+        "district": "002",
+        "ward": "00043"
+      },
+      "parentId": "",
+      "user": {},
+      "id": 3
+    }
   ],
   "customer": [
     {

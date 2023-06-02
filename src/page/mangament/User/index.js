@@ -15,6 +15,8 @@ import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined"
 import ModalCreateUser from "./components/modal/ModalCreateUser";
 import ModalEditCustomer from "./components/modal/ModalEditCustomer";
 import ModalDeleteCustomer from "./components/modal/ModalDeleteCustomer";
+import ModalCreateGroup from "../../../component/group/Modal/ModalCreateGroup";
+import ModalEditGroup from "../../../component/group/Modal/ModalEditGroup";
 
 const StyledTableHead = styled(TableHead)(() => ({
   backgroundColor: "#ebebeb",
@@ -42,6 +44,8 @@ export const User = () => {
   const [isModalCreate, setIsModalCreate] = useState(false);
   const [isModalEditCustomer, setIsModalEditCustomer] = useState(false);
   const [isModalDeleteCustomer, setIsModalDeleteCustomer] = useState(false);
+  const [isModalCreateGroup, setIsModalCreateGroup] = useState(true);
+  const [isModalEditGroup, setIsModalEditGroup] = useState(false);
 
   return (
     <TableContainer component={Paper}>
@@ -147,6 +151,20 @@ export const User = () => {
         <ModalDeleteCustomer
           open={isModalDeleteCustomer}
           handleClose={() => setIsModalDeleteCustomer(false)}
+        />
+      )}
+
+      {isModalCreateGroup && (
+        <ModalCreateGroup
+          open={isModalCreateGroup}
+          handleClose={() => setIsModalCreateGroup(false)}
+        />
+      )}
+
+      {isModalEditGroup && (
+        <ModalEditGroup
+          open={isModalEditGroup}
+          handleClose={() => setIsModalEditGroup}
         />
       )}
     </TableContainer>
