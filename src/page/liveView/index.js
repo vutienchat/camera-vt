@@ -1,5 +1,5 @@
-import React, { memo, useState, useCallback, useEffect } from "react";
 import { Box } from "@material-ui/core";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import {
   Content,
   HeaderLiveView,
@@ -7,7 +7,6 @@ import {
   SideBar,
 } from "../../component/liveView";
 import { dataInit } from "../../component/liveView/dataSideBar";
-import { getGroupTree } from "../../component/liveView/javascript";
 const sizeDefault = 2;
 
 const nodeListWithoutDevices = [
