@@ -4,23 +4,23 @@ import { CustomerItemContent } from "./item";
 import { useEffect } from "react";
 import { useState } from "react";
 import { convertTreeData } from "../../../../utils";
-import { GroupContext } from "../..";
+import { GroupContext } from "../../../../page/mangament/Customer/Customer";
 
 export const CustomerTableBody = () => {
-  const { customer_list } = useContext(GroupContext);
+  const { group_list } = useContext(GroupContext);
   const [customerTreeList, setCustomerTreeList] = useState();
 
   useEffect(() => {
-    if (customer_list) {
-      setCustomerTreeList(convertTreeData(customer_list));
+    if (group_list) {
+      setCustomerTreeList(convertTreeData(group_list));
     }
-  }, [customer_list]);
+  }, [group_list]);
 
   return (
     <TableBody>
       {customerTreeList &&
-        customer_list &&
-        customer_list.map((customer) => (
+        group_list &&
+        group_list.map((customer) => (
           <CustomerItemContent
             customerTreeList={customerTreeList}
             parentId={customer.currentNode.id}

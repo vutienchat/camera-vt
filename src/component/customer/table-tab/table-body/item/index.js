@@ -9,84 +9,28 @@ import {
   TableRow,
 } from "@material-ui/core";
 
-import { GroupContext } from "../../..";
 import { EditIcon } from "../../../../../common/icons/EditIcon";
 import { DeleteIcon } from "../../../../../common/icons/DeleteIcon";
 import { DropdownIcon } from "../../../../../common/icons/DropdownIcon";
 import { ExpandMoreIcon } from "../../../../../common/icons/ExpandMoreIcon";
 import { InfoDetailIcon } from "../../../../../common/icons/InfoDetailIcon";
+import { GroupContext } from "../../../../../page/mangament/Customer/Customer";
 
 export const CustomerItemContent = ({ customerTreeList, parentId }) => {
   const { selectedColumns, setOpenEditGroupModal, setGroupDetail } =
     useContext(GroupContext);
 
   const [state, setState] = useState({ parentNode: true });
-  const [checked, setChecked] = useState({});
+  const [checked, setChecked] = useState([]);
 
   const handleClick = (item) => {
     const newstate = { ...state, [item]: !state[item] };
     setState(newstate);
   };
 
-  const checkParent = useCallback(
-    (th, checkT) => {
-      if (th.data.parentId !== "") {
-        let count = 0;
-
-        for (
-          let i = 0;
-          i < customerTreeList[th.data.parentId].children.length;
-          i++
-        ) {
-          if (!checkT[customerTreeList[th.data.parentId].children[i]]) {
-            count += 1;
-          }
-        }
-
-        if (count > 0) {
-          setChecked((prev) => ({
-            ...prev,
-            [th.data.parentId]: false,
-          }));
-          checkParent(customerTreeList[th], checkT);
-        } else {
-          setChecked((prev) => ({
-            ...prev,
-            [th.data.parentId]: true,
-          }));
-          checkParent(customerTreeList[th], checkT);
-        }
-      }
-    },
-    [checked]
-  );
-
-  const checkAll = (data, check) => {
-    if (data.children.length > 0) {
-      data.children.map((child) => {
-        setChecked((prev) => ({ ...prev, [child]: check }));
-        checkAll(customerTreeList[child], check);
-      });
-    }
-  };
-
   const handleChangeCheckbox = (event) => {
-    let checkT = { ...checked };
     if (customerTreeList[event.target.value].children.length > 0) {
-      checkT = {
-        ...checkT,
-        [event.target.value]: event.target.checked,
-      };
-      setChecked(checkT);
-      checkAll(customerTreeList[event.target.value], event.target.checked);
-      checkParent(customerTreeList[event.target.value], checkT);
     } else {
-      checkT = {
-        ...checkT,
-        [event.target.value]: event.target.checked,
-      };
-      setChecked(checkT);
-      checkParent(customerTreeList[event.target.value], checkT);
     }
   };
 
@@ -120,7 +64,6 @@ export const CustomerItemContent = ({ customerTreeList, parentId }) => {
                   ) : null}
                   <Checkbox
                     value={task}
-                    checked={checked[task] ? true : false}
                     size="small"
                     onChange={handleChangeCheckbox}
                   />
@@ -197,7 +140,6 @@ export const CustomerItemContent = ({ customerTreeList, parentId }) => {
               ) : null}
               <Checkbox
                 value={parentId}
-                checked={checked[parentId]}
                 size="small"
                 onChange={handleChangeCheckbox}
               />

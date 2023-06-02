@@ -1,3 +1,4 @@
 export const QUERY_KEYS = {
-  CUSTOMER_LIST: "customer_list",
+  GROUP_LIST: "group_list",
+  GROUP_TYPES_LIST: "group_types_list",
 };

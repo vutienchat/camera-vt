@@ -1,77 +1,72 @@
-import { Box, Button } from "@material-ui/core";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { useState } from "react";
+import { Box } from "@material-ui/core";
+import { createContext, useMemo, useState } from "react";
 import { HeaderAction } from "../../../component/HeaderAction";
-import { ModalDetailUser } from "../../../component/modal/ModalDetailUser";
 import { ModalImport } from "../../../component/modal/ModalImport";
 import CustomerTableContent from "../../../component/customer";
+import { ModalDeleteGroup } from "../../../component/modal/ModalDeleteGroup";
+import { initalCheckedHeader, initalColumns } from "../../../utils/common";
+import useGroupDataList from "../../../hooks/api/useGroupListData";
+
+export const GroupContext = createContext({});
 
 export const Customer = () => {
-  const [openModalDetailUser, setOpenModalDetailUser] = useState(false);
+  const [groupDetail, setGroupDetail] = useState("");
+  const [openEditGroupModal, setOpenEditGroupModal] = useState(false);
+  const [checkedColumns, setCheckedColumns] = useState(initalCheckedHeader);
   const [openModalImport, setOpenModalImport] = useState(false);
+  const [isOpenDeleteGroupModal, setIsOpenDeleteGroupModal] = useState(false);
   const [dataSend, setDataSend] = useState({});
-  const [userId, setUserId] = useState(null);
-  const handeModalDetailUser = (id) => {
-    setOpenModalDetailUser(true);
-    setUserId(id);
-  };
 
   const handleInportData = (filePath, fileData) => {
     console.log({ filePath, fileData });
   };
 
-  const { data } = useQuery(["customers"], async () => {
-    const res = await axios.get("http://localhost:3004/customer");
-    return res;
-  });
-
-  console.log(data);
   const handeChangeSubmit = (e) => {
-    // console.log({ name: e.target.name, value: e.target.value });
     setDataSend({ ...dataSend, [e.target.name]: e.target.value });
   };
   const reload = () => {};
+  const { data: group_list, isLoading: isGroupListLoading } =
+    useGroupDataList();
+
+  const selectedColumns = useMemo(() => {
+    return initalColumns.filter((col) => checkedColumns[col.key] === true);
+  }, [checkedColumns]);
+
+  const data = {
+    group_list,
+    isGroupListLoading,
+    groupDetail,
+    selectedColumns,
+    openEditGroupModal,
+    setOpenEditGroupModal,
+    setGroupDetail,
+    checkedColumns,
+    setCheckedColumns,
+  };
 
   return (
-    <>
+    <GroupContext.Provider value={data}>
       <HeaderAction
         dataSend={dataSend}
         setDataSend={setDataSend}
         handeChangeSubmit={handeChangeSubmit}
         reload={reload}
       />
-      <Box>Customer List</Box>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => {
-          handeModalDetailUser(1);
-        }}
-      >
-        Detail user
-      </Button>
-      <Button variant="contained" color="primary" onClick={setOpenModalImport}>
-        Import Customer
-      </Button>
 
-      {openModalDetailUser && (
-        <ModalDetailUser
-          userId={userId}
-          openModalDetailUser={openModalDetailUser}
-          setOpenModalDetailUser={setOpenModalDetailUser}
-        />
-      )}
+      <Box>
+        <CustomerTableContent />
+      </Box>
 
       <ModalImport
         openModalImport={openModalImport}
         setOpenModalImport={setOpenModalImport}
         handleInportData={handleInportData}
       />
-      <HeaderAction />
-      <Box>
-        <CustomerTableContent />
-      </Box>
-    </>
+
+      <ModalDeleteGroup
+        isOpen={isOpenDeleteGroupModal}
+        handleClose={() => setIsOpenDeleteGroupModal(false)}
+      />
+    </GroupContext.Provider>
   );
 };
