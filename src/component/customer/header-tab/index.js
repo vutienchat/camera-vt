@@ -5,9 +5,12 @@ import { AddGroupButton } from "./actions/add-btn";
 import { DeleteButton } from "./actions/delete";
 import { ImportButton } from "./actions/import";
 import { ExportButton } from "./actions/export";
+import { useContext } from "react";
+import { GroupContext } from "../../../page/mangament/Customer/Customer";
 
 export const HeaderTab = () => {
   const classes = useStyles();
+  const { checkedGroup } = useContext(GroupContext);
 
   return (
     <Box className={classes.root}>
@@ -15,7 +18,7 @@ export const HeaderTab = () => {
         <Box style={{ display: "flex", gap: "20px", alignItems: "center" }}>
           <Box className={classes.showText}>
             <Typography>Selected:</Typography>
-            <Typography> 10 items</Typography>
+            <Typography> {checkedGroup.length} items</Typography>
           </Box>
         </Box>
       </Box>

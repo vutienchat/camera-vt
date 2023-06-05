@@ -10,21 +10,30 @@ import useGroupDataList from "../../../hooks/api/useGroupListData";
 export const GroupContext = createContext({});
 
 export const Customer = () => {
+  const [dataGroupTable, setDataGroupTable] = useState({
+    textSearch: "",
+    type: "",
+    address: {},
+    page: 1,
+    limit: 10,
+    dateStart: "",
+    dateEnd: "",
+  });
+
+  const [checkedGroup, setCheckedGroup] = useState([]);
+
   const [groupDetail, setGroupDetail] = useState("");
   const [openEditGroupModal, setOpenEditGroupModal] = useState(false);
   const [checkedColumns, setCheckedColumns] = useState(initalCheckedHeader);
   const [openModalImport, setOpenModalImport] = useState(false);
   const [isOpenDeleteGroupModal, setIsOpenDeleteGroupModal] = useState(false);
-  const [dataSend, setDataSend] = useState({});
 
   const handleInportData = (filePath, fileData) => {
     console.log({ filePath, fileData });
   };
 
-  const handeChangeSubmit = (e) => {
-    setDataSend({ ...dataSend, [e.target.name]: e.target.value });
-  };
   const reload = () => {};
+
   const { data: group_list, isLoading: isGroupListLoading } =
     useGroupDataList();
 
@@ -34,6 +43,10 @@ export const Customer = () => {
 
   const data = {
     group_list,
+    checkedGroup,
+    dataGroupTable,
+    setCheckedGroup,
+    setDataGroupTable,
     isGroupListLoading,
     groupDetail,
     selectedColumns,
@@ -46,12 +59,7 @@ export const Customer = () => {
 
   return (
     <GroupContext.Provider value={data}>
-      <HeaderAction
-        dataSend={dataSend}
-        setDataSend={setDataSend}
-        handeChangeSubmit={handeChangeSubmit}
-        reload={reload}
-      />
+      <HeaderAction reload={reload} />
 
       <Box>
         <CustomerTableContent />

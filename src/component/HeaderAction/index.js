@@ -11,15 +11,16 @@ import "react-datepicker/dist/react-datepicker.css";
 import TypeSelectTab from "./select-tab/type";
 import { SearchIcon } from "../../common/icons/SearchIcon";
 import RangeDateTab from "./select-tab/range-date";
+import { AddressSelectTab } from "./select-tab/address";
 
-export const HeaderAction = ({ handeChangeSubmit, reload }) => {
+export const HeaderAction = ({ reload }) => {
   return (
     <Box padding={1}>
       <Grid container spacing={4} alignItems="center">
-        <Grid item xs={7}>
+        <Grid item xs={6}>
           <TextField
             id="input-with-icon-textfield"
-            placeholder="Search by Customer ID, Customer Name, Address"
+            placeholder="Search by Group ID, Group Name, Address"
             variant="outlined"
             name="keyword"
             size="small"
@@ -31,16 +32,20 @@ export const HeaderAction = ({ handeChangeSubmit, reload }) => {
                 </InputAdornment>
               ),
             }}
-            onChange={handeChangeSubmit}
           />
         </Grid>
-        <Grid item xs={5}>
-          <Grid container justifyContent="space-between" alignItems="center">
+        <Grid item xs={6}>
+          <Grid
+            container
+            justifyContent="space-between"
+            alignItems="center"
+            spacing={1}
+          >
             <Grid item xs={3}>
               <TypeSelectTab />
             </Grid>
-            <Grid item xs={3}>
-              <TypeSelectTab />
+            <Grid item xs={4}>
+              <AddressSelectTab />
             </Grid>
             <Grid item xs={4}>
               <RangeDateTab />

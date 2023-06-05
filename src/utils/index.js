@@ -1,18 +1,19 @@
 export const convertTreeData = (data) => {
   var nodeList = {};
 
-  for (var tree of data) {
-    var root = tree.currentNode;
-    var nodes = tree.nodeList;
-    nodeList = {
-      ...nodeList,
-      [root.id]: {
-        data: root,
-        children: [],
-      },
-    };
+  var root = data.currentNode;
+  var nodes = data.nodeList;
 
-    for (var node of nodes) {
+  nodeList = {
+    ...nodeList,
+    [root.id]: {
+      data: root,
+      children: [],
+    },
+  };
+
+  for (var node of nodes) {
+    if (node.parentId !== nodeList[root.id].data.parentId) {
       nodeList = {
         ...nodeList,
         [node.id]: {
@@ -20,7 +21,40 @@ export const convertTreeData = (data) => {
           children: [],
         },
       };
+
       nodeList[node.parentId].children.push(node.id);
+    }
+  }
+
+  return nodeList;
+};
+
+export const convertTreeDataWithoutCurrentNode = (data) => {
+  var nodeList = {};
+
+  var nodes = data.nodeList;
+
+  nodeList = {
+    ...nodeList,
+    root: {
+      data: null,
+      children: [],
+    },
+  };
+
+  for (var node of nodes) {
+    nodeList = {
+      ...nodeList,
+      [node.id]: {
+        data: node,
+        children: [],
+      },
+    };
+
+    if (node.parentId !== "") {
+      nodeList[node.parentId].children.push(node.id);
+    } else {
+      nodeList["root"].children.push(node.id);
     }
   }
 
