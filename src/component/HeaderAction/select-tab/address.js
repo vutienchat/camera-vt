@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  Box,
-  Button,
-  ClickAwayListener,
-  Typography,
-  makeStyles,
-} from "@material-ui/core";
+import { Box, Button, ClickAwayListener, makeStyles } from "@material-ui/core";
 import { jsonAddress } from "../../../jsonAddress";
 import PopperAddress from "../../group/PopperAddress";
 import { OpenDropIcon } from "../../../common/icons/OpenDropIcon";
@@ -18,14 +12,17 @@ export const useStylesAddressTab = makeStyles({
     },
   },
   btnDropdown: {
-    border: "solid 1px #bababb",
+    width: "200px",
     background: "#fff",
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
+    height: "40px",
     borderRadius: "4px",
-    boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.25)",
+    padding: "15px 23px 15px 23px",
+    boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.25)",
     cursor: "pointer",
+    textTransform: "capitalize",
     "& p": {
       whiteSpace: "nowrap",
       overflow: "hidden",
@@ -84,7 +81,6 @@ export const AddressSelectTab = () => {
         <Button
           onClick={handleClick}
           className={classes.btnDropdown}
-          fullWidth
           endIcon={openPopper ? <OpenDropIcon /> : <DropdownIcon />}
         >
           {!(citySelected && districtSelected && wardSelected) ? (

@@ -1,11 +1,14 @@
+import { useContext } from "react";
+
 import { Box, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+
+import ImportButton from "./actions/import";
+import ExportButton from "./actions/export";
+
 import { AddGroupButton } from "./actions/add-btn";
 // import { ColumnsCustom } from "./actions/columns";
 import { DeleteButton } from "./actions/delete";
-import { ImportButton } from "./actions/import";
-import { ExportButton } from "./actions/export";
-import { useContext } from "react";
 import { GroupContext } from "../../../page/mangament/Customer/Customer";
 
 export const HeaderTab = () => {
@@ -46,7 +49,7 @@ const useStyles = makeStyles({
   actions: {
     display: "flex",
     alignItems: "center",
-    gap: "10px",
+    gap: "25px",
   },
   showText: {
     display: "flex",

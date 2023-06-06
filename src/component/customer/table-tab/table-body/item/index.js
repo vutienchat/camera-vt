@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 
 import {
   Box,
@@ -35,12 +35,11 @@ export const CustomerItemContent = ({ groupTreeList, parentId }) => {
 
   const handleCommonCheckParent = (id, arr) => {
     let idParentChecked = groupTreeList[id].data.parentId;
-    console.log("Parent", idParentChecked, groupTreeList[idParentChecked]);
+
     if (
-      groupTreeList[idParentChecked].data.parentId !== "1234" &&
-      groupTreeList[idParentChecked].data.parentId !== "root" &&
       idParentChecked !== "1234" &&
-      idParentChecked !== "root"
+      idParentChecked !== "root" &&
+      idParentChecked !== ""
     ) {
       let count = 0;
 
@@ -51,34 +50,36 @@ export const CustomerItemContent = ({ groupTreeList, parentId }) => {
       }
 
       if (count === groupTreeList[idParentChecked].children.length) {
-        setCheckedGroup((prev) => [...prev, idParentChecked]);
+        arr.push(idParentChecked);
+        setCheckedGroup(arr);
       }
 
-      handleCommonCheckParent(
-        groupTreeList[idParentChecked].data.parentId,
-        arr
-      );
+      handleCommonCheckParent(idParentChecked, arr);
+    }
+  };
+
+  const handleCommonCheckChild = (arr, id) => {
+    let childChecked = groupTreeList[id].children;
+
+    for (let i = 0; i < childChecked.length; i++) {
+      arr.push(childChecked[i]);
+      setCheckedGroup(arr);
+
+      handleCommonCheckChild(arr, childChecked[i]);
     }
   };
 
   const handleCommonCheck = (groupTreeList, id) => {
     let arrNew = [...checkedGroup];
-    let idChecked = groupTreeList[id].data.id;
     let childChecked = groupTreeList[id].children;
-    console.log("Child Checked", childChecked, parentId);
 
-    arrNew.push(idChecked);
-    setCheckedGroup(arrNew);
-
-    handleCommonCheckParent(idChecked, arrNew);
+    arrNew.push(id);
+    handleCommonCheckParent(id, arrNew);
 
     if (childChecked.length > 0) {
-      for (let i = 0; i < childChecked.length; i++) {
-        setCheckedGroup((prev) => [...prev, childChecked[i]]);
-
-        handleCommonCheck(groupTreeList, childChecked[i]);
-      }
+      handleCommonCheckChild(arrNew, id);
     }
+    setCheckedGroup(arrNew);
   };
 
   const handleCommonUnCheckParent = (id) => {
@@ -117,78 +118,80 @@ export const CustomerItemContent = ({ groupTreeList, parentId }) => {
 
   const treeTable = useCallback(
     (contentTable, collapseId) => {
-      return contentTable[collapseId].children.map((task) => (
-        <React.Fragment key={task}>
-          <TableRow hover>
-            <TableCell style={{ padding: 0 }}>
-              <Collapse
-                key={collapseId}
-                in={state[parentId] && state[collapseId]}
-                timeout="auto"
-                unmountOnExit
-              >
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  gridGap="5px"
-                >
-                  {contentTable[task].children.length > 0 ? (
-                    <Box
-                      component="div"
-                      key={contentTable[task]}
-                      onClick={() => handleClick(task)}
-                      style={{ paddingTop: "3px", cursor: "pointer" }}
-                    >
-                      {state[task] ? <DropdownIcon /> : <ExpandMoreIcon />}
-                    </Box>
-                  ) : null}
-                  <Checkbox
-                    value={task}
-                    checked={checkedGroup.includes(task)}
-                    size="small"
-                    onChange={handleChangeCheckbox}
-                  />
-                </Box>
-              </Collapse>
-            </TableCell>
-            {selectedColumns.map(({ key, format = (value) => value }) => (
-              <TableCell style={{ padding: 0 }} key={key}>
+      return contentTable[collapseId].children.map((task) => {
+        return (
+          <React.Fragment key={task}>
+            <TableRow hover>
+              <TableCell style={{ padding: 0 }}>
                 <Collapse
                   key={collapseId}
                   in={state[parentId] && state[collapseId]}
                   timeout="auto"
                   unmountOnExit
                 >
-                  {contentTable[task].data[key]}
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="start"
+                    gridGap="5px"
+                  >
+                    {contentTable[task].children.length > 0 ? (
+                      <Box
+                        component="div"
+                        key={contentTable[task]}
+                        onClick={() => handleClick(task)}
+                        style={{ paddingTop: "3px", cursor: "pointer" }}
+                      >
+                        {state[task] ? <DropdownIcon /> : <ExpandMoreIcon />}
+                      </Box>
+                    ) : null}
+                    <Checkbox
+                      value={task}
+                      checked={checkedGroup.includes(task)}
+                      size="small"
+                      onChange={handleChangeCheckbox}
+                    />
+                  </Box>
                 </Collapse>
               </TableCell>
-            ))}
-            <TableCell style={{ padding: 0 }}>
-              <Collapse
-                key={collapseId}
-                in={state[parentId] && state[collapseId]}
-                timeout="auto"
-                unmountOnExit
-              >
-                <Box display="flex" alignItems="center" gridGap="10px">
-                  <InfoDetailIcon />
-                  <IconButton
-                    onClick={() => {
-                      setOpenEditGroupModal(true);
-                      setGroupDetail(task[collapseId]);
-                    }}
+              {selectedColumns.map(({ key, format = (value) => value }) => (
+                <TableCell style={{ padding: 0 }} key={key}>
+                  <Collapse
+                    key={collapseId}
+                    in={state[parentId] && state[collapseId]}
+                    timeout="auto"
+                    unmountOnExit
                   >
-                    <EditIcon />
-                  </IconButton>
-                  <DeleteIcon color="#000" />
-                </Box>
-              </Collapse>
-            </TableCell>
-          </TableRow>
-          {treeTable(contentTable, task)}
-        </React.Fragment>
-      ));
+                    {contentTable[task].data[key]}
+                  </Collapse>
+                </TableCell>
+              ))}
+              <TableCell style={{ padding: 0 }}>
+                <Collapse
+                  key={collapseId}
+                  in={state[parentId] && state[collapseId]}
+                  timeout="auto"
+                  unmountOnExit
+                >
+                  <Box display="flex" alignItems="center" gridGap="10px">
+                    <InfoDetailIcon />
+                    <IconButton
+                      onClick={() => {
+                        setOpenEditGroupModal(true);
+                        setGroupDetail(task[collapseId]);
+                      }}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <DeleteIcon color="#000" />
+                  </Box>
+                </Collapse>
+              </TableCell>
+            </TableRow>
+            {treeTable(contentTable, task)}
+          </React.Fragment>
+        );
+      });
     },
     [state, selectedColumns, checkedGroup]
   );

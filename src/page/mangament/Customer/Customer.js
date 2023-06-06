@@ -6,6 +6,7 @@ import CustomerTableContent from "../../../component/customer";
 import { ModalDeleteGroup } from "../../../component/modal/ModalDeleteGroup";
 import { initalCheckedHeader, initalColumns } from "../../../utils/common";
 import useGroupDataList from "../../../hooks/api/useGroupListData";
+import useDebounce from "../../../hooks/useDebounce";
 
 export const GroupContext = createContext({});
 
@@ -19,6 +20,8 @@ export const Customer = () => {
     dateStart: "",
     dateEnd: "",
   });
+
+  const textSearch = useDebounce(dataGroupTable.textSearch, 1000);
 
   const [checkedGroup, setCheckedGroup] = useState([]);
 
@@ -48,6 +51,8 @@ export const Customer = () => {
     setCheckedGroup,
     setDataGroupTable,
     isGroupListLoading,
+    openModalImport,
+    setOpenModalImport,
     groupDetail,
     selectedColumns,
     openEditGroupModal,

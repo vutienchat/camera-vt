@@ -23,3 +23,14 @@ export const initalCheckedHeader = {
   created_date: true,
   last_modified: true,
 };
+
+export const fileList = [
+  {
+    name: "CSV",
+    value: "csv",
+  },
+  {
+    name: "EXCEL",
+    value: "excel",
+  },
+];

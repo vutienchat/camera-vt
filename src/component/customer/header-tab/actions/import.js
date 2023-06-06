@@ -1,61 +1,97 @@
+import { useContext, useState } from "react";
+
 import {
-  FormControl,
-  NativeSelect,
+  Box,
+  Button,
+  Menu,
+  MenuItem,
+  Typography,
   makeStyles,
   withStyles,
 } from "@material-ui/core";
-import InputBase from "@material-ui/core/InputBase";
 
-const BootstrapInput = withStyles((theme) => ({
-  input: {
-    width: "80px",
-    borderRadius: 4,
-    position: "relative",
-    backgroundColor: theme.palette.background.paper,
-    border: "1px solid #000000",
-    fontSize: 14,
-    fontWeight: 500,
-    padding: "10px 9px 10px 9px",
-    transition: theme.transitions.create(["border-color", "box-shadow"]),
-    "&:focus": {
-      borderRadius: 4,
-      borderColor: "#000000",
-      backgroundColor: "#FFFFFF",
+import { OpenDropIcon } from "../../../../common/icons/OpenDropIcon";
+import { DropdownIcon } from "../../../../common/icons/DropdownIcon";
+
+import { fileList } from "../../../../utils/common";
+import { GroupContext } from "../../../../page/mangament/Customer/Customer";
+
+const StyledMenu = withStyles({
+  paper: {
+    border: "1px solid #d3d4d5",
+  },
+})((props) => (
+  <Menu
+    elevation={0}
+    getContentAnchorEl={null}
+    anchorOrigin={{
+      vertical: "bottom",
+      horizontal: "center",
+    }}
+    transformOrigin={{
+      vertical: "top",
+      horizontal: "center",
+    }}
+    style={{
+      top: "10px",
+      padding: "8px 7px 8xp 7px",
+    }}
+    {...props}
+  />
+));
+
+export const useStylesSelectTab = makeStyles({
+  root: {
+    "& .MuiDialog-paper": {
+      overflowY: "hidden",
     },
   },
-}))(InputBase);
-
-const useStyles = makeStyles((theme) => ({
-  margin: {
-    margin: theme.spacing(1),
+  btnDropdown: {
+    border: "solid 1px #bababb",
+    background: "#fff",
+    display: "flex",
+    width: "125px",
+    height: "40px",
+    justifyContent: "space-between",
+    alignItems: "center",
+    borderRadius: "4px",
+    padding: "11px 11px 11px 9px",
+    textTransform: "capitalize",
+    boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.15)",
+    cursor: "pointer",
+    "& p": {
+      whiteSpace: "nowrap",
+      fontSize: "14px",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+    },
   },
-  option: {
-    padding: "10px",
-    display: "block",
-  },
-}));
+});
 
-export const ImportButton = () => {
-  const classes = useStyles();
-  const handleChange = () => {};
+const ImportButton = () => {
+  const classes = useStylesSelectTab();
+  const { openModalImport, setOpenModalImport } = useContext(GroupContext);
+
+  const handleClick = () => {
+    setOpenModalImport(true);
+  };
 
   return (
-    <FormControl className={classes.margin}>
-      <NativeSelect
-        id="demo-customized-select-native"
-        defaultValue=""
-        placeholder="Import Data"
-        onChange={handleChange}
-        input={<BootstrapInput />}
+    <Box fullWidth>
+      <Button
+        aria-controls="customized-menu"
+        aria-haspopup="true"
+        variant="outlined"
+        size="medium"
+        className={classes.btnDropdown}
+        endIcon={openModalImport ? <OpenDropIcon /> : <DropdownIcon />}
+        fullWidth
+        onClick={handleClick}
       >
-        <option value={""}>Import data</option>
-        <option className={classes.option} value={"csv"}>
-          CSV
-        </option>
-        <option className={classes.option} value={"excel"}>
-          EXCEL
-        </option>
-      </NativeSelect>
-    </FormControl>
+        <Typography>Import Data</Typography>
+      </Button>
+    </Box>
   );
 };
+
+export default ImportButton;

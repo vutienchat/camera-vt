@@ -8,7 +8,7 @@ export const CustomerTableHeader = () => {
     <TableHead>
       <TableRow>
         <TableCell>
-          <Checkbox />
+          <Checkbox size="small" />
         </TableCell>
         {selectedColumns.map((column) => (
           <TableCell key={column.id}>{column.label}</TableCell>

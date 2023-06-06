@@ -6,7 +6,7 @@ import {
   makeStyles,
   withStyles,
 } from "@material-ui/core";
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import { CalenderIcon } from "../../../common/icons/CalenderIcon";
 import { Calendar } from "react-multi-date-picker";
 import DateObject from "react-date-object";
@@ -42,18 +42,48 @@ export const useStylesRangeDateTab = makeStyles({
     },
   },
   btnDropdown: {
-    border: "solid 1px #bababb",
+    width: "240px",
     background: "#fff",
+    border: "none",
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
+    height: "40px",
     borderRadius: "4px",
-    boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.25)",
+    padding: "15px 23px 15px 23px",
+    textTransform: "capitalize",
+    boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.25)",
     cursor: "pointer",
     "& p": {
       whiteSpace: "nowrap",
       overflow: "hidden",
       textOverflow: "ellipsis",
+      fontSize: 15,
+    },
+  },
+  calenderContent: {
+    padding: "5px",
+    "& .rmdp-shadow": {
+      boxShadow: "none !important",
+    },
+    "& .rmdp-day:hover": {
+      backgroundColor: "#D8E3FF !important",
+      color: "#EC1B2E !important",
+    },
+    "& .rmdp-range": {
+      backgroundColor: "#D8E3FF",
+      color: "#EC1B2E",
+      fontWeight: "500 !important",
+    },
+    "& .start": {
+      backgroundColor: "#EC1B2E !important",
+      color: "#FFFFFF",
+      borderRadius: "4px !important",
+    },
+    "& .end": {
+      backgroundColor: "#EC1B2E !important",
+      color: "#FFFFFF",
+      borderRadius: "4px !important",
     },
   },
 });
@@ -76,11 +106,11 @@ const RangeDateTab = () => {
     if (event[0] && event[1]) {
       setDataGroupTable((prev) => ({
         ...prev,
-        dateStart: new DateObject(event[0]).format("YYYY-MM-DD"),
+        dateStart: new DateObject(event[0]).format("MM/DD/YY"),
       }));
       setDataGroupTable((prev) => ({
         ...prev,
-        dateEnd: new DateObject(event[1]).format("YYYY-MM-DD"),
+        dateEnd: new DateObject(event[1]).format("MM/DD/YY"),
       }));
     }
   };
@@ -94,10 +124,25 @@ const RangeDateTab = () => {
         size="medium"
         endIcon={<CalenderIcon />}
         className={classes.btnDropdown}
-        fullWidth
         onClick={handleClick}
       >
-        Date Range
+        <Box
+          flex={1}
+          display="flex"
+          justifyContent="center"
+          gridGap={4}
+          alignContent="center"
+        >
+          {dataGroupTable.dateStart && dataGroupTable.dateEnd ? (
+            <React.Fragment>
+              <Typography>{dataGroupTable.dateStart}</Typography>
+              <Typography style={{ textTransform: "lowercase" }}>to</Typography>
+              <Typography>{dataGroupTable.dateEnd}</Typography>
+            </React.Fragment>
+          ) : (
+            <Typography>Date Range</Typography>
+          )}
+        </Box>
       </Button>
       <StyledMenu
         id="customized-menu"
@@ -106,27 +151,28 @@ const RangeDateTab = () => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <Box padding={1}>
+        <Box className={classes.calenderContent}>
           <Box display="flex" justifyContent="space-evenly">
             <Box style={{ display: "flex", gap: "5px" }}>
               <Typography style={{ fontSize: 12 }}>From:</Typography>
               <Typography style={{ fontSize: 12 }}>
-                {dataGroupTable.dateStart}
+                {dataGroupTable.dateStart
+                  ? dataGroupTable.dateStart
+                  : "__/__/__"}
               </Typography>
             </Box>
             <Box style={{ display: "flex", gap: "5px" }}>
               <Typography style={{ fontSize: 12 }}>To:</Typography>
               <Typography style={{ fontSize: 12 }}>
-                {dataGroupTable.dateEnd}
+                {dataGroupTable.dateEnd ? dataGroupTable.dateEnd : "__/__/__"}
               </Typography>
             </Box>
           </Box>
           <Calendar
-            className="range-date"
             onChange={onChangeDate}
-            style={{ width: "100%" }}
             range
             rangeHover
+            width="100%"
             highlightToday={false}
           />
           <Box display="flex" justifyContent="center" style={{ gap: "10px" }}>
