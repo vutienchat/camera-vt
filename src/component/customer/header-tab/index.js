@@ -45,6 +45,14 @@ const useStyles = makeStyles({
     display: "flex",
     gap: "50px",
     alignItems: "center",
+    "& p": {
+      fontSize: "16px",
+      fontWeight: "bold",
+      fontStretch: "normal",
+      fontStyle: "normal",
+      lineHeight: "normal",
+      letterSpacing: "normal",
+    },
   },
   actions: {
     display: "flex",

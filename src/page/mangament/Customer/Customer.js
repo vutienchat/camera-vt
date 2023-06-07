@@ -13,7 +13,7 @@ export const GroupContext = createContext({});
 export const Customer = () => {
   const [dataGroupTable, setDataGroupTable] = useState({
     textSearch: "",
-    type: "",
+    type: [],
     address: {},
     page: 1,
     limit: 10,
@@ -23,29 +23,26 @@ export const Customer = () => {
 
   const textSearch = useDebounce(dataGroupTable.textSearch, 1000);
 
-  const [checkedGroup, setCheckedGroup] = useState([]);
-
-  const [groupDetail, setGroupDetail] = useState("");
-  const [openEditGroupModal, setOpenEditGroupModal] = useState(false);
   const [checkedColumns, setCheckedColumns] = useState(initalCheckedHeader);
+  const [checkedGroup, setCheckedGroup] = useState([]);
+  const [groupDetail, setGroupDetail] = useState("");
+
+  const [openEditGroupModal, setOpenEditGroupModal] = useState(false);
   const [openModalImport, setOpenModalImport] = useState(false);
   const [isOpenDeleteGroupModal, setIsOpenDeleteGroupModal] = useState(false);
 
-  const handleInportData = (filePath, fileData) => {
-    console.log({ filePath, fileData });
-  };
-
-  const reload = () => {};
-
-  const { data: group_list, isLoading: isGroupListLoading } =
-    useGroupDataList();
+  const { data: group_list, isLoading: isGroupListLoading } = useGroupDataList({
+    ...dataGroupTable,
+    textSearch,
+  });
 
   const selectedColumns = useMemo(() => {
-    return initalColumns.filter((col) => checkedColumns[col.key] === true);
+    return initalColumns.filter((col) => checkedColumns[col.key]);
   }, [checkedColumns]);
 
   const data = {
     group_list,
+    textSearch,
     checkedGroup,
     dataGroupTable,
     setCheckedGroup,
@@ -64,7 +61,7 @@ export const Customer = () => {
 
   return (
     <GroupContext.Provider value={data}>
-      <HeaderAction reload={reload} />
+      <HeaderAction />
 
       <Box>
         <CustomerTableContent />
@@ -73,7 +70,6 @@ export const Customer = () => {
       <ModalImport
         openModalImport={openModalImport}
         setOpenModalImport={setOpenModalImport}
-        handleInportData={handleInportData}
       />
 
       <ModalDeleteGroup

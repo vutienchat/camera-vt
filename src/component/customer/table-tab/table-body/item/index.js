@@ -4,9 +4,10 @@ import {
   Box,
   Checkbox,
   Collapse,
-  IconButton,
   TableCell,
   TableRow,
+  Typography,
+  makeStyles,
 } from "@material-ui/core";
 
 import { EditIcon } from "../../../../../common/icons/EditIcon";
@@ -18,6 +19,7 @@ import { InfoDetailIcon } from "../../../../../common/icons/InfoDetailIcon";
 import { GroupContext } from "../../../../../page/mangament/Customer/Customer";
 
 export const CustomerItemContent = ({ groupTreeList, parentId }) => {
+  const classes = useStylesTableBodyGroup();
   const {
     checkedGroup,
     setCheckedGroup,
@@ -26,11 +28,11 @@ export const CustomerItemContent = ({ groupTreeList, parentId }) => {
     setGroupDetail,
   } = useContext(GroupContext);
 
-  const [state, setState] = useState({ [parentId]: true });
+  const [collapse, setCollapse] = useState({ [parentId]: true });
 
   const handleClick = (item) => {
-    const newstate = { ...state, [item]: !state[item] };
-    setState(newstate);
+    const newCollapse = { ...collapse, [item]: !collapse[item] };
+    setCollapse(newCollapse);
   };
 
   const handleCommonCheckParent = (id, arr) => {
@@ -121,20 +123,30 @@ export const CustomerItemContent = ({ groupTreeList, parentId }) => {
       return contentTable[collapseId].children.map((task) => {
         return (
           <React.Fragment key={task}>
-            <TableRow hover>
-              <TableCell style={{ padding: 0 }}>
+            <TableRow
+              hover
+              style={{
+                backgroundColor: checkedGroup.includes(task)
+                  ? "#f6f4f4"
+                  : "transparent",
+              }}
+            >
+              <TableCell
+                component="th"
+                scope="row"
+                style={{
+                  padding: `0px 0px 0px ${groupTreeList[task].row * 15}px`,
+                  border:
+                    (!collapse[parentId] || !collapse[collapseId]) && "none",
+                }}
+              >
                 <Collapse
                   key={collapseId}
-                  in={state[parentId] && state[collapseId]}
+                  in={collapse[parentId] && collapse[collapseId]}
                   timeout="auto"
                   unmountOnExit
                 >
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="start"
-                    gridGap="5px"
-                  >
+                  <Box className={classes.checkBoxCell}>
                     {contentTable[task].children.length > 0 ? (
                       <Box
                         component="div"
@@ -142,7 +154,7 @@ export const CustomerItemContent = ({ groupTreeList, parentId }) => {
                         onClick={() => handleClick(task)}
                         style={{ paddingTop: "3px", cursor: "pointer" }}
                       >
-                        {state[task] ? <DropdownIcon /> : <ExpandMoreIcon />}
+                        {collapse[task] ? <DropdownIcon /> : <ExpandMoreIcon />}
                       </Box>
                     ) : null}
                     <Checkbox
@@ -154,36 +166,62 @@ export const CustomerItemContent = ({ groupTreeList, parentId }) => {
                   </Box>
                 </Collapse>
               </TableCell>
-              {selectedColumns.map(({ key, format = (value) => value }) => (
-                <TableCell style={{ padding: 0 }} key={key}>
+              {selectedColumns.map(({ key, maxWidth, textAlign }) => (
+                <TableCell
+                  key={key}
+                  component="th"
+                  scope="row"
+                  className={classes.tableCell}
+                  style={{
+                    maxWidth: maxWidth,
+                    border:
+                      (!collapse[parentId] || !collapse[collapseId]) && "none",
+                  }}
+                >
                   <Collapse
                     key={collapseId}
-                    in={state[parentId] && state[collapseId]}
+                    in={collapse[parentId] && collapse[collapseId]}
                     timeout="auto"
                     unmountOnExit
                   >
-                    {contentTable[task].data[key]}
+                    <Typography style={{ textAlign }}>
+                      {contentTable[task].data[key]}
+                    </Typography>
                   </Collapse>
                 </TableCell>
               ))}
-              <TableCell style={{ padding: 0 }}>
+              <TableCell
+                style={{
+                  padding: 0,
+                  maxWidth: 80,
+                  border:
+                    (!collapse[parentId] || !collapse[collapseId]) && "none",
+                }}
+                component="th"
+                scope="row"
+              >
                 <Collapse
                   key={collapseId}
-                  in={state[parentId] && state[collapseId]}
+                  in={collapse[parentId] && collapse[collapseId]}
                   timeout="auto"
                   unmountOnExit
                 >
-                  <Box display="flex" alignItems="center" gridGap="10px">
-                    <InfoDetailIcon />
-                    <IconButton
+                  <Box className={classes.iconButton}>
+                    <Box>
+                      <InfoDetailIcon />
+                    </Box>
+                    <Box
+                      component="div"
                       onClick={() => {
                         setOpenEditGroupModal(true);
                         setGroupDetail(task[collapseId]);
                       }}
                     >
                       <EditIcon />
-                    </IconButton>
-                    <DeleteIcon color="#000" />
+                    </Box>
+                    <Box>
+                      <DeleteIcon color="#000" />
+                    </Box>
                   </Box>
                 </Collapse>
               </TableCell>
@@ -193,8 +231,40 @@ export const CustomerItemContent = ({ groupTreeList, parentId }) => {
         );
       });
     },
-    [state, selectedColumns, checkedGroup]
+    [collapse, selectedColumns, checkedGroup]
   );
 
   return <React.Fragment>{treeTable(groupTreeList, parentId)}</React.Fragment>;
 };
+
+const useStylesTableBodyGroup = makeStyles({
+  tableCell: {
+    padding: "0px 10px 0px 0px",
+    "& p": {
+      whiteSpace: "nowrap",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      fontSize: "16px",
+      fontWeight: 500,
+      fontStretch: "normal",
+      fontStyle: "normal",
+      lineHeight: "normal",
+      letterSpacing: "normal",
+    },
+  },
+  checkBoxCell: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "start",
+    gridGap: "5px",
+  },
+  iconButton: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "start",
+    gridGap: "10px",
+    "& div": {
+      cursor: "pointer",
+    },
+  },
+});

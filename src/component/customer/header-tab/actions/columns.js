@@ -12,26 +12,6 @@ import { GroupContext, initalColumns } from "../..";
 import { DropdownIcon } from "../../../../common/icons/DropdownIcon";
 import { OpenDropIcon } from "../../../../common/icons/OpenDropIcon";
 
-const StyledMenu = withStyles({
-  paper: {
-    border: "1px solid #d3d4d5",
-  },
-})((props) => (
-  <Menu
-    elevation={0}
-    getContentAnchorEl={null}
-    anchorOrigin={{
-      vertical: "bottom",
-      horizontal: "center",
-    }}
-    transformOrigin={{
-      vertical: "top",
-      horizontal: "center",
-    }}
-    {...props}
-  />
-));
-
 export const ColumnsCustom = () => {
   const { checkedColumns, setCheckedColumns } = useContext(GroupContext);
 
@@ -86,3 +66,23 @@ export const ColumnsCustom = () => {
     </Box>
   );
 };
+
+const StyledMenu = withStyles({
+  paper: {
+    border: "1px solid #d3d4d5",
+  },
+})((props) => (
+  <Menu
+    elevation={0}
+    getContentAnchorEl={null}
+    anchorOrigin={{
+      vertical: "bottom",
+      horizontal: "center",
+    }}
+    transformOrigin={{
+      vertical: "top",
+      horizontal: "center",
+    }}
+    {...props}
+  />
+));

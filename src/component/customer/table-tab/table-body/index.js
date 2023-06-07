@@ -25,7 +25,7 @@ export const CustomerTableBody = () => {
 
   return (
     <TableBody>
-      {groupTreeList && (
+      {groupTreeList && group_list && (
         <CustomerItemContent
           groupTreeList={groupTreeList}
           parentId={group_list.currentNode ? group_list.currentNode.id : "root"}

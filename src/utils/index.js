@@ -1,5 +1,6 @@
 export const convertTreeData = (data) => {
   var nodeList = {};
+  let count = 0;
 
   var root = data.currentNode;
   var nodes = data.nodeList;
@@ -14,11 +15,14 @@ export const convertTreeData = (data) => {
 
   for (var node of nodes) {
     if (node.parentId !== nodeList[root.id].data.parentId) {
+      count += 1;
+
       nodeList = {
         ...nodeList,
         [node.id]: {
           data: node,
           children: [],
+          row: count,
         },
       };
 
@@ -31,6 +35,7 @@ export const convertTreeData = (data) => {
 
 export const convertTreeDataWithoutCurrentNode = (data) => {
   var nodeList = {};
+  let count = 0;
 
   var nodes = data.nodeList;
 
@@ -43,11 +48,14 @@ export const convertTreeDataWithoutCurrentNode = (data) => {
   };
 
   for (var node of nodes) {
+    count += 1;
+
     nodeList = {
       ...nodeList,
       [node.id]: {
         data: node,
         children: [],
+        row: count,
       },
     };
 

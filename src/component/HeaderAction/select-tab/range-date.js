@@ -12,82 +12,6 @@ import { Calendar } from "react-multi-date-picker";
 import DateObject from "react-date-object";
 import { GroupContext } from "../../../page/mangament/Customer/Customer";
 
-const StyledMenu = withStyles({
-  paper: {
-    border: "1px solid #d3d4d5",
-  },
-})((props) => (
-  <Menu
-    elevation={0}
-    getContentAnchorEl={null}
-    anchorOrigin={{
-      vertical: "bottom",
-      horizontal: "center",
-    }}
-    transformOrigin={{
-      vertical: "top",
-      horizontal: "center",
-    }}
-    style={{
-      top: "10px",
-    }}
-    {...props}
-  />
-));
-
-export const useStylesRangeDateTab = makeStyles({
-  root: {
-    "& .MuiDialog-paper": {
-      overflowY: "hidden",
-    },
-  },
-  btnDropdown: {
-    width: "240px",
-    background: "#fff",
-    border: "none",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    height: "40px",
-    borderRadius: "4px",
-    padding: "15px 23px 15px 23px",
-    textTransform: "capitalize",
-    boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.25)",
-    cursor: "pointer",
-    "& p": {
-      whiteSpace: "nowrap",
-      overflow: "hidden",
-      textOverflow: "ellipsis",
-      fontSize: 15,
-    },
-  },
-  calenderContent: {
-    padding: "5px",
-    "& .rmdp-shadow": {
-      boxShadow: "none !important",
-    },
-    "& .rmdp-day:hover": {
-      backgroundColor: "#D8E3FF !important",
-      color: "#EC1B2E !important",
-    },
-    "& .rmdp-range": {
-      backgroundColor: "#D8E3FF",
-      color: "#EC1B2E",
-      fontWeight: "500 !important",
-    },
-    "& .start": {
-      backgroundColor: "#EC1B2E !important",
-      color: "#FFFFFF",
-      borderRadius: "4px !important",
-    },
-    "& .end": {
-      backgroundColor: "#EC1B2E !important",
-      color: "#FFFFFF",
-      borderRadius: "4px !important",
-    },
-  },
-});
-
 const RangeDateTab = () => {
   const classes = useStylesRangeDateTab();
 
@@ -122,7 +46,7 @@ const RangeDateTab = () => {
         aria-haspopup="true"
         variant="outlined"
         size="medium"
-        endIcon={<CalenderIcon />}
+        endIcon={<CalenderIcon color="#939393" />}
         className={classes.btnDropdown}
         onClick={handleClick}
       >
@@ -188,5 +112,113 @@ const RangeDateTab = () => {
     </Box>
   );
 };
+
+const StyledMenu = withStyles({
+  paper: {
+    border: "1px solid #d3d4d5",
+  },
+})((props) => (
+  <Menu
+    elevation={0}
+    getContentAnchorEl={null}
+    anchorOrigin={{
+      vertical: "bottom",
+      horizontal: "center",
+    }}
+    transformOrigin={{
+      vertical: "top",
+      horizontal: "center",
+    }}
+    style={{
+      top: "10px",
+    }}
+    {...props}
+  />
+));
+
+export const useStylesRangeDateTab = makeStyles({
+  root: {
+    "& .MuiDialog-paper": {
+      overflowY: "hidden",
+    },
+  },
+  btnDropdown: {
+    width: "240px",
+    background: "#fff",
+    border: "1px solid #939393",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    height: "40px",
+    borderRadius: "4px",
+    padding: "15px 23px 15px 23px",
+    textTransform: "capitalize",
+    cursor: "pointer",
+    "& p": {
+      whiteSpace: "nowrap",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      fontSize: "16px",
+      fontWeight: 500,
+      fontStretch: "normal",
+      fontStyle: "normal",
+      lineHeight: "normal",
+      letterSpacing: "normal",
+      textAlign: "left",
+      color: "#939393",
+    },
+  },
+  calenderContent: {
+    padding: "5px",
+    "& .rmdp-shadow": {
+      boxShadow: "none !important",
+    },
+    "& .rmdp-range": {
+      backgroundColor: "#D8E3FF",
+      color: "#EC1B2E",
+      borderRadius: 0,
+      boxShadow: "none",
+      fontWeight: "500 !important",
+    },
+    "& .rmdp-week-day": {
+      color: "#000",
+    },
+    "& .start": {
+      backgroundColor: "#EC1B2E !important",
+      color: "#FFFFFF",
+      borderRadius: "4px !important",
+    },
+    "& .end": {
+      backgroundColor: "#EC1B2E !important",
+      color: "#FFFFFF",
+      borderRadius: "4px !important",
+    },
+    "& .rmdp-arrow": {
+      borderColor: "#000",
+    },
+    "& .rmdp-arrow-container:hover .rmdp-arrow": {
+      borderColor: "#000",
+    },
+    "& .rmdp-arrow-container:hover": {
+      backgroundColor: "transparent",
+      boxShadow: "none",
+    },
+    "& .rmdp-day:not(.rmdp-disabled):not(.rmdp-day-hidden) span:hover": {
+      backgroundColor: "#EC1B2E",
+      color: "#FFFFFF",
+      boxShadow: "none",
+      borderRadius: "4px",
+    },
+    "& .rmdp-day:hover": {
+      backgroundColor: "#EC1B2E",
+      color: "#FFFFFF",
+      borderRadius: "4px",
+    },
+    "& .rmdp-day:not(.rmdp-disabled):not(.rmdp-day-hidden) span:hover .rmdp-day":
+      {
+        backgroundColor: "#EC1B2E",
+      },
+  },
+});
 
 export default RangeDateTab;

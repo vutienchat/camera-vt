@@ -7,6 +7,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  IconButton,
   TextField,
   Typography,
   makeStyles,
@@ -53,19 +54,26 @@ const useStyles = makeStyles({
     textTransform: "capitalize !important",
     fontWeight: 600,
   },
+  fileButton: {
+    height: "100%",
+    border: "1px solid #000",
+    "& p": {
+      fontSize: 14,
+      fontWeight: 600,
+      textTransform: "capitalize",
+    },
+  },
 });
 
-export const ModalImport = ({
-  openModalImport,
-  setOpenModalImport,
-  handleInportData,
-}) => {
+export const ModalImport = ({ openModalImport, setOpenModalImport }) => {
   const classes = useStyles();
 
   const [filePath, setFilePath] = useState("");
   const [fileData, setFileData] = useState(null);
 
   const handleClose = () => {
+    setFilePath("");
+    setFileData(null);
     setOpenModalImport(false);
   };
 
@@ -98,7 +106,9 @@ export const ModalImport = ({
               Import Group
             </Typography>
           </Box>
-          <CloseIcon />
+          <IconButton onClick={handleClose}>
+            <CloseIcon />
+          </IconButton>
         </Box>
       </DialogTitle>
       <DialogContent>
@@ -113,15 +123,19 @@ export const ModalImport = ({
             onChange={handeFile}
           />
           <label htmlFor="contained-button-file">
-            <Button variant="outlined" cla component="span">
-              Choose file
+            <Button
+              variant="outlined"
+              className={classes.fileButton}
+              component="span"
+            >
+              <Typography>Choose file</Typography>
             </Button>
           </label>
           <TextField
             className="filePath"
             name="filePath"
-            defaultValue={filePath}
             value={filePath}
+            placeholder="No file chosen..."
             style={{ flex: 1 }}
             InputProps={{
               readOnly: true,
@@ -153,7 +167,6 @@ export const ModalImport = ({
               className={classes.button}
               onClick={() => {
                 handleClose();
-                handleInportData(filePath, fileData);
               }}
               style={{
                 background: "#dd3d4b",

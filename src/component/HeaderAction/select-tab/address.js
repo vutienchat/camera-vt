@@ -1,35 +1,15 @@
 import React, { useState } from "react";
-import { Box, Button, ClickAwayListener, makeStyles } from "@material-ui/core";
+import {
+  Box,
+  Button,
+  ClickAwayListener,
+  Typography,
+  makeStyles,
+} from "@material-ui/core";
 import { jsonAddress } from "../../../jsonAddress";
 import PopperAddress from "../../group/PopperAddress";
 import { OpenDropIcon } from "../../../common/icons/OpenDropIcon";
 import { DropdownIcon } from "../../../common/icons/DropdownIcon";
-
-export const useStylesAddressTab = makeStyles({
-  root: {
-    "& .MuiDialog-paper": {
-      overflowY: "hidden",
-    },
-  },
-  btnDropdown: {
-    width: "200px",
-    background: "#fff",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    height: "40px",
-    borderRadius: "4px",
-    padding: "15px 23px 15px 23px",
-    boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.25)",
-    cursor: "pointer",
-    textTransform: "capitalize",
-    "& p": {
-      whiteSpace: "nowrap",
-      overflow: "hidden",
-      textOverflow: "ellipsis",
-    },
-  },
-});
 
 export const AddressSelectTab = () => {
   const classes = useStylesAddressTab();
@@ -81,16 +61,24 @@ export const AddressSelectTab = () => {
         <Button
           onClick={handleClick}
           className={classes.btnDropdown}
-          endIcon={openPopper ? <OpenDropIcon /> : <DropdownIcon />}
+          endIcon={
+            openPopper ? (
+              <OpenDropIcon color="#939393" />
+            ) : (
+              <DropdownIcon color="#939393" />
+            )
+          }
         >
-          {!(citySelected && districtSelected && wardSelected) ? (
-            "Address"
-          ) : (
-            <span>
-              {citySelected.Name} - {districtSelected.Name} -{" "}
-              {wardSelected.Name}
-            </span>
-          )}
+          <Typography>
+            {!(citySelected && districtSelected && wardSelected) ? (
+              "Address"
+            ) : (
+              <span>
+                {citySelected.Name} - {districtSelected.Name} -{" "}
+                {wardSelected.Name}
+              </span>
+            )}
+          </Typography>
         </Button>
         {openPopper && (
           <PopperAddress
@@ -120,3 +108,37 @@ export const AddressSelectTab = () => {
     </ClickAwayListener>
   );
 };
+
+export const useStylesAddressTab = makeStyles({
+  root: {
+    "& .MuiDialog-paper": {
+      overflowY: "hidden",
+    },
+  },
+  btnDropdown: {
+    width: "200px",
+    background: "#fff",
+    border: "1px solid #939393",
+    display: "flex",
+    height: "40px",
+    justifyContent: "space-between",
+    alignItems: "center",
+    borderRadius: "4px",
+    padding: "15px 23px 15px 23px",
+    textTransform: "capitalize",
+    cursor: "pointer",
+    "& p": {
+      whiteSpace: "nowrap",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      fontSize: "16px",
+      fontWeight: 500,
+      fontStretch: "normal",
+      fontStyle: "normal",
+      lineHeight: "normal",
+      letterSpacing: "normal",
+      textAlign: "left",
+      color: "#939393",
+    },
+  },
+});
