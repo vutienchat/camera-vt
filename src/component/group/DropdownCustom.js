@@ -1,9 +1,4 @@
 import {
-  AppBar,
-  Popper,
-  Tab,
-  Tabs,
-  Typography,
   Box,
   TextField,
   InputAdornment,
@@ -31,9 +26,12 @@ const useStyles = makeStyles({
     height: "40px",
     marginRight: 10,
     marginBlock: 5,
+    fontSize: 16,
+    fontWeight: 400,
+    borderRadius: "4px",
     cursor: "pointer",
     "&:hover": {
-      backgroundColor: "#fff1f2",
+      backgroundColor: "#f6f4f4",
     },
   },
   list: {
@@ -41,7 +39,7 @@ const useStyles = makeStyles({
     overflowY: "auto",
 
     "& .active": {
-      backgroundColor: "#fff1f2",
+      backgroundColor: "#f6f4f4",
       fontWeight: "bold",
     },
   },

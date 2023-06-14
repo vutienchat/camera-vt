@@ -114,11 +114,26 @@
     }
   ],
   "customerType": [
-    { "name": "Building", "value": "building" },
-    { "name": "Building_Edge", "value": "building_edge" },
-    { "name": "Common", "value": "common" },
-    { "name": "Company", "value": "company" },
-    { "name": "Container", "value": "container" }
+    {
+      "name": "Building",
+      "value": "building"
+    },
+    {
+      "name": "Building_Edge",
+      "value": "building_edge"
+    },
+    {
+      "name": "Common",
+      "value": "common"
+    },
+    {
+      "name": "Company",
+      "value": "company"
+    },
+    {
+      "name": "Container",
+      "value": "container"
+    }
   ],
   "customer": [
     {
@@ -161,5 +176,126 @@
       "createdTime": "16:10:25 29/05/2023"
     }
   ],
-  "groupMngt": []
+  "groupMngt": [
+    {
+      "parentGroup": "",
+      "name": "hieutesst",
+      "provinceId": "01",
+      "districtId": "002",
+      "wardId": "00043",
+      "phone": "0387310977",
+      "email": "doanhieu4538@gmail.com",
+      "type": 20,
+      "userName": "DoanHieu",
+      "role": "1",
+      "userType": "1",
+      "password": "123456abc@",
+      "repeatPassword": "123456abc@",
+      "cameraLimited": 30,
+      "addressDetail": "281 Truong Đinh, Tuong Mai, Hoang Mai",
+      "parentId": "",
+      "accessKey": "1686120201728",
+      "secretKey": "1686120201728",
+      "id": 1
+    },
+    {
+      "data": {
+        "parentGroup": "",
+        "name": "hieutesst",
+        "provinceId": "01",
+        "districtId": "002",
+        "wardId": "00043",
+        "phone": "0387310977",
+        "email": "doanhieu4538@gmail.com",
+        "type": 20,
+        "userName": "DoanHieu",
+        "role": "1",
+        "userType": "1",
+        "password": "123456abc@",
+        "repeatPassword": "123456abc@",
+        "cameraLimited": 30,
+        "addressDetail": "281 Truong Đinh, Tuong Mai, Hoang Mai",
+        "parentId": "",
+        "accessKey": "1686120201728",
+        "secretKey": "1686120201728",
+        "id": 1
+      },
+      "accessKey": "1686122811377",
+      "secretKey": "1686122811377",
+      "id": 2
+    },
+    {
+      "data": {
+        "parentGroup": "",
+        "name": "hieutesst",
+        "provinceId": "01",
+        "districtId": "002",
+        "wardId": "00043",
+        "phone": "0387310977",
+        "email": "doanhieu4538@gmail.com",
+        "type": 20,
+        "userName": "DoanHieu",
+        "role": "1",
+        "userType": "1",
+        "password": "123456abc@",
+        "repeatPassword": "123456abc@",
+        "cameraLimited": 30,
+        "addressDetail": "281 Truong Đinh, Tuong Mai, Hoang Mai",
+        "parentId": "",
+        "accessKey": "1686120201728",
+        "secretKey": "1686120201728",
+        "id": 1
+      },
+      "accessKey": "1686122865925",
+      "secretKey": "1686122865925",
+      "id": 3
+    },
+    {
+      "data": {
+        "parentGroup": "",
+        "name": "hieutesst",
+        "provinceId": "01",
+        "districtId": "002",
+        "wardId": "00043",
+        "phone": "0387310977",
+        "email": "doanhieu4538@gmail.com",
+        "type": 20,
+        "userName": "DoanHieu",
+        "role": "1",
+        "userType": "1",
+        "password": "123456abc@",
+        "repeatPassword": "123456abc@",
+        "cameraLimited": 30,
+        "addressDetail": "281 Truong Đinh, Tuong Mai, Hoang Mai",
+        "parentId": "",
+        "accessKey": "1686120201728",
+        "secretKey": "1686120201728",
+        "id": 1
+      },
+      "accessKey": "1686122897858",
+      "secretKey": "1686122897858",
+      "id": 4
+    },
+    {
+      "parentGroup": "",
+      "name": "asdfasdf",
+      "provinceId": "01",
+      "districtId": "001",
+      "wardId": "00001",
+      "phone": "0385115613",
+      "email": "doanhieu4538@gmail.com",
+      "type": 1,
+      "userName": "",
+      "role": "",
+      "userType": "",
+      "password": "",
+      "repeatPassword": "",
+      "cameraLimited": 0,
+      "addressDetail": "281 Truong Đinh, Tuong Mai, Hoang Mai",
+      "parentId": "",
+      "accessKey": "1686127692609",
+      "secretKey": "1686127692609",
+      "id": 5
+    }
+  ]
 }

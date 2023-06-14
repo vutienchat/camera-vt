@@ -1,6 +1,6 @@
 const jsonServer = require("json-server");
 const server = jsonServer.create();
-const router = jsonServer.router("./db.json");
+const router = jsonServer.router("./server/customer.json");
 const middlewares = jsonServer.defaults();
 
 // Set default middlewares (logger, static, cors and no-cache)
@@ -16,10 +16,10 @@ server.get("/echo", (req, res) => {
 server.use(jsonServer.bodyParser);
 server.use((req, res, next) => {
   if (req.method === "POST") {
-    console.log("req", req.body);
-    //console.log("res", res);
-    // req.body.createdAt = Date.now();
+    req.body.accessKey = Date.now().toString();
+    req.body.secretKey = Date.now().toString();
   }
+
   // Continue to JSON Server router
   next();
 });

@@ -1,29 +1,27 @@
 import {
   Box,
   Button,
-  ClickAwayListener,
   Dialog,
-  DialogContent,
   Switch,
-  TextField,
   Typography,
   makeStyles,
 } from "@material-ui/core";
 import React, { useState } from "react";
-import PopperAddress from "../PopperAddress";
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
-import { jsonAddress } from "../../../jsonAddress";
-import DropdownCustom from "../DropdownCustom";
-import { GroupTypes } from "../../../until/type";
-import CreateUser from "../CreateUser";
-import axios from "axios";
+import CreateUser from "./FormUser";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { addGroup } from "../../../until/api";
+import { addGroup, getListGroup } from "../../../until/api";
+import { emailRegex, nameGroupRegex, phoneRegex } from "../../../until/regex";
+import FormGroup from "./FormGroup";
+import { typeErrForm } from "../../../until/type";
+import { footerModalStyle } from "../../../until/style-common";
 
 export const useStylesModalCreate = makeStyles({
   root: {
     "& .MuiDialog-paper": {
       overflowY: "hidden",
+    },
+    "& .MuiPaper-rounded": {
+      borderRadius: "12px",
     },
   },
   btnDropdown: {
@@ -36,6 +34,7 @@ export const useStylesModalCreate = makeStyles({
     alignItems: "center",
     borderRadius: "4px",
     paddingLeft: 20,
+    cursor: "pointer",
     "& p": {
       color: "#bababb",
       whiteSpace: "nowrap",
@@ -62,66 +61,197 @@ export const useStylesModalCreate = makeStyles({
     paddingTop: 5,
     fontStyle: "italic",
   },
+  labelInput: {
+    fontSize: "16px",
+    fontWeight: "bold",
+    color: "#000",
+    paddingBottom: "5px",
+  },
 });
 
 const ModalCreateGroup = ({ open, handleClose }) => {
+  const footerClass = footerModalStyle();
   const classes = useStylesModalCreate();
-  const [openPopper, setOpenPopper] = useState(false);
-  const [openGroupType, setOpenGroupType] = useState(false);
-  const [isParentGroup, setIsParentGroup] = useState(false);
   const [textSearch, setTextSearch] = useState("");
-  const [idCitySelected, setIdCitySelected] = useState("");
-  const [idDistrictSelected, setIdDistrictSelected] = useState("");
-  const [idWardSelected, setIdWardSelected] = useState("");
-  const [typeGroup, setTypeGroup] = useState();
+  const [provinceSelected, setProvinceSelected] = useState();
+  const [districtSelected, setDistrictSelected] = useState();
+  const [wardSelected, setWardSelected] = useState();
   const [isCheckedCreateUser, setIsCheckedCreateUser] = useState(false);
   const [userType, setUserType] = useState();
   const [userRole, setUserRole] = useState();
-  const [dataSubmit, setDataSubmit] = useState();
+  const [dataSubmit, setDataSubmit] = useState({
+    parentGroup: "",
+    name: "",
+    provinceId: "",
+    districtId: "",
+    wardId: "",
+    phone: "",
+    email: "",
+    type: null,
+    userName: "",
+    role: "",
+    userType: "",
+    password: "",
+    repeatPassword: "",
+    cameraLimited: 30,
+  });
+  const [messErr, setMessErr] = useState({
+    groupErr: "",
+    addressErr: "",
+    addressDetailErr: "",
+    phoneErr: "",
+    emailErr: "",
+    userNameErr: "",
+    passwordErr: "",
+    repeatPasswordErr: "",
+    typeGroupErr: "",
+    userRoleErr: "",
+    userTypeErr: "",
+  });
 
-  const citySelected = React.useMemo(() => {
-    if (!idCitySelected) return;
-    return jsonAddress.find((item) => item.Id === idCitySelected);
-  }, [idCitySelected, jsonAddress]);
+  const disableBtn = React.useMemo(() => {
+    let disable = true;
+    if (
+      Object.keys(dataSubmit).length &&
+      dataSubmit.name &&
+      dataSubmit.districtId &&
+      dataSubmit.wardId &&
+      dataSubmit.provinceId &&
+      dataSubmit.phone &&
+      dataSubmit.type
+    ) {
+      if (
+        !messErr.groupErr &&
+        !messErr.addressErr &&
+        !messErr.addressDetailErr &&
+        !messErr.phoneErr &&
+        !messErr.emailErr &&
+        !messErr.typeGroupErr
+      ) {
+        disable = false;
+      }
+      if (isCheckedCreateUser) {
+        disable = true;
+        if (
+          dataSubmit.userName &&
+          dataSubmit.password &&
+          dataSubmit.repeatPassword &&
+          dataSubmit.userType &&
+          dataSubmit.role
+        )
+          if (
+            !messErr.userNameErr &&
+            !messErr.passwordErr &&
+            !messErr.repeatPasswordErr &&
+            !messErr.roleErr &&
+            !messErr.userTypeErr
+          ) {
+            disable = false;
+          }
+      }
+      if (dataSubmit.type === 20 && !dataSubmit.cameraLimited) {
+        disable = true;
+      }
+      // disable = false;
+    }
+    return disable;
+  }, [dataSubmit, isCheckedCreateUser, messErr]);
 
-  const districtSelected = React.useMemo(() => {
-    if (!(idDistrictSelected || citySelected)) return;
-    return citySelected.Districts.find(
-      (item) => item.Id === idDistrictSelected
-    );
-  }, [citySelected, idDistrictSelected]);
-
-  const wardSelected = React.useMemo(() => {
-    if (!(idWardSelected || districtSelected)) return;
-    return (
-      districtSelected &&
-      districtSelected.Wards.find((item) => item.Id === idWardSelected)
-    );
-  }, [districtSelected, idWardSelected]);
-
-  const handleClick = (event) => {
-    setOpenPopper((prev) => !prev);
+  const changMessErr = (key, value) => {
+    setMessErr((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
   };
 
-  const onSearch = (list, textSearch) => {
-    if (!textSearch.trim()) return list;
-    return list.filter(
-      (item) => item.Name.toLowerCase().indexOf(textSearch.toLowerCase()) !== -1
-    );
+  // blur form
+  const onBlurGroupName = (value) => {
+    let groupErr = "";
+    if (!(value || value.trim())) groupErr = typeErrForm["emptyNameGroup"];
+    if (value && !nameGroupRegex.test(value))
+      groupErr = typeErrForm["invalidGroup"];
+    changMessErr("groupErr", groupErr);
   };
 
-  const onSearchTypes = (list, textSearch) => {
-    if (!textSearch.trim()) return list;
-    return list.filter(
-      (item) =>
-        item.label.toLowerCase().indexOf(textSearch.toLowerCase()) !== -1
-    );
+  const onBlurAddress = (dataSubmit) => {
+    let addressErr = "";
+    if (!dataSubmit.provinceId || !dataSubmit.districtId || !dataSubmit.wardId)
+      addressErr = typeErrForm["emptyAddress"];
+
+    changMessErr("addressErr", addressErr);
   };
 
-  const handleSelectTypeGroup = (value) => {
-    setTypeGroup(value);
-    setOpenGroupType(false);
-    setDataSubmit({ ...dataSubmit, type: Number(value.id) });
+  const onBlurPhone = (value, checked = isCheckedCreateUser) => {
+    let phoneErr = "";
+    if (checked && !(value || value.trim()))
+      phoneErr = typeErrForm["emptyPhone"];
+    if (value && !phoneRegex.test(value))
+      phoneErr = typeErrForm["invalidPhone"];
+    changMessErr("phoneErr", phoneErr);
+  };
+
+  const onBlurEmail = (value) => {
+    let emailErr = "";
+    // if (checked && !(value || value.trim()))
+    //   emailErr = typeErrForm["emptyEmail"];
+
+    if (value && !emailRegex.test(value))
+      emailErr = typeErrForm["invalidEmail"];
+
+    changMessErr("emailErr", emailErr);
+  };
+
+  const onBlurAddressDetail = (value) => {
+    let addressDetailErr = "";
+    if (!(value || value.trim()))
+      addressDetailErr = typeErrForm["emptyAddressDetail"];
+
+    if (value && value.length < 6)
+      addressDetailErr = typeErrForm["addressDetailInvalid"];
+    changMessErr("addressDetailErr", addressDetailErr);
+  };
+
+  const onBlurGroupType = (value) => {
+    let typeGroupErr = "";
+    if (!value) typeGroupErr = typeErrForm["emptyTypeGroup"];
+    changMessErr("typeGroupErr", typeGroupErr);
+  };
+
+  const onBlurUserName = (value) => {
+    let userNameErr = "";
+    if (isCheckedCreateUser) {
+      if (!value.trim()) userNameErr = typeErrForm["emptyUsername"];
+      if (!nameGroupRegex.test(value))
+        userNameErr = typeErrForm["invalidUsername"];
+    }
+
+    changMessErr("userNameErr", userNameErr);
+  };
+
+  const onBlurPassWord = (value) => {
+    let passwordErr = "";
+    if (!value.trim()) passwordErr = typeErrForm["emptyPassword"];
+    changMessErr("passwordErr", passwordErr);
+  };
+
+  const onBlurRepeatPassword = (value) => {
+    let repeatPasswordErr = "";
+    if (!value.trim()) repeatPasswordErr = typeErrForm["emptyRepeatPassword"];
+    if (dataSubmit.password && value && dataSubmit.password !== value)
+      repeatPasswordErr = typeErrForm["repeatPasswordNotMatch"];
+    changMessErr("repeatPasswordErr", repeatPasswordErr);
+  };
+
+  const onBlurUserRole = (value) => {
+    let userRoleErr = "";
+    if (!value) userRoleErr = typeErrForm["emptyUserRole"];
+    changMessErr("userRoleErr", userRoleErr);
+  };
+
+  const onBlurUserType = (value) => {
+    let userTypeErr = "";
+    if (!value) userTypeErr = typeErrForm["emptyUserType"];
+    changMessErr("userTypeErr", userTypeErr);
   };
 
   const onChangeDataSubmit = (value, key) => {
@@ -134,7 +264,6 @@ const ModalCreateGroup = ({ open, handleClose }) => {
   };
 
   //api
-
   const handleCreateGroup = useMutation((formData) => addGroup(formData));
 
   return (
@@ -165,220 +294,69 @@ const ModalCreateGroup = ({ open, handleClose }) => {
         </Box>
         <Box style={{ height: "auto", padding: "8px 24px" }}>
           <Box style={{ display: "flex", flexDirection: "column" }}>
-            <Box className={classes.Row}>
-              <Box style={{ display: "flex", flexDirection: "column" }}>
-                <Typography>
-                  Group Name <span style={{ color: "red" }}>*</span>
-                </Typography>
-                <TextField
-                  style={{ width: 450 }}
-                  variant="outlined"
-                  size="small"
-                  onChange={(e) => onChangeDataSubmit(e.target.value, "name")}
-                />
-              </Box>
-              <Box style={{ display: "flex", flexDirection: "column" }}>
-                <Typography>Phone</Typography>
-                <TextField
-                  style={{ width: 450 }}
-                  variant="outlined"
-                  size="small"
-                  onChange={(e) => onChangeDataSubmit(e.target.value, "phone")}
-                />
-              </Box>
-            </Box>
-            <Box className={classes.Row}>
-              <Box style={{ display: "flex", flexDirection: "column" }}>
-                <Typography>
-                  Address <span style={{ color: "red" }}>*</span>
-                </Typography>
-                <ClickAwayListener
-                  onClickAway={() => {
-                    setOpenPopper(false);
-                    setTextSearch("");
-                  }}
-                >
-                  <Box style={{ position: "relative" }}>
-                    <button
-                      onClick={handleClick}
-                      className={classes.btnDropdown}
-                    >
-                      <Typography>
-                        {!(citySelected && districtSelected && wardSelected) ? (
-                          "Province/City, District, Ward"
-                        ) : (
-                          <span>
-                            {citySelected.Name} - {districtSelected.Name} -{" "}
-                            {wardSelected.Name}
-                          </span>
-                        )}
-                      </Typography>
-                      <ArrowDropDownIcon />
-                    </button>
-                    {openPopper && (
-                      <PopperAddress
-                        listDistrict={
-                          (citySelected
-                            ? onSearch(citySelected.Districts, textSearch)
-                            : []) || []
-                        }
-                        listWards={
-                          (districtSelected
-                            ? onSearch(districtSelected.Wards, textSearch)
-                            : []) || []
-                        }
-                        listCity={onSearch(jsonAddress, textSearch)}
-                        idCitySelected={idCitySelected}
-                        setIdCitySelected={setIdCitySelected}
-                        setIdDistrictSelected={setIdDistrictSelected}
-                        idDistrictSelected={idDistrictSelected}
-                        idWardSelected={idWardSelected}
-                        setIdWardSelected={setIdWardSelected}
-                        setTextSearch={setTextSearch}
-                        textSearch={textSearch}
-                        handleClose={() => setOpenPopper(false)}
-                      />
-                    )}
-                  </Box>
-                </ClickAwayListener>
-              </Box>
-              <Box style={{ display: "flex", flexDirection: "column" }}>
-                <Typography>Email</Typography>
-                <TextField
-                  style={{ width: 450 }}
-                  variant="outlined"
-                  size="small"
-                  onChange={(e) => onChangeDataSubmit(e.target.value, "email")}
-                />
-              </Box>
-            </Box>
-            <Box className={classes.Row}>
-              <Box style={{ display: "flex", flexDirection: "column" }}>
-                <Typography>
-                  Address Detail <span style={{ color: "red" }}>*</span>
-                </Typography>
-                <TextField
-                  style={{ width: 450 }}
-                  variant="outlined"
-                  size="small"
-                  onChange={(e) =>
-                    onChangeDataSubmit(e.target.value, "addressDetail")
-                  }
-                />
-              </Box>
-              <Box style={{ display: "flex", flexDirection: "column" }}>
-                <Typography>
-                  Group Type <span style={{ color: "red" }}>*</span>
-                </Typography>
-                <ClickAwayListener
-                  onClickAway={() => {
-                    setOpenGroupType(false);
-                    setTextSearch("");
-                  }}
-                >
-                  <Box style={{ position: "relative" }}>
-                    <button
-                      onClick={() => setOpenGroupType((prev) => !prev)}
-                      className={classes.btnDropdown}
-                    >
-                      <Typography>
-                        {typeGroup ? (
-                          <span>{GroupTypes[typeGroup.id].label}</span>
-                        ) : (
-                          "Type Group"
-                        )}
-                      </Typography>
-                      <ArrowDropDownIcon />
-                    </button>
-                    {openGroupType && (
-                      <DropdownCustom
-                        listData={onSearchTypes(
-                          Object.values(GroupTypes),
-                          textSearch
-                        )}
-                        setTypeSelected={handleSelectTypeGroup}
-                        setTextSearch={setTextSearch}
-                        typeSelected={typeGroup}
-                        textSearch={textSearch}
-                      />
-                    )}
-                  </Box>
-                </ClickAwayListener>
-              </Box>
-            </Box>
-            <Box className={classes.Row}>
-              <Box style={{ display: "flex", flexDirection: "column" }}>
-                <Typography>Parent Group</Typography>
-                <ClickAwayListener onClickAway={() => setIsParentGroup(false)}>
-                  <Box style={{ position: "relative" }}>
-                    <button
-                      onClick={() => setIsParentGroup((prev) => !prev)}
-                      className={classes.btnDropdown}
-                    >
-                      <Typography>
-                        {typeGroup ? (
-                          <span>{GroupTypes[typeGroup.id].label}</span>
-                        ) : (
-                          "Type Group"
-                        )}
-                      </Typography>
-                      <ArrowDropDownIcon />
-                    </button>
-                    {isParentGroup && (
-                      <DropdownCustom
-                        listData={onSearchTypes(
-                          Object.values(GroupTypes),
-                          textSearch
-                        )}
-                        setTypeSelected={setTypeGroup}
-                        setTextSearch={setTextSearch}
-                        typeSelected={typeGroup}
-                        textSearch={textSearch}
-                      />
-                    )}
-                  </Box>
-                </ClickAwayListener>
-                <Typography className={classes.Description}>
-                  Skip if you create a level 1 group
-                </Typography>
-              </Box>
-              {typeGroup && typeGroup.id === "20" && (
-                <Box
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "flex-start",
-                    width: 450,
-                  }}
-                >
-                  <Typography>
-                    Camera Limited <span style={{ color: "red" }}>*</span>
-                  </Typography>
-                  <TextField
-                    className={classes.TextFieldCenter}
-                    variant="outlined"
-                    size="small"
-                  />
-                </Box>
-              )}
-            </Box>
+            <FormGroup
+              onChangeDataSubmit={onChangeDataSubmit}
+              onBlurGroupName={onBlurGroupName}
+              onBlurPhone={onBlurPhone}
+              onBlurAddress={onBlurAddress}
+              onBlurAddressDetail={onBlurAddressDetail}
+              onBlurGroupType={onBlurGroupType}
+              onBlurEmail={onBlurEmail}
+              setTextSearch={setTextSearch}
+              setWardSelected={setWardSelected}
+              setDistrictSelected={setDistrictSelected}
+              setProvinceSelected={setProvinceSelected}
+              provinceSelected={provinceSelected}
+              districtSelected={districtSelected}
+              wardSelected={wardSelected}
+              dataSubmit={dataSubmit}
+              textSearch={textSearch}
+              messErr={messErr}
+            />
+
             <Box className={classes.Row}>
               <Box style={{ display: "flex", alignItems: "center" }}>
                 <Switch
-                  onChange={(e) => setIsCheckedCreateUser(e.target.checked)}
+                  onChange={(e) => {
+                    setIsCheckedCreateUser(e.target.checked);
+                    setMessErr((prev) => ({
+                      ...prev,
+                      userNameErr: "",
+                      passwordErr: "",
+                      repeatPasswordErr: "",
+                      userRoleErr: "",
+                      userTypeErr: "",
+                    }));
+                    setDataSubmit((prev) => ({
+                      ...prev,
+                      userName: "",
+                      password: "",
+                      repeatPassword: "",
+                      role: "",
+                      userType: "",
+                    }));
+                    onBlurEmail(dataSubmit.email, e.target.checked);
+                    onBlurPhone(dataSubmit.phone, e.target.checked);
+                  }}
                 />
                 <Typography>Create User account</Typography>
               </Box>
             </Box>
             {isCheckedCreateUser && (
               <CreateUser
-                onSearchTypes={onSearchTypes}
                 setUserType={setUserType}
                 userType={userType}
                 setUserRole={setUserRole}
                 userRole={userRole}
                 setDataSubmit={setDataSubmit}
                 onChangeDataSubmit={onChangeDataSubmit}
+                onBlurRepeatPassword={onBlurRepeatPassword}
+                onBlurPassWord={onBlurPassWord}
+                onBlurUserName={onBlurUserName}
+                messErr={messErr}
+                onBlurUserType={onBlurUserType}
+                onBlurUserRole={onBlurUserRole}
+                dataSubmit={dataSubmit}
               />
             )}
           </Box>
@@ -394,37 +372,15 @@ const ModalCreateGroup = ({ open, handleClose }) => {
             onClick={() => {
               handleCreateGroup.mutate({
                 ...dataSubmit,
-                address: {
-                  province: citySelected.Id,
-                  district: districtSelected.Id,
-                  ward: wardSelected.Id,
-                },
                 parentId: "",
               });
             }}
-            style={{
-              width: "120px",
-              height: "35px",
-              background: "#dd3d4b",
-              color: "#fff",
-              fontWeight: "600",
-              marginRight: 10,
-            }}
+            className={footerClass.btnSubmit}
+            disabled={disableBtn}
           >
             Save
           </Button>
-          <Button
-            onClick={handleClose}
-            style={{
-              width: "120px",
-              height: "35px",
-              background: "#fff",
-              color: "#333",
-              fontWeight: "600",
-              border: "solid 1px ",
-              marginLeft: 10,
-            }}
-          >
+          <Button onClick={handleClose} className={footerClass.btnCancel}>
             Cancel
           </Button>
         </Box>

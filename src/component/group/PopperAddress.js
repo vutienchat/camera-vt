@@ -1,9 +1,7 @@
 import {
   AppBar,
-  Popper,
   Tab,
   Tabs,
-  Typography,
   Box,
   TextField,
   InputAdornment,
@@ -11,10 +9,8 @@ import {
   ListItem,
   makeStyles,
 } from "@material-ui/core";
-import { TabContext } from "@material-ui/lab";
 import React, { useState } from "react";
 import SearchIcon from "@material-ui/icons/Search";
-import { jsonAddress } from "../../jsonAddress";
 
 const useStyles = makeStyles({
   root: {
@@ -79,12 +75,12 @@ const PopperAddress = React.memo(
   ({
     listDistrict,
     listWards,
-    idCitySelected,
-    setIdCitySelected,
-    setIdDistrictSelected,
-    idDistrictSelected,
-    idWardSelected,
-    setIdWardSelected,
+    provinceSelected,
+    setProvinceSelected,
+    setDistrictSelected,
+    districtSelected,
+    wardSelected,
+    setWardSelected,
     listCity,
     textSearch,
     setTextSearch,
@@ -135,8 +131,8 @@ const PopperAddress = React.memo(
               className={root}
             >
               <Tab label="Provider/City" />
-              <Tab label="District" disabled={!idCitySelected} />
-              <Tab label="Ward" disabled={!idDistrictSelected} />
+              <Tab label="District" disabled={!provinceSelected} />
+              <Tab label="Ward" disabled={!districtSelected} />
             </Tabs>
           </AppBar>
           <TabPanel value={value} index={0}>
@@ -146,14 +142,15 @@ const PopperAddress = React.memo(
                   <ListItemAddress
                     key={item.Id}
                     handleSelect={() => {
-                      setIdCitySelected(item.Id);
+                      setProvinceSelected(item);
                       setValue(1);
-
                       setTextSearch("");
                     }}
                     data={item}
                     className={listItem}
-                    isActive={item.Id === idCitySelected}
+                    isActive={
+                      provinceSelected && item.Id === provinceSelected.Id
+                    }
                   />
                 );
               })}
@@ -165,13 +162,13 @@ const PopperAddress = React.memo(
                 <ListItemAddress
                   key={item.Id}
                   handleSelect={() => {
-                    setIdDistrictSelected(item.Id);
+                    setDistrictSelected(item);
                     setValue(2);
                     setTextSearch("");
                   }}
                   data={item}
                   className={listItem}
-                  isActive={item.Id === idDistrictSelected}
+                  isActive={districtSelected && item.Id === districtSelected.Id}
                 />
               ))}
             </List>
@@ -182,12 +179,12 @@ const PopperAddress = React.memo(
                 <ListItemAddress
                   key={item.Id}
                   handleSelect={() => {
-                    setIdWardSelected(item.Id);
+                    setWardSelected(item);
                     handleClose();
                   }}
                   data={item}
                   className={listItem}
-                  isActive={item.Id === idWardSelected}
+                  isActive={wardSelected && item.Id === wardSelected.Id}
                 />
               ))}
             </List>

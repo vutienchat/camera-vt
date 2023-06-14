@@ -6,20 +6,26 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import React, { useState } from "react";
-import { useStylesModalCreate } from "./Modal/ModalCreateGroup";
+import { useStylesModalCreate } from "./ModalCreateGroup";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
-import DropdownCustom from "./DropdownCustom";
-import { UserTypes, userRoles } from "../../until/type";
+import DropdownCustom from "../DropdownCustom";
+import { UserTypes, userRoles } from "../../../until/type";
+import { onSearchTypes } from "../../../until/common";
 
-const CreateUser = React.memo(
+const FormUser = React.memo(
   ({
-    onSearchTypes,
     userType,
     setUserType,
     userRole,
     setUserRole,
-    setDataSubmit,
     onChangeDataSubmit,
+    onBlurUserName,
+    onBlurPassWord,
+    onBlurRepeatPassword,
+    messErr,
+    onBlurUserRole,
+    onBlurUserType,
+    dataSubmit,
   }) => {
     const classes = useStylesModalCreate();
     const [isUserType, setIsUserType] = useState(false);
@@ -30,55 +36,82 @@ const CreateUser = React.memo(
       setUserType(value);
       setIsUserType(false);
       setTextSearch("");
-      onChangeDataSubmit(value.Id, "userType");
+      onChangeDataSubmit(value.id, "userType");
     };
 
     const handleSelectUserRole = (value) => {
       setUserRole(value);
       setIsUserRole(false);
       setTextSearch("");
-      onChangeDataSubmit(value.Id, "role");
+      onChangeDataSubmit(value.id, "role");
     };
     return (
       <React.Fragment>
         <Box className={classes.Row}>
           <Box style={{ display: "flex", flexDirection: "column" }}>
-            <Typography>
+            <Typography className={classes.labelInput}>
               User Name <span style={{ color: "red" }}>*</span>
             </Typography>
             <TextField
               style={{ width: 450 }}
               variant="outlined"
               size="small"
-              onChange={(e) => onChangeDataSubmit(e.target.value, "userName")}
+              onChange={(e) => {
+                onBlurUserName(e.target.value);
+                onChangeDataSubmit(e.target.value, "userName");
+              }}
+              onBlur={(e) => onBlurUserName(e.target.value)}
+              error={messErr.userNameErr !== ""}
             />
+            {messErr.userNameErr && (
+              <span style={{ color: "red", fontSize: "12px" }}>
+                {messErr.userNameErr}
+              </span>
+            )}
           </Box>
           <Box style={{ display: "flex", flexDirection: "column" }}>
-            <Typography>
+            <Typography className={classes.labelInput}>
               Password <span style={{ color: "red" }}>*</span>
             </Typography>
             <TextField
               style={{ width: 450 }}
               variant="outlined"
               size="small"
-              onChange={(e) => onChangeDataSubmit(e.target.value, "password")}
+              type="password"
+              onChange={(e) => {
+                onBlurPassWord(e.target.value);
+                onChangeDataSubmit(e.target.value, "password");
+              }}
+              onBlur={(e) => onBlurPassWord(e.target.value)}
+              error={messErr.passwordErr !== ""}
             />
+            {messErr.passwordErr && (
+              <span style={{ color: "red", fontSize: "12px" }}>
+                {messErr.passwordErr}
+              </span>
+            )}
           </Box>
         </Box>
         <Box className={classes.Row}>
           <Box style={{ display: "flex", flexDirection: "column" }}>
-            <Typography>
+            <Typography className={classes.labelInput}>
               Role <span style={{ color: "red" }}>*</span>
             </Typography>
             <ClickAwayListener
               onClickAway={() => {
+                if (isUserRole) onBlurUserRole(dataSubmit.userRole);
                 setIsUserRole(false);
                 setTextSearch("");
               }}
             >
               <Box style={{ position: "relative" }}>
                 <button
-                  onClick={() => setIsUserRole((prev) => !prev)}
+                  onClick={() =>
+                    setIsUserRole((prev) => {
+                      if (prev) onBlurUserRole(dataSubmit.userRole);
+                      return !prev;
+                    })
+                  }
                   className={classes.btnDropdown}
                 >
                   <Typography>
@@ -88,7 +121,9 @@ const CreateUser = React.memo(
                       "Type Group"
                     )}
                   </Typography>
-                  <ArrowDropDownIcon />
+                  <ArrowDropDownIcon
+                    style={{ color: "#939393", fontSize: "30px" }}
+                  />
                 </button>
                 {isUserRole && (
                   <DropdownCustom
@@ -104,35 +139,55 @@ const CreateUser = React.memo(
                 )}
               </Box>
             </ClickAwayListener>
+            {messErr.userRoleErr && (
+              <span style={{ color: "red", fontSize: "12px" }}>
+                {messErr.userRoleErr}
+              </span>
+            )}
           </Box>
           <Box style={{ display: "flex", flexDirection: "column" }}>
-            <Typography>
+            <Typography className={classes.labelInput}>
               Repeat Password <span style={{ color: "red" }}>*</span>
             </Typography>
             <TextField
               style={{ width: 450 }}
               variant="outlined"
               size="small"
-              onChange={(e) =>
-                onChangeDataSubmit(e.target.value, "repeatPassword")
-              }
+              type="password"
+              onChange={(e) => {
+                onBlurRepeatPassword(e.target.value);
+                onChangeDataSubmit(e.target.value, "repeatPassword");
+              }}
+              onBlur={(e) => onBlurRepeatPassword(e.target.value)}
+              error={messErr.repeatPasswordErr !== ""}
             />
+            {messErr.repeatPasswordErr && (
+              <span style={{ color: "red", fontSize: "12px" }}>
+                {messErr.repeatPasswordErr}
+              </span>
+            )}
           </Box>
         </Box>
         <Box className={classes.Row}>
           <Box style={{ display: "flex", flexDirection: "column" }}>
-            <Typography>
+            <Typography className={classes.labelInput}>
               User Type <span style={{ color: "red" }}>*</span>
             </Typography>
             <ClickAwayListener
               onClickAway={() => {
+                if (isUserType) onBlurUserType(dataSubmit.userType);
                 setIsUserType(false);
                 setTextSearch("");
               }}
             >
               <Box style={{ position: "relative" }}>
                 <button
-                  onClick={() => setIsUserType((prev) => !prev)}
+                  onClick={() =>
+                    setIsUserType((prev) => {
+                      if (prev) onBlurUserType(dataSubmit.userType);
+                      return !prev;
+                    })
+                  }
                   className={classes.btnDropdown}
                 >
                   <Typography>
@@ -142,7 +197,9 @@ const CreateUser = React.memo(
                       "Type Group"
                     )}
                   </Typography>
-                  <ArrowDropDownIcon />
+                  <ArrowDropDownIcon
+                    style={{ color: "#939393", fontSize: "30px" }}
+                  />
                 </button>
                 {isUserType && (
                   <DropdownCustom
@@ -158,6 +215,11 @@ const CreateUser = React.memo(
                 )}
               </Box>
             </ClickAwayListener>
+            {messErr.userTypeErr && (
+              <span style={{ color: "red", fontSize: "12px" }}>
+                {messErr.userTypeErr}
+              </span>
+            )}
           </Box>
         </Box>
       </React.Fragment>
@@ -165,4 +227,4 @@ const CreateUser = React.memo(
   }
 );
 
-export default CreateUser;
+export default FormUser;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { styled, makeStyles } from "@material-ui/core/styles";
 import { Checkbox, Box, Typography } from "@material-ui/core";
 import TableCell from "@material-ui/core/TableCell";
@@ -17,6 +17,8 @@ import ModalEditCustomer from "./components/modal/ModalEditCustomer";
 import ModalDeleteCustomer from "./components/modal/ModalDeleteCustomer";
 import ModalCreateGroup from "../../../component/group/Modal/ModalCreateGroup";
 import ModalEditGroup from "../../../component/group/Modal/ModalEditGroup";
+import { useQuery } from "@tanstack/react-query";
+import { getListGroup } from "../../../until/api";
 
 const StyledTableHead = styled(TableHead)(() => ({
   backgroundColor: "#ebebeb",
@@ -44,8 +46,14 @@ export const User = () => {
   const [isModalCreate, setIsModalCreate] = useState(false);
   const [isModalEditCustomer, setIsModalEditCustomer] = useState(false);
   const [isModalDeleteCustomer, setIsModalDeleteCustomer] = useState(false);
+
+  // group
   const [isModalCreateGroup, setIsModalCreateGroup] = useState(true);
   const [isModalEditGroup, setIsModalEditGroup] = useState(false);
+  const indexGroup = useRef(null);
+  // const [query,setQuery] = useState()
+
+  const { data } = useQuery(["listGroups"], () => getListGroup());
 
   return (
     <TableContainer component={Paper}>
@@ -111,7 +119,10 @@ export const User = () => {
                 >
                   <InfoOutlinedIcon />
                   <EditOutlinedIcon
-                    onClick={() => setIsModalEditCustomer(true)}
+                    onClick={() => {
+                      indexGroup.current = content;
+                      setIsModalEditGroup(true);
+                    }}
                   />
                   <DeleteOutlineOutlinedIcon
                     onClick={() => setIsModalDeleteCustomer(true)}
@@ -164,7 +175,8 @@ export const User = () => {
       {isModalEditGroup && (
         <ModalEditGroup
           open={isModalEditGroup}
-          handleClose={() => setIsModalEditGroup}
+          handleClose={() => setIsModalEditGroup(false)}
+          dataGroup={data[0]}
         />
       )}
     </TableContainer>
