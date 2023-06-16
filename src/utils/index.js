@@ -1,6 +1,5 @@
 export const convertTreeData = (data) => {
   var nodeList = {};
-  let count = 0;
 
   var root = data.currentNode;
   var nodes = data.nodeList;
@@ -10,23 +9,48 @@ export const convertTreeData = (data) => {
     [root.id]: {
       data: root,
       children: [],
+      row: 0,
     },
   };
 
   for (var node of nodes) {
+    let count = 0;
+
     if (node.parentId !== nodeList[root.id].data.parentId) {
-      count += 1;
+      if (nodeList[node.id]) {
+        nodeList = {
+          ...nodeList,
+          [node.id]: {
+            data: node,
+            children: [...nodeList[node.id].children],
+            row: nodeList[node.id].row,
+          },
+        };
+      } else {
+        nodeList = {
+          ...nodeList,
+          [node.id]: {
+            data: node,
+            children: [],
+            row: count + 1,
+          },
+        };
+      }
 
-      nodeList = {
-        ...nodeList,
-        [node.id]: {
-          data: node,
-          children: [],
-          row: count,
-        },
-      };
+      if (!nodeList[node.parentId]) {
+        nodeList = {
+          ...nodeList,
+          [node.parentId]: {
+            data: node,
+            children: [node.id],
+            row: count + 1,
+          },
+        };
+      } else {
+        nodeList[node.parentId].children.push(node.id);
+      }
 
-      nodeList[node.parentId].children.push(node.id);
+      nodeList[node.id].row = nodeList[node.parentId].row + 1;
     }
   }
 

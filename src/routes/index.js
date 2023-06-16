@@ -3,6 +3,7 @@ import { Customer } from "../page/mangament/Customer/Customer";
 import { Device } from "../page/mangament/Device";
 import { Role } from "../page/mangament/Role";
 import { User } from "../page/mangament/User";
+import Map from "../page/map";
 
 export const routes = [
   { path: "/customer", element: Customer },
@@ -10,4 +11,5 @@ export const routes = [
   { path: "/role", element: Role },
   { path: "/device", element: Device },
   { path: "/", element: LiveView },
+  { path: "/map", element: Map },
 ];

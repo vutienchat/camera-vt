@@ -26,6 +26,8 @@ export const CustomerItemContent = ({ groupTreeList, parentId }) => {
     selectedColumns,
     setOpenEditGroupModal,
     setGroupDetail,
+    setIsOpenGroupDetailGroup,
+    setIsOpenDeleteGroupModal,
   } = useContext(GroupContext);
 
   const [collapse, setCollapse] = useState({ [parentId]: true });
@@ -207,19 +209,31 @@ export const CustomerItemContent = ({ groupTreeList, parentId }) => {
                   unmountOnExit
                 >
                   <Box className={classes.iconButton}>
-                    <Box>
+                    <Box
+                      component="div"
+                      onClick={() => {
+                        setGroupDetail(groupTreeList[task]);
+                        setIsOpenGroupDetailGroup(true);
+                      }}
+                    >
                       <InfoDetailIcon />
                     </Box>
                     <Box
                       component="div"
                       onClick={() => {
+                        setGroupDetail(groupTreeList[task]);
                         setOpenEditGroupModal(true);
-                        setGroupDetail(task[collapseId]);
                       }}
                     >
                       <EditIcon />
                     </Box>
-                    <Box>
+                    <Box
+                      component="div"
+                      onClick={() => {
+                        setGroupDetail(groupTreeList[task]);
+                        setIsOpenDeleteGroupModal(true);
+                      }}
+                    >
                       <DeleteIcon color="#000" />
                     </Box>
                   </Box>

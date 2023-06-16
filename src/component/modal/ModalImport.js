@@ -58,8 +58,12 @@ const useStyles = makeStyles({
     height: "100%",
     border: "1px solid #000",
     "& p": {
-      fontSize: 14,
-      fontWeight: 600,
+      fontSize: "16px",
+      fontWeight: "bold",
+      fontStretch: "normal",
+      fontStyle: "normal",
+      lineHeight: "normal",
+      letterSpacing: "normal",
       textTransform: "capitalize",
     },
   },
@@ -78,7 +82,7 @@ export const ModalImport = ({ openModalImport, setOpenModalImport }) => {
   };
 
   const handeFile = (e) => {
-    setFilePath(e.target.value);
+    setFilePath(e.target.files[0].name);
     setFileData(e.target.files);
   };
 

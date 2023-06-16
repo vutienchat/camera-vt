@@ -5,9 +5,17 @@ import {
   DialogContent,
   DialogContentText,
   Typography,
+  makeStyles,
 } from "@material-ui/core";
+import React from "react";
 
-export const ModalDeleteGroup = ({ groupId, handleClose, isOpen }) => {
+const ModalDeleteGroup = ({ groupDetail, handleClose, isOpen }) => {
+  const classes = useStyles();
+
+  const handleDeleteGroup = () => {
+    alert(`Delete group ${groupDetail.data.id}`);
+  };
+
   return (
     <Dialog
       open={isOpen}
@@ -15,77 +23,95 @@ export const ModalDeleteGroup = ({ groupId, handleClose, isOpen }) => {
       aria-labelledby="draggable-dialog-title"
     >
       <Box style={{ width: 480 }}>
-        <Box
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            marginInline: "24px",
-            padding: "20px 0 10px 0",
-          }}
-        >
-          <Typography style={{ fontWeight: 800 }}>Delete Task View</Typography>
+        <Box className={classes.dialogHeader}>
+          <Typography>Delete Group</Typography>
         </Box>
         <DialogContent>
           <DialogContentText
             style={{
               marginTop: "14px",
-              fontSize: "18px",
               color: "#333",
-              fontWeight: " 600",
-              marginBottom: "10px",
-            }}
-          >
-            Are you sure you want to delete this Task view
-          </DialogContentText>
-          <DialogContentText
-            style={{
-              marginTop: "14px",
               fontSize: "16px",
-              color: "#333",
-              marginBottom: "10px",
+              fontWeight: "bold",
+              fontStretch: "normal",
+              fontStyle: "normal",
+              lineHeight: "normal",
+              letterSpacing: "normal",
+              textAlign: "center",
             }}
           >
-            Delete Task View can not be restored
+            Are you sure you want to DELETE selected group?
           </DialogContentText>
         </DialogContent>
-        <Box
-          style={{
-            display: "flex",
-            justifyContent: "space-around",
-            padding: "20px 0 40px 0",
-          }}
-        >
+        <Box className={classes.actionButtons}>
           <Button
             onClick={handleClose}
             style={{
-              width: "150px",
-              height: "48px",
               background: "#fff",
-              color: "#333",
-              fontWeight: "600",
-              border: "solid 1px ",
+              color: "#000",
+              border: "solid 1.5px #000",
             }}
           >
-            Cancel
+            <Typography>Cancel</Typography>
           </Button>
           <Button
             autoFocus
             onClick={() => {
               handleClose();
+              handleDeleteGroup();
             }}
             style={{
-              width: "150px",
-              height: "48px",
               background: "#dd3d4b",
               color: "#fff",
-              fontWeight: "600",
             }}
           >
-            Delete
+            <Typography>Delete</Typography>
           </Button>
         </Box>
       </Box>
     </Dialog>
   );
 };
+
+const useStyles = makeStyles({
+  dialogHeader: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    marginInline: "24px",
+    padding: "20px 0 10px 0",
+    "& p": {
+      textTransform: "capitalize",
+      fontSize: "21px",
+      fontWeight: "bold",
+      fontStretch: "normal",
+      fontStyle: "normal",
+      lineHeight: "normal",
+      letterSpacing: "normal",
+      textAlign: "center",
+      color: "#000",
+    },
+  },
+  actionButtons: {
+    display: "flex",
+    justifyContent: "center",
+    gap: "32px",
+    padding: "20px 0 40px 0",
+    "& button": {
+      width: "150px",
+      height: "48px",
+    },
+    "& p": {
+      textTransform: "capitalize",
+      fontSize: "16px",
+      fontWeight: "bold",
+      fontStretch: "normal",
+      fontStyle: "normal",
+      lineHeight: "normal",
+      letterSpacing: "normal",
+      textAlign: "center",
+    },
+  },
+});
+
+export default React.memo(ModalDeleteGroup);

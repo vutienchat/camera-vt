@@ -16,6 +16,7 @@ const RangeDateTab = () => {
   const classes = useStylesRangeDateTab();
 
   const { dataGroupTable, setDataGroupTable } = useContext(GroupContext);
+  const [rangeDate, setRangeDate] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
@@ -27,14 +28,18 @@ const RangeDateTab = () => {
   };
 
   const onChangeDate = (event) => {
-    if (event[0] && event[1]) {
+    setRangeDate([
+      new DateObject(event[0]).format("MM/DD/YY"),
+      new DateObject(event[1]).format("MM/DD/YY"),
+    ]);
+  };
+
+  const handleChangeDate = () => {
+    if (rangeDate[0] && rangeDate[1]) {
       setDataGroupTable((prev) => ({
         ...prev,
-        dateStart: new DateObject(event[0]).format("MM/DD/YY"),
-      }));
-      setDataGroupTable((prev) => ({
-        ...prev,
-        dateEnd: new DateObject(event[1]).format("MM/DD/YY"),
+        dateStart: rangeDate[0],
+        dateEnd: rangeDate[1],
       }));
     }
   };
@@ -80,15 +85,13 @@ const RangeDateTab = () => {
             <Box style={{ display: "flex", gap: "5px" }}>
               <Typography style={{ fontSize: 12 }}>From:</Typography>
               <Typography style={{ fontSize: 12 }}>
-                {dataGroupTable.dateStart
-                  ? dataGroupTable.dateStart
-                  : "__/__/__"}
+                {rangeDate[0] ? rangeDate[0] : "__/__/__"}
               </Typography>
             </Box>
             <Box style={{ display: "flex", gap: "5px" }}>
               <Typography style={{ fontSize: 12 }}>To:</Typography>
               <Typography style={{ fontSize: 12 }}>
-                {dataGroupTable.dateEnd ? dataGroupTable.dateEnd : "__/__/__"}
+                {rangeDate[1] ? rangeDate[1] : "__/__/__"}
               </Typography>
             </Box>
           </Box>
@@ -100,10 +103,15 @@ const RangeDateTab = () => {
             highlightToday={false}
           />
           <Box display="flex" justifyContent="center" style={{ gap: "10px" }}>
-            <Button variant="contained" color="secondary" size="small">
+            <Button
+              variant="contained"
+              color="secondary"
+              size="small"
+              onClick={handleChangeDate}
+            >
               Confirm
             </Button>
-            <Button variant="outlined" size="small">
+            <Button variant="outlined" size="small" onClick={handleClose}>
               Cancel
             </Button>
           </Box>
