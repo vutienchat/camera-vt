@@ -9,11 +9,10 @@ import { MapContext } from "../..";
 
 const MapContent = () => {
   const [infoModal, setInfoModal] = useState([]);
-  const [markers, setMarkers] = useState([]);
   const [openPopup, setOpenPopup] = useState(false);
-  
-  const { vtmapgl, map, currentMarkers } = useContext(MapContext);
-  console.log(currentMarkers)
+
+  const { vtmapgl, map, currentMarkers, markers, setMarkers } =
+    useContext(MapContext);
 
   useEffect(() => {
     if (markers.length > 0) {

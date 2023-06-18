@@ -10,12 +10,16 @@ const Map = () => {
   const { vtmapgl, map } = useVTMapGL();
 
   const [currentMarkers, setCurrentMarkers] = useState(fakeData);
+  const [markers, setMarkers] = useState([]);
 
   const data = {
     currentMarkers,
     vtmapgl,
+    markers,
+
     map,
-    setCurrentMarkers
+    setMarkers,
+    setCurrentMarkers,
   };
 
   return (
