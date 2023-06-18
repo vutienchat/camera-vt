@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { Box } from "@material-ui/core";
 import {
-  fakeData,
   getCurrentMarkerPopup,
   getPopupContent,
   getStatusModal,
@@ -9,12 +8,12 @@ import {
 import { MapContext } from "../..";
 
 const MapContent = () => {
-  const [currentMarkers, setCurrentMarkers] = useState(fakeData);
   const [infoModal, setInfoModal] = useState([]);
   const [markers, setMarkers] = useState([]);
   const [openPopup, setOpenPopup] = useState(false);
-
-  const { vtmapgl, map } = useContext(MapContext);
+  
+  const { vtmapgl, map, currentMarkers } = useContext(MapContext);
+  console.log(currentMarkers)
 
   useEffect(() => {
     if (markers.length > 0) {
