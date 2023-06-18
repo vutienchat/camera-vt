@@ -218,7 +218,7 @@ export const getCurrentMarkerPopup = (lngLat, infoModal, vtmapgl) => {
                 <span>Unit: ${lngLat.unit}</span>
                 <span>Device Type: ${lngLat.device}</span>
             </div>
-            <button style="width: 100%; background: transparent; margin-top: 10px">
+            <button style="width: 100%; background: transparent; margin-top: 10px" class="edit-button-${lngLat.id}">
                 Edit Location
             </button>
         `

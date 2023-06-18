@@ -8,49 +8,81 @@ import {
 import { MapContext } from "../..";
 
 const MapContent = () => {
+  const {
+    vtmapgl,
+    map,
+    idEditModal,
+
+    currentMarkers,
+    markers,
+    setMarkers,
+    setIdEditModal,
+    setIsOpenEditModal,
+  } = useContext(MapContext);
+
   const [infoModal, setInfoModal] = useState([]);
   const [openPopup, setOpenPopup] = useState(false);
 
-  const { vtmapgl, map, currentMarkers, markers, setMarkers } =
-    useContext(MapContext);
+  const handleOpenEditModal = (index) => {
+    setIdEditModal(currentMarkers[index].id);
+    setIsOpenEditModal(true);
+  };
+
+  const handleOpenPopUpModal = (i) => {
+    let infoModalClone = [...infoModal];
+
+    let listPopup = document.querySelector(
+      `.status-modal-${currentMarkers[i].id}`
+    );
+
+    let popupContent = document.querySelector(
+      `.popup-content-${currentMarkers[i].id}`
+    );
+
+    if (!infoModalClone.includes(currentMarkers[i].id)) {
+      infoModalClone.push(currentMarkers[i].id);
+    } else {
+      infoModalClone = infoModalClone.filter(
+        (prevId) => prevId !== currentMarkers[i].id
+      );
+    }
+
+    listPopup.innerHTML = getStatusModal(
+      infoModalClone.includes(currentMarkers[i].id)
+    );
+
+    popupContent.innerHTML = getPopupContent(
+      markers[i].lngLat,
+      infoModalClone.includes(currentMarkers[i].id)
+    );
+
+    setInfoModal(infoModalClone);
+  };
 
   useEffect(() => {
     if (markers.length > 0) {
-      let infoModalClone = [...infoModal];
-
       for (let i = 0; i <= currentMarkers.length - 1; i++) {
+        let editButton = document.querySelector(
+          `.edit-button-${currentMarkers[i].id}`
+        );
+
         let listPopup = document.querySelector(
           `.status-modal-${currentMarkers[i].id}`
         );
 
-        let popupContent = document.querySelector(
-          `.popup-content-${currentMarkers[i].id}`
-        );
+        if (editButton && listPopup) {
+          editButton.addEventListener("click", () => handleOpenEditModal(i));
+          listPopup.addEventListener("click", () => handleOpenPopUpModal(i));
 
-        if (listPopup) {
-          // eslint-disable-next-line no-loop-func
-          listPopup.addEventListener("click", (e) => {
-            e.stopPropagation();
-
-            if (!infoModalClone.includes(currentMarkers[i].id)) {
-              infoModalClone.push(currentMarkers[i].id);
-            } else {
-              infoModalClone = infoModalClone.filter(
-                (prevId) => prevId !== currentMarkers[i].id
-              );
-            }
-
-            listPopup.innerHTML = getStatusModal(
-              infoModalClone.includes(currentMarkers[i].id)
+          return () => {
+            editButton.removeEventListener("click", () =>
+              handleOpenEditModal(i)
             );
 
-            popupContent.innerHTML = getPopupContent(
-              markers[i].lngLat,
-              infoModalClone.includes(currentMarkers[i].id)
+            listPopup.removeEventListener("click", () =>
+              handleOpenPopUpModal(i)
             );
-
-            setInfoModal(infoModalClone);
-          });
+          };
         }
       }
     }
@@ -70,6 +102,7 @@ const MapContent = () => {
 
         marker.getElement().addEventListener("click", (e) => {
           e.stopPropagation();
+
           setOpenPopup((prev) => !prev);
           marker.togglePopup();
         });

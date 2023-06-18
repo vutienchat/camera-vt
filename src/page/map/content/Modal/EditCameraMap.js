@@ -12,11 +12,19 @@ import { useContext, useEffect, useState } from "react";
 import { MapContext } from "../..";
 
 const EditCameraMapModal = () => {
-  const { currentMarkers, setCurrentMarkers, markers, setMarkers } =
-    useContext(MapContext);
+  const {
+    currentMarkers,
+    setCurrentMarkers,
+    markers,
+    setMarkers,
+    idEditModal,
+    setIdEditModal,
+    setIsOpenEditModal,
+  } = useContext(MapContext);
   const { vtmapgl, map, geocoderService } = useSearchMap();
 
   const [markersArr, setMarkersArr] = useState([]);
+  const [idNewCamera, setIdNewCamera] = useState(0);
 
   function getPopupHtml(item) {
     return `
@@ -40,24 +48,48 @@ const EditCameraMapModal = () => {
     `;
   }
 
+  const handleClick = (index) => {
+    setIdNewCamera(index);
+  };
+
+  const handleEditCameraPlace = () => {
+    const cloneEl = currentMarkers.map((item) => {
+      if (item.id === idEditModal) {
+        return {
+          ...item,
+          location: [
+            markersArr[idNewCamera].location.lng,
+            markersArr[idNewCamera].location.lat,
+          ],
+        };
+      } else {
+        return item;
+      }
+    });
+
+    let listPopup = document.querySelector(`.status-modal-${idEditModal}`);
+
+    markers.forEach((item) => {
+      if (item.lngLat.id === idEditModal) {
+        item.marker.remove();
+      }
+    });
+
+    setCurrentMarkers(cloneEl);
+    setIdEditModal(-1);
+    setIsOpenEditModal(false);
+  };
+
   useEffect(() => {
     if (markersArr.length > 0) {
-      let cloneEl = [...currentMarkers];
       markersArr.forEach((item, index) => {
         let markerEl = document.querySelector(`.icon-edit-${index}`);
-        markerEl.addEventListener("click", function (e) {
-          cloneEl[0] = {
-            ...cloneEl[0],
-            location: [
-              markersArr[index].location.lng,
-              markersArr[index].location.lat,
-            ],
-          };
 
-          markers[0].marker.remove();
+        markerEl.addEventListener("click", () => handleClick(index));
 
-          setCurrentMarkers(cloneEl);
-        });
+        return () => {
+          markerEl.removeEventListener("click", () => handleClick(index));
+        };
       });
     }
   }, [vtmapgl, map, markersArr, currentMarkers, markers]);
@@ -70,6 +102,7 @@ const EditCameraMapModal = () => {
 
       if (items && items.length > 0) {
         bounds = new vtmapgl.LngLatBounds();
+
         items.forEach((item, index) => {
           const el = document.createElement("div");
 
@@ -79,9 +112,11 @@ const EditCameraMapModal = () => {
             <path d="M26.25 22.5H23.75V12.5H16.25V22.5H13.75V12.5C13.7507 11.8372 14.0143 11.2017 14.483 10.733C14.9517 10.2643 15.5872 10.0007 16.25 10H23.75C24.4128 10.0007 25.0483 10.2643 25.517 10.733C25.9857 11.2017 26.2493 11.8372 26.25 12.5V22.5Z" fill="#FF0000"/>
             <path d="M18.75 20H21.25V22.5H18.75V20ZM18.75 15H21.25V17.5H18.75V15Z" fill="#FF0000"/>
             </svg>`;
+
           const coordinate = item.location;
 
           const marker = new vtmapgl.Marker(el);
+
           marker.setLngLat([coordinate.lng, coordinate.lat]);
 
           let popup = new vtmapgl.Popup().setHTML(getPopupHtml(item));
@@ -119,7 +154,7 @@ const EditCameraMapModal = () => {
       <Box>
         <div class="map match-parent" id="child-map"></div>
       </Box>
-      <Box mt={"20px"}>
+      <Box mt="20px">
         <TextField
           id="input-with-icon-textfield"
           placeholder="Search by Group ID, Group Name, Address"
@@ -153,8 +188,15 @@ const EditCameraMapModal = () => {
         />
       </Box>
       <Box mt="20px">
-        <Button>Confirm</Button>
-        <Button>Cancel</Button>
+        <Button onClick={handleEditCameraPlace}>Confirm</Button>
+        <Button
+          onClick={() => {
+            setIdEditModal(-1);
+            setIsOpenEditModal(false);
+          }}
+        >
+          Cancel
+        </Button>
       </Box>
     </Card>
   );

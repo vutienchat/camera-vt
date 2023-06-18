@@ -11,15 +11,21 @@ const Map = () => {
 
   const [currentMarkers, setCurrentMarkers] = useState(fakeData);
   const [markers, setMarkers] = useState([]);
+  const [isOpenEditModal, setIsOpenEditModal] = useState(false);
+  const [idEditModal, setIdEditModal] = useState(-1);
 
   const data = {
     currentMarkers,
     vtmapgl,
     markers,
-
+    isOpenEditModal,
+    idEditModal,
     map,
+
     setMarkers,
     setCurrentMarkers,
+    setIdEditModal,
+    setIsOpenEditModal,
   };
 
   return (
