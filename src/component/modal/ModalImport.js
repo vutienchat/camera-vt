@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import {
   Box,
   Button,
@@ -5,65 +7,82 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  Link,
+  IconButton,
   TextField,
   Typography,
   makeStyles,
 } from "@material-ui/core";
-import GetAppIcon from "@material-ui/icons/GetApp";
-import { useState } from "react";
-export const ModalImport = ({
-  openModalImport,
-  setOpenModalImport,
-  handleInportData,
-}) => {
-  const handleClose = () => {
-    setOpenModalImport(false);
-  };
+import CloseIcon from "@material-ui/icons/Close";
+
+const useStyles = makeStyles({
+  contentSearch: {
+    borderRadius: "4px",
+    fontSize: 14,
+    color: "black",
+    padding: "11px 11px 11px 22px",
+    cursor: "pointer",
+    border: "solid 1.5px #d3d3d3",
+    background: "#fff",
+    "&:hover": {
+      boxShadow: "rgba(0, 0,0, 0.24) 0px 3px 8px",
+    },
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  root: {
+    "& .MuiDialog-paper": {
+      overflowY: "unset",
+      borderRadius: "12px",
+    },
+  },
+  uploadFile: {
+    display: "flex",
+    gap: 12,
+    marginBottom: 10,
+    "& .MuiOutlinedInput-input": {
+      height: 40,
+      padding: "0 14px",
+    },
+  },
+  inputFile: {
+    display: "none",
+  },
+  button: {
+    width: "125px",
+    height: "40px",
+    textTransform: "capitalize !important",
+    fontWeight: 600,
+  },
+  fileButton: {
+    height: "100%",
+    border: "1px solid #000",
+    "& p": {
+      fontSize: "16px",
+      fontWeight: "bold",
+      fontStretch: "normal",
+      fontStyle: "normal",
+      lineHeight: "normal",
+      letterSpacing: "normal",
+      textTransform: "capitalize",
+    },
+  },
+});
+
+export const ModalImport = ({ openModalImport, setOpenModalImport }) => {
+  const classes = useStyles();
 
   const [filePath, setFilePath] = useState("");
   const [fileData, setFileData] = useState(null);
 
-  const useStyles = makeStyles({
-    contentSearch: {
-      borderRadius: "4px",
-      fontSize: 14,
-      color: "black",
-      padding: "11px 11px 11px 22px",
-      cursor: "pointer",
-      border: "solid 1.5px #d3d3d3",
-      background: "#fff",
-      "&:hover": {
-        boxShadow: "rgba(0, 0,0, 0.24) 0px 3px 8px",
-      },
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-    },
-    root: {
-      "& .MuiDialog-paper": {
-        overflowY: "unset",
-        borderRadius: "12px",
-      },
-    },
-    uploadFile: {
-      display: "flex",
-      gap: 12,
-      marginBottom: 10,
-      "& .MuiOutlinedInput-input": {
-        height: 40,
-        padding: "0 14px",
-      },
-    },
-    inputFile: {
-      display: "none",
-    },
-  });
-
-  const classes = useStyles();
+  const handleClose = () => {
+    setFilePath("");
+    setFileData(null);
+    setOpenModalImport(false);
+  };
 
   const handeFile = (e) => {
-    setFilePath(e.target.value);
+    setFilePath(e.target.files[0].name);
     setFileData(e.target.files);
   };
 
@@ -83,21 +102,23 @@ export const ModalImport = ({
         <Box
           style={{
             display: "flex",
-            justifyContent: "center",
             alignItems: "center",
-            marginInline: "24px",
-            padding: "30px 0 10px 0",
           }}
         >
-          <Typography style={{ fontWeight: 800, fontSize: "21px" }}>
-            Import Customer
-          </Typography>
+          <Box flex={1} textAlign="center">
+            <Typography style={{ fontWeight: 700, fontSize: "18px" }}>
+              Import Group
+            </Typography>
+          </Box>
+          <IconButton onClick={handleClose}>
+            <CloseIcon />
+          </IconButton>
         </Box>
       </DialogTitle>
       <DialogContent>
         <Box className={classes.uploadFile}>
           <input
-            accept="image/*"
+            accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             className={classes.inputFile}
             id="contained-button-file"
             multiple
@@ -106,33 +127,25 @@ export const ModalImport = ({
             onChange={handeFile}
           />
           <label htmlFor="contained-button-file">
-            <Button variant="contained" color="primary" component="span">
-              Choose file
+            <Button
+              variant="outlined"
+              className={classes.fileButton}
+              component="span"
+            >
+              <Typography>Choose file</Typography>
             </Button>
           </label>
           <TextField
             className="filePath"
             name="filePath"
-            defaultValue={filePath}
             value={filePath}
+            placeholder="No file chosen..."
             style={{ flex: 1 }}
             InputProps={{
               readOnly: true,
             }}
             variant="outlined"
           />
-        </Box>
-        <Box>
-          <Link
-            href="#"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-end",
-            }}
-          >
-            Download template file <GetAppIcon fontSize="small" />
-          </Link>
         </Box>
       </DialogContent>
       <DialogActions>
@@ -149,37 +162,29 @@ export const ModalImport = ({
             style={{
               display: "flex",
               paddingTop: "24px",
-              width: "90%",
-              justifyContent: "space-around",
+              justifyContent: "center",
+              gap: "29px",
+              alignContent: "center",
             }}
           >
             <Button
-              onClick={handleClose}
-              style={{
-                width: "150px",
-                height: "48px",
-                background: "#fff",
-                color: "#333",
-                fontWeight: "600",
-                border: "solid 1px ",
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
+              className={classes.button}
               onClick={() => {
                 handleClose();
-                handleInportData(filePath, fileData);
               }}
               style={{
-                width: "150px",
-                height: "48px",
                 background: "#dd3d4b",
                 color: "#fff",
-                fontWeight: "600",
               }}
             >
               Import
+            </Button>
+            <Button
+              className={classes.button}
+              variant="outlined"
+              onClick={handleClose}
+            >
+              Cancel
             </Button>
           </Box>
         </Box>

@@ -1,58 +1,72 @@
-import {
-  Box,
-  Grid,
-  IconButton,
-  InputAdornment,
-  TextField,
-} from "@material-ui/core";
+import { Box, makeStyles } from "@material-ui/core";
 
-import ReplayIcon from "@mui/icons-material/Replay";
 import "react-datepicker/dist/react-datepicker.css";
 import TypeSelectTab from "./select-tab/type";
-import { SearchIcon } from "../../common/icons/SearchIcon";
 import RangeDateTab from "./select-tab/range-date";
+import { AddressSelectTab } from "./select-tab/address";
+import SearchTab from "./search-tab";
+import { ReloadIcon } from "../../common/icons/ReloadIcon";
+import { useQueryClient } from "@tanstack/react-query";
+import { useContext } from "react";
+import { GroupContext } from "../../page/mangament/Customer/Customer";
+import { QUERY_KEYS } from "../../utils/keys";
 
-export const HeaderAction = ({ handeChangeSubmit, reload }) => {
+export const HeaderAction = () => {
+  const queryClient = useQueryClient();
+  const { dataGroupTable, textSearch } = useContext(GroupContext);
+  const classes = useStylesHeaderActions();
+
+  const handleReloadDataTable = () => {
+    queryClient.invalidateQueries([
+      QUERY_KEYS.GROUP_LIST,
+      { ...dataGroupTable, textSearch },
+    ]);
+  };
+
   return (
-    <Box padding={1}>
-      <Grid container spacing={4} alignItems="center">
-        <Grid item xs={7}>
-          <TextField
-            id="input-with-icon-textfield"
-            placeholder="Search by Customer ID, Customer Name, Address"
-            variant="outlined"
-            name="keyword"
-            size="small"
-            fullWidth
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon width={20} height={20} color="#EC1B2E" />
-                </InputAdornment>
-              ),
-            }}
-            onChange={handeChangeSubmit}
-          />
-        </Grid>
-        <Grid item xs={5}>
-          <Grid container justifyContent="space-between" alignItems="center">
-            <Grid item xs={3}>
-              <TypeSelectTab />
-            </Grid>
-            <Grid item xs={3}>
-              <TypeSelectTab />
-            </Grid>
-            <Grid item xs={4}>
-              <RangeDateTab />
-            </Grid>
-            <Grid item xs={1}>
-              <IconButton onClick={reload}>
-                <ReplayIcon />
-              </IconButton>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
+    <Box className={classes.content}>
+      <Box className={classes.searchContent}>
+        <SearchTab />
+      </Box>
+      <Box className={classes.actionsContent}>
+        <TypeSelectTab />
+        <AddressSelectTab />
+        <RangeDateTab />
+        <Box className={classes.icon} onClick={handleReloadDataTable}>
+          <ReloadIcon width={16} height={16} color="#939393" />
+        </Box>
+      </Box>
     </Box>
   );
 };
+
+const useStylesHeaderActions = makeStyles({
+  root: {
+    "& .MuiDialog-paper": {
+      overflowY: "hidden",
+    },
+  },
+  content: {
+    padding: "10px",
+    display: "flex",
+    gap: "20px",
+    alignContent: "center",
+  },
+  searchContent: {
+    flex: 1,
+  },
+  actionsContent: {
+    display: "flex",
+    gap: "10px",
+    alignContent: "center",
+  },
+  icon: {
+    width: "40px",
+    display: "flex",
+    border: "1px solid #939393",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: "4px",
+    cursor: "pointer",
+  },
+});

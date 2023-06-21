@@ -8,8 +8,8 @@ import {
 } from "@material-ui/core";
 import React, { useState } from "react";
 import CreateUser from "./FormUser";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { addGroup, getListGroup } from "../../../until/api";
+import { useMutation } from "@tanstack/react-query";
+import { addGroup } from "../../../until/api";
 import { emailRegex, nameGroupRegex, phoneRegex } from "../../../until/regex";
 import FormGroup from "./FormGroup";
 import { typeErrForm } from "../../../until/type";

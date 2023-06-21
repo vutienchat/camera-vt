@@ -1,61 +1,66 @@
-import {
-  FormControl,
-  NativeSelect,
-  makeStyles,
-  withStyles,
-} from "@material-ui/core";
-import InputBase from "@material-ui/core/InputBase";
+import { useContext } from "react";
 
-const BootstrapInput = withStyles((theme) => ({
-  input: {
-    width: "80px",
-    borderRadius: 4,
-    position: "relative",
-    backgroundColor: theme.palette.background.paper,
-    border: "1px solid #000000",
-    fontSize: 14,
-    fontWeight: 500,
-    padding: "10px 9px 10px 9px",
-    transition: theme.transitions.create(["border-color", "box-shadow"]),
-    "&:focus": {
-      borderRadius: 4,
-      borderColor: "#000000",
-      backgroundColor: "#FFFFFF",
-    },
-  },
-}))(InputBase);
+import { Box, Button, Typography, makeStyles } from "@material-ui/core";
 
-const useStyles = makeStyles((theme) => ({
-  margin: {
-    margin: theme.spacing(1),
-  },
-  option: {
-    padding: "10px",
-    display: "block",
-  },
-}));
+import { OpenDropIcon } from "../../../../common/icons/OpenDropIcon";
+import { DropdownIcon } from "../../../../common/icons/DropdownIcon";
 
-export const ImportButton = () => {
-  const classes = useStyles();
-  const handleChange = () => {};
+import { GroupContext } from "../../../../page/mangament/Customer/Customer";
+
+const ImportButton = () => {
+  const classes = useStylesSelectTab();
+  const { openModalImport, setOpenModalImport } = useContext(GroupContext);
+
+  const handleClick = () => {
+    setOpenModalImport(true);
+  };
 
   return (
-    <FormControl className={classes.margin}>
-      <NativeSelect
-        id="demo-customized-select-native"
-        defaultValue=""
-        placeholder="Import Data"
-        onChange={handleChange}
-        input={<BootstrapInput />}
+    <Box fullWidth>
+      <Button
+        aria-controls="customized-menu"
+        aria-haspopup="true"
+        variant="outlined"
+        size="medium"
+        className={classes.btnDropdown}
+        endIcon={openModalImport ? <OpenDropIcon /> : <DropdownIcon />}
+        fullWidth
+        onClick={handleClick}
       >
-        <option value={""}>Import data</option>
-        <option className={classes.option} value={"csv"}>
-          CSV
-        </option>
-        <option className={classes.option} value={"excel"}>
-          EXCEL
-        </option>
-      </NativeSelect>
-    </FormControl>
+        <Typography>Import Data</Typography>
+      </Button>
+    </Box>
   );
 };
+
+export const useStylesSelectTab = makeStyles({
+  root: {
+    "& .MuiDialog-paper": {
+      overflowY: "hidden",
+    },
+  },
+  btnDropdown: {
+    padding: "14px 16px 13px",
+    borderRadius: "4px",
+    width: "150px",
+    height: "40px",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    textTransform: "capitalize",
+    cursor: "pointer",
+    "& p": {
+      whiteSpace: "nowrap",
+      overflow: "hidden",
+      fontSize: "16px",
+      fontWeight: "bold",
+      textOverflow: "ellipsis",
+      fontStretch: "normal",
+      fontStyle: "normal",
+      lineHeight: "normal",
+      letterSpacing: "normal",
+    },
+  },
+});
+
+export default ImportButton;

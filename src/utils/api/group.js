@@ -1,7 +1,7 @@
 import axiosInstance from "../../common/axios";
 
-export const getGroupdDataList = async () => {
-  const { data } = await axiosInstance.get("/data");
+export const getGroupdDataList = async (dataGroup) => {
+  const { data } = await axiosInstance.get(`/data`);
 
   return data;
 };

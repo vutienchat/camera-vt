@@ -1,13 +1,19 @@
+import { useContext } from "react";
+
 import { Box, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+
+import ImportButton from "./actions/import";
+import ExportButton from "./actions/export";
+
 import { AddGroupButton } from "./actions/add-btn";
 // import { ColumnsCustom } from "./actions/columns";
 import { DeleteButton } from "./actions/delete";
-import { ImportButton } from "./actions/import";
-import { ExportButton } from "./actions/export";
+import { GroupContext } from "../../../page/mangament/Customer/Customer";
 
 export const HeaderTab = () => {
   const classes = useStyles();
+  const { checkedGroup } = useContext(GroupContext);
 
   return (
     <Box className={classes.root}>
@@ -15,7 +21,7 @@ export const HeaderTab = () => {
         <Box style={{ display: "flex", gap: "20px", alignItems: "center" }}>
           <Box className={classes.showText}>
             <Typography>Selected:</Typography>
-            <Typography> 10 items</Typography>
+            <Typography> {checkedGroup.length} items</Typography>
           </Box>
         </Box>
       </Box>
@@ -39,11 +45,19 @@ const useStyles = makeStyles({
     display: "flex",
     gap: "50px",
     alignItems: "center",
+    "& p": {
+      fontSize: "16px",
+      fontWeight: "bold",
+      fontStretch: "normal",
+      fontStyle: "normal",
+      lineHeight: "normal",
+      letterSpacing: "normal",
+    },
   },
   actions: {
     display: "flex",
     alignItems: "center",
-    gap: "10px",
+    gap: "25px",
   },
   showText: {
     display: "flex",
