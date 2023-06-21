@@ -121,7 +121,7 @@ export const CustomerItemContent = ({ groupTreeList, parentId }) => {
   };
 
   const treeTable = useCallback(
-    (contentTable, collapseId) => {
+    (contentTable, collapseId, padding) => {
       return contentTable[collapseId].children.map((task) => {
         return (
           <React.Fragment key={task}>
@@ -154,7 +154,11 @@ export const CustomerItemContent = ({ groupTreeList, parentId }) => {
                         component="div"
                         key={contentTable[task]}
                         onClick={() => handleClick(task)}
-                        style={{ paddingTop: "3px", cursor: "pointer" }}
+                        style={{
+                          paddingTop: "3px",
+                          cursor: "pointer",
+                          paddingLeft: `${padding}px`,
+                        }}
                       >
                         {collapse[task] ? <DropdownIcon /> : <ExpandMoreIcon />}
                       </Box>
@@ -240,7 +244,7 @@ export const CustomerItemContent = ({ groupTreeList, parentId }) => {
                 </Collapse>
               </TableCell>
             </TableRow>
-            {treeTable(contentTable, task)}
+            {treeTable(contentTable, task, padding + 12)}
           </React.Fragment>
         );
       });
@@ -248,7 +252,9 @@ export const CustomerItemContent = ({ groupTreeList, parentId }) => {
     [collapse, selectedColumns, checkedGroup]
   );
 
-  return <React.Fragment>{treeTable(groupTreeList, parentId)}</React.Fragment>;
+  return (
+    <React.Fragment>{treeTable(groupTreeList, parentId, 12)}</React.Fragment>
+  );
 };
 
 const useStylesTableBodyGroup = makeStyles({

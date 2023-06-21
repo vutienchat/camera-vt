@@ -5,6 +5,7 @@ import {
   InputAdornment,
   TextField,
   Typography,
+  makeStyles,
 } from "@material-ui/core";
 import { useSearchMap } from "../../../../hooks/useSearchMap";
 import { SearchIcon } from "../../../../common/icons/SearchIcon";
@@ -12,6 +13,7 @@ import { useContext, useEffect, useState } from "react";
 import { MapContext } from "../..";
 
 const EditCameraMapModal = () => {
+  const classes = useStylesTableBodyGroup();
   const {
     currentMarkers,
     setCurrentMarkers,
@@ -28,22 +30,10 @@ const EditCameraMapModal = () => {
 
   function getPopupHtml(item) {
     return `
-        <div style="font-weight: bold;border-bottom: solid 1px lightgray;padding: 8px 0;">${
-          item.name == null ? "" : item.name
-        }</div> 
-        <div style="margin-top: 8px;">
-            <span style="font-weight: bold">Địa chỉ: </span>
-            <span>${item.address == null ? "N/A" : item.address}</span>
-        </div>
-
-        <div>
-            <span style="font-weight: bold">Phone: </span>
-            <span>${item.phone == null ? "N/A" : item.phone}</span>
-        </div>
-
-        <div>
-            <span style="font-weight: bold">Email: </span>
-            <span>${item.mail == null ? "N/A" : item.mail}</span>
+        <div style="background: rgba(221, 61, 75, 1); padding: 10px; border-radius: 10px;">
+            <span style="color: #FFFFFF;">${
+              item.address == null ? "N/A" : item.address
+            }</span>
         </div>
     `;
   }
@@ -66,8 +56,6 @@ const EditCameraMapModal = () => {
         return item;
       }
     });
-
-    let listPopup = document.querySelector(`.status-modal-${idEditModal}`);
 
     markers.forEach((item) => {
       if (item.lngLat.id === idEditModal) {
@@ -148,6 +136,7 @@ const EditCameraMapModal = () => {
         padding: "13px",
         borderRadius: "12px",
       }}
+      className="edit-modal"
     >
       <Typography>Edit Location</Typography>
       <Typography>Lobby 1_ 380 LLQ</Typography>
@@ -187,19 +176,52 @@ const EditCameraMapModal = () => {
           }}
         />
       </Box>
-      <Box mt="20px">
-        <Button onClick={handleEditCameraPlace}>Confirm</Button>
+      <Box className={classes.actionButton}>
+        <Button
+          onClick={handleEditCameraPlace}
+          style={{ background: "#dd3d4b", color: "#fff" }}
+        >
+          <Typography>Confirm</Typography>
+        </Button>
         <Button
           onClick={() => {
             setIdEditModal(-1);
             setIsOpenEditModal(false);
           }}
+          style={{
+            background: "#fff",
+            color: "#000",
+            border: "1.5px solid #000",
+          }}
         >
-          Cancel
+          <Typography>Cancel</Typography>
         </Button>
       </Box>
     </Card>
   );
 };
+
+const useStylesTableBodyGroup = makeStyles({
+  actionButton: {
+    display: "flex",
+    justifyContent: "center",
+    gap: "32px",
+    padding: "20px 0 0 0",
+    "& button": {
+      width: "125px",
+      height: "40px",
+    },
+    "& p": {
+      textTransform: "capitalize",
+      textAlign: "center",
+      fontSize: "16px",
+      fontWeight: "bold",
+      fontStretch: "normal",
+      fontStyle: "normal",
+      lineHeight: "normal",
+      letterSpacing: "normal",
+    },
+  },
+});
 
 export default EditCameraMapModal;

@@ -70,19 +70,12 @@ const MapContent = () => {
           `.status-modal-${currentMarkers[i].id}`
         );
 
-        if (editButton && listPopup) {
-          editButton.addEventListener("click", () => handleOpenEditModal(i));
+        if (listPopup) {
           listPopup.addEventListener("click", () => handleOpenPopUpModal(i));
+        }
 
-          return () => {
-            editButton.removeEventListener("click", () =>
-              handleOpenEditModal(i)
-            );
-
-            listPopup.removeEventListener("click", () =>
-              handleOpenPopUpModal(i)
-            );
-          };
+        if (editButton) {
+          editButton.addEventListener("click", () => handleOpenEditModal(i));
         }
       }
     }
