@@ -21,6 +21,7 @@
     "devextreme": "22.2.4",
     "devextreme-react": "22.2.4",
     "fix-webm-duration": "^1.0.5",
+    "google-map-react": "^2.2.1",
     "json-server": "^0.17.3",
     "lodash": "^4.17.21",
     "nodemon": "^2.0.22",

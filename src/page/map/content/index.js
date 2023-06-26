@@ -1,5 +1,5 @@
 import { Box } from "@material-ui/core";
-import MapContent from "./map";
+import ContentMap from "./map/ContentMap.js";
 import SideBar from "./side-bar";
 import EditCameraMapModal from "./Modal/EditCameraMap";
 import { useContext } from "react";
@@ -11,8 +11,8 @@ const Content = () => {
   return (
     <Box style={{ display: "flex" }}>
       <SideBar />
-      <MapContent />
-      {isOpenEditModal && idEditModal !== -1 && <EditCameraMapModal />}
+      <ContentMap />
+      {/* {isOpenEditModal && idEditModal !== -1 && <EditCameraMapModal />} */}
     </Box>
   );
 };
