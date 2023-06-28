@@ -110,6 +110,11 @@ const ContentMap = () => {
     if (!map || !mapApi) return;
     const handleZoomChanged = () => {
       console.log("Zoom level changed to", map.getZoom());
+      // const bounds = map.getBounds();
+      // const minLat = bounds.getSouthWest().lat();
+      // const minLng = bounds.getSouthWest().lng();
+      // const maxLat = bounds.getNorthEast().lat();
+      // const maxLng = bounds.getNorthEast().lng();
     };
 
     mapApi.event.addListener(map, "zoom_changed", handleZoomChanged);
