@@ -6,6 +6,19 @@ const ContentPopUpCamera = ({ place }) => {
 
   return (
     <Box style={{ position: "relative", height: "100%" }}>
+      <Box
+        style={{
+          position: "absolute",
+          top: "100%",
+          width: 0,
+          height: 0,
+          borderLeft: "16px solid transparent",
+          borderRight: "16px solid transparent",
+          borderTop: `18px solid ${place.status ? "#08B44D" : "#DD3D4B"}`,
+          left: "50%",
+          transform: "translateX(-50%)",
+        }}
+      />
       <Box style={{ display: "flex", padding: "10px", alignItems: "center" }}>
         <span
           style={{ fontWeight: "bold", marginRight: "auto", fontsize: "16px" }}
@@ -84,7 +97,7 @@ const ContentPopUpCamera = ({ place }) => {
       >
         <video
           style={{ width: "100%", height: "100%", objectFit: "fill" }}
-          autoplay
+          autoPlay
         >
           <source src={place.video} type="video/mp4" />
         </video>
@@ -133,6 +146,7 @@ const ContentPopUpCamera = ({ place }) => {
           Edit Location
         </Box>
       </Collapse>
+      <Box />
     </Box>
   );
 };
