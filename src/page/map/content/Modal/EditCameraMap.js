@@ -51,17 +51,37 @@ const EditCameraMapModal = ({ place, handleClose }) => {
   const keyword = useDebounce(searchValue, 1000);
 
   const [statusDragStart, setStatusDragStart] = useState(false);
-
+  const [listLive, setListLive] = useState([]);
   const classes = useStylesTableBodyGroup();
+  console.log("list ngoai", listLive);
 
-  const apiHasLoaded = (map, maps) => {
-    let marker = new maps.Marker({
+  const apiHasLoaded = (map, maps, listLive) => {
+    //console.log(listLive);
+    const marker = new maps.Marker({
       position: { lat: place.lat, lng: place.lng },
       map,
       icon: {
         url: require("../../../../asset/carbon_location-company.png"),
       },
       draggable: true,
+    });
+
+    const infowindow = new maps.InfoWindow({
+      content: `<div style="background: red">aloaloaloa</div>`,
+    });
+
+    console.log("infowindow", infowindow);
+
+    // infowindow.open(map, marker);
+
+    maps.event.addListener(marker, "click", () => {
+      if (infowindow.getMap()) {
+        // Nếu Infowindow đang hiển thị, ẩn nó
+        infowindow.close();
+      } else {
+        // Nếu Infowindow đang ẩn, hiển thị nó và đặt vị trí tương ứng
+        infowindow.open(map, marker);
+      }
     });
 
     setMarker(marker);
@@ -159,9 +179,29 @@ const EditCameraMapModal = ({ place, handleClose }) => {
             fullscreenControl: false,
           }}
           draggable
-          onGoogleApiLoaded={({ map, maps }) => apiHasLoaded(map, maps)}
+          onGoogleApiLoaded={({ map, maps }) =>
+            apiHasLoaded(map, maps, listLive)
+          }
         >
           <Box
+            lat={placeCustom.lat}
+            lng={placeCustom.lng}
+            style={{ position: "relative" }}
+            onClick={() => console.log("listLivetrong fuck")}
+          >
+            <Box
+              style={{
+                width: "50px",
+                height: "50px",
+                backgroundColor: "#fff",
+                position: "absolute",
+                bottom: "100%",
+                left: "50%",
+                transform: "translateX(-50%)",
+              }}
+            />
+          </Box>
+          {/* <Box
             lat={placeCustom.lat}
             lng={placeCustom.lng}
             style={{ display: statusDragStart ? "none" : "block" }}
@@ -204,7 +244,7 @@ const EditCameraMapModal = ({ place, handleClose }) => {
                 }}
               />
             </Box>
-          </Box>
+          </Box> */}
         </GoogleMapReact>
       </Box>
       <Box mt="20px">
