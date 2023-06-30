@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Box, Collapse } from "@material-ui/core";
 
-const ContentPopUpCamera = ({ place }) => {
+const ContentPopUpCamera = ({ place, handleOpenEditModal }) => {
   const [isShowInfo, setIsShowInfo] = useState(false);
 
   return (
@@ -142,6 +142,7 @@ const ContentPopUpCamera = ({ place }) => {
             textAlign: "center",
             borderRadius: "10px",
           }}
+          onClick={handleOpenEditModal}
         >
           Edit Location
         </Box>
