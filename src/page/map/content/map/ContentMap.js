@@ -94,7 +94,21 @@ const getListLocation = (searchPlace, request, createMaker) => {
 };
 
 const ContentMap = () => {
-  const markerList = useListMarkersData();
+  const markerList = {
+    data: [
+      {
+        id: 3,
+        status: true,
+        address: "141 Cầu Giấy, Hà Nội",
+        video: "/static/media/video1.74efbde570da071de4a9.mp4",
+        location: [105.811252, 21.06616],
+        title: "Lobby 5_ 980 LLQ",
+        unit: "VMS",
+        type: "ONVIF",
+      },
+    ],
+  };
+  //  useListMarkersData();
   // 21.06616,105.81125 location mặc định
   const [mapApiLoaded, setMapApiLoaded] = useState(false);
   const [isOpenBg, setIsOpenBg] = useState(false);
