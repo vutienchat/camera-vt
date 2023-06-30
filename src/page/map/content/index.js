@@ -3,7 +3,7 @@ import ContentMap from "./map/ContentMap.js";
 import SideBar from "./side-bar";
 import EditCameraMapModal from "./Modal/EditCameraMap";
 import { useContext } from "react";
-import { MapContext } from "..";
+import { MapContext } from "../Map.js";
 
 const Content = () => {
   const { isOpenEditModal, idEditModal } = useContext(MapContext);

@@ -1,19 +1,25 @@
-import React, { useCallback, useEffect, useState, memo, useRef } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+  memo,
+  useContext,
+} from "react";
 import { Box } from "@material-ui/core";
 import GoogleMapReact from "google-map-react";
-import { fakeData } from "../../../../utils/common";
 import { CameraOnline, CameraOffline, ContentPopUpCamera } from "../component";
 import useListMarkersData from "../../../../hooks/api/useListMarkers";
 import EditCameraMapModal from "../Modal/EditCameraMap";
+import { MapContext } from "../../Map";
 
-const Marker = memo(({ place, draggable, onDragEnd }) => {
+const Marker = memo(({ place, setPlaceSelected, setIsOpenEditModal }) => {
   const [isShowLive, setIsShowLive] = useState(false);
-  const [isOpenEditCamera, setIsOpenEditModal] = useState(false);
 
   return (
     <>
       {isShowLive && (
         <Box
+          className="marker"
           style={{
             borderRadius: "10px",
             height: "162px",
@@ -28,15 +34,12 @@ const Marker = memo(({ place, draggable, onDragEnd }) => {
         >
           <ContentPopUpCamera
             place={place}
-            handleOpenEditModal={() => setIsOpenEditModal(true)}
+            handleOpenEditModal={() => {
+              setIsOpenEditModal(true);
+              setPlaceSelected(place);
+            }}
           />
         </Box>
-      )}
-      {isOpenEditCamera && (
-        <EditCameraMapModal
-          place={place}
-          handleClose={() => setIsOpenEditModal(false)}
-        />
       )}
       <div
         className="marker"
@@ -95,12 +98,14 @@ const getListLocation = (searchPlace, request, createMaker) => {
 };
 
 const ContentMap = () => {
-  const markerList = useListMarkersData();
+  const { markerList } = useContext(MapContext);
   const [mapApiLoaded, setMapApiLoaded] = useState(false);
   const [isOpenBg, setIsOpenBg] = useState(false);
   const [map, setMap] = useState(null);
   const [mapApi, setMapApi] = useState(null);
   const [places, setPlaces] = useState([]);
+  const [placeSelected, setPlaceSelected] = useState();
+  const [isOpenEditCamera, setIsOpenEditModal] = useState(false);
 
   const apiHasLoaded = (map, maps) => {
     setMapApiLoaded(true);
@@ -201,19 +206,27 @@ const ContentMap = () => {
         yesIWantToUseGoogleMapApiInternals
         onGoogleApiLoaded={({ map, maps }) => apiHasLoaded(map, maps)}
       >
-        {markerList.data &&
-          markerList.data.map((place) => (
+        {places &&
+          places.map((place) => (
             <Marker
               key={place.id}
-              lat={place.location[1]}
-              lng={place.location[0]}
+              lat={place.lat}
+              lng={place.lng}
               //show={place.show}
               place={place}
+              setPlaceSelected={setPlaceSelected}
+              setIsOpenEditModal={setIsOpenEditModal}
               // draggable={true}
               // onDragEnd={handleMarkerDrag}
             />
           ))}
       </GoogleMapReact>
+      {isOpenEditCamera && (
+        <EditCameraMapModal
+          place={placeSelected}
+          handleClose={() => setIsOpenEditModal(false)}
+        />
+      )}
     </Box>
   );
 };

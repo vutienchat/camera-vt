@@ -1,13 +1,13 @@
 import { Box } from "@material-ui/core";
 import Content from "./content";
-import { useVTMapGL } from "../../hooks/useVTMapGL";
-import { createContext, useState } from "react";
-import { fakeData } from "../../utils/common";
+import { createContext } from "react";
+import useListMarkersData from "../../hooks/api/useListMarkers";
 
 export const MapContext = createContext({});
 
 const Map = () => {
   // const { vtmapgl, map } = useVTMapGL();
+  const markerList = useListMarkersData();
 
   // const [currentMarkers, setCurrentMarkers] = useState(fakeData);
   // const [markers, setMarkers] = useState([]);
@@ -15,6 +15,7 @@ const Map = () => {
   // const [idEditModal, setIdEditModal] = useState(-1);
 
   const data = {
+    markerList,
     // currentMarkers,
     // vtmapgl,
     // markers,

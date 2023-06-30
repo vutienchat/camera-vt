@@ -1,14 +1,8 @@
 import { Box, Typography } from "@material-ui/core";
 import { CameraIcon } from "../../../../../common/icons/CameraIcon";
-import { useContext } from "react";
-import { MapContext } from "../../..";
 
 const CameraItem = ({ camera_detail }) => {
-  const { map } = useContext(MapContext);
-
-  const handleCheck = () => {
-    map.flyTo({ center: camera_detail.location, zoom: map.getZoom() });
-  };
+  const handleCheck = () => {};
 
   return (
     <Box

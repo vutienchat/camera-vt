@@ -1,14 +1,18 @@
 import { Box } from "@material-ui/core";
-import SearchTab from "./search-tab";
+import Search from "./search";
 import { fakeData } from "../../../../utils/common";
 import CameraItem from "./item";
+import { useContext } from "react";
+import { MapContext } from "../../Map";
 
 const SideBar = () => {
+  const { markerList } = useContext(MapContext);
+
   return (
     <Box style={{ width: "280px", height: "900px", padding: "10px" }}>
-      <SearchTab />
+      <Search />
       <Box style={{ marginTop: "10px" }}>
-        {fakeData.map((data) => (
+        {markerList.data.map((data) => (
           <CameraItem camera_detail={data} key={data.id} />
         ))}
       </Box>
