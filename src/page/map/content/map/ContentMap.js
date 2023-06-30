@@ -1,7 +1,6 @@
-import React, { useCallback, useEffect, useState, memo, useRef } from "react";
+import React, { useCallback, useEffect, useState, memo } from "react";
 import { Box } from "@material-ui/core";
 import GoogleMapReact from "google-map-react";
-import { fakeData } from "../../../../utils/common";
 import { CameraOnline, CameraOffline, ContentPopUpCamera } from "../component";
 import useListMarkersData from "../../../../hooks/api/useListMarkers";
 import EditCameraMapModal from "../Modal/EditCameraMap";
@@ -96,6 +95,7 @@ const getListLocation = (searchPlace, request, createMaker) => {
 
 const ContentMap = () => {
   const markerList = useListMarkersData();
+  // 21.06616,105.81125 location mặc định
   const [mapApiLoaded, setMapApiLoaded] = useState(false);
   const [isOpenBg, setIsOpenBg] = useState(false);
   const [map, setMap] = useState(null);
