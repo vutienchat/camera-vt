@@ -8,7 +8,6 @@ import React, {
 import { Box } from "@material-ui/core";
 import GoogleMapReact from "google-map-react";
 import { CameraOnline, CameraOffline, ContentPopUpCamera } from "../component";
-import useListMarkersData from "../../../../hooks/api/useListMarkers";
 import EditCameraMapModal from "../Modal/EditCameraMap";
 import { MapContext } from "../../Map";
 
@@ -99,13 +98,13 @@ const getListLocation = (searchPlace, request, createMaker) => {
 
 const ContentMap = () => {
   const { markerList } = useContext(MapContext);
+
   const [mapApiLoaded, setMapApiLoaded] = useState(false);
-  const [isOpenBg, setIsOpenBg] = useState(false);
+  const [isOpenEditCamera, setIsOpenEditModal] = useState(false);
+  const [places, setPlaces] = useState([]);
   const [map, setMap] = useState(null);
   const [mapApi, setMapApi] = useState(null);
-  const [places, setPlaces] = useState([]);
   const [placeSelected, setPlaceSelected] = useState();
-  const [isOpenEditCamera, setIsOpenEditModal] = useState(false);
 
   const apiHasLoaded = (map, maps) => {
     setMapApiLoaded(true);
@@ -115,10 +114,18 @@ const ContentMap = () => {
 
   const handleGetLocationDevice = useCallback((searchPlace, listDevice) => {
     listDevice.forEach((deviceItem) => {
-      const request = {
-        query: deviceItem.address,
-        fields: ["name", "geometry"],
-      };
+      let request;
+      if (deviceItem.address) {
+        request = {
+          query: deviceItem.address,
+          fields: ["name", "geometry"],
+        };
+      } else {
+        request = {
+          query: "380 Đường Lạc Long Quân, Xuân La, Tây Hồ, Hà Nội",
+          fields: ["name", "geometry"],
+        };
+      }
 
       getListLocation(searchPlace, request, (maker) => {
         setPlaces((prev) => [...prev, { ...deviceItem, ...maker }]);
@@ -164,7 +171,10 @@ const ContentMap = () => {
     const geocoder = new mapApi.Geocoder();
 
     let searchPlace = new mapApi.places.PlacesService(map);
-    handleGetLocationDevice(searchPlace, markerList.data);
+
+    markerList.data.forEach((mrk) => {
+      handleGetLocationDevice(searchPlace, mrk.deviceList);
+    });
 
     geocoder.geocode(
       { address: "380 Đường Lạc Long Quân, Xuân La, Tây Hồ, Hà Nội" },
@@ -212,12 +222,9 @@ const ContentMap = () => {
               key={place.id}
               lat={place.lat}
               lng={place.lng}
-              //show={place.show}
               place={place}
               setPlaceSelected={setPlaceSelected}
               setIsOpenEditModal={setIsOpenEditModal}
-              // draggable={true}
-              // onDragEnd={handleMarkerDrag}
             />
           ))}
       </GoogleMapReact>

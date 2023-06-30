@@ -1,37 +1,44 @@
+import { createContext, useState } from "react";
 import { Box } from "@material-ui/core";
-import Content from "./content";
-import { createContext } from "react";
+
 import useListMarkersData from "../../hooks/api/useListMarkers";
+import ContentMap from "./content/map/ContentMap";
+import SideBar from "./content/side-bar/SideBar";
 
 export const MapContext = createContext({});
 
 const Map = () => {
   // const { vtmapgl, map } = useVTMapGL();
   const markerList = useListMarkersData();
-
-  // const [currentMarkers, setCurrentMarkers] = useState(fakeData);
-  // const [markers, setMarkers] = useState([]);
-  // const [isOpenEditModal, setIsOpenEditModal] = useState(false);
-  // const [idEditModal, setIdEditModal] = useState(-1);
+  const [mapApiLoaded, setMapApiLoaded] = useState(false);
+  const [places, setPlaces] = useState([]);
+  const [map, setMap] = useState(null);
+  const [mapApi, setMapApi] = useState(null);
+  const [placeSelected, setPlaceSelected] = useState();
+  const [showLiveList, setShowLiveList] = useState([]);
 
   const data = {
     markerList,
-    // currentMarkers,
-    // vtmapgl,
-    // markers,
-    // isOpenEditModal,
-    // idEditModal,
-    // map,
-    // setMarkers,
-    // setCurrentMarkers,
-    // setIdEditModal,
-    // setIsOpenEditModal,
+    mapApiLoaded,
+    places,
+    map,
+    mapApi,
+    placeSelected,
+    showLiveList,
+
+    setMapApiLoaded,
+    setPlaces,
+    setMap,
+    setMapApi,
+    setPlaceSelected,
+    setShowLiveList,
   };
 
   return (
     <MapContext.Provider value={data}>
-      <Box>
-        <Content />
+      <Box style={{ display: "flex" }}>
+        <SideBar />
+        <ContentMap />
       </Box>
     </MapContext.Provider>
   );
