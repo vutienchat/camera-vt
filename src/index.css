@@ -1101,3 +1101,8 @@ a.vtmapgl-ctrl-logo.vtmapgl-compact {
   flex: 1;
   height: 900px;
 }
+
+.map-container-edit {
+  width: 100%;
+  height: 100%;
+}

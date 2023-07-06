@@ -13,10 +13,8 @@ import {
 
 import useDebounce from "../../../../hooks/useDebounce";
 import { SearchIcon } from "../../../../common/icons/SearchIcon";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { editMarker } from "../../../../utils/api/map";
-import { MapContext } from "../../Map";
-import { QUERY_KEYS } from "../../../../utils/keys";
 import { getPopUpHtml } from "../../../../utils/common";
 import { listMa } from "../map/ContentMap";
 
@@ -57,7 +55,6 @@ const EditCameraMapModal = ({
     lat: place.lat,
   });
 
-  console.log(listMa);
   const [mapContent, setMapContent] = useState(null);
   const [mapApi, setMapApi] = useState(null);
   const [marker, setMarker] = useState(null);

@@ -29,8 +29,8 @@
           "status": "ONLINE",
           "rawStatus": "ONLINE",
           "lastConnect": "2023-04-28T07:01:10.844+00:00",
-          "lat": 21.03680754590638,
-          "lng": 105.79408736499023
+          "lat": 20.9419270598734,
+          "lng": 105.76524825366211
         },
         {
           "id": "cd84e581e59511ed87990093d4df85",
@@ -82,7 +82,7 @@
           "rawStatus": "ONLINE",
           "lastConnect": "2023-04-28T07:01:10.844+00:00",
           "lat": 21.049707384893708,
-          "lng": 105.79524486853636
+          "lng": 105.74717968298948
         }
       ],
       "provinceId": "01",
@@ -120,9 +120,7 @@
           "rtspStatus": false,
           "status": "OFFLINE",
           "rawStatus": "OFFLINE",
-          "lastConnect": "2023-04-28T07:01:10.844+00:00",
-          "lat": "",
-          "lng": ""
+          "lastConnect": "2023-04-28T07:01:10.844+00:00"
         }
       ],
       "provinceId": "01",

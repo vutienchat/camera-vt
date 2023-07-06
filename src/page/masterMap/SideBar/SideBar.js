@@ -45,10 +45,10 @@ const TreeHeader = ({ node }) => {
 };
 
 const SideBar = memo(() => {
-  const { markerList, deviceListSelected, setDeviceListSelected } =
-    useContext(MasterMapContext);
-
   const classes = useStyles();
+
+  const { markerList, listPopUpCameraOpen, setListPopUpCameraOpen } =
+    useContext(MasterMapContext);
 
   return (
     <Box style={{ width: "320px", height: "900px", padding: "10px" }}>
@@ -74,31 +74,14 @@ const SideBar = memo(() => {
                     label={
                       <CameraItem
                         camera_detail={device}
-                        selected={deviceListSelected[device.id]}
+                        selected={listPopUpCameraOpen[device.id]}
                       />
                     }
                     onClick={() => {
-                      // Nếu Infowindow đang hiển thị, ẩn nó
-                      const parentElementDevice = document.getElementById(
-                        device.id
-                      ).parentElement.parentElement.parentElement.parentElement;
-
-                      if (
-                        parentElementDevice.style.display === "none" ||
-                        parentElementDevice.style.display === ""
-                      ) {
-                        parentElementDevice.style.display = "block";
-                        setDeviceListSelected((prev) => ({
-                          ...prev,
-                          [device.id]: true,
-                        }));
-                      } else {
-                        parentElementDevice.style.display = "none";
-                        setDeviceListSelected((prev) => ({
-                          ...prev,
-                          [device.id]: false,
-                        }));
-                      }
+                      setListPopUpCameraOpen((prev) => ({
+                        ...prev,
+                        [device.id]: !prev[device.id],
+                      }));
                     }}
                   />
                 ))}

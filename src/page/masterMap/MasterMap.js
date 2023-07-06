@@ -2,24 +2,28 @@ import { Box } from "@material-ui/core";
 import { createContext, useState } from "react";
 import useListMarkersData from "../../hooks/api/useListMarkers";
 import SideBar from "./SideBar/SideBar";
-import { useLoadScript } from "@react-google-maps/api";
+import { useJsApiLoader } from "@react-google-maps/api";
 import MasterMapContent from "./Content/MasterMapContent";
 
 export const MasterMapContext = createContext({});
 
 const MasterMap = () => {
   const markerList = useListMarkersData();
-  const { isLoaded } = useLoadScript({
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
     googleMapsApiKey: "AIzaSyBR-uY9uzbU_4XVTNhIPB0R2c7xZKKO_wg",
   });
 
-  const [deviceListSelected, setDeviceListSelected] = useState({});
+  const [listPopUpCameraOpen, setListPopUpCameraOpen] = useState({});
+  const [places, setPlaces] = useState([]);
 
   const data = {
+    places,
     markerList,
-    deviceListSelected,
+    listPopUpCameraOpen,
 
-    setDeviceListSelected,
+    setPlaces,
+    setListPopUpCameraOpen,
   };
 
   if (!isLoaded || markerList.isLoading) {

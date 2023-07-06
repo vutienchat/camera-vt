@@ -3,6 +3,8 @@ import { GoogleMap } from "@react-google-maps/api";
 
 import { MasterMapContext } from "../MasterMap";
 import MarkerItem from "./MarkerItem";
+import { Box } from "@material-ui/core";
+import EditCameraEdit from "../Modals/EditCameraEdit";
 
 const latDefault = 21.0677385;
 const lngDefault = 105.8114404;
@@ -24,45 +26,90 @@ const defaultProps = {
 };
 
 const MasterMapContent = () => {
-  const { markerList } = useContext(MasterMapContext);
+  const { markerList, places, setPlaces } = useContext(MasterMapContext);
 
-  const [places, setPlaces] = useState([]);
+  const [placeSelected, setPlaceSelected] = useState();
+  const [isOpenEditModal, setIsOpenEditModal] = useState(false);
+
+  const getAddressMarker = async (position) => {
+    const geocoder = new window.google.maps.Geocoder();
+
+    const response = await geocoder
+      .geocode({
+        location: {
+          lng: position.lng,
+          lat: position.lat,
+        },
+      })
+      .then(({ results }) => {
+        return results[0].formatted_address;
+      });
+
+    return response;
+  };
 
   useEffect(() => {
     if (!markerList.data) return;
 
-    let list = [];
-
     markerList.data.forEach((marker) => {
-      marker.deviceList.forEach((device) => {
+      marker.deviceList.forEach(async (device) => {
         if (device.lng && device.lat) {
-          list = [...list, device];
-        } else {
-          list = [
-            ...list,
+          const addressMarker = await getAddressMarker({
+            lng: device.lng,
+            lat: device.lat,
+          });
+
+          setPlaces((prev) => [
+            ...prev,
             {
               ...device,
+              name: addressMarker,
+            },
+          ]);
+        } else {
+          setPlaces((prev) => [
+            ...prev,
+            {
+              ...device,
+              name: "380 Đường Lạc Long Quân, Xuân La, Tây Hồ, Hà Nội",
               lat: latDefault,
               lng: lngDefault,
             },
-          ];
+          ]);
         }
       });
     });
-
-    setPlaces(list);
   }, [markerList.data]);
 
+  const handleOpenEditModal = (place) => {
+    setPlaceSelected(place);
+    setIsOpenEditModal(true);
+  };
+
   return (
-    <GoogleMap
-      zoom={defaultProps.zoom}
-      center={defaultProps.center}
-      mapContainerClassName="map-container"
-    >
-      {places.map((place) => {
-        return <MarkerItem key={place.id} place={place} />;
-      })}
-    </GoogleMap>
+    <Box flex={1} position={"relative"}>
+      <GoogleMap
+        zoom={defaultProps.zoom}
+        center={defaultProps.center}
+        mapContainerClassName="map-container"
+      >
+        {places.map((place) => {
+          return (
+            <MarkerItem
+              key={place.id}
+              place={place}
+              handleOpenEditModal={handleOpenEditModal}
+            />
+          );
+        })}
+      </GoogleMap>
+      {isOpenEditModal && (
+        <EditCameraEdit
+          place={placeSelected}
+          handleClose={() => setIsOpenEditModal(false)}
+        />
+      )}
+    </Box>
   );
 };
 

@@ -1,14 +1,18 @@
 import { Box } from "@material-ui/core";
 import { InfoWindow, Marker } from "@react-google-maps/api";
 import ContentPopUpCamera from "./ContentPopUpCamera";
-import { useState } from "react";
+import { useContext } from "react";
+import { MasterMapContext } from "../MasterMap";
 
-const MarkerItem = ({ place }) => {
-  const [isPopUpCameraOpen, setIsPopUpCameraOpen] = useState(false);
+const MarkerItem = ({ place, handleOpenEditModal }) => {
+  const { listPopUpCameraOpen, setListPopUpCameraOpen } =
+    useContext(MasterMapContext);
 
-  console.log(place);
   const handleOnClick = () => {
-    setIsPopUpCameraOpen((prev) => !prev);
+    setListPopUpCameraOpen((prev) => ({
+      ...prev,
+      [place.id]: !prev[place.id],
+    }));
   };
 
   return (
@@ -19,9 +23,14 @@ const MarkerItem = ({ place }) => {
           lat: place.lat,
           lng: place.lng,
         }}
+        icon={{
+          url: require(place.status === "ONLINE"
+            ? "../../../asset/camera-online.png"
+            : "../../../asset/camera-offline.png"),
+        }}
         onClick={handleOnClick}
       />
-      {isPopUpCameraOpen && (
+      {listPopUpCameraOpen[place.id] && (
         <InfoWindow
           position={{
             lat: place.lat,
@@ -29,10 +38,14 @@ const MarkerItem = ({ place }) => {
           }}
           options={{
             position: "relative",
+            pixelOffset: { width: 0, height: -50 },
           }}
           className="infoWindow"
         >
-          <ContentPopUpCamera place={place} />
+          <ContentPopUpCamera
+            place={place}
+            handleOpenEditModal={handleOpenEditModal}
+          />
         </InfoWindow>
       )}
     </Box>
