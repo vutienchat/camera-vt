@@ -1,63 +1,18 @@
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-  memo,
-  useContext,
-} from "react";
+import React, { useCallback, useEffect, useState, useContext } from "react";
+
 import { Box } from "@material-ui/core";
 import GoogleMapReact from "google-map-react";
-import { CameraOnline, CameraOffline, ContentPopUpCamera } from "../component";
 import EditCameraMapModal from "../Modal/EditCameraMap";
 import { MapContext } from "../../Map";
-
-const Marker = memo(({ place, setPlaceSelected, setIsOpenEditModal }) => {
-  const [isShowLive, setIsShowLive] = useState(false);
-
-  return (
-    <>
-      {isShowLive && (
-        <Box
-          className="marker"
-          style={{
-            borderRadius: "10px",
-            height: "162px",
-            width: "220px",
-            border: `3px solid ${place.status ? "#08B44D" : "#DD3D4B"}`,
-            position: "absolute",
-            transform: "translateX(-50%)",
-            bottom: "30px",
-            background: "#fff",
-            zIndex: 2,
-          }}
-        >
-          <ContentPopUpCamera
-            place={place}
-            handleOpenEditModal={() => {
-              setIsOpenEditModal(true);
-              setPlaceSelected(place);
-            }}
-          />
-        </Box>
-      )}
-      <div
-        className="marker"
-        style={{
-          width: "fit-content",
-          height: "auto",
-          borderRadius: "6px",
-          position: "absolute",
-          transform: "translate(-50%, -50%)",
-          cursor: "pointer",
-          zIndex: 1,
-        }}
-        onClick={() => setIsShowLive((isShowPrev) => !isShowPrev)}
-      >
-        {place.status ? <CameraOnline /> : <CameraOffline />}
-      </div>
-    </>
-  );
-});
+import {
+  exitFullscreen,
+  getPopUpHtml,
+  handleCameraIconClick,
+  handleCloseModal,
+  handleCloseZoom,
+  handleInfoIconClick,
+  handleZoomVideo,
+} from "../../../../utils/common";
 
 const VIET_NAM_BOUNDS = {
   north: 26.625282609530778,
@@ -86,7 +41,6 @@ const getListLocation = (searchPlace, request, createMaker) => {
   searchPlace.findPlaceFromQuery(request, (results, status) => {
     if (status === "OK") {
       const place = results[0];
-      console.log(place);
       createMaker({
         name: place.name,
         lat: place.geometry.location.lat(),
@@ -97,14 +51,25 @@ const getListLocation = (searchPlace, request, createMaker) => {
 };
 
 const ContentMap = () => {
-  const { markerList } = useContext(MapContext);
+  const {
+    placeSelected,
+    markerList,
+    map,
+    mapApi,
+    listMarker,
+    mapApiLoaded,
+    setMapApiLoaded,
+    setMap,
+    setMapApi,
+    statusClick,
+    setListMarker,
+    setPlaceSelected,
+    setStatusClick,
+    setDeviceListSelected,
+  } = useContext(MapContext);
 
-  const [mapApiLoaded, setMapApiLoaded] = useState(false);
   const [isOpenEditCamera, setIsOpenEditModal] = useState(false);
   const [places, setPlaces] = useState([]);
-  const [map, setMap] = useState(null);
-  const [mapApi, setMapApi] = useState(null);
-  const [placeSelected, setPlaceSelected] = useState();
 
   const apiHasLoaded = (map, maps) => {
     setMapApiLoaded(true);
@@ -142,22 +107,158 @@ const ContentMap = () => {
     // const maxLng = bounds.getNorthEast().lng();
   };
 
-  const handleDragEnd = () => {
-    const markers = document.querySelectorAll(".marker");
+  const handleClickOpenPopUp = (place) => {
+    const parentElementDevice = document.getElementById(place.id).parentElement
+      .parentElement.parentElement.parentElement;
 
-    markers.forEach((marker) => {
-      marker.style.display = "none";
-      marker.style.scale = 0;
-    });
-    setTimeout(() => {
-      markers.forEach((marker) => {
-        marker.style.display = "block";
-        marker.style.scale = 1;
-        marker.style.transition = "all 0.2s ease-in-out";
-      });
-    }, 300);
+    if (
+      parentElementDevice.style.display === "none" ||
+      parentElementDevice.style.display === ""
+    ) {
+      setDeviceListSelected((prev) => ({
+        ...prev,
+        [place.id]: true,
+      }));
+      parentElementDevice.style.display = "block";
+    } else {
+      setDeviceListSelected((prev) => ({
+        ...prev,
+        [place.id]: false,
+      }));
+      parentElementDevice.style.display = "none";
+    }
+
+    setStatusClick((prev) => !prev);
   };
 
+  useEffect(() => {
+    if (!map && !mapApi && !mapApiLoaded) return;
+
+    if (places.length > 0) {
+      console.log("render", places);
+
+      places.forEach((place) => {
+        const marker = new mapApi.Marker({
+          position: { lat: place.lat, lng: place.lng },
+          map,
+          icon: {
+            url: require(place.status === "ONLINE"
+              ? "../../../../asset/camera-online.png"
+              : "../../../../asset/camera-offline.png"),
+          },
+        });
+
+        marker.setMap(map);
+
+        const infoWindowDetail = new mapApi.InfoWindow({
+          content: getPopUpHtml(place),
+        });
+
+        infoWindowDetail.open(map, marker);
+
+        setListMarker((prev) => ({ ...prev, [place.id]: marker }));
+
+        mapApi.event.addListener(marker, "click", () =>
+          handleClickOpenPopUp(place)
+        );
+
+        return () => {
+          mapApi.event.clearInstanceListeners(() =>
+            handleClickOpenPopUp(place)
+          );
+          setListMarker([]);
+          setPlaces([]);
+        };
+      });
+    }
+  }, [map, mapApi, mapApiLoaded, places]);
+
+  // Events in Modal
+  useEffect(() => {
+    if (places.length > 0) {
+      const handleOpenEditModal = (e) => {
+        const dataId = e.target.getAttribute("data-id");
+
+        setPlaceSelected(places.find((place) => place.id === dataId));
+        setIsOpenEditModal(true);
+      };
+
+      places.forEach((place) => {
+        const editBtn = document.getElementById(`edit-button-${place.id}`);
+        const infoIcon = document.getElementById(`${place.id}_info_icon`);
+        const cameraIcon = document.getElementById(`${place.id}_camera_icon`);
+        const closeIcon = document.getElementById(`${place.id}_close_icon`);
+        const zoomIcon = document.getElementById(`${place.id}_zoom_icon`);
+        const closeZoomIcon = document.getElementById("close_zoom");
+
+        if (editBtn) {
+          editBtn.setAttribute("data-id", place.id);
+          editBtn.addEventListener("click", handleOpenEditModal);
+        }
+
+        if (infoIcon) {
+          infoIcon.setAttribute("data-id", place.id);
+          infoIcon.addEventListener("click", handleInfoIconClick);
+        }
+
+        if (cameraIcon) {
+          cameraIcon.setAttribute("data-id", place.id);
+          cameraIcon.addEventListener("click", handleCameraIconClick);
+        }
+
+        if (closeIcon) {
+          closeIcon.setAttribute("data-id", place.id);
+          closeIcon.addEventListener("click", handleCloseModal);
+        }
+
+        if (zoomIcon) {
+          zoomIcon.addEventListener("click", handleZoomVideo);
+          zoomIcon.setAttribute("data-id", place.id);
+        }
+
+        if (closeZoomIcon) {
+          closeZoomIcon.addEventListener("click", handleCloseZoom);
+        }
+      });
+
+      return () => {
+        places.forEach((place) => {
+          const editBtn = document.getElementById(`edit-button-${place.id}`);
+          const infoIcon = document.getElementById(`${place.id}_info_icon`);
+          const cameraIcon = document.getElementById(`${place.id}_camera_icon`);
+          const closeIcon = document.getElementById(`${place.id}_close_icon`);
+          const zoomIcon = document.getElementById(`${place.id}_zoom_icon`);
+          const closeZoomIcon = document.getElementById("close_zoom");
+
+          if (editBtn) {
+            editBtn.removeEventListener("click", handleOpenEditModal);
+          }
+
+          if (infoIcon) {
+            infoIcon.removeEventListener("click", handleInfoIconClick);
+          }
+
+          if (cameraIcon) {
+            cameraIcon.removeEventListener("click", handleCameraIconClick);
+          }
+
+          if (closeIcon) {
+            closeIcon.removeEventListener("click", handleCloseModal);
+          }
+
+          if (zoomIcon) {
+            zoomIcon.addEventListener("click", handleZoomVideo);
+          }
+
+          if (closeZoomIcon) {
+            closeZoomIcon.addEventListener("click", handleCloseZoom);
+          }
+        });
+      };
+    }
+  }, [statusClick]);
+
+  // Get Data List Group devices
   useEffect(() => {
     if (
       !map ||
@@ -167,8 +268,6 @@ const ContentMap = () => {
       markerList.isLoading
     )
       return;
-    // eslint-disable-next-line no-undef
-    const geocoder = new mapApi.Geocoder();
 
     let searchPlace = new mapApi.places.PlacesService(map);
 
@@ -176,30 +275,21 @@ const ContentMap = () => {
       handleGetLocationDevice(searchPlace, mrk.deviceList);
     });
 
-    geocoder.geocode(
-      { address: "380 Đường Lạc Long Quân, Xuân La, Tây Hồ, Hà Nội" },
-      (results, status) => {
-        console.log(results);
-        if (status === "OK") {
-          console.log(results[0]);
-          //mapApi.setCenter({ lat, lng });
-        } else {
-          console.log(
-            "Geocode was not successful for the following reason:",
-            status
-          );
-        }
-      }
-    );
-
     return () => {
       mapApi.event.clearInstanceListeners(searchPlace);
       setPlaces([]);
     };
-  }, [map, mapApi, mapApiLoaded]);
+  }, [map, mapApi, mapApiLoaded, markerList.data]);
+
+  const handleCloseEditModal = useCallback(() => {
+    setIsOpenEditModal(false);
+  }, [isOpenEditCamera]);
 
   return (
-    <Box style={{ width: "100%", position: "relative" }}>
+    <Box
+      style={{ width: "100%", position: "relative" }}
+      className="map-content"
+    >
       <GoogleMapReact
         bootstrapURLKeys={bootstrapURLKeys}
         defaultCenter={defaultProps.center}
@@ -212,26 +302,19 @@ const ContentMap = () => {
             strictBounds: false,
           },
         }}
-        onDragEnd={handleDragEnd}
         yesIWantToUseGoogleMapApiInternals
         onGoogleApiLoaded={({ map, maps }) => apiHasLoaded(map, maps)}
-      >
-        {places &&
-          places.map((place) => (
-            <Marker
-              key={place.id}
-              lat={place.lat}
-              lng={place.lng}
-              place={place}
-              setPlaceSelected={setPlaceSelected}
-              setIsOpenEditModal={setIsOpenEditModal}
-            />
-          ))}
-      </GoogleMapReact>
-      {isOpenEditCamera && (
+      />
+      {isOpenEditCamera && markerList.data && (
         <EditCameraMapModal
+          listMarker={listMarker}
+          mapParent={map}
+          markerList={markerList.data}
+          mapApiContent={mapApi}
+          places={places}
           place={placeSelected}
-          handleClose={() => setIsOpenEditModal(false)}
+          setStatusClick={setStatusClick}
+          handleClose={handleCloseEditModal}
         />
       )}
     </Box>

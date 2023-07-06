@@ -16,6 +16,9 @@ const Map = () => {
   const [mapApi, setMapApi] = useState(null);
   const [placeSelected, setPlaceSelected] = useState();
   const [showLiveList, setShowLiveList] = useState([]);
+  const [listMarker, setListMarker] = useState({});
+  const [statusClick, setStatusClick] = useState(false);
+  const [deviceListSelected, setDeviceListSelected] = useState({});
 
   const data = {
     markerList,
@@ -25,6 +28,9 @@ const Map = () => {
     mapApi,
     placeSelected,
     showLiveList,
+    listMarker,
+    statusClick,
+    deviceListSelected,
 
     setMapApiLoaded,
     setPlaces,
@@ -32,6 +38,9 @@ const Map = () => {
     setMapApi,
     setPlaceSelected,
     setShowLiveList,
+    setListMarker,
+    setStatusClick,
+    setDeviceListSelected,
   };
 
   return (

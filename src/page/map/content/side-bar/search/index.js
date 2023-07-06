@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Box, InputAdornment, TextField, makeStyles } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import { SearchIcon } from "../../../../../common/icons/SearchIcon";

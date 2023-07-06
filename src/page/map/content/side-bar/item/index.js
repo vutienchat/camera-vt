@@ -1,7 +1,7 @@
 import { Box, Typography } from "@material-ui/core";
 import { CameraIcon } from "../../../../../common/icons/CameraIcon";
 
-const CameraItem = ({ camera_detail }) => {
+const CameraItem = ({ camera_detail, selected }) => {
   const handleCheck = () => {};
 
   return (
@@ -13,6 +13,7 @@ const CameraItem = ({ camera_detail }) => {
         justifyContent: "space-between",
         padding: "10px",
         cursor: "pointer",
+        backgroundColor: selected ? "rgba(255, 160, 169, 0.15)" : "transparent",
       }}
     >
       <Box

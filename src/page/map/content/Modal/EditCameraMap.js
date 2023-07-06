@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import GoogleMapReact from "google-map-react";
 
 import {
@@ -13,6 +13,11 @@ import {
 
 import useDebounce from "../../../../hooks/useDebounce";
 import { SearchIcon } from "../../../../common/icons/SearchIcon";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { editMarker } from "../../../../utils/api/map";
+import { MapContext } from "../../Map";
+import { QUERY_KEYS } from "../../../../utils/keys";
+import { getPopUpHtml } from "../../../../utils/common";
 
 const bootstrapURLKeys = {
   key: "AIzaSyBR-uY9uzbU_4XVTNhIPB0R2c7xZKKO_wg",
@@ -36,7 +41,16 @@ const defaultProps = {
   zoom: 13,
 };
 
-const EditCameraMapModal = ({ place, handleClose }) => {
+const EditCameraMapModal = ({
+  places,
+  listMarker,
+  place,
+  handleClose,
+  mapParent,
+  markerList,
+  mapApiContent,
+}) => {
+  const queryClient = useQueryClient();
   const [placeCustom, setPlaceCustom] = useState({
     name: place.name,
     lng: place.lng,
@@ -50,13 +64,37 @@ const EditCameraMapModal = ({ place, handleClose }) => {
 
   const keyword = useDebounce(searchValue, 1000);
 
-  const [statusDragStart, setStatusDragStart] = useState(false);
-  const [listLive, setListLive] = useState([]);
+  const [infoWindowState, setInfoWindowState] = useState();
   const classes = useStylesTableBodyGroup();
-  console.log("list ngoai", listLive);
+  console.log(place.id, listMarker);
 
-  const apiHasLoaded = (map, maps, listLive) => {
-    //console.log(listLive);
+  const editMarkerApi = useMutation({
+    mutationFn: async (param) => editMarker(param),
+    onSuccess: () => {
+      const marker = new mapApiContent.Marker({
+        position: { lat: place.lat, lng: place.lng },
+        mapParent,
+        icon: {
+          url: require(place.status === "ONLINE"
+            ? "../../../../asset/camera-online.png"
+            : "../../../../asset/camera-offline.png"),
+        },
+      });
+
+      const infoWindowDetail = new mapApiContent.InfoWindow({
+        content: getPopUpHtml(place),
+      });
+
+      infoWindowDetail.open(mapParent, marker);
+
+      queryClient.invalidateQueries([QUERY_KEYS.MARKERS_LIST]);
+    },
+    onError: () => {
+      console.log("Error");
+    },
+  });
+
+  const apiHasLoaded = (map, maps) => {
     const marker = new maps.Marker({
       position: { lat: place.lat, lng: place.lng },
       map,
@@ -67,30 +105,15 @@ const EditCameraMapModal = ({ place, handleClose }) => {
     });
 
     const infowindow = new maps.InfoWindow({
-      content: `<div style="background: red">aloaloaloa</div>`,
+      content: `<div class="pop-up-edit"><p>${place.name}</p></div>`,
     });
 
-    console.log("infowindow", infowindow);
+    infowindow.open(map, marker);
 
-    // infowindow.open(map, marker);
-
-    maps.event.addListener(marker, "click", () => {
-      if (infowindow.getMap()) {
-        // Nếu Infowindow đang hiển thị, ẩn nó
-        infowindow.close();
-      } else {
-        // Nếu Infowindow đang ẩn, hiển thị nó và đặt vị trí tương ứng
-        infowindow.open(map, marker);
-      }
-    });
-
+    setInfoWindowState(infowindow);
     setMarker(marker);
     setMapContent(map);
     setMapApi(maps);
-
-    marker.addListener("dragstart", () => {
-      setStatusDragStart(true);
-    });
 
     marker.addListener("dragend", () => {
       const geocoder = new maps.Geocoder();
@@ -103,12 +126,14 @@ const EditCameraMapModal = ({ place, handleClose }) => {
           },
         })
         .then(({ results }) => {
+          infowindow.setContent(
+            `<div class="pop-up-edit"><p>${results[0].formatted_address}</p></div>`
+          );
           setPlaceCustom({
             name: results[0].formatted_address,
             lng: marker.getPosition().lng(),
             lat: marker.getPosition().lat(),
           });
-          setStatusDragStart(false);
         });
     });
   };
@@ -144,12 +169,53 @@ const EditCameraMapModal = ({ place, handleClose }) => {
             lng: results[0].geometry.location.lng(),
             lat: results[0].geometry.location.lat(),
           });
-          //mapApi.setCenter({ lat, lng });
-        } else {
+          infoWindowState.setContent(
+            `<div class="pop-up-edit"><p>${results[0].formatted_address}</p></div>`
+          );
         }
       });
     }
   }, [keyword, mapApi, mapContent, place, marker]);
+
+  const handleEditMarker = () => {
+    let placeArr = [];
+
+    markerList.map((m) => {
+      if (m.id === "37012e00e59711ed879f024263d4df88") {
+        m.deviceList.map((de) => {
+          if (de.id === place.id) {
+            placeArr = [
+              ...placeArr,
+              {
+                ...de,
+                lat: placeCustom.lat,
+                lng: placeCustom.lng,
+                name: placeCustom.name,
+                address: placeCustom.name,
+              },
+            ];
+          } else {
+            placeArr = [
+              ...placeArr,
+              {
+                ...de,
+              },
+            ];
+          }
+        });
+      }
+    });
+
+    const params = {
+      id: "37012e00e59711ed879f024263d4df88",
+      parentId: "f0cd4870e59011ed879f024263d4df88",
+      label: "MeLinh-IN",
+      groupType: 13,
+      deviceList: placeArr,
+    };
+
+    editMarkerApi.mutate(params);
+  };
 
   return (
     <Card
@@ -166,7 +232,7 @@ const EditCameraMapModal = ({ place, handleClose }) => {
       className="edit-modal"
     >
       <Typography>Edit Location</Typography>
-      <Typography>{place.title}</Typography>
+      <Typography>{place.name}</Typography>
       <Box style={{ width: "100%", height: 200 }}>
         <GoogleMapReact
           bootstrapURLKeys={bootstrapURLKeys}
@@ -179,73 +245,8 @@ const EditCameraMapModal = ({ place, handleClose }) => {
             fullscreenControl: false,
           }}
           draggable
-          onGoogleApiLoaded={({ map, maps }) =>
-            apiHasLoaded(map, maps, listLive)
-          }
-        >
-          <Box
-            lat={placeCustom.lat}
-            lng={placeCustom.lng}
-            style={{ position: "relative" }}
-            onClick={() => console.log("listLivetrong fuck")}
-          >
-            <Box
-              style={{
-                width: "50px",
-                height: "50px",
-                backgroundColor: "#fff",
-                position: "absolute",
-                bottom: "100%",
-                left: "50%",
-                transform: "translateX(-50%)",
-              }}
-            />
-          </Box>
-          {/* <Box
-            lat={placeCustom.lat}
-            lng={placeCustom.lng}
-            style={{ display: statusDragStart ? "none" : "block" }}
-          >
-            <Box
-              style={{
-                position: "absolute",
-                top: "-100px",
-                padding: "10px",
-                transform: "translateX(-50%)",
-                left: "50%",
-                backgroundColor: "rgba(221, 61, 75, 1)",
-                width: "200px",
-              }}
-            >
-              <Typography
-                style={{
-                  color: "#fff",
-                  overflow: "hidden",
-                  whiteSpace: "nowrap",
-                  textOverflow: "ellipsis",
-                  width: 180,
-                  margin: "auto",
-                  fontSize: "12px",
-                }}
-              >
-                {placeCustom.name}
-              </Typography>
-              <Box
-                style={{
-                  position: "absolute",
-                  top: "100%",
-                  width: 0,
-                  height: 0,
-                  borderLeft: "12px solid transparent",
-                  borderRight: "12px solid transparent",
-                  borderTop: `14px solid #DD3D4B`,
-                  left: "50%",
-                  transform: "translateX(-50%)",
-                }}
-              />
-            </Box>
-          </Box> */}
-        </GoogleMapReact>
+          onGoogleApiLoaded={({ map, maps }) => apiHasLoaded(map, maps)}
+        />
       </Box>
       <Box mt="20px">
         <TextField
@@ -281,7 +282,11 @@ const EditCameraMapModal = ({ place, handleClose }) => {
         />
       </Box>
       <Box className={classes.actionButton}>
-        <Button style={{ background: "#dd3d4b", color: "#fff" }}>
+        <Button
+          style={{ background: "#dd3d4b", color: "#fff" }}
+          onClick={handleEditMarker}
+          disabled={placeCustom.name === place.name}
+        >
           <Typography>Confirm</Typography>
         </Button>
         <Button
@@ -322,4 +327,4 @@ const useStylesTableBodyGroup = makeStyles({
   },
 });
 
-export default EditCameraMapModal;
+export default React.memo(EditCameraMapModal);

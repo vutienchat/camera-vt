@@ -954,6 +954,7 @@ a.vtmapgl-ctrl-logo.vtmapgl-compact {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  margin-top: 10px;
 }
 
 .popup-info span {
@@ -975,4 +976,123 @@ a.vtmapgl-ctrl-logo.vtmapgl-compact {
 
 .vtmapgl-ctrl-logo {
   display: none;
+}
+
+.edit-modal .gm-style-iw.gm-style-iw-c {
+  background-color: rgba(221, 61, 75, 1);
+  padding: 0;
+  width: 228px;
+  border-radius: 10px;
+}
+
+.edit-modal .pop-up-edit {
+  background-color: rgba(221, 61, 75, 1);
+  color: #fff;
+  padding: 0 5px;
+}
+
+
+.edit-modal .pop-up-edit p {
+  word-wrap: break-word;
+}
+
+.edit-modal .gm-style-iw-t {
+  display: block !important;
+}
+
+.edit-modal .gm-style-iw-d {
+  overflow: unset !important;
+}
+
+.edit-modal .gm-ui-hover-effect {
+  display: none !important;
+}
+
+.edit-modal .gm-style-iw-tc::after {
+  background-color: rgba(221, 61, 75, 1);
+}
+
+/*Map Content*/
+.map-content .gm-style-iw.gm-style-iw-c {
+  padding: 0;
+  width: 228px;
+  border-radius: 10px;
+}
+
+.map-content .pop-up {
+  padding: 0 5px;
+  border-radius: 10px;
+}
+
+.map-content .gm-style-iw-t {
+  display: none;
+}
+
+.map-content .gm-style-iw-d {
+  overflow: unset !important;
+}
+
+.map-content .gm-ui-hover-effect {
+  display: none !important;
+}
+
+.map-content .pop-up-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.map-content .pop-up-header_btn {
+  cursor: pointer;
+  position: relative;
+  width: 20px;
+  height: 20px;
+  z-index: 0;
+}
+
+.map-content .pop-up-header_btn .info_icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  width: 18px;
+  background-color: #FFF;
+}
+
+.map-content .pop-up-header_btn .camera_icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: 18px;
+  background-color: #FFF;
+}
+
+.map-content .pop-up .info_content {
+  position: absolute;
+  width: 100%;
+  z-index: 3;
+  background-color: #fff;
+  top: 0;
+  left: 0;
+}
+
+.map-content .pop-up .camera_content {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+}
+
+.header_video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  width: 100vw;
+  padding: 10px;
+  display: none;
+  color: #fff;
+  justify-content: space-between;
+  align-items: center;
 }
