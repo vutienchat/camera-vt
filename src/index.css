@@ -1096,3 +1096,8 @@ a.vtmapgl-ctrl-logo.vtmapgl-compact {
   justify-content: space-between;
   align-items: center;
 }
+
+.map-container {
+  flex: 1;
+  height: 900px;
+}

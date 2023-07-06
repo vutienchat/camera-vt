@@ -1,17 +1,10 @@
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-  useContext,
-  useRef,
-} from "react";
+import React, { useCallback, useEffect, useState, useContext } from "react";
 
 import { Box } from "@material-ui/core";
 import GoogleMapReact from "google-map-react";
 import EditCameraMapModal from "../Modal/EditCameraMap";
 import { MapContext } from "../../Map";
 import {
-  exitFullscreen,
   getPopUpHtml,
   handleCameraIconClick,
   handleCloseModal,
