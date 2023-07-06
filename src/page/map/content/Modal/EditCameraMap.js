@@ -18,6 +18,7 @@ import { editMarker } from "../../../../utils/api/map";
 import { MapContext } from "../../Map";
 import { QUERY_KEYS } from "../../../../utils/keys";
 import { getPopUpHtml } from "../../../../utils/common";
+import { listMa } from "../map/ContentMap";
 
 const bootstrapURLKeys = {
   key: "AIzaSyBR-uY9uzbU_4XVTNhIPB0R2c7xZKKO_wg",
@@ -42,21 +43,21 @@ const defaultProps = {
 };
 
 const EditCameraMapModal = ({
-  places,
-  listMarker,
   place,
   handleClose,
   mapParent,
   markerList,
   mapApiContent,
+  infoWindows,
+  setInfoWindows,
 }) => {
-  const queryClient = useQueryClient();
   const [placeCustom, setPlaceCustom] = useState({
     name: place.name,
     lng: place.lng,
     lat: place.lat,
   });
 
+  console.log(listMa);
   const [mapContent, setMapContent] = useState(null);
   const [mapApi, setMapApi] = useState(null);
   const [marker, setMarker] = useState(null);
@@ -66,33 +67,59 @@ const EditCameraMapModal = ({
 
   const [infoWindowState, setInfoWindowState] = useState();
   const classes = useStylesTableBodyGroup();
-  console.log(place.id, listMarker);
 
   const editMarkerApi = useMutation({
     mutationFn: async (param) => editMarker(param),
     onSuccess: () => {
-      const marker = new mapApiContent.Marker({
-        position: { lat: place.lat, lng: place.lng },
-        mapParent,
-        icon: {
-          url: require(place.status === "ONLINE"
-            ? "../../../../asset/camera-online.png"
-            : "../../../../asset/camera-offline.png"),
-        },
+      const newLatLng = new mapApiContent.LatLng(
+        placeCustom.lat,
+        placeCustom.lng
+      );
+
+      listMa[place.id].setPosition(newLatLng);
+      infoWindows[place.id].close();
+
+      const infoDetail = new mapApiContent.InfoWindow({
+        content: getPopUpHtml({
+          ...place,
+          name: placeCustom.name,
+        }),
       });
 
-      const infoWindowDetail = new mapApiContent.InfoWindow({
-        content: getPopUpHtml(place),
-      });
+      infoDetail.open(mapParent, listMa[place.id]);
 
-      infoWindowDetail.open(mapParent, marker);
-
-      queryClient.invalidateQueries([QUERY_KEYS.MARKERS_LIST]);
+      listMa[place.id] = marker;
+      setInfoWindows((prev) => ({
+        ...prev,
+        [place.id]: infoDetail,
+      }));
     },
     onError: () => {
       console.log("Error");
     },
   });
+
+  const handleDragEnd = () => {
+    const geocoder = new mapApi.Geocoder();
+
+    geocoder
+      .geocode({
+        location: {
+          lng: marker.getPosition().lng(),
+          lat: marker.getPosition().lat(),
+        },
+      })
+      .then(({ results }) => {
+        infoWindowState.setContent(
+          `<div class="pop-up-edit"><p>${results[0].formatted_address}</p></div>`
+        );
+        setPlaceCustom({
+          name: results[0].formatted_address,
+          lng: marker.getPosition().lng(),
+          lat: marker.getPosition().lat(),
+        });
+      });
+  };
 
   const apiHasLoaded = (map, maps) => {
     const marker = new maps.Marker({
@@ -137,6 +164,8 @@ const EditCameraMapModal = ({
         });
     });
   };
+
+  useEffect(() => {}, []);
 
   const handleSearch = (e) => {
     setSearchValue(e.target.value);
@@ -190,8 +219,6 @@ const EditCameraMapModal = ({
                 ...de,
                 lat: placeCustom.lat,
                 lng: placeCustom.lng,
-                name: placeCustom.name,
-                address: placeCustom.name,
               },
             ];
           } else {
@@ -285,7 +312,7 @@ const EditCameraMapModal = ({
         <Button
           style={{ background: "#dd3d4b", color: "#fff" }}
           onClick={handleEditMarker}
-          disabled={placeCustom.name === place.name}
+          disabled={placeCustom.name === place.name || editMarkerApi.isLoading}
         >
           <Typography>Confirm</Typography>
         </Button>

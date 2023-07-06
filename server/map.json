@@ -29,10 +29,8 @@
           "status": "ONLINE",
           "rawStatus": "ONLINE",
           "lastConnect": "2023-04-28T07:01:10.844+00:00",
-          "lat": 21.06514193684413,
-          "lng": 105.80853516884768,
-          "name": "1, 23 Ngõ 565 Lạc Long Quân, Xuân La, Tây Hồ, Hà Nội, Việt Nam",
-          "address": "1, 23 Ngõ 565 Lạc Long Quân, Xuân La, Tây Hồ, Hà Nội, Việt Nam"
+          "lat": 21.03680754590638,
+          "lng": 105.79408736499023
         },
         {
           "id": "cd84e581e59511ed87990093d4df85",
@@ -57,13 +55,11 @@
           "status": "ONLINE",
           "rawStatus": "ONLINE",
           "lastConnect": "2023-04-28T07:01:10.844+00:00",
-          "lat": 21.067448778335404,
-          "lng": 105.77284864027978,
-          "name": "134 P. Viên, Cổ Nhuế, Từ Liêm, Hà Nội, Việt Nam",
-          "address": "134 P. Viên, Cổ Nhuế, Từ Liêm, Hà Nội, Việt Nam"
+          "lat": 21.0689411572396,
+          "lng": 105.78136930333007
         },
         {
-          "id": "cd84e581e59511ed879f024263d4df86",
+          "id": "cd84e581e59511ed879f020000d4df86",
           "groupId": "54006d90e59711ed879f024263d4df86",
           "groupAncestorIds": null,
           "camType": 2,
@@ -85,10 +81,8 @@
           "status": "ONLINE",
           "rawStatus": "ONLINE",
           "lastConnect": "2023-04-28T07:01:10.844+00:00",
-          "lat": 21.054452298921998,
-          "lng": 105.80347927304686,
-          "name": "27A/175/42 Lạc Long Quân, Tổ dân phố số 05, Cầu Giấy, Hà Nội, Việt Nam",
-          "address": "27A/175/42 Lạc Long Quân, Tổ dân phố số 05, Cầu Giấy, Hà Nội, Việt Nam"
+          "lat": 21.049707384893708,
+          "lng": 105.79524486853636
         }
       ],
       "provinceId": "01",

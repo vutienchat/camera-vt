@@ -17,6 +17,7 @@ const Map = () => {
   const [placeSelected, setPlaceSelected] = useState();
   const [showLiveList, setShowLiveList] = useState([]);
   const [listMarker, setListMarker] = useState({});
+  const [infoWindows, setInfoWindows] = useState({});
   const [statusClick, setStatusClick] = useState(false);
   const [deviceListSelected, setDeviceListSelected] = useState({});
 
@@ -31,6 +32,7 @@ const Map = () => {
     listMarker,
     statusClick,
     deviceListSelected,
+    infoWindows,
 
     setMapApiLoaded,
     setPlaces,
@@ -41,6 +43,7 @@ const Map = () => {
     setListMarker,
     setStatusClick,
     setDeviceListSelected,
+    setInfoWindows,
   };
 
   return (

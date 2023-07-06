@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useState, useContext } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+  useContext,
+  useRef,
+} from "react";
 
 import { Box } from "@material-ui/core";
 import GoogleMapReact from "google-map-react";
@@ -13,6 +19,9 @@ import {
   handleInfoIconClick,
   handleZoomVideo,
 } from "../../../../utils/common";
+
+const latDefault = 21.0677385;
+const lngDefault = 105.8114404;
 
 const VIET_NAM_BOUNDS = {
   north: 26.625282609530778,
@@ -37,35 +46,24 @@ const bootstrapURLKeys = {
   libraries: ["places"],
 };
 
-const getListLocation = (searchPlace, request, createMaker) => {
-  searchPlace.findPlaceFromQuery(request, (results, status) => {
-    if (status === "OK") {
-      const place = results[0];
-      createMaker({
-        name: place.name,
-        lat: place.geometry.location.lat(),
-        lng: place.geometry.location.lng(),
-      });
-    }
-  });
-};
-
+export let listMa = {};
 const ContentMap = () => {
   const {
     placeSelected,
     markerList,
     map,
     mapApi,
-    listMarker,
     mapApiLoaded,
     setMapApiLoaded,
     setMap,
     setMapApi,
     statusClick,
     setListMarker,
+    setInfoWindows,
     setPlaceSelected,
     setStatusClick,
     setDeviceListSelected,
+    infoWindows,
   } = useContext(MapContext);
 
   const [isOpenEditCamera, setIsOpenEditModal] = useState(false);
@@ -77,26 +75,40 @@ const ContentMap = () => {
     setMapApi(maps);
   };
 
-  const handleGetLocationDevice = useCallback((searchPlace, listDevice) => {
-    listDevice.forEach((deviceItem) => {
-      let request;
-      if (deviceItem.address) {
-        request = {
-          query: deviceItem.address,
-          fields: ["name", "geometry"],
-        };
-      } else {
-        request = {
-          query: "380 Đường Lạc Long Quân, Xuân La, Tây Hồ, Hà Nội",
-          fields: ["name", "geometry"],
-        };
-      }
+  const handleGetLocationDevice = useCallback(
+    (listDevice) => {
+      listDevice.forEach((deviceItem) => {
+        if (deviceItem.lng && deviceItem.lat) {
+          const geocoder = new mapApi.Geocoder();
 
-      getListLocation(searchPlace, request, (maker) => {
-        setPlaces((prev) => [...prev, { ...deviceItem, ...maker }]);
+          geocoder
+            .geocode({
+              location: {
+                lng: deviceItem.lng,
+                lat: deviceItem.lat,
+              },
+            })
+            .then(({ results }) => {
+              setPlaces((prev) => [
+                ...prev,
+                { ...deviceItem, name: results[0].formatted_address },
+              ]);
+            });
+        } else {
+          setPlaces((prev) => [
+            ...prev,
+            {
+              ...deviceItem,
+              lng: lngDefault,
+              lat: latDefault,
+              name: "380 Đường Lạc Long Quân, Xuân La, Tây Hồ, Hà Nội",
+            },
+          ]);
+        }
       });
-    });
-  }, []);
+    },
+    [mapApi]
+  );
 
   const handleZoomChanged = () => {
     console.log("Zoom level changed to", map.getZoom());
@@ -107,7 +119,7 @@ const ContentMap = () => {
     // const maxLng = bounds.getNorthEast().lng();
   };
 
-  const handleClickOpenPopUp = (place) => {
+  const handleClickOpenPopUp = (place) => () => {
     const parentElementDevice = document.getElementById(place.id).parentElement
       .parentElement.parentElement.parentElement;
 
@@ -135,7 +147,7 @@ const ContentMap = () => {
     if (!map && !mapApi && !mapApiLoaded) return;
 
     if (places.length > 0) {
-      console.log("render", places);
+      let listMarkers = {};
 
       places.forEach((place) => {
         const marker = new mapApi.Marker({
@@ -146,6 +158,7 @@ const ContentMap = () => {
               ? "../../../../asset/camera-online.png"
               : "../../../../asset/camera-offline.png"),
           },
+          id: `${place.id}_icon`,
         });
 
         marker.setMap(map);
@@ -156,20 +169,30 @@ const ContentMap = () => {
 
         infoWindowDetail.open(map, marker);
 
-        setListMarker((prev) => ({ ...prev, [place.id]: marker }));
+        listMarkers = { ...listMarkers, [place.id]: marker };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        listMa = { ...listMa, [place.id]: marker };
+        setInfoWindows((prev) => ({ ...prev, [place.id]: infoWindowDetail }));
 
-        mapApi.event.addListener(marker, "click", () =>
-          handleClickOpenPopUp(place)
-        );
+        mapApi.event.addListener(marker, "click", handleClickOpenPopUp(place));
+      });
 
-        return () => {
-          mapApi.event.clearInstanceListeners(() =>
+      setListMarker(listMarkers);
+
+      return () => {
+        places.forEach((place) => {
+          mapApi.event.clearInstanceListeners(
+            listMarkers[place.id],
+            "click",
             handleClickOpenPopUp(place)
           );
-          setListMarker([]);
-          setPlaces([]);
-        };
-      });
+
+          listMa = {};
+
+          setListMarker({});
+          setInfoWindows({});
+        });
+      };
     }
   }, [map, mapApi, mapApiLoaded, places]);
 
@@ -269,16 +292,9 @@ const ContentMap = () => {
     )
       return;
 
-    let searchPlace = new mapApi.places.PlacesService(map);
-
     markerList.data.forEach((mrk) => {
-      handleGetLocationDevice(searchPlace, mrk.deviceList);
+      handleGetLocationDevice(mrk.deviceList);
     });
-
-    return () => {
-      mapApi.event.clearInstanceListeners(searchPlace);
-      setPlaces([]);
-    };
   }, [map, mapApi, mapApiLoaded, markerList.data]);
 
   const handleCloseEditModal = useCallback(() => {
@@ -307,13 +323,14 @@ const ContentMap = () => {
       />
       {isOpenEditCamera && markerList.data && (
         <EditCameraMapModal
-          listMarker={listMarker}
           mapParent={map}
           markerList={markerList.data}
           mapApiContent={mapApi}
           places={places}
           place={placeSelected}
           setStatusClick={setStatusClick}
+          infoWindows={infoWindows}
+          setInfoWindows={setInfoWindows}
           handleClose={handleCloseEditModal}
         />
       )}
