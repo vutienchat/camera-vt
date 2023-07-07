@@ -7,7 +7,7 @@ import {
   Typography,
   makeStyles,
 } from "@material-ui/core";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { SearchIcon } from "../../../common/icons/SearchIcon";
 import useDebounce from "../../../hooks/useDebounce";
 import { GoogleMap, InfoWindow, Marker } from "@react-google-maps/api";
@@ -174,38 +174,45 @@ const EditCameraMapModal = ({ place, handleClose }) => {
       <Box style={{ width: "100%", height: 200 }}>
         <GoogleMap
           zoom={defaultProps.zoom}
-          center={defaultProps.center}
+          center={{
+            lat: placeCustom.lat,
+            lng: placeCustom.lng,
+          }}
           mapContainerClassName="map-container-edit"
           clickableIcons={false}
+          options={{
+            streetViewControl: false,
+            rotateControl: false,
+            mapTypeControl: false,
+          }}
         >
           <Marker
             position={{
-              lng: parseFloat(placeCustom.lng),
-              lat: parseFloat(placeCustom.lat),
+              lat: placeCustom.lat,
+              lng: placeCustom.lng,
             }}
             draggable
             onDragEnd={handleDragMarker}
             icon={{
               url: require("../../../asset/carbon_location-company.png"),
             }}
-          />
-          <InfoWindow
-            position={{
-              lng: parseFloat(placeCustom.lng),
-              lat: parseFloat(placeCustom.lat),
-            }}
-            options={{
-              position: "relative",
-              pixelOffset: { width: 0, height: -40 },
-            }}
-            className="infoWindow"
           >
-            <Box padding={1}>
-              <Typography style={{ color: "#fff" }}>
-                {placeCustom.name}
-              </Typography>
-            </Box>
-          </InfoWindow>
+            <InfoWindow
+              position={{
+                lat: placeCustom.lat,
+                lng: placeCustom.lng,
+              }}
+              options={{
+                pixelOffset: { width: 0, height: -40 },
+              }}
+            >
+              <Box padding={1}>
+                <Typography style={{ color: "#fff" }}>
+                  {placeCustom.name}
+                </Typography>
+              </Box>
+            </InfoWindow>
+          </Marker>
         </GoogleMap>
       </Box>
       <Box mt="20px">
@@ -222,21 +229,6 @@ const EditCameraMapModal = ({ place, handleClose }) => {
                 <SearchIcon width={20} height={20} color="#EC1B2E" />
               </InputAdornment>
             ),
-            //   endAdornment:
-            //     textSearch.length > 0 ? (
-            //       <InputAdornment position="end">
-            //         <Box
-            //           component="div"
-            //           display="flex"
-            //           alignContent="center"
-            //           style={{
-            //             cursor: "pointer",
-            //           }}
-            //         >
-            //           <CloseIcon />
-            //         </Box>
-            //       </InputAdornment>
-            //     ) : null,
           }}
           onChange={handleSearch}
         />

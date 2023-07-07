@@ -87,11 +87,17 @@ const MasterMapContent = () => {
   };
 
   return (
-    <Box flex={1} position={"relative"}>
+    <Box flex={1} position={"relative"} className="map-content">
       <GoogleMap
         zoom={defaultProps.zoom}
         center={defaultProps.center}
         mapContainerClassName="map-container"
+        clickableIcons={false}
+        options={{
+          streetViewControl: false,
+          rotateControl: false,
+          mapTypeControl: false,
+        }}
       >
         {places.map((place) => {
           return (

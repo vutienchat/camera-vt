@@ -29,25 +29,16 @@ const MarkerItem = ({ place, handleOpenEditModal }) => {
             : "../../../asset/camera-offline.png"),
         }}
         onClick={handleOnClick}
-      />
-      {listPopUpCameraOpen[place.id] && (
-        <InfoWindow
-          position={{
-            lat: place.lat,
-            lng: place.lng,
-          }}
-          options={{
-            position: "relative",
-            pixelOffset: { width: 0, height: -50 },
-          }}
-          className="infoWindow"
-        >
-          <ContentPopUpCamera
-            place={place}
-            handleOpenEditModal={handleOpenEditModal}
-          />
-        </InfoWindow>
-      )}
+      >
+        {listPopUpCameraOpen[place.id] && (
+          <InfoWindow>
+            <ContentPopUpCamera
+              place={place}
+              handleOpenEditModal={handleOpenEditModal}
+            />
+          </InfoWindow>
+        )}
+      </Marker>
     </Box>
   );
 };

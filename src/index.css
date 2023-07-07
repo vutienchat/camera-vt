@@ -1015,7 +1015,7 @@ a.vtmapgl-ctrl-logo.vtmapgl-compact {
 /*Map Content*/
 .map-content .gm-style-iw.gm-style-iw-c {
   padding: 0;
-  width: 228px;
+  width: fit-content;
   border-radius: 10px;
 }
 
@@ -1024,9 +1024,6 @@ a.vtmapgl-ctrl-logo.vtmapgl-compact {
   border-radius: 10px;
 }
 
-.map-content .gm-style-iw-t {
-  display: none;
-}
 
 .map-content .gm-style-iw-d {
   overflow: unset !important;
