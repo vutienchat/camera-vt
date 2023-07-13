@@ -898,7 +898,7 @@ a.vtmapgl-ctrl-logo.vtmapgl-compact {
   word-break: break-all;
 }
 
-.vtmapgl-popup {
+/* .vtmapgl-popup {
   width: 209px !important;
   border-radius: 10px;
   background-color: transparent !important;
@@ -964,29 +964,29 @@ a.vtmapgl-ctrl-logo.vtmapgl-compact {
   font-style: normal;
   line-height: normal;
   letter-spacing: normal;
-}
+} */
 
 .edit-modal .vtmapgl-popup-tip {
   border-top-color: rgba(221, 61, 75, 1) !important;
 }
 
-.vtmapgl-ctrl {
+/* .vtmapgl-ctrl {
   display: none;
 }
 
 .vtmapgl-ctrl-logo {
   display: none;
-}
+} */
 
 .edit-modal .gm-style-iw.gm-style-iw-c {
-  background-color: rgba(221, 61, 75, 1);
+  background-color: #4e8ff7;
   padding: 0;
   width: 228px;
   border-radius: 10px;
 }
 
 .edit-modal .pop-up-edit {
-  background-color: rgba(221, 61, 75, 1);
+  background-color: #4e8ff7;
   color: #fff;
   padding: 0 5px;
 }
@@ -1009,7 +1009,7 @@ a.vtmapgl-ctrl-logo.vtmapgl-compact {
 }
 
 .edit-modal .gm-style-iw-tc::after {
-  background-color: rgba(221, 61, 75, 1);
+  background-color: #4e8ff7;
 }
 
 /*Map Content*/

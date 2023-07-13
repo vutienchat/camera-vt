@@ -22,7 +22,7 @@ const SearchTab = () => {
   return (
     <TextField
       id="input-with-icon-textfield"
-      placeholder="Search by Group ID, Group Name, Address"
+      placeholder="Search by Group name, Camera name  "
       variant="outlined"
       name="keyword"
       className={classes.input}

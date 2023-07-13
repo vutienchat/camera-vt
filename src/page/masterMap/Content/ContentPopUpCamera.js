@@ -1,16 +1,38 @@
-import React, { useState, memo, useContext } from "react";
-import { Box, Collapse } from "@material-ui/core";
+import React, { useState, memo, useContext, useRef, useEffect } from "react";
+import { Box, Collapse, Typography } from "@material-ui/core";
 import IconNotiVideoOffline from "../Icons/IconNotiVideoOffline";
 import InfoCameraIcon from "../Icons/InfoCameraIcon";
 import CameraVideoIcon from "../Icons/CameraVideoIcon";
 import CloseModalIcon from "../Icons/CloseModalIcon";
 import ZoomVideoIcon from "../Icons/ZoomVideoIcon";
+import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
 import { MasterMapContext } from "../MasterMap";
+import { enterFullScreen, exitFullscreen } from "../../../utils/common";
 
 const RenderVideo = memo(({ place }) => {
   const { setListPopUpCameraOpen } = useContext(MasterMapContext);
+  const videoRef = useRef();
+  const [isFullScreen, setIsFullScreen] = useState(false);
+
+  const handleChangeFullScreen = () => {
+    setIsFullScreen((prev) => !prev);
+  };
+
+  useEffect(() => {
+    document.addEventListener("fullscreenchange", handleChangeFullScreen);
+
+    return () => {
+      document.removeEventListener("fullscreenchange", handleChangeFullScreen);
+    };
+  }, []);
+
+  const handleZoom = () => {
+    enterFullScreen(videoRef.current);
+  };
+
   return (
     <Box
+      ref={videoRef}
       style={{
         width: "100%",
         position: "relative",
@@ -40,7 +62,7 @@ const RenderVideo = memo(({ place }) => {
         >
           <IconNotiVideoOffline /> Offline
         </Box>
-        <Box>05:20:30 16/06/203</Box>
+        <Typography style={{ fontSize: 12 }}>05:20:30 16/06/203</Typography>
       </Box>
       <video
         style={{ width: "100%", height: "100%", objectFit: "fill" }}
@@ -48,29 +70,60 @@ const RenderVideo = memo(({ place }) => {
       >
         <source type="video/mp4" />
       </video>
-      <Box
-        style={{
-          position: "absolute",
-          left: "10px",
-          top: "5px",
-          cursor: "pointer",
-        }}
-        onClick={() => {
-          setListPopUpCameraOpen((prev) => ({ [place.id]: !prev[place.id] }));
-        }}
-      >
-        <CloseModalIcon />
-      </Box>
-      <Box
-        style={{
-          position: "absolute",
-          right: "10px",
-          top: "5px",
-          cursor: "pointer",
-        }}
-      >
-        <ZoomVideoIcon />
-      </Box>
+      {isFullScreen ? (
+        <>
+          <Typography
+            style={{
+              position: "absolute",
+              left: "15px",
+              top: "10px",
+              color: "#fff",
+            }}
+          >
+            {place.camName}
+          </Typography>
+          <Box
+            style={{
+              position: "absolute",
+              right: "15px",
+              top: "10px",
+              cursor: "pointer",
+            }}
+            onClick={() => exitFullscreen()}
+          >
+            <CloseModalIcon color={"#fff"} width={25} height={25} />
+          </Box>
+        </>
+      ) : (
+        <>
+          <Box
+            style={{
+              position: "absolute",
+              left: "10px",
+              top: "5px",
+              cursor: "pointer",
+            }}
+            onClick={() => {
+              setListPopUpCameraOpen((prev) => ({
+                [place.id]: !prev[place.id],
+              }));
+            }}
+          >
+            <CloseModalIcon color="#fff" width={10} height={10} />
+          </Box>
+          <Box
+            style={{
+              position: "absolute",
+              right: "10px",
+              top: "5px",
+              cursor: "pointer",
+            }}
+            onClick={handleZoom}
+          >
+            <ZoomVideoIcon />
+          </Box>
+        </>
+      )}
     </Box>
   );
 });
@@ -84,11 +137,8 @@ const ContentPopUpCamera = ({ place, handleOpenEditModal }) => {
         width: 228,
         height: 158,
         position: "relative",
-        backgroundColor: "transparent",
-        border: `4px solid ${
-          place.status === "ONLINE" ? "#08B44D" : "#DD3D4B"
-        }`,
         borderRadius: "10px",
+        padding: "12px",
       }}
     >
       <Box
@@ -107,7 +157,9 @@ const ContentPopUpCamera = ({ place, handleOpenEditModal }) => {
           style={{
             display: "flex",
             alignContent: "center",
-            padding: 5,
+            paddingTop: 7,
+            paddingBottom: 7,
+            backgroundColor: "#fff",
           }}
         >
           <span
@@ -115,6 +167,11 @@ const ContentPopUpCamera = ({ place, handleOpenEditModal }) => {
               fontWeight: "bold",
               marginRight: "auto",
               fontsize: "16px",
+              lineHeight: "20px",
+              width: "150px",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
             }}
           >
             {place.camName}
@@ -128,7 +185,11 @@ const ContentPopUpCamera = ({ place, handleOpenEditModal }) => {
             }}
             onClick={() => setIsShowInfo((isShow) => !isShow)}
           >
-            {!isShowInfo ? <InfoCameraIcon /> : <CameraVideoIcon />}
+            {!isShowInfo ? (
+              <InfoCameraIcon />
+            ) : (
+              <PlayCircleOutlineIcon fontSize="small" color="inherit" />
+            )}
           </Box>
         </Box>
         <Box
@@ -139,9 +200,6 @@ const ContentPopUpCamera = ({ place, handleOpenEditModal }) => {
         >
           <Box
             style={{
-              borderTop: `3px solid ${
-                place.status === "ONLINE" ? "#08B44D" : "#DD3D4B"
-              }`,
               position: "absolute",
               bottom: 0,
               left: 0,
@@ -149,8 +207,6 @@ const ContentPopUpCamera = ({ place, handleOpenEditModal }) => {
               top: 0,
               flex: 1,
               height: "auto",
-              borderBottomLeftRadius: "7px",
-              borderBottomRightRadius: "7px",
               overflow: "hidden",
             }}
           >
@@ -160,22 +216,25 @@ const ContentPopUpCamera = ({ place, handleOpenEditModal }) => {
             in={isShowInfo}
             style={{
               position: "absolute",
-              borderBottomLeftRadius: "7px",
-              borderBottomRightRadius: "7px",
               bottom: 0,
               left: 0,
               right: 0,
               top: 0,
               background: "white",
-              padding: "10px",
               paddingTop: 0,
             }}
           >
-            <Box style={{ display: "flex", marginBottom: "10px" }}>
+            <Box
+              style={{
+                display: "flex",
+                marginBottom: "10px",
+                alignItems: "center",
+              }}
+            >
               <Box
                 style={{
-                  height: "10px",
-                  width: "10px",
+                  height: "8px",
+                  width: "8px",
                   borderRadius: "50%",
                   backgroundColor:
                     place.status === "ONLINE" ? "#08B44D" : "#DD3D4B",
@@ -190,10 +249,10 @@ const ContentPopUpCamera = ({ place, handleOpenEditModal }) => {
                 {place.status === "ONLINE" ? "Online" : "Offline"}
               </span>
             </Box>
-            <Box style={{ marginBottom: "10px" }}>Unit: {place.unit}</Box>
             <Box style={{ marginBottom: "10px" }}>
-              Device Type: {place.type}
+              Location: {place.lat.toFixed(2)}ºN, {place.lng.toFixed(2)}ºE
             </Box>
+            <Box style={{ marginBottom: "10px" }}>Camera Type:</Box>
             <Box
               style={{
                 border: "2px solid #000",

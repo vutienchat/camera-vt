@@ -1,18 +1,21 @@
+import React, { useContext, useEffect, useState } from "react";
+import { GoogleMap, InfoWindow, Marker } from "@react-google-maps/api";
+import { useMutation } from "@tanstack/react-query";
+
 import {
   Box,
   Button,
   Card,
+  Dialog,
   InputAdornment,
   TextField,
   Typography,
   makeStyles,
 } from "@material-ui/core";
-import React, { useContext, useEffect, useState } from "react";
+
 import { SearchIcon } from "../../../common/icons/SearchIcon";
 import useDebounce from "../../../hooks/useDebounce";
-import { GoogleMap, InfoWindow, Marker } from "@react-google-maps/api";
 import { MasterMapContext } from "../MasterMap";
-import { useMutation } from "@tanstack/react-query";
 import { editMarker } from "../../../utils/api/map";
 
 const VIET_NAM_BOUNDS = {
@@ -31,13 +34,13 @@ const defaultProps = {
   zoom: 10,
 };
 
-const EditCameraMapModal = ({ place, handleClose }) => {
+const EditCameraMapModal = ({ place, handleClose, isOpenEditModal }) => {
   const { setPlaces, markerList } = useContext(MasterMapContext);
 
   const classes = useStylesTableBodyGroup();
 
+  const [isPopupOpen, setIsPopupOpen] = useState(true);
   const [searchValue, setSearchValue] = useState("");
-
   const [placeCustom, setPlaceCustom] = useState({
     name: place.name,
     lng: place.lng,
@@ -47,7 +50,9 @@ const EditCameraMapModal = ({ place, handleClose }) => {
   const keyword = useDebounce(searchValue, 1000);
 
   const handleSearch = (e) => {
-    setSearchValue(e.target.value);
+    if (e.target.value.length < 255) {
+      setSearchValue(e.target.value);
+    }
   };
 
   useEffect(() => {
@@ -58,7 +63,12 @@ const EditCameraMapModal = ({ place, handleClose }) => {
     });
   }, [place]);
 
+  const handleStartDragMarker = () => {
+    setIsPopupOpen(false);
+  };
+
   const handleDragMarker = (event) => {
+    setIsPopupOpen(true);
     const geocoder = new window.google.maps.Geocoder();
 
     geocoder
@@ -156,103 +166,109 @@ const EditCameraMapModal = ({ place, handleClose }) => {
   };
 
   return (
-    <Card
-      style={{
-        position: "absolute",
-        width: "425px",
-        background: "#FFFFFF",
-        zIndex: 100,
-        top: 20,
-        right: 10,
-        padding: "13px",
-        borderRadius: "12px",
-      }}
-      className="edit-modal"
-    >
-      <Typography>Edit Location</Typography>
-      <Typography>{place.name}</Typography>
-      <Box style={{ width: "100%", height: 200 }}>
-        <GoogleMap
-          zoom={defaultProps.zoom}
-          center={{
-            lat: placeCustom.lat,
-            lng: placeCustom.lng,
-          }}
-          mapContainerClassName="map-container-edit"
-          clickableIcons={false}
-          options={{
-            streetViewControl: false,
-            rotateControl: false,
-            mapTypeControl: false,
-          }}
+    <Dialog open={isOpenEditModal} onClose={handleClose}>
+      <Card
+        style={{
+          width: "425px",
+          background: "#FFFFFF",
+          padding: "13px",
+          borderRadius: "12px",
+        }}
+        className="edit-modal"
+      >
+        <Typography
+          style={{ textAlign: "center", fontWeight: 600, fontSize: "21px" }}
         >
-          <Marker
-            position={{
+          Edit Location
+        </Typography>
+        <Typography style={{ fontWeight: 600 }}>{place.camName}</Typography>
+        <Box style={{ width: "100%", height: 200 }}>
+          <GoogleMap
+            zoom={defaultProps.zoom}
+            center={{
               lat: placeCustom.lat,
               lng: placeCustom.lng,
             }}
-            draggable
-            onDragEnd={handleDragMarker}
-            icon={{
-              url: require("../../../asset/carbon_location-company.png"),
+            mapContainerClassName="map-container-edit"
+            clickableIcons={false}
+            options={{
+              streetViewControl: false,
+              rotateControl: false,
+              mapTypeControl: false,
+              zoomControl: false,
+              fullscreenControl: false,
             }}
           >
-            <InfoWindow
+            <Marker
               position={{
                 lat: placeCustom.lat,
                 lng: placeCustom.lng,
               }}
-              options={{
-                pixelOffset: { width: 0, height: -40 },
+              draggable
+              onDragStart={handleStartDragMarker}
+              onDragEnd={handleDragMarker}
+              icon={{
+                url: require("../../../asset/carbon_location-company.png"),
               }}
             >
-              <Box padding={1}>
-                <Typography style={{ color: "#fff" }}>
-                  {placeCustom.name}
-                </Typography>
-              </Box>
-            </InfoWindow>
-          </Marker>
-        </GoogleMap>
-      </Box>
-      <Box mt="20px">
-        <TextField
-          id="input-with-icon-textfield"
-          placeholder="Search by Group ID, Group Name, Address"
-          variant="outlined"
-          name="keyword"
-          size="small"
-          fullWidth
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon width={20} height={20} color="#EC1B2E" />
-              </InputAdornment>
-            ),
-          }}
-          onChange={handleSearch}
-        />
-      </Box>
-      <Box className={classes.actionButton}>
-        <Button
-          style={{ background: "#dd3d4b", color: "#fff" }}
-          onClick={handleEditMarker}
-          disabled={placeCustom.name === place.name}
-        >
-          <Typography>Confirm</Typography>
-        </Button>
-        <Button
-          onClick={handleClose}
-          style={{
-            background: "#fff",
-            color: "#000",
-            border: "1.5px solid #000",
-          }}
-        >
-          <Typography>Cancel</Typography>
-        </Button>
-      </Box>
-    </Card>
+              <InfoWindow
+                position={{
+                  lat: placeCustom.lat,
+                  lng: placeCustom.lng,
+                }}
+                options={{
+                  pixelOffset: { width: 0, height: -40 },
+                }}
+              >
+                <Box padding={1}>
+                  <Typography style={{ color: "#fff" }}>
+                    {placeCustom.name}
+                  </Typography>
+                </Box>
+              </InfoWindow>
+            </Marker>
+          </GoogleMap>
+        </Box>
+        <Box mt="20px">
+          <TextField
+            id="input-with-icon-textfield"
+            placeholder="Search"
+            variant="outlined"
+            name="keyword"
+            size="small"
+            fullWidth
+            autoFocus
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon width={20} height={20} color="#EC1B2E" />
+                </InputAdornment>
+              ),
+            }}
+            onChange={handleSearch}
+          />
+        </Box>
+        <Box className={classes.actionButton}>
+          <Button
+            onClick={handleClose}
+            style={{
+              background: "#fff",
+              color: "#000",
+              border: "1.5px solid #000",
+            }}
+          >
+            <Typography>Cancel</Typography>
+          </Button>
+          <Button
+            style={{ background: "#dd3d4b", color: "#fff" }}
+            onClick={handleEditMarker}
+            disabled={placeCustom.name === place.name}
+          >
+            <Typography>Confirm</Typography>
+          </Button>
+        </Box>
+      </Card>
+    </Dialog>
   );
 };
 

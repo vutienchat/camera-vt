@@ -11,7 +11,7 @@ const MasterMap = () => {
   const markerList = useListMarkersData();
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: "AIzaSyBR-uY9uzbU_4XVTNhIPB0R2c7xZKKO_wg",
+    googleMapsApiKey: "AIzaSyBx-jW3bHBkViPbZs0tYyYL-cxZf-H93Z4",
   });
 
   const [listPopUpCameraOpen, setListPopUpCameraOpen] = useState({});

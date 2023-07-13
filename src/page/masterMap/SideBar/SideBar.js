@@ -1,4 +1,4 @@
-import React, { memo, useContext } from "react";
+import React, { memo, useContext, useMemo } from "react";
 import { Box, Typography, makeStyles } from "@material-ui/core";
 import Search from "./search";
 import CameraItem from "./item";
@@ -44,16 +44,97 @@ const TreeHeader = ({ node }) => {
   );
 };
 
+const NumberStatusCamera = ({ title, linearColor }) => {
+  return (
+    <Box
+      style={{
+        display: "flex",
+        gap: "10px",
+        alignItems: "center",
+      }}
+    >
+      <Box
+        style={{
+          width: "10px",
+          height: "10px",
+          borderRadius: "100px",
+          background: linearColor,
+        }}
+      />
+      <Typography>{title}</Typography>
+    </Box>
+  );
+};
+
+const statusCamera = [
+  {
+    key: "total",
+    color: "linear-gradient(rgba(10, 226, 32, 1), rgba(169, 6, 6, 1))",
+  },
+  {
+    key: "online",
+    color: "linear-gradient(rgba(10, 226, 32, 1), rgba(6, 169, 32, 0.97))",
+  },
+  {
+    key: "offline",
+    color: "linear-gradient(rgba(226, 10, 30, 1), rgba(185, 9, 25, 0.97))",
+  },
+];
+
 const SideBar = memo(() => {
   const classes = useStyles();
 
   const { markerList, listPopUpCameraOpen, setListPopUpCameraOpen } =
     useContext(MasterMapContext);
 
+  const numberStatus = useMemo(() => {
+    if (!markerList.data)
+      return {
+        total: 0,
+        online: 0,
+        offline: 0,
+      };
+
+    let numberOnline = 0;
+    let numberOffline = 0;
+
+    markerList.data.forEach((marker) => {
+      marker.deviceList.forEach((device) => {
+        if (device.status === "ONLINE") {
+          numberOnline += 1;
+        } else {
+          numberOffline += 1;
+        }
+      });
+    });
+
+    return {
+      total: numberOnline + numberOffline,
+      online: numberOnline,
+      offline: numberOffline,
+    };
+  }, [markerList]);
+
   return (
-    <Box style={{ width: "320px", height: "900px", padding: "10px" }}>
+    <Box style={{ width: "290px", height: "900px", padding: "10px" }}>
       <Search />
-      <Box style={{ marginTop: "10px" }}>
+      <Box
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignContent: "center",
+          padding: "10px 15px",
+        }}
+      >
+        {statusCamera.map((status) => (
+          <NumberStatusCamera
+            key={status.key}
+            title={numberStatus[status.key]}
+            linearColor={status.color}
+          />
+        ))}
+      </Box>
+      <Box>
         <TreeView
           className={classes.root}
           defaultCollapseIcon={<ExpandMoreIcon />}

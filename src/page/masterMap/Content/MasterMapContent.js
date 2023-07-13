@@ -97,6 +97,8 @@ const MasterMapContent = () => {
           streetViewControl: false,
           rotateControl: false,
           mapTypeControl: false,
+          zoomControl: false,
+          fullscreenControl: false,
         }}
       >
         {places.map((place) => {
@@ -111,6 +113,7 @@ const MasterMapContent = () => {
       </GoogleMap>
       {isOpenEditModal && (
         <EditCameraEdit
+          isOpenEditModal={isOpenEditModal}
           place={placeSelected}
           handleClose={() => setIsOpenEditModal(false)}
         />

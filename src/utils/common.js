@@ -220,8 +220,6 @@ export function exitFullscreen() {
   } else if (document.webkitExitFullscreen) {
     document.webkitExitFullscreen();
   }
-
-  document.getElementById("header_video").style.display = "none";
 }
 
 export const handleInfoIconClick = (e) => {
