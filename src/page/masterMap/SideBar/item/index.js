@@ -1,5 +1,5 @@
 import { Box, Typography } from "@material-ui/core";
-import { CameraIcon } from "../../../../../common/icons/CameraIcon";
+import { CameraIcon } from "../../../../common/icons/CameraIcon";
 
 const CameraItem = ({ camera_detail, selected }) => {
   const handleCheck = () => {};

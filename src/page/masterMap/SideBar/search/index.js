@@ -1,7 +1,7 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Box, InputAdornment, TextField, makeStyles } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
-import { SearchIcon } from "../../../../../common/icons/SearchIcon";
+import { SearchIcon } from "../../../../common/icons/SearchIcon";
 
 const SEARCH_LENGTH = 255;
 
@@ -22,7 +22,7 @@ const SearchTab = () => {
   return (
     <TextField
       id="input-with-icon-textfield"
-      placeholder="Search by Group ID, Group Name, Address"
+      placeholder="Search by Group name, Camera name  "
       variant="outlined"
       name="keyword"
       className={classes.input}

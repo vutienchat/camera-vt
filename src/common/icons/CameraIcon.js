@@ -1,9 +1,9 @@
-export const CameraIcon = ({ color }) => {
+export const CameraIcon = ({ color, width, height }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="23"
+      width={width}
+      height={height}
       viewBox="0 0 24 23"
       fill="none"
     >

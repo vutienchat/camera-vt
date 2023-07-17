@@ -1,3 +1,6 @@
+import React, { useContext, useEffect, useState } from "react";
+import GoogleMapReact from "google-map-react";
+
 import {
   Box,
   Button,
@@ -7,121 +10,235 @@ import {
   Typography,
   makeStyles,
 } from "@material-ui/core";
-import { useSearchMap } from "../../../../hooks/useSearchMap";
+
+import useDebounce from "../../../../hooks/useDebounce";
 import { SearchIcon } from "../../../../common/icons/SearchIcon";
-import { useContext, useEffect, useState } from "react";
-import { MapContext } from "../..";
+import { useMutation } from "@tanstack/react-query";
+import { editMarker } from "../../../../utils/api/map";
+import { getPopUpHtml } from "../../../../utils/common";
+import { listMa } from "../map/ContentMap";
 
-const EditCameraMapModal = () => {
+const bootstrapURLKeys = {
+  key: "AIzaSyBR-uY9uzbU_4XVTNhIPB0R2c7xZKKO_wg",
+  language: "vn",
+  region: "vn",
+  libraries: ["places"],
+};
+
+const VIET_NAM_BOUNDS = {
+  north: 26.625282609530778,
+  south: 7.403234941112085,
+  west: 91.39500174206523,
+  east: 119.49802908581523,
+};
+
+const defaultProps = {
+  restriction: {
+    latLngBounds: VIET_NAM_BOUNDS,
+    strictBounds: false,
+  },
+  zoom: 13,
+};
+
+const EditCameraMapModal = ({
+  place,
+  handleClose,
+  mapParent,
+  markerList,
+  mapApiContent,
+  infoWindows,
+  setInfoWindows,
+}) => {
+  const [placeCustom, setPlaceCustom] = useState({
+    name: place.name,
+    lng: place.lng,
+    lat: place.lat,
+  });
+
+  const [mapContent, setMapContent] = useState(null);
+  const [mapApi, setMapApi] = useState(null);
+  const [marker, setMarker] = useState(null);
+  const [searchValue, setSearchValue] = useState("");
+
+  const keyword = useDebounce(searchValue, 1000);
+
+  const [infoWindowState, setInfoWindowState] = useState();
   const classes = useStylesTableBodyGroup();
-  const {
-    currentMarkers,
-    setCurrentMarkers,
-    markers,
-    setMarkers,
-    idEditModal,
-    setIdEditModal,
-    setIsOpenEditModal,
-  } = useContext(MapContext);
-  const { vtmapgl, map, geocoderService } = useSearchMap();
 
-  const [markersArr, setMarkersArr] = useState([]);
-  const [idNewCamera, setIdNewCamera] = useState(0);
+  const editMarkerApi = useMutation({
+    mutationFn: async (param) => editMarker(param),
+    onSuccess: () => {
+      const newLatLng = new mapApiContent.LatLng(
+        placeCustom.lat,
+        placeCustom.lng
+      );
 
-  function getPopupHtml(item) {
-    return `
-        <div style="background: rgba(221, 61, 75, 1); padding: 10px; border-radius: 10px;">
-            <span style="color: #FFFFFF;">${
-              item.address == null ? "N/A" : item.address
-            }</span>
-        </div>
-    `;
-  }
+      listMa[place.id].setPosition(newLatLng);
+      infoWindows[place.id].close();
 
-  const handleClick = (index) => {
-    setIdNewCamera(index);
+      const infoDetail = new mapApiContent.InfoWindow({
+        content: getPopUpHtml({
+          ...place,
+          name: placeCustom.name,
+        }),
+      });
+
+      infoDetail.open(mapParent, listMa[place.id]);
+
+      listMa[place.id] = marker;
+      setInfoWindows((prev) => ({
+        ...prev,
+        [place.id]: infoDetail,
+      }));
+    },
+    onError: () => {
+      console.log("Error");
+    },
+  });
+
+  const handleDragEnd = () => {
+    const geocoder = new mapApi.Geocoder();
+
+    geocoder
+      .geocode({
+        location: {
+          lng: marker.getPosition().lng(),
+          lat: marker.getPosition().lat(),
+        },
+      })
+      .then(({ results }) => {
+        infoWindowState.setContent(
+          `<div class="pop-up-edit"><p>${results[0].formatted_address}</p></div>`
+        );
+        setPlaceCustom({
+          name: results[0].formatted_address,
+          lng: marker.getPosition().lng(),
+          lat: marker.getPosition().lat(),
+        });
+      });
   };
 
-  const handleEditCameraPlace = () => {
-    const cloneEl = currentMarkers.map((item) => {
-      if (item.id === idEditModal) {
-        return {
-          ...item,
-          location: [
-            markersArr[idNewCamera].location.lng,
-            markersArr[idNewCamera].location.lat,
-          ],
-        };
-      } else {
-        return item;
-      }
+  const apiHasLoaded = (map, maps) => {
+    const marker = new maps.Marker({
+      position: { lat: place.lat, lng: place.lng },
+      map,
+      icon: {
+        url: require("../../../../asset/carbon_location-company.png"),
+      },
+      draggable: true,
     });
 
-    markers.forEach((item) => {
-      if (item.lngLat.id === idEditModal) {
-        item.marker.remove();
-      }
+    const infowindow = new maps.InfoWindow({
+      content: `<div class="pop-up-edit"><p>${place.name}</p></div>`,
     });
 
-    setCurrentMarkers(cloneEl);
-    setIdEditModal(-1);
-    setIsOpenEditModal(false);
+    infowindow.open(map, marker);
+
+    setInfoWindowState(infowindow);
+    setMarker(marker);
+    setMapContent(map);
+    setMapApi(maps);
+
+    marker.addListener("dragend", () => {
+      const geocoder = new maps.Geocoder();
+
+      geocoder
+        .geocode({
+          location: {
+            lng: marker.getPosition().lng(),
+            lat: marker.getPosition().lat(),
+          },
+        })
+        .then(({ results }) => {
+          infowindow.setContent(
+            `<div class="pop-up-edit"><p>${results[0].formatted_address}</p></div>`
+          );
+          setPlaceCustom({
+            name: results[0].formatted_address,
+            lng: marker.getPosition().lng(),
+            lat: marker.getPosition().lat(),
+          });
+        });
+    });
+  };
+
+  useEffect(() => {}, []);
+
+  const handleSearch = (e) => {
+    setSearchValue(e.target.value);
   };
 
   useEffect(() => {
-    if (markersArr.length > 0) {
-      markersArr.forEach((item, index) => {
-        let markerEl = document.querySelector(`.icon-edit-${index}`);
-
-        markerEl.addEventListener("click", () => handleClick(index));
-
-        return () => {
-          markerEl.removeEventListener("click", () => handleClick(index));
-        };
+    if (keyword === "" && marker) {
+      setPlaceCustom({
+        name: place.name,
+        lng: place.lng,
+        lat: place.lat,
+      });
+      marker.setPosition({
+        lng: place.lng,
+        lat: place.lat,
       });
     }
-  }, [vtmapgl, map, markersArr, currentMarkers, markers]);
 
-  const handleChangeKeyword = (e) => {
-    geocoderService.fetchTextToAddress(e.target.value, 0, 10, (result) => {
-      let bounds;
-      let items = result.items;
-      let mar = [];
+    if (mapApi && mapContent && keyword !== "" && marker) {
+      const geocoder = new mapApi.Geocoder();
 
-      if (items && items.length > 0) {
-        bounds = new vtmapgl.LngLatBounds();
+      geocoder.geocode({ address: keyword }, (results, status) => {
+        if (status === "OK") {
+          marker.setPosition({
+            lng: results[0].geometry.location.lng(),
+            lat: results[0].geometry.location.lat(),
+          });
+          setPlaceCustom({
+            name: results[0].formatted_address,
+            lng: results[0].geometry.location.lng(),
+            lat: results[0].geometry.location.lat(),
+          });
+          infoWindowState.setContent(
+            `<div class="pop-up-edit"><p>${results[0].formatted_address}</p></div>`
+          );
+        }
+      });
+    }
+  }, [keyword, mapApi, mapContent, place, marker]);
 
-        items.forEach((item, index) => {
-          const el = document.createElement("div");
+  const handleEditMarker = () => {
+    let placeArr = [];
 
-          el.className = `icon-edit-${index}`;
-          el.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
-            <path d="M20 37.5L9.45502 25.0638C9.30849 24.877 9.16349 24.6891 9.02002 24.5C7.21874 22.1272 6.24565 19.229 6.25001 16.25C6.25001 12.6033 7.69867 9.10591 10.2773 6.52728C12.8559 3.94866 16.3533 2.5 20 2.5C23.6467 2.5 27.1441 3.94866 29.7227 6.52728C32.3014 9.10591 33.75 12.6033 33.75 16.25C33.7544 19.2277 32.7817 22.1246 30.9813 24.4963L30.98 24.5C30.98 24.5 30.605 24.9925 30.5488 25.0588L20 37.5ZM11.015 22.9938C11.0175 22.9938 11.3075 23.3787 11.3738 23.4612L20 33.635L28.6375 23.4475C28.6925 23.3787 28.985 22.9913 28.9863 22.99C30.4577 21.0514 31.2529 18.6838 31.25 16.25C31.25 13.2663 30.0648 10.4048 27.955 8.29505C25.8452 6.18526 22.9837 5 20 5C17.0163 5 14.1548 6.18526 12.0451 8.29505C9.93528 10.4048 8.75001 13.2663 8.75001 16.25C8.74739 18.6853 9.54349 21.0543 11.0163 22.9938H11.015Z" fill="#FF0000"/>
-            <path d="M26.25 22.5H23.75V12.5H16.25V22.5H13.75V12.5C13.7507 11.8372 14.0143 11.2017 14.483 10.733C14.9517 10.2643 15.5872 10.0007 16.25 10H23.75C24.4128 10.0007 25.0483 10.2643 25.517 10.733C25.9857 11.2017 26.2493 11.8372 26.25 12.5V22.5Z" fill="#FF0000"/>
-            <path d="M18.75 20H21.25V22.5H18.75V20ZM18.75 15H21.25V17.5H18.75V15Z" fill="#FF0000"/>
-            </svg>`;
-
-          const coordinate = item.location;
-
-          const marker = new vtmapgl.Marker(el);
-
-          marker.setLngLat([coordinate.lng, coordinate.lat]);
-
-          let popup = new vtmapgl.Popup().setHTML(getPopupHtml(item));
-
-          marker.setPopup(popup);
-          marker.addTo(map);
-
-          mar.push(item);
-
-          setMarkersArr(mar);
-          bounds.extend([coordinate.lng, coordinate.lat]);
+    markerList.map((m) => {
+      if (m.id === "37012e00e59711ed879f024263d4df88") {
+        m.deviceList.map((de) => {
+          if (de.id === place.id) {
+            placeArr = [
+              ...placeArr,
+              {
+                ...de,
+                lat: placeCustom.lat,
+                lng: placeCustom.lng,
+              },
+            ];
+          } else {
+            placeArr = [
+              ...placeArr,
+              {
+                ...de,
+              },
+            ];
+          }
         });
-      } else {
       }
-
-      map.fitBounds(bounds, { padding: 50 });
     });
+
+    const params = {
+      id: "37012e00e59711ed879f024263d4df88",
+      parentId: "f0cd4870e59011ed879f024263d4df88",
+      label: "MeLinh-IN",
+      groupType: 13,
+      deviceList: placeArr,
+    };
+
+    editMarkerApi.mutate(params);
   };
 
   return (
@@ -139,9 +256,21 @@ const EditCameraMapModal = () => {
       className="edit-modal"
     >
       <Typography>Edit Location</Typography>
-      <Typography>Lobby 1_ 380 LLQ</Typography>
-      <Box>
-        <div class="map match-parent" id="child-map"></div>
+      <Typography>{place.name}</Typography>
+      <Box style={{ width: "100%", height: 200 }}>
+        <GoogleMapReact
+          bootstrapURLKeys={bootstrapURLKeys}
+          defaultCenter={{ lat: place.lat, lng: place.lng }}
+          defaultZoom={defaultProps.zoom}
+          center={{ lat: placeCustom.lat, lng: placeCustom.lng }}
+          yesIWantToUseGoogleMapApiInternals
+          options={{
+            zoomControl: false,
+            fullscreenControl: false,
+          }}
+          draggable
+          onGoogleApiLoaded={({ map, maps }) => apiHasLoaded(map, maps)}
+        />
       </Box>
       <Box mt="20px">
         <TextField
@@ -150,7 +279,6 @@ const EditCameraMapModal = () => {
           variant="outlined"
           name="keyword"
           size="small"
-          onChange={handleChangeKeyword}
           fullWidth
           InputProps={{
             startAdornment: (
@@ -174,20 +302,19 @@ const EditCameraMapModal = () => {
             //       </InputAdornment>
             //     ) : null,
           }}
+          onChange={handleSearch}
         />
       </Box>
       <Box className={classes.actionButton}>
         <Button
-          onClick={handleEditCameraPlace}
           style={{ background: "#dd3d4b", color: "#fff" }}
+          onClick={handleEditMarker}
+          disabled={placeCustom.name === place.name || editMarkerApi.isLoading}
         >
           <Typography>Confirm</Typography>
         </Button>
         <Button
-          onClick={() => {
-            setIdEditModal(-1);
-            setIsOpenEditModal(false);
-          }}
+          onClick={handleClose}
           style={{
             background: "#fff",
             color: "#000",
@@ -224,4 +351,4 @@ const useStylesTableBodyGroup = makeStyles({
   },
 });
 
-export default EditCameraMapModal;
+export default React.memo(EditCameraMapModal);

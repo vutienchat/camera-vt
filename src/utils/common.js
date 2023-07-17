@@ -88,73 +88,8 @@ export const fileList = [
   },
 ];
 
-export const getIconCamera = (status) => {
-  if (status === "online") {
-    return `<div style="background: white;padding: 5px 5px 0px 5px"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="23" viewBox="0 0 24 23" fill="none">
-    <path d="M9 14C9 13.2044 9.31607 12.4413 9.87868 11.8787C10.4413 11.3161 11.2044 11 12 11C12.7956 11 13.5587 11.3161 14.1213 11.8787C14.6839 12.4413 15 13.2044 15 14C15 14.7956 14.6839 15.5587 14.1213 16.1213C13.5587 16.6839 12.7956 17 12 17C11.2044 17 10.4413 16.6839 9.87868 16.1213C9.31607 15.5587 9 14.7956 9 14ZM12 8C10.4087 8 8.88258 8.63214 7.75736 9.75736C6.63214 10.8826 6 12.4087 6 14C6 15.5913 6.63214 17.1174 7.75736 18.2426C8.88258 19.3679 10.4087 20 12 20C13.5913 20 15.1174 19.3679 16.2426 18.2426C17.3679 17.1174 18 15.5913 18 14C18 12.4087 17.3679 10.8826 16.2426 9.75736C15.1174 8.63214 13.5913 8 12 8ZM7.5 14C7.5 12.8065 7.97411 11.6619 8.81802 10.818C9.66193 9.9741 10.8065 9.5 12 9.5C13.1935 9.5 14.3381 9.9741 15.182 10.818C16.0259 11.6619 16.5 12.8065 16.5 14C16.5 15.1935 16.0259 16.3381 15.182 17.182C14.3381 18.0259 13.1935 18.5 12 18.5C10.8065 18.5 9.66193 18.0259 8.81802 17.182C7.97411 16.3381 7.5 15.1935 7.5 14ZM3.09355e-07 2.75C3.09355e-07 2.15326 0.237053 1.58097 0.65901 1.15901C1.08097 0.737053 1.65326 0.5 2.25 0.5H21.75C22.3467 0.5 22.919 0.737053 23.341 1.15901C23.7629 1.58097 24 2.15326 24 2.75V4.25C24.0002 4.71549 23.8561 5.1696 23.5875 5.54974C23.3188 5.92988 22.9389 6.21734 22.5 6.3725V12.5C22.5 13.8789 22.2284 15.2443 21.7007 16.5182C21.1731 17.7921 20.3996 18.9496 19.4246 19.9246C18.4496 20.8996 17.2921 21.6731 16.0182 22.2007C14.7443 22.7284 13.3789 23 12 23C10.6211 23 9.25574 22.7284 7.98182 22.2007C6.70791 21.6731 5.55039 20.8996 4.57538 19.9246C3.60036 18.9496 2.82694 17.7921 2.29927 16.5182C1.77159 15.2443 1.5 13.8789 1.5 12.5V6.3725C1.06113 6.21734 0.681193 5.92988 0.412542 5.54974C0.143892 5.1696 -0.00024372 4.71549 3.09355e-07 4.25V2.75ZM3 6.5V12.5C3 14.8869 3.94821 17.1761 5.63604 18.864C7.32387 20.5518 9.61305 21.5 12 21.5C14.3869 21.5 16.6761 20.5518 18.364 18.864C20.0518 17.1761 21 14.8869 21 12.5V6.5H3ZM2.25 2C2.05109 2 1.86032 2.07902 1.71967 2.21967C1.57902 2.36032 1.5 2.55109 1.5 2.75V4.25C1.5 4.44891 1.57902 4.63968 1.71967 4.78033C1.86032 4.92098 2.05109 5 2.25 5H21.75C21.9489 5 22.1397 4.92098 22.2803 4.78033C22.421 4.63968 22.5 4.44891 22.5 4.25V2.75C22.5 2.55109 22.421 2.36032 22.2803 2.21967C22.1397 2.07902 21.9489 2 21.75 2H2.25Z" fill="#0BCB23"/>
-    </svg></div>`;
-  } else {
-    return `<div style="background: white;padding: 5px 5px 0px 5px"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="23" viewBox="0 0 24 23" fill="none">
-    <path d="M9 14C9 13.2044 9.31607 12.4413 9.87868 11.8787C10.4413 11.3161 11.2044 11 12 11C12.7956 11 13.5587 11.3161 14.1213 11.8787C14.6839 12.4413 15 13.2044 15 14C15 14.7956 14.6839 15.5587 14.1213 16.1213C13.5587 16.6839 12.7956 17 12 17C11.2044 17 10.4413 16.6839 9.87868 16.1213C9.31607 15.5587 9 14.7956 9 14ZM12 8C10.4087 8 8.88258 8.63214 7.75736 9.75736C6.63214 10.8826 6 12.4087 6 14C6 15.5913 6.63214 17.1174 7.75736 18.2426C8.88258 19.3679 10.4087 20 12 20C13.5913 20 15.1174 19.3679 16.2426 18.2426C17.3679 17.1174 18 15.5913 18 14C18 12.4087 17.3679 10.8826 16.2426 9.75736C15.1174 8.63214 13.5913 8 12 8ZM7.5 14C7.5 12.8065 7.97411 11.6619 8.81802 10.818C9.66193 9.9741 10.8065 9.5 12 9.5C13.1935 9.5 14.3381 9.9741 15.182 10.818C16.0259 11.6619 16.5 12.8065 16.5 14C16.5 15.1935 16.0259 16.3381 15.182 17.182C14.3381 18.0259 13.1935 18.5 12 18.5C10.8065 18.5 9.66193 18.0259 8.81802 17.182C7.97411 16.3381 7.5 15.1935 7.5 14ZM3.09355e-07 2.75C3.09355e-07 2.15326 0.237053 1.58097 0.65901 1.15901C1.08097 0.737053 1.65326 0.5 2.25 0.5H21.75C22.3467 0.5 22.919 0.737053 23.341 1.15901C23.7629 1.58097 24 2.15326 24 2.75V4.25C24.0002 4.71549 23.8561 5.1696 23.5875 5.54974C23.3188 5.92988 22.9389 6.21734 22.5 6.3725V12.5C22.5 13.8789 22.2284 15.2443 21.7007 16.5182C21.1731 17.7921 20.3996 18.9496 19.4246 19.9246C18.4496 20.8996 17.2921 21.6731 16.0182 22.2007C14.7443 22.7284 13.3789 23 12 23C10.6211 23 9.25574 22.7284 7.98182 22.2007C6.70791 21.6731 5.55039 20.8996 4.57538 19.9246C3.60036 18.9496 2.82694 17.7921 2.29927 16.5182C1.77159 15.2443 1.5 13.8789 1.5 12.5V6.3725C1.06113 6.21734 0.681193 5.92988 0.412542 5.54974C0.143892 5.1696 -0.00024372 4.71549 3.09355e-07 4.25V2.75ZM3 6.5V12.5C3 14.8869 3.94821 17.1761 5.63604 18.864C7.32387 20.5518 9.61305 21.5 12 21.5C14.3869 21.5 16.6761 20.5518 18.364 18.864C20.0518 17.1761 21 14.8869 21 12.5V6.5H3ZM2.25 2C2.05109 2 1.86032 2.07902 1.71967 2.21967C1.57902 2.36032 1.5 2.55109 1.5 2.75V4.25C1.5 4.44891 1.57902 4.63968 1.71967 4.78033C1.86032 4.92098 2.05109 5 2.25 5H21.75C21.9489 5 22.1397 4.92098 22.2803 4.78033C22.421 4.63968 22.5 4.44891 22.5 4.25V2.75C22.5 2.55109 22.421 2.36032 22.2803 2.21967C22.1397 2.07902 21.9489 2 21.75 2H2.25Z" fill="#FF0000"/>
-    </svg></div>`;
-  }
-};
-
-export const fakeData = [
-  {
-    id: 1,
-    status: true,
-    address: "60 Hoàng Quốc Việt, Hà Nội",
-    video: "/static/media/video1.74efbde570da071de4a9.mp4",
-    location: [106.69672, 10.682201],
-    title: "Lobby 1_ 380 LLQ",
-    unit: "VMS",
-    type: "ONVIF",
-  },
-  {
-    id: 2,
-    status: false,
-    address: "380 Đường Lạc Long Quân, Xuân La, Tây Hồ, Hà Nội",
-    video: "/static/media/video1.74efbde570da071de4a9.mp4",
-    location: [108.91744, 13.38962],
-    title: "Lobby 2_ 890 LLQ",
-    unit: "VMS",
-    type: "ONVIF",
-  },
-  // {
-  //   id: 3,
-  //   status: true,
-  //   address: "141 Cầu Giấy, Hà Nội",
-  //   video: "/static/media/video1.74efbde570da071de4a9.mp4",
-  //   location: [108.2022, 16.0544],
-  //   title: "Lobby 5_ 980 LLQ",
-  //   unit: "VMS",
-  //   type: "ONVIF",
-  // },
-  // {
-  //   id: 4,
-  //   status: true,
-  //   address: "141 Linh Đàm, Hà Nội",
-  //   video: "/static/media/video1.74efbde570da071de4a9.mp4",
-  //   location: [106.586783, 17.07779],
-  //   title: "Lobby 8_ 380 LLQ",
-  //   unit: "VMS",
-  //   type: "ONVIF",
-  // },
-  // {
-  //   id: 5,
-  //   status: true,
-  //   address: "144 Phạm Văn Đồng, Hà Nội",
-  //   video: "/static/media/video1.74efbde570da071de4a9.mp4",
-  //   location: [105.619341, 18.25022],
-  //   title: "Lobby 0_ 380 LLQ",
-  //   unit: "VMS",
-  //   type: "ONVIF",
-  // },
-];
-
 export const getStatusModal = (status) => {
-  if (status) {
+  if (!status) {
     return `
       <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
         <path fill-rule="evenodd" clip-rule="evenodd" d="M9.71005 0.288192C11.6991 0.487104 13.5545 1.3807 14.9501 2.81194C16.4704 4.35644 17.3693 6.4064 17.4754 8.57107C17.5814 10.7357 16.8872 12.8637 15.5251 14.5494C14.2722 16.1067 12.5141 17.1766 10.5554 17.5739C8.59658 17.9711 6.56055 17.6706 4.80005 16.7244C3.03577 15.7578 1.65846 14.2127 0.90005 12.3494C0.138246 10.4766 0.0368481 8.40013 0.61255 6.46194C1.18702 4.53131 2.40999 2.85799 4.07505 1.72444C5.72611 0.598081 7.72128 0.0895525 9.71005 0.288192ZM10.3 16.3494C11.9786 16.009 13.4859 15.094 14.5625 13.7619C15.7283 12.3131 16.3214 10.4866 16.2292 8.62932C16.1371 6.77201 15.366 5.01322 14.0625 3.68694C12.8686 2.46821 11.2844 1.70784 9.58669 1.53876C7.889 1.36968 6.18589 1.80263 4.77505 2.76194C3.71309 3.49369 2.85555 4.48444 2.28364 5.64035C1.71174 6.79626 1.44442 8.07904 1.50701 9.36717C1.5696 10.6553 1.96003 11.9061 2.64131 13.0011C3.32259 14.0962 4.27215 14.9991 5.40005 15.6244C6.89796 16.4329 8.63222 16.6895 10.3 16.3494ZM8.2188 6.49944H9.7813V5.24944H8.2188V6.49944ZM9.7813 7.74944V12.7494H8.2188V7.74944H9.7813Z" fill="black"/>
@@ -171,81 +106,193 @@ export const getStatusModal = (status) => {
   }
 };
 
-export const getPopupContent = (lngLat, status) => {
-  const color = lngLat.status === "online" ? "#0BCB23" : "#FF0000";
+export const getPopUpHtml = (place) => {
+  const bgColor =
+    place.status === "ONLINE" ? "rgba(8, 171, 73, 1)" : "rgba(205, 56, 69, 1)";
+  const textStatus = place.status === "ONLINE" ? "Online" : "Offline";
 
-  if (!status) {
-    return `
-        <div style="display: flex; align-items: center; gap: 10px; padding: 5px 0px 10px">
-          <div style="width: 10px; height: 10px; border-radius: 100px; background: ${color}"></div>
-            <span style="color: ${color}">${lngLat.status}</span>
+  const popupHtml = `
+    <div class="pop-up" id=${place.id} style="border: 5px solid ${bgColor}; padding: 0 5px; border-radius: 10px;">
+      <div class="pop-up-header">
+        <div style="width: 150px">
+          <p style="word-break: break-word;">${place.name}</p>
+        </div>  
+        <div class="pop-up-header_btn">
+          <div id="${place.id}_info_icon" class="info_icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M9.71005 0.288192C11.6991 0.487104 13.5545 1.3807 14.9501 2.81194C16.4704 4.35644 17.3693 6.4064 17.4754 8.57107C17.5814 10.7357 16.8872 12.8637 15.5251 14.5494C14.2722 16.1067 12.5141 17.1766 10.5554 17.5739C8.59658 17.9711 6.56055 17.6706 4.80005 16.7244C3.03577 15.7578 1.65846 14.2127 0.90005 12.3494C0.138246 10.4766 0.0368481 8.40013 0.61255 6.46194C1.18702 4.53131 2.40999 2.85799 4.07505 1.72444C5.72611 0.598081 7.72128 0.0895525 9.71005 0.288192ZM10.3 16.3494C11.9786 16.009 13.4859 15.094 14.5625 13.7619C15.7283 12.3131 16.3214 10.4866 16.2292 8.62932C16.1371 6.77201 15.366 5.01322 14.0625 3.68694C12.8686 2.46821 11.2844 1.70784 9.58669 1.53876C7.889 1.36968 6.18589 1.80263 4.77505 2.76194C3.71309 3.49369 2.85555 4.48444 2.28364 5.64035C1.71174 6.79626 1.44442 8.07904 1.50701 9.36717C1.5696 10.6553 1.96003 11.9061 2.64131 13.0011C3.32259 14.0962 4.27215 14.9991 5.40005 15.6244C6.89796 16.4329 8.63222 16.6895 10.3 16.3494ZM8.2188 6.49944H9.7813V5.24944H8.2188V6.49944ZM9.7813 7.74944V12.7494H8.2188V7.74944H9.7813Z" fill="black"/>
+            </svg>
+          </div>
+          <div id="${place.id}_camera_icon" class="camera_icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="18" viewBox="0 0 14 18" fill="none">
+              <path d="M7.00033 12.7487C10.222 12.7487 12.8337 10.137 12.8337 6.91536C12.8337 3.6937 10.222 1.08203 7.00033 1.08203C3.77866 1.08203 1.16699 3.6937 1.16699 6.91536C1.16699 10.137 3.77866 12.7487 7.00033 12.7487Z" stroke="black" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M7 9.41406C8.38071 9.41406 9.5 8.29477 9.5 6.91406C9.5 5.53335 8.38071 4.41406 7 4.41406C5.61929 4.41406 4.5 5.53335 4.5 6.91406C4.5 8.29477 5.61929 9.41406 7 9.41406Z" stroke="black" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M4.08398 11.9141L1.58398 16.9141H12.4173L9.91732 11.9141" stroke="black" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
         </div>
-        <div class="popup-info">
-            <span>Unit: ${lngLat.unit}</span>
-            <span>Device Type: ${lngLat.device}</span>
-        </div>
-        <button style="width: 100%; background: transparent; margin-top: 10px">
-            Edit Location
-        </button>
-    `;
-  } else {
-    return `
-          <video style="width: 100%" autoplay>
-            <source src=${lngLat.video} type="video/mp4">
-          </video>
-        `;
-  }
-};
-
-export const getCurrentMarkerPopup = (lngLat, infoModal, vtmapgl) => {
-  const el = document.createElement("div");
-
-  const color = lngLat.status === "online" ? "#0BCB23" : "#FF0000";
-  const statusModal = infoModal.includes(lngLat.id);
-
-  const html = `
-    <div class="popup-title">
-      <span class="title">${lngLat.title}</span>
-      <div class="status-modal-${lngLat.id}">
-          ${getStatusModal(statusModal)}
       </div>
-    </div>
-    <div>
-    <div class="popup-content-${lngLat.id}">
-    ${
-      !statusModal
-        ? `
-            <div style="display: flex; align-items: center; gap: 10px; padding: 5px 0px 10px">
-               <div style="width: 10px; height: 10px; border-radius: 100px; background: ${color}"></div>
-                <span style="color: ${color}">${lngLat.status}</span>
+      <div style="padding-bottom: 10px; position: relative">
+        <div id="${place.id}_info_content" class="info_content">
+          <div style="display: flex; align-items: center; gap: 10px">
+            <div style="background-color: ${bgColor}; width: 10px; height: 10px; border-radius: 100px"></div>
+            <span style="color: ${bgColor}">${textStatus}</span>
+          </div>
+          <div class="popup-info">
+            <span>Unit: </span>
+            <span>Device Type: </span>
+          </div>
+          <button style="width: 100%;cursor: pointer; background: transparent; margin-top: 10px; border-radius: 5px" id="edit-button-${place.id}">
+            Edit Location
+          </button>
+        </div>
+        <div id="${place.id}_camera_content" class="camera_content" style="width: 100%; height: 100%; position: relative; background-image: linear-gradient(180deg, #292929 25%, #d1d1d1 100%); background-color: #292929;">
+          <div id="${place.id}_camera" style="position: relative; width: 100%; height: 100%;">
+            <div style="position: absolute;width: 100%; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #fff; textAlign: center;">
+              <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 4px; width: 100%">
+                <div>
+                  <svg
+                    width="17"
+                    height="16"
+                    viewBox="0 0 17 16"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M1.40514 1.71543L2.21314 0.907429L4.16514 2.85829L3.35714 3.66686L1.40514 1.71543ZM12.832 13.1383L13.6406 12.3303L15.5914 14.2823L14.7834 15.0903L12.832 13.1383ZM5.64286 0H6.78571V2.28571H5.64286V0ZM0.5 5.14286H2.78571V6.28571H0.5V5.14286ZM14.2143 9.71429H16.5V10.8571H14.2143V9.71429ZM10.2143 13.7143H11.3571V16H10.2143V13.7143ZM8.83143 10.8971L6.71143 13.0229C6.49906 13.2352 6.24695 13.4037 5.96948 13.5186C5.69201 13.6335 5.39462 13.6927 5.09429 13.6927C4.79395 13.6927 4.49656 13.6335 4.21909 13.5186C3.94162 13.4037 3.68951 13.2352 3.47714 13.0229C3.04825 12.594 2.8073 12.0123 2.8073 11.4057C2.8073 10.7992 3.04825 10.2175 3.47714 9.78857L5.60286 7.66286L4.79143 6.85714L2.67143 8.98286C2.3461 9.29951 2.08689 9.67762 1.90885 10.0953C1.73082 10.5129 1.6375 10.9617 1.63431 11.4157C1.63112 11.8697 1.71812 12.3198 1.89027 12.7399C2.06242 13.1599 2.31629 13.5417 2.63714 13.8629C2.95751 14.1806 3.33745 14.432 3.75518 14.6026C4.17291 14.7733 4.62021 14.8598 5.07143 14.8571C5.53049 14.8576 5.98508 14.7669 6.40883 14.5903C6.83258 14.4138 7.21707 14.1548 7.54 13.8286L9.64286 11.7086L8.83143 10.8971ZM8.16286 5.10286L10.2886 2.97714C10.5009 2.76478 10.7531 2.59632 11.0305 2.48139C11.308 2.36645 11.6054 2.3073 11.9057 2.3073C12.206 2.3073 12.5034 2.36645 12.7809 2.48139C13.0584 2.59632 13.3105 2.76478 13.5229 2.97714C13.7352 3.18951 13.9037 3.44162 14.0186 3.71909C14.1335 3.99656 14.1927 4.29395 14.1927 4.59429C14.1927 4.89462 14.1335 5.19201 14.0186 5.46948C13.9037 5.74695 13.7352 5.99906 13.5229 6.21143L11.3971 8.33714L12.2086 9.14286L14.3286 7.01714C14.6539 6.70049 14.9131 6.32238 15.0911 5.90475C15.2692 5.48712 15.3625 5.03829 15.3657 4.58431C15.3689 4.13033 15.2819 3.68023 15.1097 3.26014C14.9376 2.84005 14.6837 2.45834 14.3629 2.13714C14.0425 1.81938 13.6626 1.56798 13.2448 1.39736C12.8271 1.22673 12.3798 1.14025 11.9286 1.14286C11.4695 1.14242 11.0149 1.23311 10.5912 1.40967C10.1674 1.58623 9.78293 1.84516 9.46 2.17143L7.35714 4.29143L8.16286 5.10286Z"
+                      fill="white"
+                    />
+                  </svg>
+                </div>
+                <span>Offline</span>
+              </div>
+              <div style="width: 100%; text-align: center">05:20:30 16/06/203</div>
             </div>
-            <div class="popup-info">
-                <span>Unit: ${lngLat.unit}</span>
-                <span>Device Type: ${lngLat.device}</span>
+            <video autoplay style="width: 100%; height: 100%; objectFit: fill;">
+              <source type="video/mp4">
+            </video>
+            <div id="${place.id}_header_video" class="header_video">
+              <div style="color: #fff">
+                ${place.name}
+              </div>
+              <div id="close_zoom">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M10 1.4285L8.57133 0L5 3.5715L1.4285 0L0 1.4285L3.57133 5L0 8.5715L1.4285 10L5 6.4285L8.57133 10L10 8.5715L6.42833 5L10 1.4285Z" fill="white"/>
+                </svg>
+              </div>
             </div>
-            <button style="width: 100%; background: transparent; margin-top: 10px" class="edit-button-${lngLat.id}">
-                Edit Location
-            </button>
-        `
-        : `
-          <video style="width: 100%" autoplay>
-            <source src=${lngLat.video} type="video/mp4">
-          </video>
-        `
-    }
+          </div>
+          <div id="${place.id}_close_icon" style="position: absolute; top: 5px; left: 8px; z-index: 10; cursor: pointer">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 1.4285L8.57133 0L5 3.5715L1.4285 0L0 1.4285L3.57133 5L0 8.5715L1.4285 10L5 6.4285L8.57133 10L10 8.5715L6.42833 5L10 1.4285Z" fill="white"/>
+            </svg>
+          </div>
+          <div id="${place.id}_zoom_icon" style="position: absolute; top: 5px; right: 8px; z-index: 10; cursor: pointer">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3.11687 5.61688L1.285 7.51125L0 5.99312V10H3.99188L2.47312 8.69938L4.36688 6.86688L3.11687 5.61688ZM6.00812 0L7.52688 1.30062L5.63312 3.13313L6.88312 4.38312L8.715 2.48875L10 4.00688V0H6.00812Z" fill="white"/>
+            </svg>
+          </div>
+        </div>
+      </div>
     </div>
   `;
 
-  const popup = new vtmapgl.Popup().setHTML(`
-          <div style="width: 209px; border-radius: 10px; background-color: #FFFFFF; padding: 10px; border: 4px solid ${color}">
-            ${html}
-          </div>
-        `);
+  return popupHtml;
+};
 
-  el.innerHTML = getIconCamera(lngLat.status);
+export function enterFullScreen(element) {
+  if (element.requestFullscreen) {
+    element.requestFullscreen();
+  } else if (element.mozRequestFullScreen) {
+    element.mozRequestFullScreen(); // Firefox
+  } else if (element.webkitRequestFullscreen) {
+    element.webkitRequestFullscreen(); // Safari
+  } else if (element.msRequestFullscreen) {
+    element.msRequestFullscreen(); // IE/Edge
+  }
+}
 
-  return {
-    el,
-    popup,
-  };
+export function exitFullscreen() {
+  if (document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if (document.mozCancelFullScreen) {
+    document.mozCancelFullScreen();
+  } else if (document.webkitExitFullscreen) {
+    document.webkitExitFullscreen();
+  }
+}
+
+export const handleInfoIconClick = (e) => {
+  let infoIcon;
+
+  if (e.target.parentElement.getAttribute("data-id")) {
+    infoIcon = e.target.parentElement;
+  } else {
+    infoIcon = e.target.parentElement.parentElement;
+  }
+
+  const id = infoIcon.getAttribute("data-id");
+  const infoContent = document.getElementById(`${id}_info_content`);
+
+  infoContent.style.zIndex = 1;
+  infoIcon.style.zIndex = 1;
+};
+
+export const handleCameraIconClick = (e) => {
+  let id;
+
+  if (e.target.parentElement.getAttribute("data-id")) {
+    id = e.target.parentElement.getAttribute("data-id");
+  } else {
+    id = e.target.parentElement.parentElement.getAttribute("data-id");
+  }
+
+  const infoIcon = document.getElementById(`${id}_info_icon`);
+  const infoContent = document.getElementById(`${id}_info_content`);
+
+  infoContent.style.zIndex = 3;
+  infoIcon.style.zIndex = 3;
+};
+
+export const handleCloseModal = (e) => {
+  let id;
+
+  if (e.target.parentElement.getAttribute("data-id")) {
+    id = e.target.parentElement.getAttribute("data-id");
+  } else {
+    id = e.target.parentElement.parentElement.getAttribute("data-id");
+  }
+  const parentElementDevice =
+    document.getElementById(id).parentElement.parentElement.parentElement
+      .parentElement;
+
+  if (
+    parentElementDevice.style.display === "none" ||
+    parentElementDevice.style.display === ""
+  ) {
+    parentElementDevice.style.display = "block";
+  } else {
+    parentElementDevice.style.display = "none";
+  }
+};
+
+export const handleZoomVideo = (e) => {
+  let id;
+
+  if (e.target.parentElement.getAttribute("data-id")) {
+    id = e.target.parentElement.getAttribute("data-id");
+  } else {
+    id = e.target.parentElement.parentElement.getAttribute("data-id");
+  }
+
+  const headerVideo = document.getElementById(`${id}_header_video`);
+  const cameraContent = document.getElementById(`${id}_camera`);
+
+  headerVideo.style.display = "flex";
+
+  enterFullScreen(cameraContent);
+};
+
+export const handleCloseZoom = () => {
+  exitFullscreen();
 };

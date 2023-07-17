@@ -1,7 +1,58 @@
-import React, { useState } from "react";
-import { Box, Collapse } from "@material-ui/core";
+import React, { useState, memo } from "react";
+import { Box, Collapse, Button } from "@material-ui/core";
+import { IconNotiVideoOffline } from ".";
 
-const ContentPopUpCamera = ({ place }) => {
+const RenderVideo = memo(({ place }) => {
+  return (
+    <Box
+      style={{
+        width: "100%",
+        height: "100%",
+        position: "relative",
+        backgroundImage: "linear-gradient(180deg, #292929 25%, #d1d1d1 100%)",
+        backgroundColor: "#292929",
+      }}
+    >
+      <Box
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          color: "#fff",
+          textAlign: "center",
+          fontWeight: 500,
+        }}
+      >
+        <Box
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignTtems: "center",
+            marginBottom: "4px",
+          }}
+        >
+          <IconNotiVideoOffline /> Offline
+        </Box>
+        <Box>05:20:30 16/06/203</Box>
+      </Box>
+      <video
+        style={{ width: "100%", height: "100%", objectFit: "fill" }}
+        autoPlay
+      >
+        <source type="video/mp4" />
+      </video>
+      <Button
+        style={{ position: "absolute", backgroundColor: "red", left: 0 }}
+      ></Button>
+      <Button
+        style={{ position: "absolute", backgroundColor: "red", right: 0 }}
+      ></Button>
+    </Box>
+  );
+});
+
+const ContentPopUpCamera = ({ place, handleOpenEditModal }) => {
   const [isShowInfo, setIsShowInfo] = useState(false);
 
   return (
@@ -60,23 +111,23 @@ const ContentPopUpCamera = ({ place }) => {
               <path
                 d="M10.0003 13.7487C13.222 13.7487 15.8337 11.137 15.8337 7.91536C15.8337 4.6937 13.222 2.08203 10.0003 2.08203C6.77866 2.08203 4.16699 4.6937 4.16699 7.91536C4.16699 11.137 6.77866 13.7487 10.0003 13.7487Z"
                 stroke="black"
-                stroke-width="1.66667"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="1.66667"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
               <path
                 d="M10.0005 10.4141C11.3812 10.4141 12.5005 9.29477 12.5005 7.91406C12.5005 6.53335 11.3812 5.41406 10.0005 5.41406C8.61978 5.41406 7.50049 6.53335 7.50049 7.91406C7.50049 9.29477 8.61978 10.4141 10.0005 10.4141Z"
                 stroke="black"
-                stroke-width="1.66667"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="1.66667"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
               <path
                 d="M7.0835 12.9141L4.5835 17.9141H15.4168L12.9168 12.9141"
                 stroke="black"
-                stroke-width="1.66667"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="1.66667"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
             </svg>
           )}
@@ -95,12 +146,7 @@ const ContentPopUpCamera = ({ place }) => {
           overflow: "hidden",
         }}
       >
-        <video
-          style={{ width: "100%", height: "100%", objectFit: "fill" }}
-          autoPlay
-        >
-          <source src={place.video} type="video/mp4" />
-        </video>
+        <RenderVideo place={place} />
       </Box>
       <Collapse
         in={isShowInfo}
@@ -142,6 +188,7 @@ const ContentPopUpCamera = ({ place }) => {
             textAlign: "center",
             borderRadius: "10px",
           }}
+          onClick={handleOpenEditModal}
         >
           Edit Location
         </Box>

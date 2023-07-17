@@ -141,31 +141,36 @@ const TypeSelectTab = () => {
               overflowY: typesList.length > 4 ? "scroll" : "none",
             }}
           >
-            <MenuItem component="div" className={classes.listItem}>
-              <Typography>All Type</Typography>
-              <Checkbox
-                size="small"
-                onChange={checkedAll}
-                checked={
-                  typesList.length > 0 &&
-                  dataGroupTable.type.length === typesList.length
-                }
-              />
-            </MenuItem>
-            {typesList.map((type) => (
-              <MenuItem
-                key={type.name}
-                component="div"
-                className={classes.listItem}
-              >
-                <Typography>{type.name}</Typography>
+            <label>
+              <MenuItem component="div" className={classes.listItem}>
+                <Typography>All Type</Typography>
                 <Checkbox
                   size="small"
-                  value={type.value}
-                  onClick={handleChangeTypeGroup}
-                  checked={dataGroupTable.type.includes(type.value)}
+                  onChange={checkedAll}
+                  checked={
+                    typesList.length > 0 &&
+                    dataGroupTable.type.length === typesList.length
+                  }
                 />
               </MenuItem>
+            </label>
+            {typesList.map((type) => (
+              <label>
+                <MenuItem
+                  key={type.name}
+                  component="div"
+                  className={classes.listItem}
+                >
+                  <Typography>{type.name}</Typography>
+                  <Checkbox
+                    size="small"
+                    id={type.value}
+                    value={type.value}
+                    onClick={handleChangeTypeGroup}
+                    checked={dataGroupTable.type.includes(type.value)}
+                  />
+                </MenuItem>
+              </label>
             ))}
           </Box>
         </Box>
