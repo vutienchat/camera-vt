@@ -5,7 +5,12 @@ import TableBodyContent from "./TableBodyContent";
 
 export const TableCommonContext = createContext({});
 
-const TableContent = ({ tableHeader, tableData, handleCheckData }) => {
+const TableContent = ({
+  tableHeader,
+  tableData,
+  handleCheckData,
+  isLoading,
+}) => {
   const [checkedList, setCheckedList] = useState([]);
 
   useEffect(() => {
@@ -19,6 +24,7 @@ const TableContent = ({ tableHeader, tableData, handleCheckData }) => {
   }, [checkedList]);
 
   const data = {
+    isLoading,
     checkedList,
     tableHeader,
     tableData,

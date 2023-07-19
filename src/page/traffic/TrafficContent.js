@@ -11,7 +11,11 @@ import { columnsTrafficData } from "../../utils/traffic";
 export const TrafficContext = createContext({});
 
 const TrafficContent = () => {
-  const { data: trafficList } = useTrafficData();
+  const {
+    data: trafficList,
+    isLoading: isTrafficLoading,
+    isFetching: isTrafficFetching,
+  } = useTrafficData();
 
   const [checkedItemList, setCheckedItemList] = useState([]);
   const [paramTrafficSearch, setParamTrafficSearch] = useState({
@@ -44,6 +48,7 @@ const TrafficContent = () => {
         <Box mt={3}>
           <TabStatusTable />
           <TableContent
+            isLoading={isTrafficLoading || isTrafficFetching}
             tableData={trafficList}
             tableHeader={columnsTrafficData}
             handleCheckData={handleCheckData}

@@ -1,5 +1,7 @@
 import {
+  Box,
   Checkbox,
+  CircularProgress,
   TableBody,
   TableCell,
   TableRow,
@@ -10,7 +12,7 @@ import { useContext } from "react";
 import { TableCommonContext } from "./TableContent";
 
 const TableBodyContent = () => {
-  const { tableHeader, tableData, checkedList, setCheckedList } =
+  const { isLoading, tableHeader, tableData, checkedList, setCheckedList } =
     useContext(TableCommonContext);
   const classes = useTableBodyStyle();
 
@@ -24,10 +26,30 @@ const TableBodyContent = () => {
     }
   };
 
-  if (!tableData) {
+  if (isLoading) {
     return (
       <TableRow>
-        <TableCell rowSpan={tableHeader.length + 1}>No Data</TableCell>
+        <TableCell colSpan={tableHeader.length + 1}>
+          <Box
+            style={{ display: "flex", justifyContent: "center", padding: 20 }}
+          >
+            <CircularProgress color="secondary" />
+          </Box>
+        </TableCell>
+      </TableRow>
+    );
+  }
+
+  if (!tableData || tableData.length === 0) {
+    return (
+      <TableRow>
+        <TableCell colSpan={tableHeader.length + 1}>
+          <Typography
+            style={{ textAlign: "center", padding: 20, fontSize: 21 }}
+          >
+            No Data
+          </Typography>
+        </TableCell>
       </TableRow>
     );
   }

@@ -20,7 +20,17 @@ const TableHeaderContent = () => {
     return checkedList.length === tableData.length;
   }, [checkedList, tableData]);
 
+  const isChecked = useMemo(() => {
+    if (!tableData) return false;
+
+    return checkedList.length > 0 && checkedList.length < tableData.length;
+  }, [checkedList, tableData]);
+
   const handleCheckAll = (event) => {
+    if (isChecked) {
+      setCheckedList([]);
+    }
+
     if (event.target.checked) {
       tableData.forEach((item) => {
         if (!checkedList.includes(item)) {
@@ -38,7 +48,11 @@ const TableHeaderContent = () => {
     >
       <TableRow>
         <TableCell className={classes.checkbox}>
-          <Checkbox checked={isCheckedAll} onChange={handleCheckAll} />
+          <Checkbox
+            indeterminate={isChecked}
+            checked={isCheckedAll}
+            onChange={handleCheckAll}
+          />
         </TableCell>
         {tableHeader.map((header) => (
           <TableCell
