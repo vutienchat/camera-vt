@@ -1,0 +1,96 @@
+{
+  "trafficList": [
+    {
+      "id": "37012e00e59711ed879f0",
+      "statusEvent": "VP",
+      "deviceId": "1234",
+      "videoId": "Mã code video Id",
+      "camName": "Tên camera",
+      "lat": 26.32443324,
+      "lng": 106.2135456,
+      "parentId": "Mã code nhóm event ITS",
+      "location": "Ngã Tư An Dương Vương",
+      "groupId": "Mã code Group Id",
+      "typeError": 1,
+      "typeNotError": 0,
+      "imageCrop": "đường dẫn ảnh chụp xe",
+      "imageDetail": "đường dẫn ảnh chụp biển số xe",
+      "imageFull": "đường dẫn ảnh full",
+      "createDate": "19:12:25 27/06/2023",
+      "label1": "dieuhanh_hpg - 14:15:15 28/06/2023",
+      "label2": "pheduyet_hpg - 14:15:15 28/06/2023",
+      "description": {
+        "licencePlate": "99A-999.99",
+        "vehicleType": "moto",
+        "color": "black",
+        "colorPlate": "white",
+        "hướng đi": "Hướng về UBND phường Ngọc Sơn"
+      },
+      "holdGPLX": true,
+      "fineAmount": "1000000",
+      "note": "Chú thích",
+      "vehicleOwner": {
+        "fullName": "Nguyễn Thái Bảo",
+        "birthday": "07/09/1991",
+        "cccd": "030091009100",
+        "address": "1 Trần Nhân Tông",
+        "provinceId": "01",
+        "districtId": "001",
+        "wardId": "0001"
+      },
+      "infoSanction": {
+        "infoNumber": "20230629-0001",
+        "send1": "19:12:25 27/06/2023",
+        "send2": "19:12:25 27/06/2023",
+        "sendGTVT": "19:12:25 27/06/2023",
+        "sendGTVT": "19:12:25 27/06/2023",
+        "infoReturn": "19:12:25 27/06/2023",
+        "appointmentDate": "19:12:25 27/06/2023",
+        "note": ""
+      }
+    }
+  ],
+  "groupList": [
+    {
+      "id": "54006d90e59711ed879f024263d4df88",
+      "parentId": "f0cd4870e59011ed879f024263d4df88",
+      "label": "MeLinh-OUT",
+      "groupType": 15,
+      "deviceList": [
+        {
+          "id": "cd84e581e59511ed879f024263d4df83",
+          "groupId": "54006d90e59711ed879f024263d4df87",
+          "address": "",
+          "groupAncestorIds": null,
+          "camType": 2,
+          "camManufacturer": null,
+          "camModel": null,
+          "camUsername": null,
+          "camPassword": null,
+          "verificationCode": null,
+          "featureType": 6,
+          "streamType": 1,
+          "connectionStatus": null,
+          "createDate": "2023-04-28T07:25:07.932+00:00",
+          "lastModified": "2023-04-28T07:25:07.932+00:00",
+          "camName": "Lobby 2_ HQV",
+          "ipStatus": 0,
+          "ipRawStatus": 0,
+          "rtspAddress": null,
+          "rtspStatus": false,
+          "status": "OFFLINE",
+          "rawStatus": "OFFLINE",
+          "lastConnect": "2023-04-28T07:01:10.844+00:00",
+          "location": "380 Lạc Long Quân",
+          "lat": 26.32443324,
+          "lng": 106.2135456
+        }
+      ],
+      "provinceId": "01",
+      "districtId": "001",
+      "wardId": "0001",
+      "address": null,
+      "auto": true
+    }
+  ]
+}
