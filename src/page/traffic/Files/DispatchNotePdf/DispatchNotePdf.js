@@ -1,7 +1,9 @@
 import React from "react";
 import { Page, Document, StyleSheet, Font } from "@react-pdf/renderer";
-import HeaderNotePdf from "./HeaderNotePdf";
 import DispatchNoteContent from "./DispatchNoteContent";
+import HeaderSprintPdf from "./HeaderSprintPdf";
+import NewSprintContent from "./NewSprintContent";
+import HeaderFilePdf from "../HeaderFilePdf";
 
 Font.register({
   family: "AlegreyaSans",
@@ -27,12 +29,18 @@ const styles = StyleSheet.create({
   },
 });
 
-const DispatchNote = () => {
+const DispatchNote = ({ checkedItemList }) => {
   return (
     <Document>
-      <Page size="A4" style={styles.page}>
-        <HeaderNotePdf />
-        <DispatchNoteContent />
+      <Page size="A4" style={styles.page} wrap>
+        {checkedItemList.map(() => (
+          <>
+            <HeaderFilePdf />
+            <DispatchNoteContent />
+            <HeaderSprintPdf />
+            <NewSprintContent />
+          </>
+        ))}
       </Page>
     </Document>
   );

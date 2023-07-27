@@ -1,3 +1,6 @@
+import React, { useContext, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+
 import {
   Box,
   Button,
@@ -6,21 +9,23 @@ import {
   Typography,
   makeStyles,
 } from "@material-ui/core";
-import React, { useContext, useState } from "react";
-import { SearchIcon } from "../../../common/icons/SearchIcon";
 import CloseIcon from "@material-ui/icons/Close";
-import { ReloadIcon } from "../../../common/icons/ReloadIcon";
-import { useQueryClient } from "@tanstack/react-query";
-import { QUERY_KEYS } from "../../../utils/keys";
+
 import { SettingIcon } from "../Icons";
-import CustomModal from "../../../common/CustomModal";
 import SettingModal from "../Modals/SettingModal";
 import { TrafficContext } from "../TrafficContent";
+import ViolationPendingApproval from "./TabPaneFilter/ViolationPendingApproval";
+import NotificationShowing from "./TabPaneFilter/NotificationShowing";
+
+import { QUERY_KEYS } from "../../../utils/keys";
+import CustomModal from "../../../common/CustomModal";
+import { SearchIcon } from "../../../common/icons/SearchIcon";
+import { ReloadIcon } from "../../../common/icons/ReloadIcon";
 
 const TableFilter = () => {
   const queryClient = useQueryClient();
   const classes = useTableFilterStyle();
-  const { checkedItemList } = useContext(TrafficContext);
+  const { paramTrafficSearch } = useContext(TrafficContext);
 
   const [textSearch, setTextSearch] = useState("");
   const [isOpenSettingModal, setIsOpenSettingModal] = useState(false);
@@ -68,24 +73,9 @@ const TableFilter = () => {
             ) : null,
         }}
       />
-      {checkedItemList.length > 0 && (
-        <React.Fragment>
-          <Button
-            className={classes.btnDropdown}
-            variant="outlined"
-            style={{
-              border: "1px solid rgba(24, 106, 59, 1)",
-            }}
-          >
-            <Typography
-              style={{ color: "rgba(24, 106, 59, 1)", fontWeight: 700 }}
-            >
-              Gửi duyệt không lỗi
-            </Typography>
-          </Button>
-        </React.Fragment>
-      )}
-      <Button className={classes.btnDropdown}>
+      {paramTrafficSearch.tabPane === "01" && <ViolationPendingApproval />}
+      {paramTrafficSearch.tabPane === "03" && <NotificationShowing />}
+      <Button className={classes.btnDropdown} style={{ minWidth: 150 }}>
         <Typography>Xuất danh sách</Typography>
       </Button>
       <Box className={classes.icon} onClick={handleReloadDataTable}>
@@ -130,8 +120,8 @@ const useTableFilterStyle = makeStyles({
     alignContent: "center",
   },
   icon: {
-    width: "40px",
-    height: "40px",
+    minWidth: "40px",
+    height: "38px",
     display: "flex",
     border: "1px solid #939393",
     justifyContent: "center",
@@ -140,7 +130,6 @@ const useTableFilterStyle = makeStyles({
     cursor: "pointer",
   },
   btnDropdown: {
-    width: "auto",
     background: "#fff",
     border: "1px solid #939393",
     height: "40px",
@@ -156,8 +145,6 @@ const useTableFilterStyle = makeStyles({
       letterSpacing: "normal",
       textAlign: "center",
       color: "#939393",
-      width: "100%",
-      padding: "0px 15px",
     },
   },
 });

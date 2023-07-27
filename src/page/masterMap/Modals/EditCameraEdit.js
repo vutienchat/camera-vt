@@ -17,6 +17,8 @@ import { SearchIcon } from "../../../common/icons/SearchIcon";
 import useDebounce from "../../../hooks/useDebounce";
 import { MasterMapContext } from "../MasterMap";
 import { editMarker } from "../../../utils/api/map";
+import { useRef } from "react";
+import { useScreenshot } from "use-react-screenshot";
 
 const VIET_NAM_BOUNDS = {
   north: 26.625282609530778,
@@ -39,6 +41,11 @@ const EditCameraMapModal = ({ place, handleClose, isOpenEditModal }) => {
 
   const classes = useStylesTableBodyGroup();
 
+  const mapRef = useRef();
+
+  const [image, takeScreenshot] = useScreenshot();
+  const getImage = () => takeScreenshot(mapRef.current);
+
   const [isPopupOpen, setIsPopupOpen] = useState(true);
   const [searchValue, setSearchValue] = useState("");
   const [placeCustom, setPlaceCustom] = useState({
@@ -47,6 +54,7 @@ const EditCameraMapModal = ({ place, handleClose, isOpenEditModal }) => {
     lat: place.lat,
   });
 
+  console.log(image);
   const keyword = useDebounce(searchValue, 1000);
 
   const handleSearch = (e) => {
@@ -70,6 +78,7 @@ const EditCameraMapModal = ({ place, handleClose, isOpenEditModal }) => {
   const handleDragMarker = (event) => {
     setIsPopupOpen(true);
     const geocoder = new window.google.maps.Geocoder();
+    getImage();
 
     geocoder
       .geocode({
@@ -182,7 +191,8 @@ const EditCameraMapModal = ({ place, handleClose, isOpenEditModal }) => {
           Edit Location
         </Typography>
         <Typography style={{ fontWeight: 600 }}>{place.camName}</Typography>
-        <Box style={{ width: "100%", height: 200 }}>
+
+        <div ref={mapRef} style={{ width: "100%", height: 200 }}>
           <GoogleMap
             zoom={defaultProps.zoom}
             center={{
@@ -228,7 +238,7 @@ const EditCameraMapModal = ({ place, handleClose, isOpenEditModal }) => {
               </InfoWindow>
             </Marker>
           </GoogleMap>
-        </Box>
+        </div>
         <Box mt="20px">
           <TextField
             id="input-with-icon-textfield"

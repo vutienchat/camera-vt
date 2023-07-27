@@ -2,7 +2,6 @@ import React, { useState, memo, useContext, useRef, useEffect } from "react";
 import { Box, Collapse, Typography } from "@material-ui/core";
 import IconNotiVideoOffline from "../Icons/IconNotiVideoOffline";
 import InfoCameraIcon from "../Icons/InfoCameraIcon";
-import CameraVideoIcon from "../Icons/CameraVideoIcon";
 import CloseModalIcon from "../Icons/CloseModalIcon";
 import ZoomVideoIcon from "../Icons/ZoomVideoIcon";
 import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";

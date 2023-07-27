@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const HeaderNotePdf = () => {
+const HeaderFilePdf = () => {
   return (
     <View style={styles.root}>
       <View style={styles.rowSpan}>
@@ -57,4 +57,4 @@ const HeaderNotePdf = () => {
   );
 };
 
-export default HeaderNotePdf;
+export default HeaderFilePdf;

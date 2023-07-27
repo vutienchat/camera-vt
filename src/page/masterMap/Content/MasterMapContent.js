@@ -3,7 +3,8 @@ import { GoogleMap } from "@react-google-maps/api";
 
 import { MasterMapContext } from "../MasterMap";
 import MarkerItem from "./MarkerItem";
-import { Box } from "@material-ui/core";
+import { Box, Typography } from "@material-ui/core";
+import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import EditCameraEdit from "../Modals/EditCameraEdit";
 
 const latDefault = 21.0677385;
@@ -26,7 +27,8 @@ const defaultProps = {
 };
 
 const MasterMapContent = () => {
-  const { markerList, places, setPlaces } = useContext(MasterMapContext);
+  const { markerList, places, setPlaces, loadError } =
+    useContext(MasterMapContext);
 
   const [placeSelected, setPlaceSelected] = useState();
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
@@ -86,8 +88,29 @@ const MasterMapContent = () => {
     setIsOpenEditModal(true);
   };
 
+  const handleOnLoadMaps = (map) => {
+    console.log(map);
+  };
+
   return (
-    <Box flex={1} position={"relative"} className="map-content">
+    <Box flex={1} position="relative" className="map-content">
+      {/* {!loadError ? (
+        <Box
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+            backgroundColor: "#808080",
+            color: "#FFFFFF",
+            flexDirection: "column",
+            gap: "10px",
+          }}
+        >
+          <ErrorOutlineIcon style={{ color: "#fff" }} fontSize="large" />
+          <Typography style={{ fontSize: 20 }}>Something went wrong</Typography>
+        </Box>
+      ) : ( */}
       <GoogleMap
         zoom={defaultProps.zoom}
         center={defaultProps.center}
@@ -100,6 +123,7 @@ const MasterMapContent = () => {
           zoomControl: false,
           fullscreenControl: false,
         }}
+        onLoad={handleOnLoadMaps}
       >
         {places.map((place) => {
           return (
@@ -111,6 +135,7 @@ const MasterMapContent = () => {
           );
         })}
       </GoogleMap>
+      {/* )} */}
       {isOpenEditModal && (
         <EditCameraEdit
           isOpenEditModal={isOpenEditModal}

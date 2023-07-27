@@ -9,8 +9,15 @@ import {
 import React from "react";
 import CloseModalIcon from "../page/masterMap/Icons/CloseModalIcon";
 
-const ConfirmModal = ({ title, isOpen, children, handleClose }) => {
-  const classes = useConfirmModalStyle();
+const QuestionModal = ({
+  title,
+  isOpen,
+  children,
+  handleConfirm,
+  handleClose,
+  confirmText,
+}) => {
+  const classes = useQuestionModalStyle();
 
   return (
     <Dialog
@@ -26,11 +33,13 @@ const ConfirmModal = ({ title, isOpen, children, handleClose }) => {
             <CloseModalIcon width={16} height={16} color="#000" />
           </IconButton>
         </Box>
-        {children}
+        <Box style={{ padding: "20px 0px" }}>{children}</Box>
         <Box className={classes.footer}>
-          <Button variant="outlined">Cancel</Button>
-          <Button variant="contained" type="submit" color="primary">
-            Confirm
+          <Button variant="outlined">
+            <Typography>Cancel</Typography>
+          </Button>
+          <Button variant="contained" color="secondary" onClick={handleConfirm}>
+            <Typography>{confirmText}</Typography>
           </Button>
         </Box>
       </Box>
@@ -38,7 +47,7 @@ const ConfirmModal = ({ title, isOpen, children, handleClose }) => {
   );
 };
 
-const useConfirmModalStyle = makeStyles({
+const useQuestionModalStyle = makeStyles({
   root: {
     "& .MuiDialog-paper": {
       overflowY: "unset",
@@ -68,7 +77,10 @@ const useConfirmModalStyle = makeStyles({
     display: "flex",
     justifyContent: "center",
     gap: "32px",
+    "& p": {
+      textTransform: "none",
+    },
   },
 });
 
-export default ConfirmModal;
+export default QuestionModal;

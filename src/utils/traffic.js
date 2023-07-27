@@ -2,16 +2,6 @@ import ViolationInfo from "../page/traffic/component/ItemTable/ViolationInfo";
 
 export const settingArr = [
   {
-    label: "Tỉnh/Thành phố",
-    key: "name",
-    errorMessage: "Name is required",
-    minLength: {
-      message: "Name is more than 2",
-      value: "2",
-    },
-    type: "text",
-  },
-  {
     label: "Người ký",
     key: "signer",
     errorMessage: "Signer is required",
@@ -174,8 +164,8 @@ export const carsColor = [
 
 export const plateCarsColor = [
   {
-    label: "Đen",
-    value: "black",
+    label: "Đỏ",
+    value: "red",
   },
   {
     label: "Xanh",
@@ -315,3 +305,65 @@ export const colorStatusErrEvent = {
     color: "rgba(23, 32, 42, 1)",
   },
 };
+
+export const status = [
+  {
+    label: "Tất cả",
+    value: "all",
+  },
+  {
+    label: "Vi phạm chờ duyệt",
+    value: "01",
+  },
+  {
+    label: "Lỗi đang xử lý",
+    value: "02",
+  },
+  {
+    label: "Ra thông báo VP",
+    value: "03",
+  },
+];
+
+export const listSceneTab = [
+  {
+    label: "Thông tin hiện trường",
+    value: "scence_info",
+  },
+  {
+    label: "Thông tin xử phạt",
+    value: "ban_info",
+  },
+];
+
+export const noErrorReasonList = [
+  {
+    label: "Xe ưu tiên",
+    value: "01",
+  },
+  {
+    label: "Tốc độ đúng quy định",
+    value: "02",
+  },
+  {
+    label: "Xe rẽ phải ở đoạn đường được rẽ phải",
+    value: "03",
+  },
+  {
+    label: "Xe di chuyển theo hiệu lệnh người điều khiển giao thông",
+    value: "04",
+  },
+  {
+    label: "Lỗi đèn tín hiệu",
+    value: "05",
+  },
+  {
+    label: "Không đủ cơ sở chứng minh vi phạm",
+    value: "06",
+  },
+];
+
+export function getValueObjectByPath(path, obj, separator = ".") {
+  const properties = Array.isArray(path) ? path : path.split(separator);
+  return properties.reduce((prev, curr) => prev && prev[curr], obj);
+}

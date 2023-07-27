@@ -10,35 +10,39 @@ import { useContext, useMemo } from "react";
 import { TableCommonContext } from "./TableContent";
 
 const TableHeaderContent = () => {
-  const { checkedList, tableHeader, tableData, setCheckedList } =
+  const { checkedItems, checkedable, tableHeader, tableData, handleCheckData } =
     useContext(TableCommonContext);
   const classes = useTableHeaderStyle();
 
   const isCheckedAll = useMemo(() => {
     if (!tableData) return false;
 
-    return checkedList.length === tableData.length;
-  }, [checkedList, tableData]);
+    return checkedItems.length === tableData.length;
+  }, [checkedItems, tableData]);
 
   const isChecked = useMemo(() => {
     if (!tableData) return false;
 
-    return checkedList.length > 0 && checkedList.length < tableData.length;
-  }, [checkedList, tableData]);
+    return checkedItems.length > 0 && checkedItems.length < tableData.length;
+  }, [checkedItems, tableData]);
 
   const handleCheckAll = (event) => {
+    let checkedList = [...checkedItems];
+
     if (isChecked) {
-      setCheckedList([]);
+      handleCheckData([]);
     }
 
     if (event.target.checked) {
       tableData.forEach((item) => {
-        if (!checkedList.includes(item)) {
-          setCheckedList((prev) => [...prev, JSON.stringify(item)]);
+        if (!checkedList.find((li) => li.id === item.id)) {
+          checkedList.push(item);
         }
       });
+
+      handleCheckData(checkedList);
     } else {
-      setCheckedList([]);
+      handleCheckData([]);
     }
   };
 
@@ -47,13 +51,15 @@ const TableHeaderContent = () => {
       style={{ backgroundColor: "rgba(221, 61, 75, 1)", color: "#fff" }}
     >
       <TableRow>
-        <TableCell className={classes.checkbox}>
-          <Checkbox
-            indeterminate={isChecked}
-            checked={isCheckedAll}
-            onChange={handleCheckAll}
-          />
-        </TableCell>
+        {checkedable && (
+          <TableCell className={classes.checkbox}>
+            <Checkbox
+              indeterminate={isChecked}
+              checked={isCheckedAll}
+              onChange={handleCheckAll}
+            />
+          </TableCell>
+        )}
         {tableHeader.map((header) => (
           <TableCell
             key={header.field}

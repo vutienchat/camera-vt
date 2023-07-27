@@ -25,7 +25,7 @@ const CustomModal = ({ title, isOpen, children, handleClose }) => {
             <CloseModalIcon width={16} height={16} color="#000" />
           </IconButton>
         </Box>
-        {children}
+        <Box style={{ marginTop: 10 }}>{children}</Box>
       </Box>
     </Dialog>
   );

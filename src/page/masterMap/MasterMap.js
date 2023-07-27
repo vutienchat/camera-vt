@@ -9,7 +9,7 @@ export const MasterMapContext = createContext({});
 
 const MasterMap = () => {
   const markerList = useListMarkersData();
-  const { isLoaded } = useJsApiLoader({
+  const { isLoaded, loadError } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: "AIzaSyBx-jW3bHBkViPbZs0tYyYL-cxZf-H93Z4",
   });
@@ -21,6 +21,7 @@ const MasterMap = () => {
     places,
     markerList,
     listPopUpCameraOpen,
+    loadError,
 
     setPlaces,
     setListPopUpCameraOpen,

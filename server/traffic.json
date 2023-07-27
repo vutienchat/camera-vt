@@ -43,7 +43,6 @@
         "send1": "19:12:25 27/06/2023",
         "send2": "19:12:25 27/06/2023",
         "sendGTVT": "19:12:25 27/06/2023",
-        "sendGTVT": "19:12:25 27/06/2023",
         "infoReturn": "19:12:25 27/06/2023",
         "appointmentDate": "19:12:25 27/06/2023",
         "note": ""
@@ -60,7 +59,7 @@
       "parentId": "Mã code nhóm event ITS",
       "location": "Ngã Tư An Dương Vương",
       "groupId": "Mã code Group Id",
-      "typeError": 1,
+      "typeError": 2,
       "typeNotError": 0,
       "imageCrop": "đường dẫn ảnh chụp xe",
       "imageDetail": "đường dẫn ảnh chụp biển số xe",
@@ -69,7 +68,7 @@
       "label1": "dieuhanh_hpg - 14:15:15 28/06/2023",
       "label2": "pheduyet_hpg - 14:15:15 28/06/2023",
       "description": {
-        "licencePlate": "99A-999.99",
+        "licencePlate": "88A-888.88",
         "vehicleType": "moto",
         "color": "black",
         "colorPlate": "white",
@@ -91,7 +90,6 @@
         "infoNumber": "20230629-0001",
         "send1": "19:12:25 27/06/2023",
         "send2": "19:12:25 27/06/2023",
-        "sendGTVT": "19:12:25 27/06/2023",
         "sendGTVT": "19:12:25 27/06/2023",
         "infoReturn": "19:12:25 27/06/2023",
         "appointmentDate": "19:12:25 27/06/2023",

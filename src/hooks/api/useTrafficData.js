@@ -2,16 +2,16 @@ import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../../common/axios";
 import { QUERY_KEYS } from "../../utils/keys";
 
-const getTrafficData = async () => {
+const getTrafficData = async (params) => {
   const { data } = await axiosInstance.get("/trafficList");
 
   return data;
 };
 
-const useTrafficData = () => {
+const useTrafficData = (params) => {
   return useQuery({
-    queryKey: [QUERY_KEYS.TRAFFIC_LIST],
-    queryFn: () => getTrafficData(),
+    queryKey: [QUERY_KEYS.TRAFFIC_LIST, params],
+    queryFn: () => getTrafficData(params),
   });
 };
 

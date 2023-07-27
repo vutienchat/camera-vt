@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View } from "@react-pdf/renderer";
+import SignViewPdf from "../SignViewPdf";
 
 const styles = StyleSheet.create({
   rowSpan: {
@@ -14,7 +15,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   fontSmall: {
-    fontSize: 15,
+    fontSize: 11,
   },
   line: {
     width: 150,
@@ -25,6 +26,13 @@ const styles = StyleSheet.create({
   textIndent: {
     textIndent: "25px",
     wordWrap: "break-word",
+  },
+  footer: {
+    display: "flex",
+    marginTop: 15,
+    flexDirection: "row",
+    paddingHorizontal: 25,
+    gap: 20,
   },
 });
 
@@ -52,11 +60,14 @@ const DispatchNoteContent = () => {
               ...styles.fontSmall,
             }}
           >
-            Đối với: Ông(bà)/Tổ chức: CÔNG TY TNHH MTV EAGON.
+            Đối với: Ông(bà)/Tổ chức:{" "}
+            <Text style={{ fontWeight: 600 }}>CÔNG TY TNHH MTV EAGON.</Text>
           </Text>
           <Text style={{ ...styles.textIndent, ...styles.fontSmall }}>
-            Địa chỉ: TỔ DÂN PHỐ NGHĨA SƠN, MINH ĐỨC, QUẬN ĐỒ SƠN, THÀNH PHỐ HẢI
-            PHÒNG.
+            Địa chỉ:{" "}
+            <Text style={{ fontWeight: 600 }}>
+              TỔ DÂN PHỐ NGHĨA SƠN, MINH ĐỨC, QUẬN ĐỒ SƠN, THÀNH PHỐ HẢI PHÒNG.
+            </Text>
           </Text>
           <Text style={{ ...styles.textIndent, ...styles.fontSmall }}>
             Là chủ phương tiện: Ô tô, biển kiểm soát: 15A-235.18, vi phạm Không
@@ -66,6 +77,18 @@ const DispatchNoteContent = () => {
             Đề nghị Công an(phường xã, thị trấn): Minh Đức chuyển thông báo tới
             Ông(bà)/Tổ chức CÔNG TY TNHH MTV EAGON và giám sát thực hiện
           </Text>
+          <Text style={{ ...styles.textIndent, fontSize: 12 }}>
+            Mọi thắc mắc vui lòng liên hệ đội tuyên truyền xử lý:
+            0394.690.802(giờ hành chính, trừ thứ 7, chủ nhật, ngày lễ).
+          </Text>
+        </View>
+        <View style={styles.footer}>
+          <View>
+            <Text style={{ fontSize: 12, fontWeight: 600 }}>Nơi nhận</Text>
+            <Text style={{ fontSize: 12 }}>- Như trên</Text>
+            <Text style={{ fontSize: 12 }}>- Lưu: Hồ sơ vụ việc(CATP)</Text>
+          </View>
+          <SignViewPdf />
         </View>
       </View>
     </View>

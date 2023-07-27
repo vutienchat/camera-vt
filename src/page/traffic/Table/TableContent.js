@@ -1,5 +1,5 @@
 import { Box, Table, TableContainer } from "@material-ui/core";
-import { createContext, useEffect, useState } from "react";
+import { createContext, memo } from "react";
 import TableHeaderContent from "./TableHeader";
 import TableBodyContent from "./TableBodyContent";
 
@@ -10,25 +10,18 @@ const TableContent = ({
   tableData,
   handleCheckData,
   isLoading,
+  checkedItems,
+  handleClickColumns,
+  checkedable,
 }) => {
-  const [checkedList, setCheckedList] = useState([]);
-
-  useEffect(() => {
-    if (checkedList.length === 0) {
-      handleCheckData([]);
-    } else {
-      const checkedArr = checkedList.map((checked) => JSON.parse(checked));
-
-      handleCheckData(checkedArr);
-    }
-  }, [checkedList]);
-
   const data = {
     isLoading,
-    checkedList,
+    checkedItems,
     tableHeader,
     tableData,
-    setCheckedList,
+    handleCheckData,
+    handleClickColumns,
+    checkedable,
   };
 
   return (
@@ -43,4 +36,4 @@ const TableContent = ({
   );
 };
 
-export default TableContent;
+export default memo(TableContent);

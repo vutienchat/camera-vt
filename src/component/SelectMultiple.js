@@ -45,7 +45,7 @@ const useStyles = makeStyles(() => ({
     position: "absolute",
     top: 50,
     right: 0,
-    zIndex: 1,
+    zIndex: 50,
     border: "1px solid",
     width: "400px",
     padding: "10px",
@@ -140,7 +140,7 @@ export default function SelectMultiple({
   };
 
   return (
-    <Box style={{ width: width }}>
+    <Box style={{ width: width || "auto" }}>
       <ClickAwayListener onClickAway={handleClickAway}>
         <div className={classes.root}>
           <Button

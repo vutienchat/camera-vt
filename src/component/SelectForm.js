@@ -1,0 +1,66 @@
+import React from "react";
+import {
+  Box,
+  FormControl,
+  MenuItem,
+  Select,
+  makeStyles,
+} from "@material-ui/core";
+import { useState } from "react";
+import { useFormContext } from "react-hook-form";
+
+const SelectForm = ({ width, disabled, keyForm, list }) => {
+  const classes = useStyles();
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
+  const handleOpen = () => {
+    setIsOpen(true);
+  };
+
+  return (
+    <FormControl
+      className={classes.formControl}
+      style={{ width: width || "100%" }}
+      variant="outlined"
+      size="small"
+    >
+      <Select
+        open={isOpen}
+        onClose={handleClose}
+        onOpen={handleOpen}
+        error={errors[keyForm]}
+        {...register(keyForm)}
+        disabled={disabled || false}
+      >
+        {list.map((item, index) => {
+          return (
+            <MenuItem value={item.value} key={`${item.value}_${index}`}>
+              {item.label}
+            </MenuItem>
+          );
+        })}
+      </Select>
+    </FormControl>
+  );
+};
+
+const useStyles = makeStyles((theme) => ({
+  button: {
+    display: "block",
+    marginTop: theme.spacing(2),
+  },
+  formControl: {
+    minWidth: 120,
+  },
+}));
+
+export default SelectForm;
