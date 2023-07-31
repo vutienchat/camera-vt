@@ -37,6 +37,7 @@
     "react-multi-date-picker": "^4.0.0",
     "react-router-dom": "^6.11.2",
     "react-scripts": "5.0.1",
+    "react-zoom-pan-pinch": "^3.1.0",
     "styled-components": "^5.3.11",
     "url-loader": "^4.1.1",
     "use-react-screenshot": "^3.0.0",

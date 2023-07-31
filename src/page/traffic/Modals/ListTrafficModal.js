@@ -13,6 +13,7 @@ import DownloadIcon from "@material-ui/icons/GetApp";
 import BaseTabCommon from "../component/BaseTabCommon";
 import SendIcon from "../Icons/SendIcon";
 import { FormProvider, useForm } from "react-hook-form";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 const ListTrafficModal = ({
   isOpen,
@@ -107,25 +108,37 @@ const ListTrafficModal = ({
               }}
             >
               <Box style={{ width: "33%" }}>
-                <img
-                  src="./image.png"
-                  alt="Image"
-                  style={{ width: "100%", objectFit: "cover" }}
-                />
+                <TransformWrapper >
+                  <TransformComponent>
+                    <img
+                      src="./image.png"
+                      alt="Image"
+                      style={{ width: "100%", objectFit: "cover" }}
+                    />
+                  </TransformComponent>
+                </TransformWrapper>
               </Box>
               <Box style={{ width: "33%" }}>
-                <img
-                  src="./image.png"
-                  alt="Image"
-                  style={{ width: "100%", objectFit: "cover" }}
-                />
+              <TransformWrapper >
+                  <TransformComponent>
+                    <img
+                      src="./image.png"
+                      alt="Image"
+                      style={{ width: "100%", objectFit: "cover" }}
+                    />
+                  </TransformComponent>
+                </TransformWrapper>
               </Box>
               <Box style={{ width: "33%" }}>
-                <img
-                  src="./image.png"
-                  alt="Image"
-                  style={{ width: "100%", objectFit: "cover" }}
-                />
+              <TransformWrapper >
+                  <TransformComponent>
+                    <img
+                      src="./image.png"
+                      alt="Image"
+                      style={{ width: "100%", objectFit: "cover" }}
+                    />
+                  </TransformComponent>
+                </TransformWrapper>
               </Box>
               <Box style={{ width: "49.5%" }}>
                 <img
