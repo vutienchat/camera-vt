@@ -7,14 +7,18 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import { useState } from "react";
-import { useFormContext } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 
-const SelectForm = ({ width, disabled, keyForm, list }) => {
+const SelectForm = ({
+  width,
+  disabled,
+  keyForm,
+  list,
+  className,
+  customStyle,
+}) => {
   const classes = useStyles();
-  const {
-    register,
-    formState: { errors },
-  } = useFormContext();
+  const { control } = useFormContext();
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -33,22 +37,36 @@ const SelectForm = ({ width, disabled, keyForm, list }) => {
       variant="outlined"
       size="small"
     >
-      <Select
-        open={isOpen}
-        onClose={handleClose}
-        onOpen={handleOpen}
-        error={errors[keyForm]}
-        {...register(keyForm)}
-        disabled={disabled || false}
-      >
-        {list.map((item, index) => {
+      <Controller
+        rules={{
+          required: {
+            message: "This field is required",
+          },
+        }}
+        control={control}
+        name={keyForm}
+        render={({ field }) => {
           return (
-            <MenuItem value={item.value} key={`${item.value}_${index}`}>
-              {item.label}
-            </MenuItem>
+            <Select
+              open={isOpen}
+              onClose={handleClose}
+              onOpen={handleOpen}
+              className={className || ""}
+              disabled={disabled || false}
+              style={customStyle}
+              {...field}
+            >
+              {list.map((item, index) => {
+                return (
+                  <MenuItem value={item.value} key={`${item.value}_${index}`}>
+                    {item.label}
+                  </MenuItem>
+                );
+              })}
+            </Select>
           );
-        })}
-      </Select>
+        }}
+      />
     </FormControl>
   );
 };

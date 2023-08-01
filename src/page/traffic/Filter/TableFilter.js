@@ -1,14 +1,7 @@
 import React, { useContext, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 
-import {
-  Box,
-  Button,
-  InputAdornment,
-  TextField,
-  Typography,
-  makeStyles,
-} from "@material-ui/core";
+import { Box, InputAdornment, TextField, makeStyles } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 
 import { SettingIcon } from "../Icons";
@@ -18,9 +11,10 @@ import ViolationPendingApproval from "./TabPaneFilter/ViolationPendingApproval";
 import NotificationShowing from "./TabPaneFilter/NotificationShowing";
 
 import { QUERY_KEYS } from "../../../utils/keys";
-import CustomModal from "../../../common/CustomModal";
+import CustomModal from "../component/CustomModal";
 import { SearchIcon } from "../../../common/icons/SearchIcon";
 import { ReloadIcon } from "../../../common/icons/ReloadIcon";
+import BaseButton from "../component/BaseButton";
 
 const TableFilter = () => {
   const queryClient = useQueryClient();
@@ -75,9 +69,10 @@ const TableFilter = () => {
       />
       {paramTrafficSearch.tabPane === "01" && <ViolationPendingApproval />}
       {paramTrafficSearch.tabPane === "03" && <NotificationShowing />}
-      <Button className={classes.btnDropdown} style={{ minWidth: 150 }}>
-        <Typography>Xuất danh sách</Typography>
-      </Button>
+      <BaseButton
+        content="Xuất danh sách"
+        customStyle={{ minWidth: "150px" }}
+      />
       <Box className={classes.icon} onClick={handleReloadDataTable}>
         <ReloadIcon width={16} height={16} color="#000" />
       </Box>
@@ -136,6 +131,7 @@ const useTableFilterStyle = makeStyles({
     borderRadius: "4px",
     textTransform: "unset",
     cursor: "pointer",
+    boxShadow: "none",
     "& p": {
       fontSize: "16px",
       fontWeight: 500,
@@ -145,6 +141,9 @@ const useTableFilterStyle = makeStyles({
       letterSpacing: "normal",
       textAlign: "center",
       color: "#939393",
+    },
+    "&:hover": {
+      boxShadow: "none",
     },
   },
 });

@@ -48,7 +48,9 @@ const TableHeaderContent = () => {
 
   return (
     <TableHead
-      style={{ backgroundColor: "rgba(221, 61, 75, 1)", color: "#fff" }}
+      style={{
+        backgroundColor: "#ebebeb",
+      }}
     >
       <TableRow>
         {checkedable && (
@@ -63,9 +65,15 @@ const TableHeaderContent = () => {
         {tableHeader.map((header) => (
           <TableCell
             key={header.field}
-            style={{ ...header.customStyles, width: header.width }}
+            style={{
+              ...header.customStyles,
+              width: header.width,
+              "&.MuiTableCell-root": {
+                padding: 0,
+              },
+            }}
           >
-            <Typography style={{ color: "#fff" }}>{header.name}</Typography>
+            <Typography style={{ color: "#000" }}>{header.name}</Typography>
           </TableCell>
         ))}
       </TableRow>
@@ -77,7 +85,10 @@ const useTableHeaderStyle = makeStyles({
   checkbox: {
     width: 50,
     "& .MuiIconButton-label": {
-      color: "#fff",
+      color: "#000",
+    },
+    "&.MuiTableCell-root": {
+      padding: "0px 0px 0px 16px",
     },
   },
 });

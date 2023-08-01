@@ -27,35 +27,29 @@ const ViolationInfo = ({ data }) => {
             <Typography>{typeErrEvent[data.typeError]}</Typography>
           </Box>
         )}
+        <Box className={classes.info}>
+          <PersonIcon fontSize="small" />
+          <Typography>{data.label1}</Typography>
+        </Box>
         <Box
           className={classes.info}
           style={{
             backgroundColor:
               colorStatusErrEvent[data.statusEvent].backgroundColor,
             width: "fit-content",
-            padding: "1px 8px 1px 8px",
+            padding: "5px 20px 5px 20px",
             borderRadius: "4px",
           }}
         >
-          <Box
-            style={{
-              width: "6px",
-              height: "6px",
-              borderRadius: "100px",
-              backgroundColor: colorStatusErrEvent[data.statusEvent].color,
-            }}
-          ></Box>
           <Typography
             style={{
               color: colorStatusErrEvent[data.statusEvent].color,
+              fontWeight: "bold",
+              textAlign: "center",
             }}
           >
             {statusErrEvent[data.statusEvent]}
           </Typography>
-        </Box>
-        <Box className={classes.info}>
-          <PersonIcon fontSize="small" />
-          <Typography>{data.label1}</Typography>
         </Box>
       </Box>
       <Box className={classes.plate}>

@@ -1,66 +1,30 @@
-import { Button, Typography, makeStyles } from "@material-ui/core";
+import { Typography, makeStyles } from "@material-ui/core";
 import React, { useContext, useState } from "react";
-import { TrafficContext } from "../../TrafficContent";
 import SendIcon from "../../Icons/SendIcon";
-import QuestionModal from "../../../../common/QuestionModal";
+import BaseButton from "../../component/BaseButton";
+import QuestionModal from "../../component/QuestionModal";
+import { TrafficContext } from "../../TrafficContent";
 
 const ViolationPendingApproval = () => {
-  const classes = useStyles();
-  const { checkedItemList, setIsOpenReasonsModal } = useContext(TrafficContext);
+  const { checkedItemList, isHighestLevel } = useContext(TrafficContext);
 
   const [isOpenConfirErrormModal, setIsOpenConfirmErrorModal] = useState(false);
+  const disabled = checkedItemList.length === 0 || !isHighestLevel;
 
   const handleConfirmError = () => {};
 
   return (
     <React.Fragment>
-      <Button
-        className={classes.btnDropdown}
-        variant="outlined"
-        style={{
-          border: "1px solid rgba(24, 106, 59, 1)",
-          minWidth: 220,
-          opacity: checkedItemList.length === 0 ? "0.3" : "1",
-        }}
-        disabled={checkedItemList.length === 0}
+      <BaseButton
+        content="Gửi duyệt lỗi"
+        disabled={disabled}
         onClick={() => {
-          if (checkedItemList.length === 0) return;
-          setIsOpenReasonsModal(true);
-        }}
-      >
-        <Typography
-          style={{
-            color: "rgba(24, 106, 59, 1)",
-            fontWeight: 700,
-          }}
-        >
-          Gửi duyệt không lỗi
-        </Typography>
-      </Button>
-      <Button
-        className={classes.btnDropdown}
-        variant="contained"
-        style={{
-          backgroundColor: "rgba(221, 61, 75, 1)",
-          minWidth: 180,
-          opacity: checkedItemList.length === 0 ? "0.3" : "1",
-        }}
-        startIcon={<SendIcon />}
-        disabled={checkedItemList.length === 0}
-        onClick={() => {
-          if (checkedItemList.length === 0) return;
+          if (disabled) return;
           setIsOpenConfirmErrorModal(true);
         }}
-      >
-        <Typography
-          style={{
-            fontWeight: 700,
-            color: "#fff",
-          }}
-        >
-          Gửi duyệt lỗi
-        </Typography>
-      </Button>
+        typeStyle="contained"
+        startIcon={<SendIcon color={disabled ? "#939393" : "#fff"} />}
+      />
       {isOpenConfirErrormModal && (
         <QuestionModal
           title="Xác nhận gửi duyệt lỗi"

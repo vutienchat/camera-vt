@@ -11,14 +11,17 @@ import { Controller, useFormContext } from "react-hook-form";
 import BaseFormGroup from "../BaseFormGroup";
 import SelectForm from "../../../../component/SelectForm";
 import {
-  carsColor,
   plateCarsColor,
   vehicles,
   violationError,
 } from "../../../../utils/traffic";
+import React, { useContext } from "react";
+import { ListTrafficModalContext } from "../../Modals/ListTrafficModal";
+import DatePicker, { DateObject } from "react-multi-date-picker";
 
 const SceneInfoForm = () => {
   const methods = useFormContext();
+  const { plates, isHighestLevel } = useContext(ListTrafficModalContext);
 
   const {
     register,
@@ -30,6 +33,11 @@ const SceneInfoForm = () => {
 
   return (
     <Box className={classes.form}>
+      <Box className={classes.plate}>
+        {plates.map((plate, index) => (
+          <Typography key={`${plate}_${index}`}>{plate}</Typography>
+        ))}
+      </Box>
       <BaseFormGroup
         label="Biển số xe"
         isRequired={true}
@@ -39,85 +47,97 @@ const SceneInfoForm = () => {
             {...register("numberPlate", {
               required: "Number Plate is required",
             })}
+            className={classes.inputFeild}
             error={errors["numberPlate"]}
-            style={{ width: "350px" }}
+            style={{
+              width: "350px",
+            }}
             variant="outlined"
             size="small"
+            disabled={!isHighestLevel}
           />
         }
       />
 
-      <BaseFormGroup
-        label="Biển số xe"
-        isRequired={true}
-        error={errors["money"]}
-        component={
-          <Box
-            style={{
-              display: "flex",
-              alignContent: "center",
-              alignItems: "center",
-              gap: 20,
-            }}
-          >
-            <TextField
-              {...register("money", {
-                required: "Money is required",
-              })}
-              variant="outlined"
-              error={errors["money"]}
-              size="small"
-              style={{
-                width: 250,
-              }}
-            />
-            <Typography style={{ fontWeight: 700, fontSize: "14px" }}>
-              VNĐ
-            </Typography>
-            <Box style={{ width: "200px" }}></Box>
-          </Box>
-        }
-      />
-
-      <BaseFormGroup
-        label="Giữ GPLX"
-        isRequired={true}
-        error={errors["gplx"]}
-        component={
-          <Controller
-            rules={{
-              required: {
-                message: "This field is required",
-              },
-            }}
-            control={control}
-            name="gplx"
-            render={({ field }) => {
-              return (
-                <RadioGroup row {...field}>
-                  <FormControlLabel
-                    value="01"
-                    control={<Radio />}
-                    label="Giữ GPLX"
-                  />
-                  <FormControlLabel
-                    value="02"
-                    control={<Radio />}
-                    label="Không giữ GPLX"
-                  />
-                </RadioGroup>
-              );
-            }}
+      {isHighestLevel && (
+        <React.Fragment>
+          <BaseFormGroup
+            label="Số tiền phạt"
+            isRequired={true}
+            error={errors["fineAmount"]}
+            width="100%"
+            component={
+              <Box
+                style={{
+                  display: "flex",
+                  alignContent: "center",
+                  alignItems: "center",
+                  gap: 20,
+                }}
+              >
+                <TextField
+                  {...register("fineAmount", {
+                    required: "Fine Amount is required",
+                  })}
+                  variant="outlined"
+                  className={classes.inputFeild}
+                  error={errors["fineAmount"]}
+                  size="small"
+                  disabled={!isHighestLevel}
+                />
+                <Typography style={{ fontWeight: 700, fontSize: "14px" }}>
+                  VNĐ
+                </Typography>
+                <Box style={{ width: "200px" }}></Box>
+              </Box>
+            }
           />
-        }
-      />
+
+          <BaseFormGroup
+            label="Giữ GPLX"
+            isRequired={true}
+            error={errors["holdGPLX"]}
+            component={
+              <Controller
+                name="holdGPLX"
+                control={control}
+                rules={{ required: "Vui long chon" }}
+                render={({ field }) => (
+                  <RadioGroup {...field} row>
+                    <FormControlLabel
+                      disabled={!isHighestLevel}
+                      value={"0"}
+                      control={<Radio />}
+                      label="Giữ GPLX"
+                    />
+                    <FormControlLabel
+                      value={"1"}
+                      disabled={!isHighestLevel}
+                      control={<Radio />}
+                      label="Không giữ GPLX"
+                    />
+                  </RadioGroup>
+                )}
+              />
+            }
+          />
+        </React.Fragment>
+      )}
 
       <BaseFormGroup
         label="Phương tiện"
         isRequired={true}
-        error={errors["vehicles"]}
+        error={errors["vehicleType"]}
         component={
-          <SelectForm width={200} keyForm="vehicles" list={vehicles} />
+          <SelectForm
+            className={classes.selectFeild}
+            keyForm="vehicleType"
+            list={vehicles}
+            disabled={!isHighestLevel}
+            customStyle={{
+              width: !isHighestLevel ? "350px" : "100%",
+            }}
+          />
         }
       />
 
@@ -126,40 +146,51 @@ const SceneInfoForm = () => {
         isRequired={true}
         error={errors["colorPlate"]}
         component={
-          <Box
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              gap: "20px",
+          <SelectForm
+            className={classes.selectFeild}
+            keyForm="colorPlate"
+            list={plateCarsColor}
+            disabled={!isHighestLevel}
+            customStyle={{
+              width: !isHighestLevel ? "350px" : "100%",
             }}
-          >
-            <SelectForm keyForm="colorPlate" list={plateCarsColor} />
-            <Box>
-              <BaseFormGroup
-                label="Màu xe"
-                width={320}
-                isRequired={true}
-                error={errors["colorCars"]}
-                component={<SelectForm keyForm="colorCars" list={carsColor} />}
-              />
-            </Box>
-          </Box>
+          />
         }
       />
 
       <BaseFormGroup
         label="Thời gian vi phạm"
         isRequired={true}
-        error={errors["timeBan"]}
+        error={errors["violationDate"]}
         component={
-          <TextField
-            {...register("timeBan", {
-              required: "Number Plate is required",
-            })}
-            style={{ width: "100%" }}
-            variant="outlined"
-            error={!!errors["timeBan"]}
-            size="small"
+          <Controller
+            control={control}
+            name="violationDate"
+            rules={{ required: true }} //optional
+            render={({ field: { onChange, value } }) => {
+              return (
+                <DatePicker
+                  value={value || ""}
+                  onChange={(date) => {
+                    onChange(
+                      date?.isValid
+                        ? new DateObject(date).format("HH:mm:ss DD/MM/YYYY")
+                        : ""
+                    );
+                  }}
+                  format="HH:mm:ss DD/MM/YYYY"
+                  style={{
+                    width: "472px",
+                    height: "32px",
+                    backgroundColor: !isHighestLevel
+                      ? "#ebebeb"
+                      : "transparent",
+                    color: !isHighestLevel ? "#939393" : "#000",
+                  }}
+                  disabled={!isHighestLevel}
+                />
+              );
+            }}
           />
         }
       />
@@ -169,23 +200,30 @@ const SceneInfoForm = () => {
         isRequired={true}
         error={errors["violationError"]}
         component={
-          <SelectForm keyForm="violationError" list={violationError} />
+          <SelectForm
+            className={classes.selectFeild}
+            keyForm="violationError"
+            list={violationError}
+            disabled={!isHighestLevel}
+          />
         }
       />
 
       <BaseFormGroup
         label="Vị trí"
         isRequired={true}
-        error={errors["place"]}
+        error={errors["direction"]}
         component={
           <TextField
-            {...register("place", {
-              required: "Place is required",
+            {...register("direction", {
+              required: "Direction is required",
             })}
-            error={!!errors["place"]}
+            className={classes.inputFeild}
+            error={!!errors["direction"]}
             style={{ width: "100%" }}
             variant="outlined"
             size="small"
+            disabled={!isHighestLevel}
           />
         }
       />
@@ -199,10 +237,12 @@ const SceneInfoForm = () => {
             {...register("camName", {
               required: "Place is required",
             })}
+            className={classes.inputFeild}
             error={!!errors["camName"]}
             style={{ width: "100%" }}
             variant="outlined"
             size="small"
+            disabled={!isHighestLevel}
           />
         }
       />
@@ -216,10 +256,12 @@ const SceneInfoForm = () => {
             {...register("direction", {
               required: "Direction is required",
             })}
+            className={classes.inputFeild}
             error={!!errors["direction"]}
             style={{ width: "100%" }}
             variant="outlined"
             size="small"
+            disabled={!isHighestLevel}
           />
         }
       />
@@ -231,8 +273,10 @@ const SceneInfoForm = () => {
           <TextField
             {...register("note")}
             style={{ width: "100%" }}
+            className={classes.inputFeild}
             variant="outlined"
             size="small"
+            disabled={!isHighestLevel}
           />
         }
       />
@@ -244,10 +288,54 @@ const useSceneInfoFormStyle = makeStyles({
   form: {
     display: "flex",
     flexDirection: "column",
-    columnGap: "10px",
-    border: "3px solid rgba(221, 61, 75, 1)",
+    gap: "2px",
+    border: "1px solid #d3d3d3",
     padding: "10px",
-    overflowX: "hidden",
+    position: "relative",
+    borderBottomRightRadius: "8px",
+    borderBottomLeftRadius: "8px",
+    height: "480px",
+  },
+  inputFeild: {
+    height: "32px",
+    width: "100%",
+    "& input": {
+      height: "100%",
+    },
+    "& .MuiOutlinedInput-inputMarginDense": {
+      padding: "8px",
+    },
+    "& .MuiInputBase-root.Mui-disabled": {
+      color: "#939393",
+      background: "#ebebeb",
+    },
+  },
+  selectFeild: {
+    height: "34px",
+    "& .MuiOutlinedInput-input": {
+      padding: "10px",
+    },
+    "&.MuiInputBase-root.Mui-disabled": {
+      color: "#939393",
+      background: "#ebebeb",
+    },
+  },
+  plate: {
+    position: "absolute",
+    top: "40px",
+    right: "30px",
+    padding: "5px 10px",
+    display: "flex",
+    flexDirection: "column",
+    gap: "1px",
+    justifyContent: "center",
+    border: "2px solid #000",
+    "& p": {
+      textAlign: "center",
+      fontWeight: "bold",
+      fontSize: "21px",
+      lineHeight: 1.14,
+    },
   },
 });
 

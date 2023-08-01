@@ -45,27 +45,27 @@ export const settingArr = [
 export const violationError = [
   {
     label: "Không chấp hành hiệu lệnh của tin hiệu giao thông",
-    value: "01",
+    value: 1,
   },
   {
     label: "Không chấp hành hiệu lệnh, chỉ dẫn của biển báo, vạch kẻ đường",
-    value: "02",
+    value: 2,
   },
   {
     label: "Vượt trong các trường hợp cấm vượt",
-    value: "03",
+    value: 3,
   },
   {
     label: "Dừng, đỗ phương tiện trái quy định",
-    value: "04",
+    value: 4,
   },
   {
     label: "Điều khiển phương tiện chạy quá tốc độ",
-    value: "05",
+    value: 5,
   },
   {
     label: "Đi ngược chiều",
-    value: "06",
+    value: 6,
   },
 ];
 
@@ -183,7 +183,7 @@ export const plateCarsColor = [
 
 export const headerFilterArr = [
   {
-    width: 220,
+    width: 300,
     btnText: "Trạng thái",
     titleDropdownText: "Tất cả trạng thái",
     key: "status",
@@ -191,7 +191,7 @@ export const headerFilterArr = [
     type: "select_multiple",
   },
   {
-    width: 220,
+    width: 300,
     btnText: "Lỗi vi phạm",
     titleDropdownText: "Tất cả lỗi vi phạm",
     key: "errors",
@@ -199,7 +199,7 @@ export const headerFilterArr = [
     type: "select_multiple",
   },
   {
-    width: 220,
+    width: 300,
     btnText: "Phương tiện",
     titleDropdownText: "Tất cả phương tiện",
     key: "vehicles",
@@ -207,19 +207,11 @@ export const headerFilterArr = [
     type: "select_multiple",
   },
   {
-    width: 220,
+    width: 300,
     btnText: "Màu xe",
     titleDropdownText: "Tất cả màu xe",
     key: "carColor",
     list: carsColor,
-    type: "select_multiple",
-  },
-  {
-    width: 220,
-    btnText: "Màu biển xe",
-    titleDropdownText: "Tất cả màu biển",
-    key: "plateCarColor",
-    list: plateCarsColor,
     type: "select_multiple",
   },
   {

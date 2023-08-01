@@ -100,8 +100,8 @@ export default function SelectMultiple({
     if (event.target.checked) {
       let itemsArr = [...selected];
       list.forEach((item) => {
-        if (!selected.includes(item.value)) {
-          itemsArr.push(item.value);
+        if (!selected.includes(String(item.value))) {
+          itemsArr.push(String(item.value));
         }
       });
 
@@ -217,9 +217,9 @@ export default function SelectMultiple({
                       </Typography>
                       <Checkbox
                         id={item.value}
-                        value={item.value}
+                        value={String(item.value)}
                         onChange={handleCheckItem}
-                        checked={selected.includes(item.value)}
+                        checked={selected.includes(String(item.value))}
                       />
                     </MenuItem>
                   </label>

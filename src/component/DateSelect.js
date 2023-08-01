@@ -50,21 +50,21 @@ const RangeDateTab = ({ paramsFilter, handleCheckDate }) => {
         className={classes.btnDropdown}
         onClick={handleClick}
       >
-        <Box
-          flex={1}
-          display="flex"
-          justifyContent="center"
-          gridGap={4}
-          alignContent="center"
-        >
+        <Box flex={1} display="flex" gridGap={4} alignContent="center">
           {paramsFilter.startDate && paramsFilter.endDate ? (
             <React.Fragment>
-              <Typography>{paramsFilter.startDate}</Typography>
-              <Typography style={{ textTransform: "lowercase" }}>to</Typography>
-              <Typography>{paramsFilter.endDate}</Typography>
+              <Typography style={{ color: "#000" }}>
+                {paramsFilter.startDate}
+              </Typography>
+              <Typography style={{ textTransform: "lowercase", color: "#000" }}>
+                to
+              </Typography>
+              <Typography style={{ color: "#000" }}>
+                {paramsFilter.endDate}
+              </Typography>
             </React.Fragment>
           ) : (
-            <Typography>Date Range</Typography>
+            <Typography style={{ color: "#000" }}>Thời gian vi phạm</Typography>
           )}
         </Box>
       </Button>
@@ -154,7 +154,7 @@ export const useStylesRangeDateTab = makeStyles({
     },
   },
   btnDropdown: {
-    width: "240px",
+    width: "300px",
     background: "#fff",
     border: "1px solid #939393",
     display: "flex",

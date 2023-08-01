@@ -7,12 +7,14 @@ import {
 } from "@material-ui/core";
 import { useFormContext } from "react-hook-form";
 import BaseFormGroup from "../BaseFormGroup";
-import SelectForm from "../../../../component/SelectForm";
-import { vehicles } from "../../../../utils/traffic";
+import { useContext } from "react";
+import { ListTrafficModalContext } from "../../Modals/ListTrafficModal";
+import BaseDatePickerForm from "../BaseDatePickerForm";
 
 const ViolationInfoForm = () => {
   const classes = useSceneInfoFormStyle();
   const methods = useFormContext();
+  const { plates, isHighestLevel } = useContext(ListTrafficModalContext);
 
   const {
     register,
@@ -21,39 +23,68 @@ const ViolationInfoForm = () => {
 
   return (
     <Box className={classes.form}>
-      <Grid container justifyContent="space-between">
-        <Grid item xs={3} lg={3}>
-          <Box
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-around",
-              height: "100%",
-            }}
-          >
-            <Typography style={{ lineHeight: "10px" }}>
-              Chủ phương tiện (*)
-            </Typography>
-            <Typography>Ngày sinh</Typography>
-            <Typography style={{ lineHeight: "10px" }}>CMND/CCCD</Typography>
-          </Box>
-        </Grid>
-        <Grid item xs={9} lg={9} style={{ display: "flex" }}>
-          <Box
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "5px",
-              flex: 1,
-            }}
-          >
-            <TextField size="small" variant="outlined" fullWidth />
-            <TextField size="small" variant="outlined" fullWidth />
-            <TextField size="small" variant="outlined" fullWidth />
-          </Box>
-          <Box style={{ width: "150px", height: "100%" }}></Box>
-        </Grid>
-      </Grid>
+      <Typography style={{ fontWeight: 600 }}>
+        Thông tin chủ phương tiện
+      </Typography>
+
+      <Box className={classes.plate}>
+        {plates.map((plate, index) => (
+          <Typography key={`${plate}_${index}`}>{plate}</Typography>
+        ))}
+      </Box>
+
+      <BaseFormGroup
+        label="Chủ phương tiện"
+        isRequired={true}
+        error={errors["fullName"]}
+        component={
+          <TextField
+            {...register("fullName", {
+              required: "Full Name is required",
+            })}
+            className={classes.inputFeild}
+            error={!!errors["fullName"]}
+            style={{ width: "350px" }}
+            variant="outlined"
+            disabled={!isHighestLevel}
+            size="small"
+          />
+        }
+      />
+
+      <BaseFormGroup
+        label="Ngày sinh"
+        isRequired={true}
+        error={errors["birthday"]}
+        component={
+          <BaseDatePickerForm
+            name="birthday"
+            format="DD/MM/YYYY"
+            disabled={!isHighestLevel}
+            width="340px"
+            endIcon
+          />
+        }
+      />
+
+      <BaseFormGroup
+        label="CMND/ CCCD"
+        isRequired={true}
+        error={errors["cccd"]}
+        component={
+          <TextField
+            {...register("cccd", {
+              required: "Vui lòng nhâp CMND/ CCCD",
+            })}
+            className={classes.inputFeild}
+            error={!!errors["cccd"]}
+            style={{ width: "350px" }}
+            variant="outlined"
+            disabled={!isHighestLevel}
+            size="small"
+          />
+        }
+      />
 
       <BaseFormGroup
         label="Số điện thoại"
@@ -66,7 +97,9 @@ const ViolationInfoForm = () => {
             })}
             error={!!errors["phoneNumber"]}
             style={{ width: "100%" }}
+            className={classes.inputFeild}
             variant="outlined"
+            disabled={!isHighestLevel}
             size="small"
           />
         }
@@ -75,42 +108,59 @@ const ViolationInfoForm = () => {
       <BaseFormGroup
         label="Địa chỉ chi tiết"
         isRequired={true}
-        error={errors["addressDetail"]}
+        error={errors["address"]}
         component={
           <TextField
-            {...register("addressDetail", {
+            {...register("address", {
               required: "Địa chỉ chi tiết is required",
             })}
             error={!!errors["addressDetail"]}
             style={{ width: "100%" }}
+            className={classes.inputFeild}
             variant="outlined"
+            disabled={!isHighestLevel}
             size="small"
           />
         }
       />
 
       <BaseFormGroup
-        label="Phương tiện"
+        label="Địa chỉ"
         isRequired={true}
-        error={errors["vehicles"]}
-        component={<SelectForm keyForm="vehicles" list={vehicles} />}
-      />
-
-      <Typography>Thông tin thông báo xử phạt</Typography>
-
-      <BaseFormGroup
-        label="Sô thông báo"
-        isRequired={true}
-        error={errors["addressDetail"]}
+        error={errors["addressType"]}
         component={
           <TextField
-            {...register("addressDetail", {
+            {...register("addressType", {
               required: "Địa chỉ chi tiết is required",
             })}
-            error={!!errors["addressDetail"]}
+            error={!!errors["addressType"]}
             style={{ width: "100%" }}
+            className={classes.inputFeild}
             variant="outlined"
             size="small"
+          />
+        }
+      />
+
+      <Typography style={{ fontWeight: 600 }}>
+        Thông tin thông báo xử phạt
+      </Typography>
+
+      <BaseFormGroup
+        label="Số thông báo"
+        isRequired={true}
+        error={errors["infoNumber"]}
+        component={
+          <TextField
+            {...register("infoNumber", {
+              required: "Địa chỉ chi tiết is required",
+            })}
+            error={!!errors["infoNumber"]}
+            style={{ width: "100%" }}
+            className={classes.inputFeild}
+            variant="outlined"
+            size="small"
+            disabled
           />
         }
       />
@@ -119,42 +169,78 @@ const ViolationInfoForm = () => {
         <Grid item xs={6} lg={6}>
           <Grid container alignItems="center">
             <Grid item xs={6} lg={6}>
-              <Typography>Thông báo gửi lần 1</Typography>
+              <Typography style={{ fontSize: "14px" }}>
+                Thông báo gửi lần 1
+              </Typography>
             </Grid>
             <Grid item xs={6} lg={6}>
-              <TextField variant="outlined" size="small" fullWidth />
+              <BaseDatePickerForm
+                name="send1"
+                format="DD/MM/YYYY"
+                disabled={!isHighestLevel}
+                width="94%"
+                endIcon
+              />
             </Grid>
           </Grid>
         </Grid>
         <Grid item xs={6} lg={6} style={{ paddingLeft: "5px" }}>
           <Grid container alignItems="center">
             <Grid item xs={6} lg={6}>
-              <Typography>Thông báo gửi lần 2</Typography>
+              <Typography style={{ fontSize: "14px" }}>
+                Thông báo gửi lần 2
+              </Typography>
             </Grid>
             <Grid item xs={6} lg={6}>
-              <TextField variant="outlined" size="small" fullWidth />
+              <BaseDatePickerForm
+                name="send2"
+                format="DD/MM/YYYY"
+                disabled={!isHighestLevel}
+                width="94%"
+                endIcon
+              />
             </Grid>
           </Grid>
         </Grid>
       </Grid>
-      <Grid container justifyContent="space-between">
+      <Grid
+        container
+        justifyContent="space-between"
+        style={{ marginTop: "5px", marginBottom: "5px" }}
+      >
         <Grid item xs={6} lg={6}>
           <Grid container alignItems="center">
             <Grid item xs={6} lg={6}>
-              <Typography>Thông báo gửi sở GTVT</Typography>
+              <Typography style={{ fontSize: "14px" }}>
+                Thông báo gửi sở GTVT
+              </Typography>
             </Grid>
             <Grid item xs={6} lg={6}>
-              <TextField variant="outlined" size="small" fullWidth />
+              <BaseDatePickerForm
+                name="sendGTVT"
+                format="DD/MM/YYYY"
+                disabled={!isHighestLevel}
+                width="94%"
+                endIcon
+              />
             </Grid>
           </Grid>
         </Grid>
         <Grid item xs={6} lg={6} style={{ paddingLeft: "5px" }}>
           <Grid container alignItems="center">
             <Grid item xs={6} lg={6}>
-              <Typography>Thông báo hoàn lại</Typography>
+              <Typography style={{ fontSize: "14px" }}>
+                Thông báo hoàn lại
+              </Typography>
             </Grid>
             <Grid item xs={6} lg={6}>
-              <TextField variant="outlined" size="small" fullWidth />
+              <BaseDatePickerForm
+                name="infoReturn"
+                format="DD/MM/YYYY"
+                disabled={!isHighestLevel}
+                width="94%"
+                endIcon
+              />
             </Grid>
           </Grid>
         </Grid>
@@ -163,16 +249,14 @@ const ViolationInfoForm = () => {
       <BaseFormGroup
         label="Ngày giờ hẹn"
         isRequired={true}
-        error={errors["time"]}
+        error={errors["appointmentDate"]}
         component={
-          <TextField
-            {...register("time", {
-              required: "Địa chỉ chi tiết is required",
-            })}
-            error={!!errors["time"]}
-            style={{ width: "100%" }}
-            variant="outlined"
-            size="small"
+          <BaseDatePickerForm
+            name="appointmentDate"
+            format="DD/MM/YYYY"
+            disabled={!isHighestLevel}
+            width="100%"
+            endIcon
           />
         }
       />
@@ -180,16 +264,18 @@ const ViolationInfoForm = () => {
       <BaseFormGroup
         label="Ghi chú"
         isRequired={true}
-        error={errors["note"]}
+        error={errors["infoSactionNote"]}
         component={
           <TextField
-            {...register("note", {
-              required: "Note is required",
+            {...register("infoSactionNote", {
+              required: "Vui lòng nhâp chú thích",
             })}
-            error={!!errors["addressDetail"]}
+            error={!!errors["infoSactionNote"]}
             style={{ width: "100%" }}
+            className={classes.inputFeild}
             variant="outlined"
             size="small"
+            disabled={!isHighestLevel}
           />
         }
       />
@@ -201,10 +287,53 @@ const useSceneInfoFormStyle = makeStyles({
   form: {
     display: "flex",
     flexDirection: "column",
-    gap: "3px",
-    border: "3px solid rgba(221, 61, 75, 1)",
-    padding: "3px",
-    overflowX: "hidden",
+    gap: "2px",
+    border: "1px solid #d3d3d3",
+    padding: "10px",
+    position: "relative",
+    borderBottomRightRadius: "8px",
+    borderBottomLeftRadius: "8px",
+    height: "480px",
+  },
+  inputFeild: {
+    height: "32px",
+    "& input": {
+      height: "100%",
+    },
+    "& .MuiOutlinedInput-inputMarginDense": {
+      padding: "8px",
+    },
+    "& .MuiInputBase-root.Mui-disabled": {
+      color: "#939393",
+      background: "#ebebeb",
+    },
+  },
+  selectFeild: {
+    height: "34px",
+    "& .MuiOutlinedInput-input": {
+      padding: "10px",
+    },
+    "&.MuiInputBase-root.Mui-disabled": {
+      color: "#939393",
+      background: "#ebebeb",
+    },
+  },
+  plate: {
+    position: "absolute",
+    top: "60px",
+    right: "30px",
+    padding: "5px 10px",
+    display: "flex",
+    flexDirection: "column",
+    gap: "1px",
+    justifyContent: "center",
+    border: "2px solid #000",
+    "& p": {
+      textAlign: "center",
+      fontWeight: "bold",
+      fontSize: "21px",
+      lineHeight: 1.14,
+    },
   },
 });
 

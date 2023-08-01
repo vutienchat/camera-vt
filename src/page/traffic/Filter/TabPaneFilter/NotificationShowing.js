@@ -5,11 +5,11 @@ import { TrafficContext } from "../../TrafficContent";
 import { PrintIcon } from "../../Icons";
 import { useState } from "react";
 import DownloadIcon from "@material-ui/icons/GetApp";
-import QuestionModal from "../../../../common/QuestionModal";
-import CustomModal from "../../../../common/CustomModal";
+import CustomModal from "../../component/CustomModal";
 import { PDFViewer } from "@react-pdf/renderer";
 import DispatchNote from "../../Files/DispatchNotePdf/DispatchNotePdf";
 import ViolationNotificationPdf from "../../Files/ViolationNotificationPdf/ViolationNotificationPdf";
+import BaseButton from "../../component/BaseButton";
 
 const NotificationShowing = () => {
   const classes = useStyles();
@@ -24,78 +24,51 @@ const NotificationShowing = () => {
 
   return (
     <React.Fragment>
-      <Button
-        className={classes.btnDropdown}
-        variant="contained"
-        style={{
-          backgroundColor: "rgba(221, 61, 75, 1)",
-          minWidth: 180,
-          opacity: checkedItemList.length === 0 ? "0.3" : "1",
-        }}
-        startIcon={<PrintIcon color="white" />}
+      <BaseButton
+        content="In thông báo VP"
         disabled={checkedItemList.length === 0}
         onClick={() => {
           if (checkedItemList.length === 0) return;
           setIsOpenNotiPrintModal(true);
         }}
-      >
-        <Typography
-          style={{
-            fontWeight: 700,
-            color: "#fff",
-          }}
-        >
-          In thông báo VP
-        </Typography>
-      </Button>
-      <Button
-        className={classes.btnDropdown}
-        variant="outlined"
-        style={{
-          border: "1px solid rgba(221, 61, 75, 1)",
-          minWidth: 180,
-          opacity: checkedItemList.length === 0 ? "0.3" : "1",
-        }}
+        typeStyle="contained"
+        startIcon={
+          <PrintIcon
+            color={checkedItemList.length === 0 ? "#939393" : "#fff"}
+          />
+        }
+        customStyle={{ minWidth: "180px" }}
+      />
+      <BaseButton
+        content="In phiếu gửi"
         disabled={checkedItemList.length === 0}
         onClick={() => {
           if (checkedItemList.length === 0) return;
           setIsOpenSendModal(true);
         }}
-        startIcon={<PrintIcon />}
-      >
-        <Typography
-          style={{
-            color: "rgba(221, 61, 75, 1)",
-            fontWeight: 700,
-          }}
-        >
-          In phiếu gửi
-        </Typography>
-      </Button>
-      <Button
-        className={classes.btnDropdown}
-        variant="outlined"
-        style={{
-          border: "1px solid rgba(221, 61, 75, 1)",
-          minWidth: 150,
-          opacity: checkedItemList.length === 0 ? "0.3" : "1",
-        }}
+        typeStyle="contained"
+        startIcon={
+          <PrintIcon
+            color={checkedItemList.length === 0 ? "#939393" : "#fff"}
+          />
+        }
+      />
+      <BaseButton
+        content="Tải xuống"
         disabled={checkedItemList.length === 0}
         onClick={() => {
           if (checkedItemList.length === 0) return;
           setIsOpenSendModal(true);
         }}
-        startIcon={<DownloadIcon style={{ color: "rgba(221, 61, 75, 1)" }} />}
-      >
-        <Typography
-          style={{
-            color: "rgba(221, 61, 75, 1)",
-            fontWeight: 700,
-          }}
-        >
-          Tải xuống
-        </Typography>
-      </Button>
+        typeStyle="contained"
+        startIcon={
+          <DownloadIcon
+            style={{
+              color: checkedItemList.length === 0 ? "#939393" : "#fff",
+            }}
+          />
+        }
+      />
       {isOpenNotiPrintModal && (
         <CustomModal
           title="Xác nhận in thông báo vi phạm"

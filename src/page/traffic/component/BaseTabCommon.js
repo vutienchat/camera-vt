@@ -7,6 +7,7 @@ const BaseTabCommon = ({
   selectedTab,
   handleChangeSelectedTab,
   badge,
+  customeStyle,
 }) => {
   const classes = useTabCommonStyle();
 
@@ -15,8 +16,7 @@ const BaseTabCommon = ({
       className={classes.root}
       style={{
         width: width || "fit-content",
-        borderTop: "1px solid rgba(221, 61, 75, 1)",
-        borderLeft: "1px solid rgba(221, 61, 75, 1)",
+        ...customeStyle,
       }}
     >
       {list.map(({ label, value }, index) => (
@@ -24,9 +24,12 @@ const BaseTabCommon = ({
           key={value}
           className={classes.statusBox}
           style={{
-            backgroundColor:
-              selectedTab === value ? "rgba(221, 61, 75, 1)" : "#fff",
+            borderBottom: selectedTab === value ? "3px solid #dd3d4b" : "",
             width: width ? `${100 / list.length}%` : "auto",
+            backgroundColor: selectedTab === value ? "#ebebeb" : "#fff",
+            borderTopLeftRadius: customeStyle && index === 0 ? "8px" : "0px",
+            borderTopRightRadius:
+              customeStyle && index === list.length - 1 ? "8px" : "0px",
           }}
           onClick={() => {
             if (selectedTab !== value) {
@@ -34,27 +37,10 @@ const BaseTabCommon = ({
             }
           }}
         >
-          {index !== 0 && selectedTab === value && (
-            <Box
-              className={classes.statusBoxAfter}
-              style={{
-                backgroundColor: "rgba(221, 61, 75, 1)",
-              }}
-            >
-              <Box
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  backgroundColor: "#fff",
-                  borderTopRightRadius: "12px",
-                }}
-              ></Box>
-            </Box>
-          )}
           <Typography
             className={classes.textStatusBox}
             style={{
-              color: selectedTab === value ? "#fff" : "#000",
+              fontWeight: selectedTab === value ? "bold" : "normal",
             }}
           >
             {label}
@@ -74,28 +60,20 @@ const useTabCommonStyle = makeStyles({
   root: {
     display: "flex",
     width: "fit-content",
-    borderTopRightRadius: "12px",
-    borderRight: "none",
+    borderTop: "1px solid #d9d9d9",
+    overflow: "hidden",
   },
   statusBox: {
     display: "flex",
     gap: "10px",
     alignItems: "center",
+    justifyContent: "center",
     padding: "5px 15px",
-    borderTopRightRadius: "12px",
-    borderRight: "1px solid rgba(221, 61, 75, 1)",
     cursor: "pointer",
     position: "relative",
     zIndex: 2,
-  },
-  statusBoxAfter: {
-    position: "absolute",
-    width: "13px",
-    height: "13px",
-    top: 0,
-    left: "-14px",
-    borderRight: "1px solid transparent",
-    zIndex: 1,
+    border: "1px solid #d9d9d9",
+    borderTop: "none",
   },
   textStatusBox: {
     color: "#000",

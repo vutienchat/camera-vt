@@ -1,23 +1,15 @@
+import React from "react";
 import {
   Box,
-  Button,
   Dialog,
   IconButton,
   Typography,
   makeStyles,
 } from "@material-ui/core";
-import React from "react";
-import CloseModalIcon from "../page/masterMap/Icons/CloseModalIcon";
+import CloseModalIcon from "../../masterMap/Icons/CloseModalIcon";
 
-const QuestionModal = ({
-  title,
-  isOpen,
-  children,
-  handleConfirm,
-  handleClose,
-  confirmText,
-}) => {
-  const classes = useQuestionModalStyle();
+const CustomModal = ({ title, isOpen, children, handleClose }) => {
+  const classes = useCustomModalStyle();
 
   return (
     <Dialog
@@ -33,21 +25,13 @@ const QuestionModal = ({
             <CloseModalIcon width={16} height={16} color="#000" />
           </IconButton>
         </Box>
-        <Box style={{ padding: "20px 0px" }}>{children}</Box>
-        <Box className={classes.footer}>
-          <Button variant="outlined">
-            <Typography>Cancel</Typography>
-          </Button>
-          <Button variant="contained" color="secondary" onClick={handleConfirm}>
-            <Typography>{confirmText}</Typography>
-          </Button>
-        </Box>
+        <Box style={{ marginTop: 10 }}>{children}</Box>
       </Box>
     </Dialog>
   );
 };
 
-const useQuestionModalStyle = makeStyles({
+const useCustomModalStyle = makeStyles({
   root: {
     "& .MuiDialog-paper": {
       overflowY: "unset",
@@ -77,10 +61,7 @@ const useQuestionModalStyle = makeStyles({
     display: "flex",
     justifyContent: "center",
     gap: "32px",
-    "& p": {
-      textTransform: "none",
-    },
   },
 });
 
-export default QuestionModal;
+export default CustomModal;

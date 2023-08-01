@@ -13,11 +13,11 @@ import {
 
 import ListTrafficModal from "./Modals/ListTrafficModal";
 import BaseTabCommon from "./component/BaseTabCommon";
-import CustomModal from "../../common/CustomModal";
+import CustomModal from "./component/CustomModal";
 import ViolationImageModal from "./Modals/ViolationImageModal";
 import { PDFViewer } from "@react-pdf/renderer";
 import ViolationHistoryModal from "./Modals/ViolationHistoryModal";
-import QuestionModal from "../../common/QuestionModal";
+import QuestionModal from "./component/QuestionModal";
 import NoErrorReasonModal from "./Modals/NoErrorReasonModal";
 import useModalAction from "./hooks/useModalAction";
 
@@ -58,6 +58,7 @@ const TrafficContent = () => {
   const [selectedReason, setSeletedReason] = useState(
     noErrorReasonList[0].value
   );
+  const [isHighestLevel, setIsHighestLevel] = useState(false);
 
   const {
     data: trafficList,
@@ -91,6 +92,8 @@ const TrafficContent = () => {
     trafficList,
     checkedItemList,
     paramTrafficSearch,
+    isHighestLevel,
+    selectedItem,
 
     setParamTrafficSearch,
     setCheckedItemList,
@@ -128,7 +131,6 @@ const TrafficContent = () => {
           <ListTrafficModal
             isOpen={isTrafficListOpenModal}
             handleClose={handleClose}
-            selectedItem={selectedItem}
             trafficList={trafficList}
             setSeletedItem={setSeletedItem}
             handleOpenViolationModal={handleOpenViolationModal}

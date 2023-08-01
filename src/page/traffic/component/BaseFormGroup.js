@@ -18,7 +18,9 @@ const BaseFormGroup = ({
       style={{ width: width || "100%" }}
     >
       <Grid item xs={3} lg={3}>
-        {label} {isRequired && <span>(*)</span>}
+        <Typography style={{ fontSize: "14px" }}>
+          {label} {isRequired && <span>(*)</span>}
+        </Typography>
       </Grid>
       <Grid item xs={9} lg={9}>
         <Box

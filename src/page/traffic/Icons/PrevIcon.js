@@ -1,16 +1,40 @@
 const PreviousIcon = () => {
   return (
     <svg
-      width="50"
-      height="83"
-      viewBox="0 0 50 83"
-      fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      data-name="Group 10502"
+      width="80"
+      height="80"
+      viewBox="0 0 80 80"
     >
-      <path
-        d="M1.32586 38.2972L37.9934 1.63153C39.7612 -0.13629 42.629 -0.13629 44.3968 1.63153L48.6739 5.90862C50.4398 7.67455 50.4417 10.5348 48.6814 12.3045L19.621 41.4989L48.6796 70.6952C50.4417 72.4649 50.4379 75.3251 48.672 77.091L44.3949 81.3681C42.6271 83.136 39.7593 83.136 37.9915 81.3681L1.32586 44.7006C-0.441954 42.9328 -0.441954 40.065 1.32586 38.2972Z"
-        fill="#DD3D4B"
+      <defs>
+        <clipPath id="lz22fa6uua">
+          <path
+            data-name="Rectangle 6501"
+            style={{ stroke: "#707070", fill: "#fff" }}
+            d="M0 0h32v32H0z"
+          />
+        </clipPath>
+      </defs>
+      <circle
+        data-name="Ellipse 345"
+        cx="40"
+        cy="40"
+        r="40"
+        style={{ opacity: 0.5 }}
       />
+      <g
+        data-name="Mask Group 1389"
+        transform="translate(23 24)"
+        style={{ clipPath: "url(#lz22fa6uua)" }}
+      >
+        <path
+          data-name="Union 1"
+          d="M4.357 0 0 4.357 11.639 16 0 27.639 4.357 32h.1l16-16-16-16z"
+          transform="rotate(180 13.114 16)"
+          style={{ fill: "#fff" }}
+        />
+      </g>
     </svg>
   );
 };
