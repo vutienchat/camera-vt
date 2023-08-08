@@ -29,7 +29,7 @@ const ListTrafficModal = ({
   isOpen,
   handleClose,
   trafficList,
-  setSeletedItem,
+  setSelectedItem,
   handleOpenHistoryModal,
   handleOpenReasonModal,
 }) => {
@@ -111,17 +111,17 @@ const ListTrafficModal = ({
 
   const handlePrevious = () => {
     if (itemId > 0) {
-      setSeletedItem(trafficList[itemId - 1]);
+      setSelectedItem(trafficList[itemId - 1]);
       handleResetDataForm(itemId - 1);
     }
   };
 
   const handleNext = () => {
     if (itemId < trafficList.length) {
-      setSeletedItem(trafficList[itemId + 1]);
+      setSelectedItem(trafficList[itemId + 1]);
       handleResetDataForm(itemId + 1);
     } else {
-      setSeletedItem(trafficList[0]);
+      setSelectedItem(trafficList[0]);
       handleResetDataForm(0);
     }
   };
@@ -241,7 +241,7 @@ const ListTrafficModal = ({
                     list={listSceneTab}
                     selectedTab={tabPane}
                     handleChangeSelectedTab={handleChangeTabPane}
-                    customeStyle={{
+                    customStyle={{
                       borderTopRightRadius: "8px",
                       borderTopLeftRadius: "8px",
                     }}

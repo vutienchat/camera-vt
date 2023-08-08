@@ -7,6 +7,8 @@ const BaseButton = ({ content, typeStyle, customStyle, ...props }) => {
 
   if (typeStyle === "border") {
     styleButton = classes.borderStyle;
+  } else if (typeStyle === "borderStyle2") {
+    styleButton = classes.borderStyle2;
   } else if (typeStyle === "contained") {
     styleButton = classes.containedStyle;
   } else if (typeStyle === "simple") {
@@ -22,8 +24,9 @@ const BaseButton = ({ content, typeStyle, customStyle, ...props }) => {
         height: "40px",
         borderRadius: "4px",
         textTransform: "unset",
-        cursor: "pointer",
+        cursor: disabled ? "default" : "pointer",
         boxShadow: "none",
+        textWrap: "nowrap",
         minWidth: "150px",
         ...customStyle,
       }}
@@ -50,50 +53,41 @@ const useBaseButtonStyle = makeStyles({
   fullStyle: {
     backgroundColor: "#ffd8dc",
     border: "none",
-    "& p": {
-      color: "#dd3d4b",
-    },
+    "& p": { color: "#dd3d4b" },
     "&:hover": {
       backgroundColor: "#aa0e1b",
-      "& p": {
-        color: "#fff",
-      },
+      "& p": { color: "#fff" },
     },
   },
   containedStyle: {
     backgroundColor: "#dd3d4b",
     border: "none",
-    "& p": {
-      color: "#fff",
-    },
-    "&:hover": {
-      backgroundColor: "#aa0e1b",
-    },
+    "& p": { color: "#fff" },
+    "&:hover": { backgroundColor: "#aa0e1b" },
   },
   borderStyle: {
     backgroundColor: "#fff",
     border: "1.5px solid #000",
-    "& p": {
-      color: "#000",
-    },
+    "& p": { color: "#000" },
     "&:hover": {
       backgroundColor: "#000",
-      "& p": {
-        color: "#fff",
-      },
+      "& p": { color: "#fff" },
     },
   },
+  borderStyle2: {
+    backgroundColor: "#fff",
+    border: "1.5px solid green",
+    "& p": { color: "green" },
+    "&:hover": { backgroundColor: "#ccc" },
+  },
+
   simpleStyle: {
     backgroundColor: "#ebebeb",
-    "& p": {
-      color: "#000",
-    },
+    "& p": { color: "#000" },
   },
   disabledStyle: {
     backgroundColor: "#d3d3d3",
-    "& p": {
-      color: "#939393",
-    },
+    "& p": { color: "#939393" },
   },
 });
 

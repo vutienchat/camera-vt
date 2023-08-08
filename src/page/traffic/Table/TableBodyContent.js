@@ -19,7 +19,7 @@ const TableBodyContent = () => {
     checkedItems,
     handleCheckData,
     handleClickColumns,
-    checkedable,
+    checkedAble,
   } = useContext(TableCommonContext);
   const classes = useTableBodyStyle();
 
@@ -35,29 +35,33 @@ const TableBodyContent = () => {
 
   if (isLoading) {
     return (
-      <TableRow>
-        <TableCell colSpan={tableHeader.length + 1}>
-          <Box
-            style={{ display: "flex", justifyContent: "center", padding: 20 }}
-          >
-            <CircularProgress color="secondary" />
-          </Box>
-        </TableCell>
-      </TableRow>
+      <TableBody>
+        <TableRow>
+          <TableCell colSpan={tableHeader.length + 1}>
+            <Box
+              style={{ display: "flex", justifyContent: "center", padding: 20 }}
+            >
+              <CircularProgress color="secondary" />
+            </Box>
+          </TableCell>
+        </TableRow>
+      </TableBody>
     );
   }
 
   if (!tableData || tableData.length === 0) {
     return (
-      <TableRow>
-        <TableCell colSpan={tableHeader.length + 1}>
-          <Typography
-            style={{ textAlign: "center", padding: 20, fontSize: 21 }}
-          >
-            No Data
-          </Typography>
-        </TableCell>
-      </TableRow>
+      <TableBody>
+        <TableRow>
+          <TableCell colSpan={tableHeader.length + 1}>
+            <Typography
+              style={{ textAlign: "center", padding: 20, fontSize: 21 }}
+            >
+              No Data
+            </Typography>
+          </TableCell>
+        </TableRow>
+      </TableBody>
     );
   }
 
@@ -65,7 +69,7 @@ const TableBodyContent = () => {
     <TableBody>
       {tableData.map((dataBody) => (
         <TableRow key={dataBody.id}>
-          {checkedable && (
+          {checkedAble && (
             <TableCell width={50}>
               <Checkbox
                 value={JSON.stringify(dataBody)}

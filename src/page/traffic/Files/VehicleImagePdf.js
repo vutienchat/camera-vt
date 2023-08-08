@@ -278,9 +278,15 @@ const VehicleImagePdf = () => {
           </View>
         </View>
         <View style={{ flex: 1 }}>
-          <View
-            style={{ width: "100%", height: 100, backgroundColor: "#808080" }}
-          ></View>
+          <View style={{ width: "100%", height: 100 }}>
+            <Image
+              src={{
+                uri: "https://maps.googleapis.com/maps/api/staticmap?center=21.0285,105.8542&zoom=16&size=600x400&key=AIzaSyDI3p_xqPNiCKgtK_yIDkXiq-BJ_aRNjpI&markers=color:red%7C21.0285,105.8542",
+              }}
+              alt="image Map"
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            />
+          </View>
           <View
             style={{
               padding: 5,

@@ -406,7 +406,13 @@ const VideoScreenDetail = memo((props) => {
       video.clientHeight * scaleZoom
     );
 
+    console.log("video", video);
+    console.log("canvas", canvas);
+
     const image = canvas.toDataURL("image/jpeg");
+
+    console.log(image);
+
     const link = document.createElement("a");
     const pictureName = "1234.jpg";
     //const pictureName = `${deviceName}_${moment().format('YYYY-MM-DD HH:mm:ss')}.jpg`;

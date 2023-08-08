@@ -7,7 +7,7 @@ const BaseTabCommon = ({
   selectedTab,
   handleChangeSelectedTab,
   badge,
-  customeStyle,
+  customStyle,
 }) => {
   const classes = useTabCommonStyle();
 
@@ -16,7 +16,7 @@ const BaseTabCommon = ({
       className={classes.root}
       style={{
         width: width || "fit-content",
-        ...customeStyle,
+        ...customStyle,
       }}
     >
       {list.map(({ label, value }, index) => (
@@ -27,9 +27,9 @@ const BaseTabCommon = ({
             borderBottom: selectedTab === value ? "3px solid #dd3d4b" : "",
             width: width ? `${100 / list.length}%` : "auto",
             backgroundColor: selectedTab === value ? "#ebebeb" : "#fff",
-            borderTopLeftRadius: customeStyle && index === 0 ? "8px" : "0px",
+            borderTopLeftRadius: customStyle && index === 0 ? "8px" : "0px",
             borderTopRightRadius:
-              customeStyle && index === list.length - 1 ? "8px" : "0px",
+              customStyle && index === list.length - 1 ? "8px" : "0px",
           }}
           onClick={() => {
             if (selectedTab !== value) {

@@ -10,7 +10,7 @@ import { useContext, useMemo } from "react";
 import { TableCommonContext } from "./TableContent";
 
 const TableHeaderContent = () => {
-  const { checkedItems, checkedable, tableHeader, tableData, handleCheckData } =
+  const { checkedItems, checkedAble, tableHeader, tableData, handleCheckData } =
     useContext(TableCommonContext);
   const classes = useTableHeaderStyle();
 
@@ -53,7 +53,7 @@ const TableHeaderContent = () => {
       }}
     >
       <TableRow>
-        {checkedable && (
+        {checkedAble && (
           <TableCell className={classes.checkbox}>
             <Checkbox
               indeterminate={isChecked}
@@ -68,9 +68,7 @@ const TableHeaderContent = () => {
             style={{
               ...header.customStyles,
               width: header.width,
-              "&.MuiTableCell-root": {
-                padding: 0,
-              },
+              //"&.MuiTableCell-root": { padding: 0 },
             }}
           >
             <Typography style={{ color: "#000" }}>{header.name}</Typography>

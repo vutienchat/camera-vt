@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { Fragment, useContext, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { Box, InputAdornment, TextField, makeStyles } from "@material-ui/core";
@@ -7,7 +7,10 @@ import CloseIcon from "@material-ui/icons/Close";
 import { SettingIcon } from "../Icons";
 import SettingModal from "../Modals/SettingModal";
 import { TrafficContext } from "../TrafficContent";
-import ViolationPendingApproval from "./TabPaneFilter/ViolationPendingApproval";
+import {
+  UnViolationPendingApproval,
+  ViolationPendingApproval,
+} from "./TabPaneFilter";
 import NotificationShowing from "./TabPaneFilter/NotificationShowing";
 
 import { QUERY_KEYS } from "../../../utils/keys";
@@ -67,7 +70,12 @@ const TableFilter = () => {
             ) : null,
         }}
       />
-      {paramTrafficSearch.tabPane === "01" && <ViolationPendingApproval />}
+      {paramTrafficSearch.tabPane === "01" && (
+        <Box style={{ display: "flex" }}>
+          <UnViolationPendingApproval />
+          <ViolationPendingApproval />
+        </Box>
+      )}
       {paramTrafficSearch.tabPane === "03" && <NotificationShowing />}
       <BaseButton
         content="Xuất danh sách"
@@ -98,7 +106,7 @@ const useTableFilterStyle = makeStyles({
     display: "flex",
     alignContent: "center",
     marginTop: "10px",
-    gap: "10px",
+    gap: "16px",
   },
   content: {
     padding: "10px",
@@ -111,7 +119,7 @@ const useTableFilterStyle = makeStyles({
   },
   actionsContent: {
     display: "flex",
-    gap: "10px",
+    gap: "16px",
     alignContent: "center",
   },
   icon: {

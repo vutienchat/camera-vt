@@ -12,7 +12,7 @@ const TableContent = ({
   isLoading,
   checkedItems,
   handleClickColumns,
-  checkedable,
+  checkedAble,
 }) => {
   const data = {
     isLoading,
@@ -21,7 +21,7 @@ const TableContent = ({
     tableData,
     handleCheckData,
     handleClickColumns,
-    checkedable,
+    checkedAble,
   };
 
   return (

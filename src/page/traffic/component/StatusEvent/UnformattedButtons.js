@@ -33,7 +33,7 @@ const UnformattedButtons = () => {
         <BaseButton
           content="Chuyển không lỗi"
           customStyle={{ minWidth: "150px" }}
-          onClick={handleOpenReasonModal}
+          onClick={() => handleOpenReasonModal(false)}
         />
         <BaseButton
           content="Gửi duyệt lỗi"

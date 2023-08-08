@@ -40,7 +40,7 @@ const RangeDateTab = ({ paramsFilter, handleCheckDate }) => {
   };
 
   return (
-    <Box fullWidth>
+    <Box>
       <Button
         aria-controls="customized-menu"
         aria-haspopup="true"

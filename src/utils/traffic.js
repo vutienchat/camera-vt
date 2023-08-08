@@ -43,142 +43,52 @@ export const settingArr = [
 ];
 
 export const violationError = [
-  {
-    label: "Không chấp hành hiệu lệnh của tin hiệu giao thông",
-    value: 1,
-  },
+  { label: "Không chấp hành hiệu lệnh của tin hiệu giao thông", value: 1 },
   {
     label: "Không chấp hành hiệu lệnh, chỉ dẫn của biển báo, vạch kẻ đường",
     value: 2,
   },
-  {
-    label: "Vượt trong các trường hợp cấm vượt",
-    value: 3,
-  },
-  {
-    label: "Dừng, đỗ phương tiện trái quy định",
-    value: 4,
-  },
-  {
-    label: "Điều khiển phương tiện chạy quá tốc độ",
-    value: 5,
-  },
-  {
-    label: "Đi ngược chiều",
-    value: 6,
-  },
+  { label: "Vượt trong các trường hợp cấm vượt", value: 3 },
+  { label: "Dừng, đỗ phương tiện trái quy định", value: 4 },
+  { label: "Điều khiển phương tiện chạy quá tốc độ", value: 5 },
+  { label: "Đi ngược chiều", value: 6 },
 ];
 
 export const violationStatus = [
-  {
-    label: "Vi phạm",
-    value: "VP",
-  },
-  {
-    label: "Chờ duyệt lỗi",
-    value: "CDVP",
-  },
-  {
-    label: "Chờ duyệt không lỗi",
-    value: "CDKVP",
-  },
-  {
-    label: "Chưa định dạng",
-    value: "CDD",
-  },
-  {
-    label: "Chờ duyệt định danh",
-    value: "CDDD",
-  },
-  {
-    label: "Đã định dạng",
-    value: "DDD",
-  },
-  {
-    label: "Có lỗi",
-    value: "CVP",
-  },
-  {
-    label: "Không lỗi",
-    value: "KVP",
-  },
+  { label: "Vi phạm", value: "VP" },
+  { label: "Chờ duyệt lỗi", value: "CDVP" },
+  { label: "Chờ duyệt không lỗi", value: "CDKVP" },
+  { label: "Chưa định dạng", value: "CDD" },
+  { label: "Chờ duyệt định danh", value: "CDDD" },
+  { label: "Đã định dạng", value: "DDD" },
+  { label: "Có lỗi", value: "CVP" },
+  { label: "Không lỗi", value: "KVP" },
 ];
 
 export const vehicles = [
-  {
-    label: "Ô tô",
-    value: "car",
-  },
-  {
-    label: "Xe máy",
-    value: "motor",
-  },
-  {
-    label: "Xe tải",
-    value: "bus",
-  },
-  {
-    label: "Xe bus",
-    value: "truck",
-  },
-  {
-    label: "Xe đạp",
-    value: "bicycle",
-  },
-  {
-    label: "Xe ba gác",
-    value: "tricycles",
-  },
-  {
-    label: "NgườI đi bộ",
-    value: "human",
-  },
+  { label: "Ô tô", value: "car" },
+  { label: "Xe máy", value: "motor" },
+  { label: "Xe tải", value: "bus" },
+  { label: "Xe bus", value: "truck" },
+  { label: "Xe đạp", value: "bicycle" },
+  { label: "Xe ba gác", value: "tricycles" },
+  { label: "NgườI đi bộ", value: "human" },
 ];
 
 export const carsColor = [
-  {
-    label: "Đen",
-    value: "black",
-  },
-  {
-    label: "Trắng",
-    value: "white",
-  },
-  {
-    label: "Đỏ",
-    value: "red",
-  },
-  {
-    label: "Nâu",
-    value: "brown",
-  },
-  {
-    label: "Xanh",
-    value: "blue",
-  },
-  {
-    label: "Vàng",
-    value: "yellow",
-  },
+  { label: "Đen", value: "black" },
+  { label: "Trắng", value: "white" },
+  { label: "Đỏ", value: "red" },
+  { label: "Nâu", value: "brown" },
+  { label: "Xanh", value: "blue" },
+  { label: "Vàng", value: "yellow" },
 ];
 
 export const plateCarsColor = [
-  {
-    label: "Đỏ",
-    value: "red",
-  },
-  {
-    label: "Xanh",
-    value: "blue",
-  },
-  {
-    label: "Vàng",
-    value: "yellow",
-  },
-  {
-    label: "Trắng",
-    value: "white",
-  },
+  { label: "Đỏ", value: "red" },
+  { label: "Xanh", value: "blue" },
+  { label: "Vàng", value: "yellow" },
+  { label: "Trắng", value: "white" },
 ];
 
 export const headerFilterArr = [
@@ -214,10 +124,7 @@ export const headerFilterArr = [
     list: carsColor,
     type: "select_multiple",
   },
-  {
-    key: "date",
-    type: "date_range",
-  },
+  { key: "date", type: "date_range" },
 ];
 
 export const columnsTrafficData = [
@@ -237,9 +144,7 @@ export const columnsTrafficData = [
   {
     field: "imageDetail",
     name: "Hình Ảnh Vi Phạm",
-    customStyles: {
-      flex: 1,
-    },
+    customStyles: { flex: 1 },
   },
 ];
 
@@ -299,33 +204,15 @@ export const colorStatusErrEvent = {
 };
 
 export const status = [
-  {
-    label: "Tất cả",
-    value: "all",
-  },
-  {
-    label: "Vi phạm chờ duyệt",
-    value: "01",
-  },
-  {
-    label: "Lỗi đang xử lý",
-    value: "02",
-  },
-  {
-    label: "Ra thông báo VP",
-    value: "03",
-  },
+  { label: "Tất cả", value: "all" },
+  { label: "Vi phạm chờ duyệt", value: "01" },
+  { label: "Lỗi đang xử lý", value: "02" },
+  { label: "Ra thông báo VP", value: "03" },
 ];
 
 export const listSceneTab = [
-  {
-    label: "Thông tin hiện trường",
-    value: "scence_info",
-  },
-  {
-    label: "Thông tin xử phạt",
-    value: "ban_info",
-  },
+  { label: "Thông tin hiện trường", value: "scence_info" },
+  { label: "Thông tin xử phạt", value: "ban_info" },
 ];
 
 export const noErrorReasonList = [
@@ -359,3 +246,18 @@ export function getValueObjectByPath(path, obj, separator = ".") {
   const properties = Array.isArray(path) ? path : path.split(separator);
   return properties.reduce((prev, curr) => prev && prev[curr], obj);
 }
+
+export const convertToAbbreviation = (string) => {
+  const cleanedName = string
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+
+  // Chia tên thành các phần
+  const parts = cleanedName.split(" ");
+
+  // Tạo chuỗi viết tắt
+  const abbreviation = parts.map((part) => part[0]).join("");
+
+  return abbreviation;
+};

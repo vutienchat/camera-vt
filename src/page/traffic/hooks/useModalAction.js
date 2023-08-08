@@ -7,6 +7,7 @@ const useModalAction = () => {
     useState(false);
   const [isOpenReasonsModal, setIsOpenReasonsModal] = useState(false);
   const [isOpenHistoryModal, setIsOpenHistoryModal] = useState(false);
+  const [isHandleMulti, setIsHandleMulti] = useState(true);
 
   const handleOpenViolationModal = useCallback(() => {
     setIsOpenViolationImageModal(true);
@@ -28,7 +29,8 @@ const useModalAction = () => {
     setIsTrafficListOpenModal(true);
   }, []);
 
-  const handleOpenReasonModal = useCallback(() => {
+  const handleOpenReasonModal = useCallback((isMulti) => {
+    setIsHandleMulti(isMulti);
     setIsOpenReasonsModal(true);
     setIsTrafficListOpenModal(false);
   }, []);
@@ -42,6 +44,7 @@ const useModalAction = () => {
     isOpenViolationImageModal,
     isOpenReasonsModal,
     isOpenHistoryModal,
+    isHandleMulti,
 
     setIsOpenReasonsModal,
     setIsTrafficListOpenModal,

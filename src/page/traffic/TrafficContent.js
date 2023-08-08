@@ -29,6 +29,7 @@ const TrafficContent = () => {
     isOpenViolationImageModal,
     isOpenReasonsModal,
     isOpenHistoryModal,
+    isHandleMulti,
 
     setIsOpenReasonsModal,
     setIsTrafficListOpenModal,
@@ -53,9 +54,23 @@ const TrafficContent = () => {
     keyword: "",
   });
 
+  const [modelSetting, setModelSetting] = useState({
+    id: "Mã code collection setting account Traffic",
+    userId: "Mã Code tài khoản của người cấu hình",
+    provinceId: "01",
+    districtId: "001",
+    headConfirmation: true,
+    address: "60 Hoàng Quốc Việt",
+    unitHeads: "Nguyễn Văn C",
+    manager: "Nguyễn Văn B",
+    deputy: "Nguyễn Văn A",
+    phone: "0987654321",
+    email: "address@gmail.com",
+  });
+
   const [checkedItemList, setCheckedItemList] = useState([]);
-  const [selectedItem, setSeletedItem] = useState();
-  const [selectedReason, setSeletedReason] = useState(
+  const [selectedItem, setSelectedItem] = useState();
+  const [selectedReason, setSelectedReason] = useState(
     noErrorReasonList[0].value
   );
   const [isHighestLevel, setIsHighestLevel] = useState(false);
@@ -67,7 +82,7 @@ const TrafficContent = () => {
   } = useTrafficData();
 
   const handleChangeSelectReason = (event) => {
-    setSeletedReason(event.target.value);
+    setSelectedReason(event.target.value);
   };
 
   const handleCheckData = (data) => {
@@ -75,17 +90,25 @@ const TrafficContent = () => {
   };
 
   const handleClickColumns = useCallback((data) => {
-    setSeletedItem(data);
+    setSelectedItem(data);
     setIsTrafficListOpenModal(true);
   }, []);
 
   const handleClose = useCallback(() => {
     setIsTrafficListOpenModal(false);
-    setSeletedItem(undefined);
+    setSelectedItem(undefined);
   }, []);
 
   const handleConfirmReason = () => {
-    console.log(selectedReason);
+    if (isHandleMulti) {
+      console.log("checkedItemList", checkedItemList);
+    } else {
+      console.log("selectedItem", selectedItem);
+    }
+  };
+
+  const handleUpdateStatusTraffic = (listStatusTraffic) => {
+    console.log("listStatusTraffic", listStatusTraffic);
   };
 
   const data = {
@@ -94,10 +117,13 @@ const TrafficContent = () => {
     paramTrafficSearch,
     isHighestLevel,
     selectedItem,
+    modelSetting,
 
     setParamTrafficSearch,
     setCheckedItemList,
     setIsOpenReasonsModal,
+    handleUpdateStatusTraffic,
+    handleOpenReasonModal,
   };
 
   const handleChangeTabPane = (value) => {
@@ -118,7 +144,7 @@ const TrafficContent = () => {
             handleChangeSelectedTab={handleChangeTabPane}
           />
           <TableContent
-            checkedable
+            checkedAble
             isLoading={isTrafficLoading || isTrafficFetching}
             tableData={trafficList}
             tableHeader={columnsTrafficData}
@@ -132,7 +158,7 @@ const TrafficContent = () => {
             isOpen={isTrafficListOpenModal}
             handleClose={handleClose}
             trafficList={trafficList}
-            setSeletedItem={setSeletedItem}
+            setSelectedItem={setSelectedItem}
             handleOpenViolationModal={handleOpenViolationModal}
             handleOpenHistoryModal={handleOpenHistoryModal}
             handleOpenReasonModal={handleOpenReasonModal}
@@ -160,13 +186,13 @@ const TrafficContent = () => {
         )}
         {isOpenReasonsModal && (
           <QuestionModal
-            title="Xác nhận gửi duyệt lỗi"
+            title="Xác nhận gửi duyệt không lỗi"
             handleClose={() => {
               handleCloseReasonModal();
               if (selectedItem) {
                 setIsTrafficListOpenModal(true);
               }
-              setSeletedReason(noErrorReasonList[0].value);
+              setSelectedReason(noErrorReasonList[0].value);
             }}
             confirmText="Gửi lỗi không duyệt"
             isOpen={isOpenReasonsModal}

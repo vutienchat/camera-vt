@@ -53,7 +53,7 @@ const useStyles = makeStyles({
   root: {
     display: "flex",
     justifyContent: "space-between",
-    gap: "10px",
+    gap: "16px",
   },
 });
 
