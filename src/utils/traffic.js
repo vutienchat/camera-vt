@@ -1,44 +1,35 @@
 import ViolationInfo from "../page/traffic/component/ItemTable/ViolationInfo";
 
+
 export const settingArr = [
   {
     label: "Người ký",
     key: "signer",
-    errorMessage: "Signer is required",
     type: "radio",
   },
   {
     label: "Trưởng phòng",
     key: "direct",
-    errorMessage: "Direct is required",
     type: "text",
+    maxLength: 10,
+    pattern: /[-!$%^&*()_+|~=`{}\[\]:\/;<>?,.@#0-9]/,
   },
   {
     label: "Phó phòng",
     key: "subDirect",
-    errorMessage: "Sub Direct is required",
     type: "text",
+    pattern: /[-!$%^&*()_+|~=`{}\[\]:\/;<>?,.@#0-9]/
   },
   {
     label: "Số điện thoại",
     key: "phone",
-    errorMessage: "Phone is required",
-    pattern: {
-      message: "Phone number is valid",
-      value: /(84|0[3|5|7|8|9])+([0-9]{8})\b/,
-    },
     type: "text",
   },
   {
     label: "Email",
     key: "email",
-    errorMessage: "Email is required",
     type: "text",
-    pattern: {
-      message: "Email is invalid",
-      value:
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    },
+
   },
 ];
 

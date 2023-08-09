@@ -188,7 +188,9 @@ export default function SelectMultiple({
                     ) : null,
                 }}
               />
-              <Box style={{ marginTop: "2px" }}>
+              <Box
+                style={{ marginTop: "2px", height: "260px", overflow: "auto" }}
+              >
                 {titleDropdownText && listFilter.length > 0 && (
                   <label>
                     <MenuItem className={classes.listItem}>

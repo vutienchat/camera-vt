@@ -58,3 +58,12 @@ export const StatusEventComponent = (status) => {
 
   return component;
 };
+
+export const validateText = (text) => {
+  let val = text
+
+  val = val.replace(/^\s+/, '')
+  val = val.replace(/\s{2,}/g, ' ')
+
+  return val
+}

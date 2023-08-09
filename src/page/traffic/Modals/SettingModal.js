@@ -15,7 +15,17 @@ import { jsonAddress } from "../../../jsonAddress";
 import SelectForm from "../../../component/SelectForm";
 import BaseFormGroup from "../component/BaseFormGroup";
 import { settingArr } from "../../../utils/traffic";
+import yup from "../javacript/yupGlobal";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { validateText } from "../javacript/common";
 
+const schema = yup.object().shape({
+  // direct: yup.string().required("Direct is required"),
+  // subDirect: yup.string().required("Sub Direct is required"),
+  // phone: yup.string() .required("Phone is required")
+  //   .phonenumber("Phone is invalid"),
+  // email: yup.string().required("Email is required").email("Email is invalid"),
+});
 const SettingModal = () => {
   const methods = useForm({
     defaultValues: {
@@ -24,6 +34,7 @@ const SettingModal = () => {
       direct: "",
     },
     mode: "onBlur",
+    resolver: yupResolver(schema),
   });
 
   const {
@@ -94,26 +105,41 @@ const SettingModal = () => {
           {settingArr.map((setting, index) => {
             if (setting.type === "text") {
               return (
-                <BaseFormGroup
-                  label={setting.label}
-                  isRequired={true}
-                  key={`${setting.key}_${index}`}
-                  showErrorMessage
-                  error={errors[setting.key]}
-                  component={
-                    <TextField
-                      {...register(setting.key, {
-                        required: setting.errorMessage,
-                        minLength: setting.minLength && {
-                          ...setting.minLength,
-                        },
-                        pattern: setting.pattern && { ...setting.pattern },
-                      })}
-                      fullWidth
-                      variant="outlined"
-                      size="small"
-                    />
-                  }
+                <Controller
+                  name={setting.key}
+                  control={control}
+                  render={(props) => {
+                    const { onChange, value, ref } = props.field;
+
+                    return (
+                      <BaseFormGroup
+                        label={setting.label}
+                        isRequired={true}
+                        key={`${setting.key}_${index}`}
+                        showErrorMessage
+                        error={errors[setting.key]}
+                        component={
+                          <TextField
+                            ref={ref}
+                            onChange={(e) => {
+                              if (!setting.pattern) {
+                                onChange(validateText(e.target.value));
+                              }
+
+                              if (setting.pattern && !setting.pattern.test(e.target.value)) {
+                                onChange(validateText(e.target.value));
+                              }
+                            }}
+                            value={value}
+                            inputProps={{ maxLength: setting.maxLength || 200 }}
+                            fullWidth
+                            variant="outlined"
+                            size="small"
+                          />
+                        }
+                      />
+                    );
+                  }}
                 />
               );
             } else if (setting.type === "radio") {
@@ -126,11 +152,6 @@ const SettingModal = () => {
                   showErrorMessage
                   component={
                     <Controller
-                      rules={{
-                        required: {
-                          message: setting.errorMessage,
-                        },
-                      }}
                       control={control}
                       name={setting.key}
                       render={({ field }) => {
