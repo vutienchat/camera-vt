@@ -1,5 +1,22 @@
 import ViolationInfo from "../page/traffic/component/ItemTable/ViolationInfo";
 
+export const SPECIAL_CHARACTER_TEXT = /[-!$%^&*()_+|~=`{}\[\]:\/;<>?,.@#0-9]/
+export const SPECIAL_CHARACTER_NUMBER = /[-!$%^&*()_+|~=`{}\[\]:\/;<>?,.@#a-zA-ZÀ-ỹ\s]/
+
+export const getSpecialCharacter = (type) => {
+  let regex
+  
+  if(type === 'number') {
+    regex = 'a-zA-ZÀ-ỹ\s'
+  } else if (type === 'text') {
+    regex = '0-9'
+  }
+
+
+  // const pattern = new RegExp(/[-!$%^&*()_+|~=`{}\\[\]:\\\/;<>?,.@#' + + `]\/)
+
+  return '\/[-!$%^&*()_+|~=`{}\\[\]:\\\/;<>?,.@#' + + `]\/`
+}
 
 export const settingArr = [
   {
@@ -12,24 +29,27 @@ export const settingArr = [
     key: "direct",
     type: "text",
     maxLength: 10,
-    pattern: /[-!$%^&*()_+|~=`{}\[\]:\/;<>?,.@#0-9]/,
+    pattern: /[a-zA-ZÀ-ỹ\s]/,
+    specialCharater: SPECIAL_CHARACTER_TEXT
   },
   {
     label: "Phó phòng",
     key: "subDirect",
     type: "text",
-    pattern: /[-!$%^&*()_+|~=`{}\[\]:\/;<>?,.@#0-9]/
+    pattern: /[a-zA-ZÀ-ỹ\s]/,
+    specialCharater: SPECIAL_CHARACTER_TEXT
   },
   {
     label: "Số điện thoại",
     key: "phone",
     type: "text",
+    pattern: /\d+/,
+    checkSpecialCharater: SPECIAL_CHARACTER_NUMBER
   },
   {
     label: "Email",
     key: "email",
     type: "text",
-
   },
 ];
 

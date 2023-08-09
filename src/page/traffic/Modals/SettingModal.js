@@ -14,17 +14,19 @@ import {
 import { jsonAddress } from "../../../jsonAddress";
 import SelectForm from "../../../component/SelectForm";
 import BaseFormGroup from "../component/BaseFormGroup";
-import { settingArr } from "../../../utils/traffic";
+import { settingArr, specialCharater } from "../../../utils/traffic";
 import yup from "../javacript/yupGlobal";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { validateText } from "../javacript/common";
 
 const schema = yup.object().shape({
-  // direct: yup.string().required("Direct is required"),
-  // subDirect: yup.string().required("Sub Direct is required"),
-  // phone: yup.string() .required("Phone is required")
-  //   .phonenumber("Phone is invalid"),
-  // email: yup.string().required("Email is required").email("Email is invalid"),
+  direct: yup.string().required("Direct is required"),
+  subDirect: yup.string().required("Sub Direct is required"),
+  phone: yup
+    .string()
+    .required("Phone is required")
+    .phone("Phone is invalid"),
+  email: yup.string().required("Email is required").email("Email is invalid"),
 });
 const SettingModal = () => {
   const methods = useForm({
@@ -121,12 +123,18 @@ const SettingModal = () => {
                         component={
                           <TextField
                             ref={ref}
+                            {...register(setting.key)}
                             onChange={(e) => {
+
                               if (!setting.pattern) {
                                 onChange(validateText(e.target.value));
                               }
 
-                              if (setting.pattern && !setting.pattern.test(e.target.value)) {
+                              if (
+                                !specialCharater.test(e.target.value) &&
+                                setting.pattern &&
+                                setting.pattern.test(e.target.value)
+                              ) {
                                 onChange(validateText(e.target.value));
                               }
                             }}
