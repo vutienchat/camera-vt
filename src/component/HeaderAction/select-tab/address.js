@@ -23,7 +23,7 @@ export const AddressSelectTab = () => {
     if (!idCitySelected) return;
     return jsonAddress.find((item) => item.Id === idCitySelected);
   }, [idCitySelected, jsonAddress]);
-
+ 
   const districtSelected = React.useMemo(() => {
     if (!(idDistrictSelected || citySelected)) return;
     return citySelected.Districts.find(

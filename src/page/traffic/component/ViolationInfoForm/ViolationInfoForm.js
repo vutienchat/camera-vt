@@ -10,6 +10,7 @@ import BaseFormGroup from "../BaseFormGroup";
 import { useContext } from "react";
 import { ListTrafficModalContext } from "../../Modals/ListTrafficModal";
 import BaseDatePickerForm from "../BaseDatePickerForm";
+import { AddressSelectTab } from "../../../../component/HeaderAction/select-tab/address";
 
 const ViolationInfoForm = () => {
   const classes = useSceneInfoFormStyle();
@@ -129,16 +130,7 @@ const ViolationInfoForm = () => {
         isRequired={true}
         error={errors["addressType"]}
         component={
-          <TextField
-            {...register("addressType", {
-              required: "Địa chỉ chi tiết is required",
-            })}
-            error={!!errors["addressType"]}
-            style={{ width: "100%" }}
-            className={classes.inputFeild}
-            variant="outlined"
-            size="small"
-          />
+          <AddressSelectTab />
         }
       />
 

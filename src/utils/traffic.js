@@ -1,44 +1,55 @@
 import ViolationInfo from "../page/traffic/component/ItemTable/ViolationInfo";
 
+export const SPECIAL_CHARACTER_TEXT = /[-!$%^&*()_+|~=`{}\[\]:\/;<>?,.@#0-9]/
+export const SPECIAL_CHARACTER_NUMBER = /[-!$%^&*()_+|~=`{}\[\]:\/;<>?,.@#a-zA-ZÀ-ỹ\s]/
+
+export const getSpecialCharacter = (type) => {
+  let regex
+  
+  if(type === 'number') {
+    regex = 'a-zA-ZÀ-ỹ\s'
+  } else if (type === 'text') {
+    regex = '0-9'
+  }
+
+
+  // const pattern = new RegExp(/[-!$%^&*()_+|~=`{}\\[\]:\\\/;<>?,.@#' + + `]\/)
+
+  return '\/[-!$%^&*()_+|~=`{}\\[\]:\\\/;<>?,.@#' + + `]\/`
+}
+
 export const settingArr = [
   {
     label: "Người ký",
     key: "signer",
-    errorMessage: "Signer is required",
     type: "radio",
   },
   {
     label: "Trưởng phòng",
     key: "direct",
-    errorMessage: "Direct is required",
     type: "text",
+    maxLength: 10,
+    pattern: /[a-zA-ZÀ-ỹ\s]/,
+    specialCharater: SPECIAL_CHARACTER_TEXT
   },
   {
     label: "Phó phòng",
     key: "subDirect",
-    errorMessage: "Sub Direct is required",
     type: "text",
+    pattern: /[a-zA-ZÀ-ỹ\s]/,
+    specialCharater: SPECIAL_CHARACTER_TEXT
   },
   {
     label: "Số điện thoại",
     key: "phone",
-    errorMessage: "Phone is required",
-    pattern: {
-      message: "Phone number is valid",
-      value: /(84|0[3|5|7|8|9])+([0-9]{8})\b/,
-    },
     type: "text",
+    pattern: /\d+/,
+    checkSpecialCharater: SPECIAL_CHARACTER_NUMBER
   },
   {
     label: "Email",
     key: "email",
-    errorMessage: "Email is required",
     type: "text",
-    pattern: {
-      message: "Email is invalid",
-      value:
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    },
   },
 ];
 
