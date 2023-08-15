@@ -164,7 +164,6 @@ export const statusErrEvent = {
   CDD: "Chưa định danh",
   CDDD: "Chờ duyệt định danh",
   DDD: "Đã định danh",
-  CVP: "Có lỗi",
   KVP: "Không lỗi",
 };
 
