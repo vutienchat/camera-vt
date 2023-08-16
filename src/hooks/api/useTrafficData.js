@@ -5,7 +5,7 @@ import { QUERY_KEYS } from "../../utils/keys";
 const getTrafficData = async (params) => {
   const { data } = await axiosInstance.get("/trafficList");
 
-  return data;
+  return data.map((trafficItem, index) => ({ ...trafficItem, stt: index + 1 }));
 };
 
 const useTrafficData = (params) => {

@@ -67,51 +67,54 @@ const TableBodyContent = () => {
 
   return (
     <TableBody>
-      {tableData.map((dataBody) => (
-        <TableRow key={dataBody.id}>
-          {checkedAble && (
-            <TableCell width={50}>
-              <Checkbox
-                value={JSON.stringify(dataBody)}
-                checked={!!checkedItems.find((item) => item.id === dataBody.id)}
-                onChange={handleCheckItem}
-              />
-            </TableCell>
-          )}
-          {tableHeader.map((head) => {
-            const { field, component, customStyles, width } = head;
-
-            return (
-              <TableCell
-                key={field}
-                style={{
-                  ...customStyles,
-                  width,
-                  cursor: handleClickColumns ? "pointer" : "auto",
-                }}
-                onClick={() => {
-                  if (handleClickColumns) {
-                    handleClickColumns(dataBody);
-                  }
-                }}
-              >
-                {component ? (
-                  component(dataBody)
-                ) : (
-                  <Typography
-                    className={classes.text}
-                    style={{
-                      width,
-                    }}
-                  >
-                    {dataBody[field]}
-                  </Typography>
-                )}
+      {tableData.map((dataBody) => {
+        const isChecked = !!checkedItems.find(
+          (item) => item.id === dataBody.id
+        );
+        return (
+          <TableRow
+            key={dataBody.id}
+            style={{ backgroundColor: isChecked ? "#f6f4f5" : "transparent" }}
+          >
+            {checkedAble && (
+              <TableCell width={50}>
+                <Checkbox
+                  value={JSON.stringify(dataBody)}
+                  checked={isChecked}
+                  onChange={handleCheckItem}
+                />
               </TableCell>
-            );
-          })}
-        </TableRow>
-      ))}
+            )}
+            {tableHeader.map((head) => {
+              const { field, component, customStyles, width } = head;
+
+              return (
+                <TableCell
+                  key={field}
+                  style={{
+                    ...customStyles,
+                    width,
+                    cursor: handleClickColumns ? "pointer" : "auto",
+                  }}
+                  onClick={() => {
+                    if (handleClickColumns) {
+                      handleClickColumns(dataBody);
+                    }
+                  }}
+                >
+                  {component ? (
+                    component(dataBody)
+                  ) : (
+                    <Typography className={classes.text} style={{ width }}>
+                      {dataBody[field]}
+                    </Typography>
+                  )}
+                </TableCell>
+              );
+            })}
+          </TableRow>
+        );
+      })}
     </TableBody>
   );
 };

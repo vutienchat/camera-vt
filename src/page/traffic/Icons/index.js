@@ -5,3 +5,5 @@ export { default as WarningIcon } from "./WarningIcon";
 export { default as PreviousIcon } from "./PrevIcon";
 export { default as NextIcon } from "./NextIcon";
 export { default as PrintIcon } from "./PrintIcon";
+export { default as PersonPDIcon } from "./PersonPDIcon";
+export { default as PersonIcon } from "./PersonIcon";

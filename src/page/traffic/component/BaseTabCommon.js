@@ -19,39 +19,53 @@ const BaseTabCommon = ({
         ...customStyle,
       }}
     >
-      {list.map(({ label, value }, index) => (
-        <Box
-          key={value}
-          className={classes.statusBox}
-          style={{
-            borderBottom: selectedTab === value ? "3px solid #dd3d4b" : "",
-            width: width ? `${100 / list.length}%` : "auto",
-            backgroundColor: selectedTab === value ? "#ebebeb" : "#fff",
-            borderTopLeftRadius: customStyle && index === 0 ? "8px" : "0px",
-            borderTopRightRadius:
-              customStyle && index === list.length - 1 ? "8px" : "0px",
-          }}
-          onClick={() => {
-            if (selectedTab !== value) {
-              handleChangeSelectedTab(value);
-            }
-          }}
-        >
-          <Typography
-            className={classes.textStatusBox}
+      {list.map(({ label, value }, index) => {
+        const isTabSelected = selectedTab === value;
+        return (
+          <Box
+            key={value}
+            className={classes.statusBox}
             style={{
-              fontWeight: selectedTab === value ? "bold" : "normal",
+              //borderBottom: selectedTab === value ? "3px solid #dd3d4b" : "",
+              position: "relative",
+              width: width ? `${100 / list.length}%` : "auto",
+              minWidth: "200px",
+              backgroundColor: isTabSelected ? "#ebebeb" : "#fff",
+              borderTopLeftRadius: customStyle && index === 0 ? "8px" : "0px",
+              borderTopRightRadius:
+                customStyle && index === list.length - 1 ? "8px" : "0px",
+            }}
+            onClick={() => {
+              if (selectedTab !== value) {
+                handleChangeSelectedTab(value);
+              }
             }}
           >
-            {label}
-          </Typography>
-          {badge && (
-            <Box className={classes.badge}>
-              <Typography>120</Typography>
-            </Box>
-          )}
-        </Box>
-      ))}
+            <Typography
+              className={classes.textStatusBox}
+              style={{
+                fontWeight: isTabSelected ? "bold" : "normal",
+                lineHeight: "normal",
+                letterSpacing: "normal",
+              }}
+            >
+              {label} (120)
+            </Typography>
+            {isTabSelected && (
+              <Box
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  right: 0,
+                  height: "4px",
+                  backgroundColor: "#dd3d4b",
+                  bottom: "-2px",
+                }}
+              />
+            )}
+          </Box>
+        );
+      })}
     </Box>
   );
 };
@@ -68,7 +82,8 @@ const useTabCommonStyle = makeStyles({
     gap: "10px",
     alignItems: "center",
     justifyContent: "center",
-    padding: "5px 15px",
+    padding: "10px 20px",
+    boxSizing: "border-box",
     cursor: "pointer",
     position: "relative",
     zIndex: 2,

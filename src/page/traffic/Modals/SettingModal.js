@@ -14,7 +14,7 @@ import {
 import { jsonAddress } from "../../../jsonAddress";
 import SelectForm from "../../../component/SelectForm";
 import BaseFormGroup from "../component/BaseFormGroup";
-import { settingArr, specialCharater } from "../../../utils/traffic";
+import { settingArr, SPECIAL_CHARACTER_TEXT } from "../../../utils/traffic";
 import yup from "../javacript/yupGlobal";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { validateText } from "../javacript/common";
@@ -22,10 +22,7 @@ import { validateText } from "../javacript/common";
 const schema = yup.object().shape({
   direct: yup.string().required("Direct is required"),
   subDirect: yup.string().required("Sub Direct is required"),
-  phone: yup
-    .string()
-    .required("Phone is required")
-    .phone("Phone is invalid"),
+  phone: yup.string().required("Phone is required").phone("Phone is invalid"),
   email: yup.string().required("Email is required").email("Email is invalid"),
 });
 const SettingModal = () => {
@@ -125,13 +122,12 @@ const SettingModal = () => {
                             ref={ref}
                             {...register(setting.key)}
                             onChange={(e) => {
-
                               if (!setting.pattern) {
                                 onChange(validateText(e.target.value));
                               }
 
                               if (
-                                !specialCharater.test(e.target.value) &&
+                                !SPECIAL_CHARACTER_TEXT.test(e.target.value) &&
                                 setting.pattern &&
                                 setting.pattern.test(e.target.value)
                               ) {

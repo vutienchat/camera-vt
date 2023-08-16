@@ -47,15 +47,12 @@ const TableHeaderContent = () => {
   };
 
   return (
-    <TableHead
-      style={{
-        backgroundColor: "#ebebeb",
-      }}
-    >
+    <TableHead style={{ backgroundColor: "#ebebeb", height: "40px" }}>
       <TableRow>
         {checkedAble && (
           <TableCell className={classes.checkbox}>
             <Checkbox
+              style={{ padding: 0 }}
               indeterminate={isChecked}
               checked={isCheckedAll}
               onChange={handleCheckAll}
@@ -68,10 +65,21 @@ const TableHeaderContent = () => {
             style={{
               ...header.customStyles,
               width: header.width,
+              padding: 0,
               //"&.MuiTableCell-root": { padding: 0 },
             }}
           >
-            <Typography style={{ color: "#000" }}>{header.name}</Typography>
+            <Typography
+              style={{
+                color: "#000",
+                fontWeight: 600,
+                lineHeight: "normal",
+                letterSpacing: "normal",
+                textAlign: "center",
+              }}
+            >
+              {header.name}
+            </Typography>
           </TableCell>
         ))}
       </TableRow>

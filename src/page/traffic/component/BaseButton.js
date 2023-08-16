@@ -21,13 +21,14 @@ const BaseButton = ({ content, typeStyle, customStyle, ...props }) => {
     <Button
       className={disabled ? classes.disabledStyle : styleButton}
       style={{
-        height: "40px",
+        height: "48px",
         borderRadius: "4px",
         textTransform: "unset",
         cursor: disabled ? "default" : "pointer",
         boxShadow: "none",
         textWrap: "nowrap",
         minWidth: "150px",
+        padding: "16px 20px",
         ...customStyle,
       }}
       {...props}

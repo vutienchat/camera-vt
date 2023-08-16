@@ -1,22 +1,22 @@
 import ViolationInfo from "../page/traffic/component/ItemTable/ViolationInfo";
 
-export const SPECIAL_CHARACTER_TEXT = /[-!$%^&*()_+|~=`{}\[\]:\/;<>?,.@#0-9]/
-export const SPECIAL_CHARACTER_NUMBER = /[-!$%^&*()_+|~=`{}\[\]:\/;<>?,.@#a-zA-ZÀ-ỹ\s]/
+export const SPECIAL_CHARACTER_TEXT = /[-!$%^&*()_+|~=`{}\[\]:\/;<>?,.@#0-9]/;
+export const SPECIAL_CHARACTER_NUMBER =
+  /[-!$%^&*()_+|~=`{}\[\]:\/;<>?,.@#a-zA-ZÀ-ỹ\s]/;
 
 export const getSpecialCharacter = (type) => {
-  let regex
-  
-  if(type === 'number') {
-    regex = 'a-zA-ZÀ-ỹ\s'
-  } else if (type === 'text') {
-    regex = '0-9'
-  }
+  let regex;
 
+  if (type === "number") {
+    regex = "a-zA-ZÀ-ỹs";
+  } else if (type === "text") {
+    regex = "0-9";
+  }
 
   // const pattern = new RegExp(/[-!$%^&*()_+|~=`{}\\[\]:\\\/;<>?,.@#' + + `]\/)
 
-  return '\/[-!$%^&*()_+|~=`{}\\[\]:\\\/;<>?,.@#' + + `]\/`
-}
+  return "/[-!$%^&*()_+|~=`{}\\[]:\\/;<>?,.@#" + +`]\/`;
+};
 
 export const settingArr = [
   {
@@ -30,21 +30,21 @@ export const settingArr = [
     type: "text",
     maxLength: 10,
     pattern: /[a-zA-ZÀ-ỹ\s]/,
-    specialCharater: SPECIAL_CHARACTER_TEXT
+    specialCharater: SPECIAL_CHARACTER_TEXT,
   },
   {
     label: "Phó phòng",
     key: "subDirect",
     type: "text",
     pattern: /[a-zA-ZÀ-ỹ\s]/,
-    specialCharater: SPECIAL_CHARACTER_TEXT
+    specialCharater: SPECIAL_CHARACTER_TEXT,
   },
   {
     label: "Số điện thoại",
     key: "phone",
     type: "text",
     pattern: /\d+/,
-    checkSpecialCharater: SPECIAL_CHARACTER_NUMBER
+    checkSpecialCharater: SPECIAL_CHARACTER_NUMBER,
   },
   {
     label: "Email",
@@ -104,45 +104,66 @@ export const plateCarsColor = [
 
 export const headerFilterArr = [
   {
-    width: 300,
+    width: "100%",
     btnText: "Trạng thái",
     titleDropdownText: "Tất cả trạng thái",
     key: "status",
     list: violationStatus,
     type: "select_multiple",
+    placeholderContent: "Trạng thái",
   },
   {
-    width: 300,
+    width: "100%",
     btnText: "Lỗi vi phạm",
     titleDropdownText: "Tất cả lỗi vi phạm",
     key: "errors",
     list: violationError,
     type: "select_multiple",
+    placeholderContent: "Lỗi vi phạm",
   },
   {
-    width: 300,
+    width: "100%",
+    btnText: "Vị trí",
+    titleDropdownText: "Tất cả thiết bị",
+    key: "devices",
+    list: violationError,
+    type: "select_multiple",
+    placeholderContent: "Tìm kiếm thiết bị",
+  },
+  {
+    width: "100%",
     btnText: "Phương tiện",
     titleDropdownText: "Tất cả phương tiện",
     key: "vehicles",
     list: vehicles,
     type: "select_multiple",
+    placeholderContent: "Phương tiện",
   },
   {
-    width: 300,
+    width: "100%",
     btnText: "Màu xe",
     titleDropdownText: "Tất cả màu xe",
     key: "carColor",
     list: carsColor,
     type: "select_multiple",
+    placeholderContent: "Màu xe",
+  },
+  {
+    width: "100%",
+    btnText: "Màu biển xe",
+    titleDropdownText: "Tất cả màu biển xe",
+    key: "plateColor",
+    list: plateCarsColor,
+    type: "select_multiple",
+    placeholderContent: "Màu biển xe",
   },
   { key: "date", type: "date_range" },
 ];
 
 export const columnsTrafficData = [
   {
-    field: "id",
+    field: "stt",
     name: "#",
-    width: 150,
   },
   {
     field: "statusEvent",
@@ -270,4 +291,11 @@ export const convertToAbbreviation = (string) => {
   const abbreviation = parts.map((part) => part[0]).join("");
 
   return abbreviation;
+};
+
+export const lowerCaseStringCustom = (numberChecked, originalString) => {
+  console.log(originalString, originalString.toLowerCase());
+  return `${
+    numberChecked ? numberChecked : "Tất cả"
+  } ${originalString.toLowerCase()}`;
 };

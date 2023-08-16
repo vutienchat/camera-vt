@@ -49,7 +49,7 @@ const TableFilter = () => {
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <SearchIcon width={20} height={20} color="#EC1B2E" />
+              <SearchIcon width={20} height={20} color="#939393" />
             </InputAdornment>
           ),
           endAdornment:
@@ -82,10 +82,10 @@ const TableFilter = () => {
         customStyle={{ minWidth: "150px" }}
       />
       <Box className={classes.icon} onClick={handleReloadDataTable}>
-        <ReloadIcon width={16} height={16} color="#000" />
+        <ReloadIcon width={24} height={24} color="#858585" />
       </Box>
       <Box className={classes.icon} onClick={() => setIsOpenSettingModal(true)}>
-        <SettingIcon width={16} height={16} color="#000" />
+        <SettingIcon width={24} height={24} color="#858585" />
       </Box>
       {isOpenSettingModal && (
         <CustomModal
@@ -104,9 +104,10 @@ const useTableFilterStyle = makeStyles({
   root: {
     width: "100%",
     display: "flex",
-    alignContent: "center",
-    marginTop: "10px",
+    alignItems: "center",
+    marginTop: "16px",
     gap: "16px",
+    "& .MuiInputBase-root": { height: "48px" },
   },
   content: {
     padding: "10px",
@@ -114,23 +115,22 @@ const useTableFilterStyle = makeStyles({
     gap: "20px",
     alignContent: "center",
   },
-  searchContent: {
-    flex: 1,
-  },
+  searchContent: { flex: 1 },
   actionsContent: {
     display: "flex",
     gap: "16px",
     alignContent: "center",
   },
   icon: {
-    minWidth: "40px",
-    height: "38px",
+    minWidth: "48px",
+    height: "48px",
     display: "flex",
     border: "1px solid #939393",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: "4px",
     cursor: "pointer",
+    boxSizing: "border-box",
   },
   btnDropdown: {
     background: "#fff",
@@ -150,9 +150,7 @@ const useTableFilterStyle = makeStyles({
       textAlign: "center",
       color: "#939393",
     },
-    "&:hover": {
-      boxShadow: "none",
-    },
+    "&:hover": { boxShadow: "none" },
   },
 });
 

@@ -160,11 +160,12 @@ export const useStylesRangeDateTab = makeStyles({
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    height: "40px",
+    height: "48px",
     borderRadius: "4px",
     padding: "15px 23px 15px 23px",
     textTransform: "capitalize",
     cursor: "pointer",
+    border: "1px solid #d3d3d3",
     "& p": {
       whiteSpace: "nowrap",
       overflow: "hidden",

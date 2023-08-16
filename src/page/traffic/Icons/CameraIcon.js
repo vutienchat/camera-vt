@@ -4,22 +4,18 @@ const CameraIcon = () => {
       width="20"
       height="20"
       viewBox="0 0 20 20"
-      fill="none"
+      fill="#939393"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
-        d="M7.83583 11.3095V15.7779H2L7.83583 11.3095ZM17.675 9.20078L16.0654 8.76953L14.3975 11.7737L16.8125 12.4208L17.675 9.20078V9.20078Z"
-        stroke="black"
-        strokeWidth="1.66667"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+        data-name="Path 7984"
+        d="m13.561 13.457 4.769-6.339L5.884 2.144 3.042 9.253 7.919 11.2l-.6 1.5c-.048 0-.1-.006-.145-.006a1.879 1.879 0 0 0-1.783 1.292H3.53v-2.592H0v6.462h3.53v-2.705h1.862a1.876 1.876 0 1 0 3.006-2L9 11.635zm-.983-3.624 1.085.433-.434 1.085-1.084-.433z"
+        fill="#939393"
       />
       <path
-        d="M16.0654 8.76966L14.3975 11.7738L13.6717 12.8734L2 9.74591L3.50958 4.11133L16.7917 7.67008L16.0654 8.76966Z"
-        stroke="black"
-        strokeWidth="1.66667"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+        d="m18.676 8.6-3.213 4.271 2.623 1.048L20 9.131z"
+        transform="translate(0 .001)"
+        fill="#939393"
       />
     </svg>
   );

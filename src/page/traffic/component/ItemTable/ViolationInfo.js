@@ -1,18 +1,23 @@
 import { Box, Typography, makeStyles } from "@material-ui/core";
-import { CameraIcon, MapsIcon, WarningIcon } from "../../Icons";
+import {
+  CameraIcon,
+  MapsIcon,
+  WarningIcon,
+  PersonPDIcon,
+  PersonIcon,
+} from "../../Icons";
 import {
   colorStatusErrEvent,
   statusErrEvent,
   typeErrEvent,
 } from "../../../../utils/traffic";
-import PersonIcon from "@material-ui/icons/Person";
 
 const ViolationInfo = ({ data }) => {
   const classes = useViolationInfoStyle();
 
   return (
     <Box className={classes.root}>
-      <Box style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+      <Box style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
         <Box className={classes.info}>
           <MapsIcon />
           <Typography>{data.location}</Typography>
@@ -28,8 +33,12 @@ const ViolationInfo = ({ data }) => {
           </Box>
         )}
         <Box className={classes.info}>
-          <PersonIcon fontSize="small" />
+          <PersonIcon />
           <Typography>{data.label1}</Typography>
+        </Box>
+        <Box className={classes.info}>
+          <PersonPDIcon />
+          <Typography>{data.label2}</Typography>
         </Box>
         <Box
           className={classes.info}
