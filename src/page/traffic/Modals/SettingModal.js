@@ -194,8 +194,8 @@ const SettingModal = () => {
 
 const useSettingStyle = makeStyles({
   root: {
-    marginTop: 20,
-    width: 550,
+    marginTop: "32px",
+    width: 559,
   },
   footer: {
     marginTop: 15,

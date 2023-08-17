@@ -71,8 +71,12 @@ const useStyles = makeStyles(() => ({
     },
   },
   isChecked: { backgroundColor: "#f6f4f5", "& p": { fontWeight: 600 } },
-  checkboxCustom: {
-    "& .MuiIconButton-colorSecondary.Mui-checked": { color: "#dd3d4b" },
+  checkBoxed: {
+    padding: 0,
+    "& svg": { color: "#b3b3b3" },
+  },
+  checked: {
+    "& svg": { color: "#dd3d4b !important" },
   },
 }));
 
@@ -169,8 +173,6 @@ export default function SelectMultiple({
     return btnText;
   }, [btnText, selected, listFilter, isOpen]);
 
-  console.log("btnText", valueBtn);
-
   return (
     <Box style={{ width: width || "auto" }}>
       <ClickAwayListener onClickAway={handleClickAway}>
@@ -236,7 +238,11 @@ export default function SelectMultiple({
                     <Typography>{titleDropdownText}</Typography>
                     <Checkbox
                       onChange={handleCheckAll}
-                      className={classes.checkboxCustom}
+                      className={`${classes.checkBoxed} ${
+                        listFilter &&
+                        selected.length === listFilter.length &&
+                        classes.checked
+                      }`}
                       checked={
                         listFilter && selected.length === listFilter.length
                       }
@@ -244,32 +250,37 @@ export default function SelectMultiple({
                     />
                   </MenuItem>
                 )}
-                {listFilter.map((item) => (
-                  <MenuItem
-                    className={`${classes.listItem} ${
-                      selected.includes(String(item.value)) && classes.isChecked
-                    }`}
-                    key={item.value}
-                  >
-                    <Typography
-                      style={{
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                        flex: 1,
-                        overflow: "hidden",
-                      }}
+                {listFilter.map((item) => {
+                  const isChecked = selected.includes(String(item.value));
+                  return (
+                    <MenuItem
+                      className={`${classes.listItem} ${
+                        isChecked && classes.isChecked
+                      }`}
+                      key={item.value}
                     >
-                      {item.label}
-                    </Typography>
-                    <Checkbox
-                      id={item.value}
-                      value={String(item.value)}
-                      onChange={handleCheckItem}
-                      checked={selected.includes(String(item.value))}
-                      style={{ padding: 0 }}
-                    />
-                  </MenuItem>
-                ))}
+                      <Typography
+                        style={{
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                          flex: 1,
+                          overflow: "hidden",
+                        }}
+                      >
+                        {item.label}
+                      </Typography>
+                      <Checkbox
+                        id={item.value}
+                        value={String(item.value)}
+                        onChange={handleCheckItem}
+                        checked={isChecked}
+                        className={`${classes.checkBoxed} ${
+                          isChecked && classes.checked
+                        }`}
+                      />
+                    </MenuItem>
+                  );
+                })}
               </Box>
             </Box>
           ) : null}

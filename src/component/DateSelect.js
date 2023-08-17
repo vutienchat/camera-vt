@@ -40,7 +40,7 @@ const RangeDateTab = ({ paramsFilter, handleCheckDate }) => {
   };
 
   return (
-    <Box>
+    <Box style={{ width: "100%" }}>
       <Button
         aria-controls="customized-menu"
         aria-haspopup="true"
@@ -125,9 +125,7 @@ const RangeDateTab = ({ paramsFilter, handleCheckDate }) => {
 };
 
 const StyledMenu = withStyles({
-  paper: {
-    border: "1px solid #d3d4d5",
-  },
+  paper: { border: "1px solid #d3d4d5" },
 })((props) => (
   <Menu
     elevation={0}
@@ -149,12 +147,10 @@ const StyledMenu = withStyles({
 
 export const useStylesRangeDateTab = makeStyles({
   root: {
-    "& .MuiDialog-paper": {
-      overflowY: "hidden",
-    },
+    "& .MuiDialog-paper": { overflowY: "hidden" },
   },
   btnDropdown: {
-    width: "300px",
+    width: "100%",
     background: "#fff",
     border: "1px solid #939393",
     display: "flex",

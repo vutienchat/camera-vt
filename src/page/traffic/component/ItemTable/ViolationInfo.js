@@ -1,3 +1,4 @@
+import React from "react";
 import { Box, Typography, makeStyles } from "@material-ui/core";
 import {
   CameraIcon,
@@ -62,11 +63,15 @@ const ViolationInfo = ({ data }) => {
         </Box>
       </Box>
       <Box className={classes.plate}>
-        <Box></Box>
-        <Typography style={{ fontSize: "25px", fontWeight: 600 }}>
+        <Box className={classes.textPlate}></Box>
+        <Typography
+          style={{ fontSize: "25px", fontWeight: 600, textWrap: "nowrap" }}
+        >
           {data.description.licencePlate}
         </Typography>
-        <Typography>{data.createDate}</Typography>
+        <Typography style={{ textWrap: "nowrap" }}>
+          {data.createDate}
+        </Typography>
       </Box>
     </Box>
   );
@@ -83,15 +88,21 @@ const useViolationInfoStyle = makeStyles({
     display: "flex",
     alignItems: "center",
     gap: "10px",
-    "& p": {
-      lineHeight: "21.4px",
-    },
+    "& p": { lineHeight: "21.4px" },
   },
   plate: {
     width: "fit-content",
-    "& p": {
-      textAlign: "center",
-    },
+    "& p": { textAlign: "center" },
+  },
+  textPlate: {
+    width: "120px",
+    height: "80px",
+    //padding: "10px 22px",
+    margin: "auto",
+    marginBottom: "4px",
+    borderRadius: "4px",
+    border: "solid 2px #000",
+    backgroundColor: "white",
   },
 });
 

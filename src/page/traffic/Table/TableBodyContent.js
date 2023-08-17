@@ -77,11 +77,14 @@ const TableBodyContent = () => {
             style={{ backgroundColor: isChecked ? "#f6f4f5" : "transparent" }}
           >
             {checkedAble && (
-              <TableCell width={50}>
+              <TableCell className={classes.tableCellCustom}>
                 <Checkbox
                   value={JSON.stringify(dataBody)}
                   checked={isChecked}
                   onChange={handleCheckItem}
+                  className={`${classes.checkBoxed} ${
+                    isChecked && classes.checked
+                  }`}
                 />
               </TableCell>
             )}
@@ -96,6 +99,7 @@ const TableBodyContent = () => {
                     width,
                     cursor: handleClickColumns ? "pointer" : "auto",
                   }}
+                  className={classes.tableCellCustom}
                   onClick={() => {
                     if (handleClickColumns) {
                       handleClickColumns(dataBody);
@@ -124,6 +128,14 @@ const useTableBodyStyle = makeStyles({
     overflow: "hidden",
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
+  },
+  tableCellCustom: { padding: "12px 24px" },
+  checkBoxed: {
+    padding: 0,
+    "& svg": { color: "#b3b3b3" },
+  },
+  checked: {
+    "& svg": { color: "#dd3d4b !important" },
   },
 });
 

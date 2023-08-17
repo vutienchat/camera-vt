@@ -1,5 +1,5 @@
 import ViolationInfo from "../page/traffic/component/ItemTable/ViolationInfo";
-
+import ViolationImageInfo from "../page/traffic/component/ItemTable/ViolationImageInfo";
 export const SPECIAL_CHARACTER_TEXT = /[-!$%^&*()_+|~=`{}\[\]:\/;<>?,.@#0-9]/;
 export const SPECIAL_CHARACTER_NUMBER =
   /[-!$%^&*()_+|~=`{}\[\]:\/;<>?,.@#a-zA-ZÀ-ỹ\s]/;
@@ -19,6 +19,14 @@ export const getSpecialCharacter = (type) => {
 };
 
 export const settingArr = [
+  {
+    label: "Địa chỉ chi tiết",
+    key: "address",
+    type: "text",
+    maxLength: 10,
+    pattern: /[a-zA-ZÀ-ỹ\s]/,
+    specialCharater: SPECIAL_CHARACTER_TEXT,
+  },
   {
     label: "Người ký",
     key: "signer",
@@ -168,7 +176,7 @@ export const columnsTrafficData = [
   {
     field: "statusEvent",
     name: "Thông tin Vi Phạm",
-    width: 650,
+    width: "100%",
     component: (data) => {
       return <ViolationInfo data={data} />;
     },
@@ -177,6 +185,9 @@ export const columnsTrafficData = [
     field: "imageDetail",
     name: "Hình Ảnh Vi Phạm",
     customStyles: { flex: 1 },
+    component: (data) => {
+      return <ViolationImageInfo data={data} />;
+    },
   },
 ];
 
@@ -200,30 +211,12 @@ export const statusErrEvent = {
 };
 
 export const colorStatusErrEvent = {
-  VP: {
-    backgroundColor: "rgba(225, 252, 239, 1)",
-    color: "rgba(24, 106, 59, 1)",
-  },
-  CDVP: {
-    backgroundColor: "rgba(255, 170, 170, 1)",
-    color: "rgba(255, 0, 0, 1)",
-  },
-  CDKVP: {
-    backgroundColor: "rgba(210, 180, 222, 1)",
-    color: "rgba(74, 35, 90, 1)",
-  },
-  CDD: {
-    backgroundColor: "rgba(169, 204, 227, 1)",
-    color: "rgba(0, 0, 255, 1)",
-  },
-  CDDD: {
-    backgroundColor: "rgba(169, 204, 227, 1)",
-    color: "rgba(255, 0, 0, 1)",
-  },
-  DDD: {
-    backgroundColor: "rgba(169, 204, 227, 1)",
-    color: "rgba(0, 132, 21, 1)",
-  },
+  VP: { backgroundColor: "#ffd8dc", color: "#dd3d4b" },
+  CDVP: { backgroundColor: "#ffebd6", color: "#ff890a" },
+  CDKVP: { backgroundColor: "#d5ecdb", color: "#56b26e" },
+  CDD: { backgroundColor: "#ffd8dc", color: "#dd3d4b" },
+  CDDD: { backgroundColor: "#ffebd6", color: "#ff890a" },
+  DDD: { backgroundColor: "#d5ecdb", color: "#56b26e" },
   KVP: {
     backgroundColor: "rgba(225, 252, 239, 1)",
     color: "rgba(24, 106, 59, 1)",
@@ -294,7 +287,6 @@ export const convertToAbbreviation = (string) => {
 };
 
 export const lowerCaseStringCustom = (numberChecked, originalString) => {
-  console.log(originalString, originalString.toLowerCase());
   return `${
     numberChecked ? numberChecked : "Tất cả"
   } ${originalString.toLowerCase()}`;

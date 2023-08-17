@@ -149,7 +149,7 @@ const ListTrafficModal = ({
           <form onSubmit={methods.handleSubmit(handleUpdateScene)}>
             <Box className={classes.content}>
               <Box className={classes.header}>
-                <Typography style={{ fontWeight: 700, fontSize: 18 }}>
+                <Typography className={classes.titlePlace}>
                   {selectedItem.description.licencePlate}
                 </Typography>
                 <Box
@@ -158,24 +158,18 @@ const ListTrafficModal = ({
                     backgroundColor:
                       colorStatusErrEvent[selectedItem.statusEvent]
                         .backgroundColor,
-                    width: "fit-content",
-                    padding: "1px 8px 1px 8px",
-                    borderRadius: "4px",
+                    padding: "0 30px",
+                    height: "32px",
+                    borderRadius: "8px",
                   }}
                 >
-                  <Box
-                    style={{
-                      width: "6px",
-                      height: "6px",
-                      borderRadius: "100px",
-                      backgroundColor:
-                        colorStatusErrEvent[selectedItem.statusEvent].color,
-                    }}
-                  ></Box>
                   <Typography
                     style={{
                       color:
                         colorStatusErrEvent[selectedItem.statusEvent].color,
+                      fontWeight: "bold",
+                      lineHeight: "normal",
+                      letterSpacing: "normal",
                     }}
                   >
                     {statusErrEvent[selectedItem.statusEvent]}
@@ -188,52 +182,47 @@ const ListTrafficModal = ({
                   justifyContent: "space-between",
                   width: "100%",
                   flexWrap: "wrap",
-                  marginTop: "10px",
+                  marginTop: "24px",
                 }}
               >
-                <Box style={{ width: "33%" }}>
-                  <TransformWrapper>
-                    <TransformComponent>
-                      <img
-                        src="./image.png"
-                        alt="Image"
-                        style={{ width: "100%", objectFit: "cover" }}
-                      />
-                    </TransformComponent>
-                  </TransformWrapper>
-                </Box>
-                <Box style={{ width: "33%" }}>
-                  <TransformWrapper>
-                    <TransformComponent>
-                      <img
-                        src="./image.png"
-                        alt="Image"
-                        style={{ width: "100%", objectFit: "cover" }}
-                      />
-                    </TransformComponent>
-                  </TransformWrapper>
-                </Box>
-                <Box style={{ width: "33%" }}>
-                  <TransformWrapper>
-                    <TransformComponent>
-                      <img
-                        src="./image.png"
-                        alt="Image"
-                        style={{ width: "100%", objectFit: "cover" }}
-                      />
-                    </TransformComponent>
-                  </TransformWrapper>
+                <Box className={classes.infoImage}>
+                  <Box>
+                    <TransformWrapper>
+                      <TransformComponent>
+                        <img src="./image.png" alt="Image" />
+                      </TransformComponent>
+                    </TransformWrapper>
+                  </Box>
+                  <Box>
+                    <TransformWrapper>
+                      <TransformComponent>
+                        <img src="./image.png" alt="Image" />
+                      </TransformComponent>
+                    </TransformWrapper>
+                  </Box>
+                  <Box>
+                    <TransformWrapper>
+                      <TransformComponent>
+                        <img src="./image.png" alt="Image" />
+                      </TransformComponent>
+                    </TransformWrapper>
+                  </Box>
                 </Box>
                 <Box style={{ width: "49.5%", marginTop: "10px" }}>
-                  <img
-                    src="./image.png"
-                    alt="Image"
+                  <video
                     style={{
                       width: "100%",
-                      objectFit: "cover",
                       height: "100%",
+                      objectFit: "fill",
+                      backgroundImage: 'url("./image.png")',
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
                     }}
-                  />
+                    controls={false}
+                    autoPlay
+                  >
+                    <source src={""} type="video/mp4" />
+                  </video>
                 </Box>
                 <Box style={{ width: "49.5%", marginTop: "10px" }}>
                   <BaseTabCommon
@@ -256,18 +245,14 @@ const ListTrafficModal = ({
               {StatusEventComponent(selectedItem.statusEvent)}
               <Box
                 className={classes.icon}
-                style={{
-                  left: "-90px",
-                }}
+                style={{ left: "-90px" }}
                 onClick={handlePrevious}
               >
                 <PreviousIcon />
               </Box>
               <Box
                 className={classes.icon}
-                style={{
-                  right: "-90px",
-                }}
+                style={{ right: "-90px" }}
                 onClick={handleNext}
               >
                 <NextIcon />
@@ -281,24 +266,36 @@ const ListTrafficModal = ({
 };
 
 const useListTrafficModalStyle = makeStyles({
-  root: {
-    padding: "20px",
-  },
+  root: { padding: "0px" },
   content: {
     position: "absolute",
-    padding: "10px",
-    width: "1350px",
+    padding: "24px",
+    width: "1420px",
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
     backgroundColor: "#fff",
     borderRadius: "10px",
   },
+
+  titlePlace: {
+    fontSize: "21px",
+    fontWeight: "bold",
+    lineHeight: "normal",
+    letterSpacing: "normal",
+  },
   header: {
     display: "flex",
     justifyContent: "center",
-    gap: "10px",
+    gap: "24px",
     alignItems: "center",
+  },
+  infoImage: {
+    width: "100%",
+    display: "flex",
+    gap: "14px",
+    marginBottom: "8px",
+    "& img": { width: "100%", objectFit: "cover", cursor: "move" },
   },
   icon: {
     position: "absolute",

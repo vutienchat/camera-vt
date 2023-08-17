@@ -33,15 +33,11 @@ const CustomModal = ({ title, isOpen, children, handleClose }) => {
 
 const useCustomModalStyle = makeStyles({
   root: {
-    "& .MuiDialog-paper": {
-      overflowY: "unset",
-    },
-    "& .MuiPaper-rounded": {
-      borderRadius: "12px",
-    },
+    "& .MuiDialog-paper": { overflowY: "unset" },
+    "& .MuiPaper-rounded": { borderRadius: "12px" },
   },
   content: {
-    padding: "20px",
+    padding: "24px",
     minWidth: "480px",
   },
   header: {
@@ -50,12 +46,19 @@ const useCustomModalStyle = makeStyles({
     "& p": {
       textAlign: "center",
       fontSize: "21px",
+      fontWeight: "bold",
+      lineHeight: "normal",
+      letterSpacing: "normal",
     },
   },
   icon: {
     position: "absolute",
-    top: -5,
+    top: "4px",
     right: 0,
+    padding: 0,
+    "&:hover": {
+      "& path": { fill: "#939393" },
+    },
   },
   footer: {
     display: "flex",

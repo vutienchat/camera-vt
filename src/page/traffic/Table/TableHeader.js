@@ -52,36 +52,39 @@ const TableHeaderContent = () => {
         {checkedAble && (
           <TableCell className={classes.checkbox}>
             <Checkbox
-              style={{ padding: 0 }}
-              indeterminate={isChecked}
               checked={isCheckedAll}
               onChange={handleCheckAll}
+              className={`${classes.checkBoxed} ${
+                isCheckedAll && classes.checked
+              }`}
             />
           </TableCell>
         )}
-        {tableHeader.map((header) => (
-          <TableCell
-            key={header.field}
-            style={{
-              ...header.customStyles,
-              width: header.width,
-              padding: 0,
-              //"&.MuiTableCell-root": { padding: 0 },
-            }}
-          >
-            <Typography
+        {tableHeader.map((header) => {
+          return (
+            <TableCell
+              key={header.field}
               style={{
-                color: "#000",
-                fontWeight: 600,
-                lineHeight: "normal",
-                letterSpacing: "normal",
-                textAlign: "center",
+                ...header.customStyles,
+                width: header.width,
+                padding: 0,
+                //"&.MuiTableCell-root": { padding: 0 },
               }}
             >
-              {header.name}
-            </Typography>
-          </TableCell>
-        ))}
+              <Typography
+                style={{
+                  color: "#000",
+                  fontWeight: 600,
+                  lineHeight: "normal",
+                  letterSpacing: "normal",
+                  textAlign: "center",
+                }}
+              >
+                {header.name}
+              </Typography>
+            </TableCell>
+          );
+        })}
       </TableRow>
     </TableHead>
   );
@@ -89,13 +92,14 @@ const TableHeaderContent = () => {
 
 const useTableHeaderStyle = makeStyles({
   checkbox: {
-    width: 50,
-    "& .MuiIconButton-label": {
-      color: "#000",
-    },
-    "&.MuiTableCell-root": {
-      padding: "0px 0px 0px 16px",
-    },
+    textAlign: "center",
+    "& .MuiIconButton-label": { color: "#000" },
+    "&.MuiTableCell-root": { padding: "0" },
   },
+  checkBoxed: {
+    padding: 0,
+    "& svg": { color: "#b3b3b3" },
+  },
+  checked: { "& svg": { color: "#dd3d4b !important" } },
 });
 export default TableHeaderContent;
