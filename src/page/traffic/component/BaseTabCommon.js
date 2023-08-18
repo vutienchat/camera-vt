@@ -8,9 +8,10 @@ const BaseTabCommon = ({
   handleChangeSelectedTab,
   badge,
   customStyle,
+  statusEvent,
 }) => {
   const classes = useTabCommonStyle();
-
+  console.log(statusEvent);
   return (
     <Box
       className={classes.root}

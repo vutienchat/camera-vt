@@ -230,6 +230,7 @@ const ListTrafficModal = ({
                     list={listSceneTab}
                     selectedTab={tabPane}
                     handleChangeSelectedTab={handleChangeTabPane}
+                    statusEvent={selectedItem.statusEvent}
                     customStyle={{
                       borderTopRightRadius: "8px",
                       borderTopLeftRadius: "8px",

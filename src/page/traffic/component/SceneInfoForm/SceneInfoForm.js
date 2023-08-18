@@ -42,6 +42,7 @@ const SceneInfoForm = () => {
         label="Biển số xe"
         isRequired={true}
         error={errors["numberPlate"]}
+        widthCustom={"500px"}
         component={
           <TextField
             {...register("numberPlate", {
@@ -49,9 +50,7 @@ const SceneInfoForm = () => {
             })}
             className={classes.inputFeild}
             error={errors["numberPlate"]}
-            style={{
-              width: "350px",
-            }}
+            style={{ width: "360px" }}
             variant="outlined"
             size="small"
             disabled={!isHighestLevel}
@@ -128,6 +127,7 @@ const SceneInfoForm = () => {
         label="Phương tiện"
         isRequired={true}
         error={errors["vehicleType"]}
+        widthCustom={"500px"}
         component={
           <SelectForm
             className={classes.selectFeild}
@@ -135,7 +135,7 @@ const SceneInfoForm = () => {
             list={vehicles}
             disabled={!isHighestLevel}
             customStyle={{
-              width: !isHighestLevel ? "350px" : "100%",
+              width: !isHighestLevel ? "360px" : "100%",
             }}
           />
         }
@@ -145,6 +145,7 @@ const SceneInfoForm = () => {
         label="Màu biển"
         isRequired={true}
         error={errors["colorPlate"]}
+        widthCustom={"500px"}
         component={
           <SelectForm
             className={classes.selectFeild}
@@ -152,7 +153,7 @@ const SceneInfoForm = () => {
             list={plateCarsColor}
             disabled={!isHighestLevel}
             customStyle={{
-              width: !isHighestLevel ? "350px" : "100%",
+              width: !isHighestLevel ? "360px" : "100%",
             }}
           />
         }
@@ -162,6 +163,7 @@ const SceneInfoForm = () => {
         label="Thời gian vi phạm"
         isRequired={true}
         error={errors["violationDate"]}
+        widthCustom={"500px"}
         component={
           <Controller
             control={control}
@@ -198,6 +200,7 @@ const SceneInfoForm = () => {
       <BaseFormGroup
         label="Vi phạm"
         isRequired={true}
+        widthCustom={"500px"}
         error={errors["violationError"]}
         component={
           <SelectForm
@@ -212,6 +215,7 @@ const SceneInfoForm = () => {
       <BaseFormGroup
         label="Vị trí"
         isRequired={true}
+        widthCustom={"500px"}
         error={errors["direction"]}
         component={
           <TextField
@@ -231,6 +235,7 @@ const SceneInfoForm = () => {
       <BaseFormGroup
         label="Tên camera"
         isRequired={true}
+        widthCustom={"500px"}
         error={errors["camName"]}
         component={
           <TextField
@@ -251,6 +256,7 @@ const SceneInfoForm = () => {
         label="Hướng đi"
         isRequired={true}
         error={errors["direction"]}
+        widthCustom={"500px"}
         component={
           <TextField
             {...register("direction", {
@@ -269,6 +275,7 @@ const SceneInfoForm = () => {
       <BaseFormGroup
         label="Ghi chú"
         error={errors["note"]}
+        widthCustom={"500px"}
         component={
           <TextField
             {...register("note")}
@@ -290,7 +297,7 @@ const useSceneInfoFormStyle = makeStyles({
     flexDirection: "column",
     gap: "2px",
     border: "1px solid #d3d3d3",
-    padding: "10px",
+    padding: "16px 20px",
     position: "relative",
     borderBottomRightRadius: "8px",
     borderBottomLeftRadius: "8px",

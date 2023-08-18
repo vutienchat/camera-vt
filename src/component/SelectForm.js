@@ -39,9 +39,7 @@ const SelectForm = ({
     >
       <Controller
         rules={{
-          required: {
-            message: "This field is required",
-          },
+          required: { message: "This field is required" },
         }}
         control={control}
         name={keyForm}

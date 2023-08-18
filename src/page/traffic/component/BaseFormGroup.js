@@ -8,6 +8,7 @@ const BaseFormGroup = ({
   error,
   width,
   showErrorMessage,
+  widthCustom,
 }) => {
   return (
     <Grid
@@ -17,12 +18,24 @@ const BaseFormGroup = ({
       alignContent="center"
       style={{ width: width || "100%" }}
     >
-      <Grid item xs={3} lg={3}>
-        <Typography style={{ fontSize: "14px" }}>
-          {label} {isRequired && <span>(*)</span>}
+      <Box>
+        <Typography
+          style={{
+            fontSize: "16px",
+            color: "black",
+            lineHeight: "normal",
+            letterSpacing: "normal",
+            display: "flex",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {label}{" "}
+          {isRequired && (
+            <span style={{ paddingLeft: "6px", color: "#dd3d4b" }}>*</span>
+          )}
         </Typography>
-      </Grid>
-      <Grid item xs={9} lg={9}>
+      </Box>
+      <Box style={{ width: widthCustom || "400px" }}>
         <Box
           style={{
             display: "flex",
@@ -33,14 +46,15 @@ const BaseFormGroup = ({
         >
           {component}
         </Box>
-      </Grid>
+      </Box>
       <React.Fragment>
-        <Grid item xs={3} lg={3}></Grid>
-        <Grid item xs={9} lg={9}>
-          <Typography color="error" style={{ marginTop: "5px" }}>
-            {showErrorMessage && error ? error.message : ""}
-          </Typography>
-        </Grid>
+        <Box style={{ width: "100%" }}>
+          <Box style={{ width: "400px", marginLeft: "auto" }}>
+            <Typography color="error" style={{ marginTop: "5px" }}>
+              {showErrorMessage && error ? error.message : ""}
+            </Typography>
+          </Box>
+        </Box>
       </React.Fragment>
     </Grid>
   );
