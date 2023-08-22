@@ -73,7 +73,7 @@ const TrafficContent = () => {
   const [selectedReason, setSelectedReason] = useState(
     noErrorReasonList[0].value
   );
-  const [isHighestLevel, setIsHighestLevel] = useState(false);
+  const [isHighestLevel, setIsHighestLevel] = useState(true);
 
   const {
     data: trafficList,

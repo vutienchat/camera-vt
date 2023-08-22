@@ -40,10 +40,10 @@ export const StatusEventComponent = (status) => {
   let component;
   switch (status) {
     case "VP":
-      component = <UnformattedButtons />;
+      component = <UnformattedButtons status={status} />;
       break;
     case "CDD":
-      component = <UnformattedButtons />;
+      component = <UnformattedButtons status={status} />;
       break;
     case "KVP":
       component = <NoErrorReasonButtons />;
@@ -52,7 +52,7 @@ export const StatusEventComponent = (status) => {
       component = <FormattedButtons />;
       break;
     default:
-      component = <UnformattedButtons />;
+      component = <UnformattedButtons status={status} />;
       break;
   }
 
@@ -60,10 +60,10 @@ export const StatusEventComponent = (status) => {
 };
 
 export const validateText = (text) => {
-  let val = text
+  let val = text;
 
-  val = val.replace(/^\s+/, '')
-  val = val.replace(/\s{2,}/g, ' ')
+  val = val.replace(/^\s+/, "");
+  val = val.replace(/\s{2,}/g, " ");
 
-  return val
-}
+  return val;
+};

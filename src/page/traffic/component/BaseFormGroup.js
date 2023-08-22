@@ -9,6 +9,7 @@ const BaseFormGroup = ({
   width,
   showErrorMessage,
   widthCustom,
+  customStyle,
 }) => {
   return (
     <Grid
@@ -16,7 +17,7 @@ const BaseFormGroup = ({
       justifyContent="space-between"
       alignItems="center"
       alignContent="center"
-      style={{ width: width || "100%" }}
+      style={{ width: width || "100%", ...customStyle }}
     >
       <Box>
         <Typography
@@ -35,7 +36,7 @@ const BaseFormGroup = ({
           )}
         </Typography>
       </Box>
-      <Box style={{ width: widthCustom || "400px" }}>
+      <Box style={{ width: widthCustom || "500px" }}>
         <Box
           style={{
             display: "flex",
@@ -49,7 +50,7 @@ const BaseFormGroup = ({
       </Box>
       <React.Fragment>
         <Box style={{ width: "100%" }}>
-          <Box style={{ width: "400px", marginLeft: "auto" }}>
+          <Box style={{ width: "500px", marginLeft: "auto" }}>
             <Typography color="error" style={{ marginTop: "5px" }}>
               {showErrorMessage && error ? error.message : ""}
             </Typography>

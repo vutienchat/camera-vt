@@ -93,7 +93,7 @@ const TableFilter = () => {
           handleClose={() => setIsOpenSettingModal(false)}
           title="Thông tin tuỳ chỉnh"
         >
-          <SettingModal />
+          <SettingModal handleCancel={() => setIsOpenSettingModal(false)} />
         </CustomModal>
       )}
     </Box>

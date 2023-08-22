@@ -25,18 +25,19 @@ const schema = yup.object().shape({
   phone: yup.string().required("Phone is required").phone("Phone is invalid"),
   email: yup.string().required("Email is required").email("Email is invalid"),
 });
-const SettingModal = () => {
-  const defaultValues = {
-    provinceId: "01", // Mã code Tỉnh/TP
-    districtId: "001", // Mã code Quận/Huyện
-    address: "string", // Địa chỉ chi tiết
-    headConfirmation: "01", // Ký thay Trưởng phòng
-    unitHeads: "string", // Tên thủ trưởng
-    manager: "string", // Tên Trưởng phòng
-    deputy: "string", // Tên Phó phòng
-    phone: "string", // Số điện thoại phòng
-    email: "string", // Địa chỉ Email phòng
-  };
+const defaultValues = {
+  city: "01", // Mã code Tỉnh/TP
+  province: "002", // Mã code Quận/Huyện
+  address: "string", // Địa chỉ chi tiết
+  headConfirmation: "01", // Ký thay Trưởng phòng
+  unitHeads: "string", // Tên thủ trưởng
+  manager: "string", // Tên Trưởng phòng
+  deputy: "string", // Tên Phó phòng
+  phone: 2123456789, // Số điện thoại phòng
+  email: "vuongdv3012@gmail.com", // Địa chỉ Email phòng
+};
+
+const SettingModal = ({ handleCancel }) => {
   const methods = useForm({
     defaultValues: {
       ...defaultValues,
@@ -126,6 +127,7 @@ const SettingModal = () => {
                 <Controller
                   name={setting.key}
                   control={control}
+                  key={`${setting.key}_${index}`}
                   render={(props) => {
                     const { onChange, value, ref } = props.field;
 
@@ -133,7 +135,7 @@ const SettingModal = () => {
                       <BaseFormGroup
                         label={setting.label}
                         isRequired={setting.key !== "email"}
-                        key={`${setting.key}_${index}`}
+                        //key={`${setting.key}_${index}`}
                         showErrorMessage
                         error={errors[setting.key]}
                         component={
@@ -179,7 +181,6 @@ const SettingModal = () => {
                       control={control}
                       name={setting.key}
                       render={({ field }) => {
-                        console.log("field", field);
                         return (
                           <RadioGroup row {...field}>
                             <FormControlLabel
@@ -187,7 +188,9 @@ const SettingModal = () => {
                               control={
                                 <Radio
                                   className={
-                                    field.value === "01" && classes.radioField
+                                    field.value === "01"
+                                      ? classes.radioField
+                                      : ""
                                   }
                                 />
                               }
@@ -198,7 +201,9 @@ const SettingModal = () => {
                               control={
                                 <Radio
                                   className={
-                                    field.value === "02" && classes.radioField
+                                    field.value === "02"
+                                      ? classes.radioField
+                                      : ""
                                   }
                                 />
                               }
@@ -217,6 +222,7 @@ const SettingModal = () => {
             <Button
               variant="outlined"
               className={`${classes.buttonCancel} ${classes.buttonCustom}`}
+              onClick={handleCancel}
             >
               Hủy bỏ
             </Button>

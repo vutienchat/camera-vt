@@ -6,12 +6,10 @@ const BaseTabCommon = ({
   list,
   selectedTab,
   handleChangeSelectedTab,
-  badge,
   customStyle,
-  statusEvent,
+  isBaseTabModal,
 }) => {
   const classes = useTabCommonStyle();
-  console.log(statusEvent);
   return (
     <Box
       className={classes.root}
@@ -27,11 +25,14 @@ const BaseTabCommon = ({
             key={value}
             className={classes.statusBox}
             style={{
-              //borderBottom: selectedTab === value ? "3px solid #dd3d4b" : "",
               position: "relative",
               width: width ? `${100 / list.length}%` : "auto",
               minWidth: "200px",
-              backgroundColor: isTabSelected ? "#ebebeb" : "#fff",
+              backgroundColor: isTabSelected
+                ? isBaseTabModal
+                  ? "#dd3d4b"
+                  : "#ebebeb"
+                : "#fff",
               borderTopLeftRadius: customStyle && index === 0 ? "8px" : "0px",
               borderTopRightRadius:
                 customStyle && index === list.length - 1 ? "8px" : "0px",
@@ -48,9 +49,10 @@ const BaseTabCommon = ({
                 fontWeight: isTabSelected ? "bold" : "normal",
                 lineHeight: "normal",
                 letterSpacing: "normal",
+                color: isTabSelected && isBaseTabModal ? "white" : "black",
               }}
             >
-              {label} (120)
+              {label} {!isBaseTabModal && 120}
             </Typography>
             {isTabSelected && (
               <Box

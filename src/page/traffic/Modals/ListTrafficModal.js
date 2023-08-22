@@ -14,7 +14,7 @@ import { Box, Modal, Typography, makeStyles } from "@material-ui/core";
 import { NextIcon, PreviousIcon } from "../Icons";
 import {
   colorStatusErrEvent,
-  listSceneTab,
+  // listSceneTab,
   statusErrEvent,
 } from "../../../utils/traffic";
 import ViolationInfoForm from "../component/ViolationInfoForm/ViolationInfoForm";
@@ -47,9 +47,11 @@ const ListTrafficModal = ({
       fineAmount: selectedItem.fineAmount,
       holdGPLX: String(selectedItem.holdGPLX),
       colorPlate: selectedItem.description.colorPlate,
+      color: selectedItem.description.color,
       vehicleType: selectedItem.description.vehicleType,
       direction: selectedItem.description.direction,
       violationDate: selectedItem.violationDate,
+      location: selectedItem.location,
 
       fullName: selectedItem.vehicleOwner.fullName,
       address: selectedItem.vehicleOwner.address,
@@ -65,6 +67,34 @@ const ListTrafficModal = ({
       infoSactionNote: selectedItem.infoSanction.note,
     },
   });
+  const plates = useMemo(() => {
+    if (!selectedItem.description.licencePlate) return [];
+
+    return selectedItem.description.licencePlate.split("-");
+  }, [selectedItem, isHighestLevel]);
+
+  const data = {
+    selectedItem,
+    plates,
+    isHighestLevel,
+    handleOpenHistoryModal,
+    handleOpenReasonModal,
+  };
+
+  const listSceneTab = useMemo(() => {
+    const statusEvent = selectedItem.statusEvent;
+    if (
+      statusEvent === "VP" ||
+      statusEvent === "CDVP" ||
+      statusEvent === "CDKVP"
+    ) {
+      return [{ label: "Thông tin hiện trường", value: "scence_info" }];
+    }
+    return [
+      { label: "Thông tin hiện trường", value: "scence_info" },
+      { label: "Thông tin xử phạt", value: "ban_info" },
+    ];
+  }, [selectedItem]);
 
   const classes = useListTrafficModalStyle();
 
@@ -73,12 +103,6 @@ const ListTrafficModal = ({
   const itemId = useMemo(() => {
     return trafficList.findIndex((element) => element.id === selectedItem.id);
   }, [trafficList, selectedItem]);
-
-  const plates = useMemo(() => {
-    if (!selectedItem.description.licencePlate) return [];
-
-    return selectedItem.description.licencePlate.split("-");
-  }, [selectedItem]);
 
   const handleResetDataForm = (index) => {
     methods.reset({
@@ -89,9 +113,11 @@ const ListTrafficModal = ({
       fineAmount: trafficList[index].fineAmount,
       holdGPLX: String(trafficList[index].holdGPLX),
       colorPlate: trafficList[index].description.colorPlate,
+      color: trafficList[index].description.color,
       vehicleType: trafficList[index].description.vehicleType,
       direction: trafficList[index].description.direction,
       violationDate: trafficList[index].violationDate,
+      location: selectedItem.location,
 
       fullName: trafficList[index].vehicleOwner.fullName,
       address: trafficList[index].vehicleOwner.address,
@@ -132,14 +158,6 @@ const ListTrafficModal = ({
 
   const handleUpdateScene = (data) => {
     console.log(data);
-  };
-
-  const data = {
-    selectedItem,
-    plates,
-    isHighestLevel,
-    handleOpenHistoryModal,
-    handleOpenReasonModal,
   };
 
   return (
@@ -230,11 +248,11 @@ const ListTrafficModal = ({
                     list={listSceneTab}
                     selectedTab={tabPane}
                     handleChangeSelectedTab={handleChangeTabPane}
-                    statusEvent={selectedItem.statusEvent}
                     customStyle={{
                       borderTopRightRadius: "8px",
                       borderTopLeftRadius: "8px",
                     }}
+                    isBaseTabModal={true}
                   />
                   {tabPane === "scence_info" ? (
                     <SceneInfoForm />

@@ -103,7 +103,7 @@ export const vehicles = [
   { label: "NgườI đi bộ", value: "human" },
 ];
 
-export const carsColor = [
+export const vehicleColor = [
   { label: "Đen", value: "black" },
   { label: "Trắng", value: "white" },
   { label: "Đỏ", value: "red" },
@@ -160,8 +160,8 @@ export const headerFilterArr = [
     width: "100%",
     btnText: "Màu xe",
     titleDropdownText: "Tất cả màu xe",
-    key: "carColor",
-    list: carsColor,
+    key: "vehicleColor",
+    list: vehicleColor,
     type: "select_multiple",
     placeholderContent: "Màu xe",
   },

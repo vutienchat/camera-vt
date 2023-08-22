@@ -63,7 +63,13 @@ const ViolationInfo = ({ data }) => {
         </Box>
       </Box>
       <Box className={classes.plate}>
-        <Box className={classes.textPlate}></Box>
+        <Box className={classes.imagePlate}>
+          <img
+            src="./plate.png"
+            alt="Image Plate"
+            style={{ width: "100%", height: "100%", objectFit: "fill" }}
+          />
+        </Box>
         <Typography
           style={{ fontSize: "25px", fontWeight: 600, textWrap: "nowrap" }}
         >
@@ -94,10 +100,10 @@ const useViolationInfoStyle = makeStyles({
     width: "fit-content",
     "& p": { textAlign: "center" },
   },
-  textPlate: {
+  imagePlate: {
     width: "120px",
     height: "80px",
-    //padding: "10px 22px",
+    overflow: "hidden",
     margin: "auto",
     marginBottom: "4px",
     borderRadius: "4px",

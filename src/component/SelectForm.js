@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  Box,
-  FormControl,
-  MenuItem,
-  Select,
-  makeStyles,
-} from "@material-ui/core";
+import { FormControl, MenuItem, Select, makeStyles } from "@material-ui/core";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
