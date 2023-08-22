@@ -35,13 +35,13 @@ const FormattedButtons = () => {
           customStyle={{ minWidth: "150px" }}
           onClick={handleOpenHistoryModal}
         />
-      </Box>
-      <Box className={classes.rightButtons}>
         <BaseButton
           content="Chuyển không lỗi"
           customStyle={{ minWidth: "150px" }}
           onClick={handleOpenReasonModal}
         />
+      </Box>
+      <Box className={classes.rightButtons}>
         <BaseButton
           startIcon={<PrintIcon color="#fff" />}
           content="In thông báo VP"

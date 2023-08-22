@@ -86,6 +86,35 @@ const UnformattedButtons = ({ status }) => {
           />
         </Box>
       )}
+      {(status === "CDD" || status === "CDDD") && (
+        <Box className={classes.rightButtons} style={{ width: "100%" }}>
+          {isHighestLevel ? (
+            <BaseButton
+              content={"Chuyển không lỗi"}
+              customStyle={{
+                minWidth: "150px",
+                marginRight: "auto",
+                marginLeft: "16px",
+              }}
+            />
+          ) : (
+            <Box style={{ marginRight: "auto" }} />
+          )}
+          {isHighestLevel && status === "CDDD" && (
+            <BaseButton
+              content={"Từ chối định danh"}
+              typeStyle="border"
+              customStyle={{ minWidth: "150px" }}
+            />
+          )}
+          <BaseButton
+            content={isHighestLevel ? "Duyệt định danh" : "Gửi duyệt định danh"}
+            typeStyle="contained"
+            startIcon={<SendIcon color="#fff" />}
+            customStyle={{ minWidth: "150px" }}
+          />
+        </Box>
+      )}
     </Box>
   );
 };

@@ -1,6 +1,7 @@
 import {
   FormattedButtons,
   NoErrorReasonButtons,
+  SubmitAndResetButton,
   UnformattedButtons,
 } from "../component/StatusEvent";
 
@@ -36,13 +37,16 @@ export function formatDateField(value) {
   return clearValue;
 }
 
-export const StatusEventComponent = (status) => {
+export const StatusEventComponent = (status, isEditDataForm) => {
+  if (isEditDataForm) return <SubmitAndResetButton />;
+
   let component;
   switch (status) {
     case "VP":
       component = <UnformattedButtons status={status} />;
       break;
     case "CDD":
+    case "CDDD":
       component = <UnformattedButtons status={status} />;
       break;
     case "KVP":

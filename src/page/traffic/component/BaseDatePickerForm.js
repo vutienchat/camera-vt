@@ -37,7 +37,7 @@ const BaseDatePickerForm = ({
               }}
               format={format}
               style={{
-                width: "50%",
+                width: "100%",
                 height: "26px",
                 flex: 1,
                 color: disabled ? "#939393" : "#000",
@@ -62,6 +62,7 @@ const useBaseDatePickerForm = makeStyles({
     alignItems: "center",
     alignContent: "center",
     paddingRight: "8px",
+    "& .rmdp-container ": { width: "100%" },
   },
 });
 

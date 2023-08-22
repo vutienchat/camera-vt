@@ -21,15 +21,6 @@ import { ListTrafficModalContext } from "../../Modals/ListTrafficModal";
 import DatePicker, { DateObject } from "react-multi-date-picker";
 
 const checkDisableTab1 = (statusEvent, isHighestLevel) => {
-  // { label: "Vi phạm", value: "VP" },
-  // { label: "Chờ duyệt lỗi", value: "CDVP" },
-  // { label: "Chờ duyệt không lỗi", value: "CDKVP" },
-  // { label: "Chưa định dạng", value: "CDD" },
-  // { label: "Chờ duyệt định danh", value: "CDDD" },
-  // { label: "Đã định dạng", value: "DDD" },
-  // { label: "Có lỗi", value: "CVP" },
-  // { label: "Không lỗi", value: "KVP" },
-
   switch (statusEvent) {
     case "VP":
       return false;
@@ -60,8 +51,6 @@ const SceneInfoForm = () => {
   const classes = useSceneInfoFormStyle();
 
   const isDisableTab1 = useMemo(() => {
-    console.log(selectedItem);
-    console.log(isHighestLevel);
     const statusEvent = selectedItem.statusEvent;
     return {
       numberPlate: () => checkDisableTab1(statusEvent, isHighestLevel),
@@ -253,10 +242,10 @@ const SceneInfoForm = () => {
                   style={{
                     width: "487px",
                     height: "32px",
-                    backgroundColor: !isHighestLevel
+                    backgroundColor: isDisableTab1.violationDate
                       ? "#ebebeb"
                       : "transparent",
-                    color: !isHighestLevel ? "#939393" : "#000",
+                    color: isDisableTab1.violationDate ? "#939393" : "#000",
                   }}
                   disabled={isDisableTab1.violationDate}
                 />
@@ -370,17 +359,13 @@ const useSceneInfoFormStyle = makeStyles({
     position: "relative",
     borderBottomRightRadius: "8px",
     borderBottomLeftRadius: "8px",
-    height: "480px",
+    minHeight: "485px",
   },
   inputField: {
     height: "32px",
     width: "100%",
-    "& input": {
-      height: "100%",
-    },
-    "& .MuiOutlinedInput-inputMarginDense": {
-      padding: "8px",
-    },
+    "& input": { height: "100%" },
+    "& .MuiOutlinedInput-inputMarginDense": { padding: "8px" },
     "& .MuiInputBase-root.Mui-disabled": {
       color: "#939393",
       background: "#ebebeb",
@@ -388,9 +373,7 @@ const useSceneInfoFormStyle = makeStyles({
   },
   selectField: {
     height: "34px",
-    "& .MuiOutlinedInput-input": {
-      padding: "10px",
-    },
+    "& .MuiOutlinedInput-input": { padding: "10px" },
     "&.MuiInputBase-root.Mui-disabled": {
       color: "#939393",
       background: "#ebebeb",

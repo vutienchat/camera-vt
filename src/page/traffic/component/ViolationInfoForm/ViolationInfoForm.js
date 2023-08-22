@@ -1,10 +1,4 @@
-import {
-  Box,
-  Grid,
-  TextField,
-  Typography,
-  makeStyles,
-} from "@material-ui/core";
+import { Box, TextField, Typography, makeStyles } from "@material-ui/core";
 import { useFormContext } from "react-hook-form";
 import BaseFormGroup from "../BaseFormGroup";
 import { useContext } from "react";
@@ -12,11 +6,26 @@ import { ListTrafficModalContext } from "../../Modals/ListTrafficModal";
 import BaseDatePickerForm from "../BaseDatePickerForm";
 import { AddressSelectTab } from "../../../../component/HeaderAction/select-tab/address";
 
+const checkDisableTab2 = (statusEvent, isHighestLevel) => {
+  switch (statusEvent) {
+    case "CDD":
+      return false;
+    case "CDDD":
+      return !isHighestLevel;
+    case "DDD":
+    case "KVP":
+    default:
+      return true;
+  }
+};
+
 const ViolationInfoForm = () => {
   const classes = useSceneInfoFormStyle();
   const methods = useFormContext();
-  const { plates, isHighestLevel } = useContext(ListTrafficModalContext);
-
+  const { plates, isHighestLevel, selectedItem } = useContext(
+    ListTrafficModalContext
+  );
+  const statusEvent = selectedItem.statusEvent;
   const {
     register,
     formState: { errors },
@@ -41,13 +50,13 @@ const ViolationInfoForm = () => {
         component={
           <TextField
             {...register("fullName", {
-              required: "Full Name is required",
+              required: "Tên chủ phương tiện là bắt buộc",
             })}
             className={classes.inputFeild}
             error={!!errors["fullName"]}
             style={{ width: "350px" }}
             variant="outlined"
-            disabled={!isHighestLevel}
+            disabled={checkDisableTab2(statusEvent, isHighestLevel)}
             size="small"
           />
         }
@@ -61,7 +70,7 @@ const ViolationInfoForm = () => {
           <BaseDatePickerForm
             name="birthday"
             format="DD/MM/YYYY"
-            disabled={!isHighestLevel}
+            disabled={checkDisableTab2(statusEvent, isHighestLevel)}
             width="340px"
             endIcon
           />
@@ -81,7 +90,7 @@ const ViolationInfoForm = () => {
             error={!!errors["cccd"]}
             style={{ width: "350px" }}
             variant="outlined"
-            disabled={!isHighestLevel}
+            disabled={checkDisableTab2(statusEvent, isHighestLevel)}
             size="small"
           />
         }
@@ -100,7 +109,7 @@ const ViolationInfoForm = () => {
             style={{ width: "100%" }}
             className={classes.inputFeild}
             variant="outlined"
-            disabled={!isHighestLevel}
+            disabled={checkDisableTab2(statusEvent, isHighestLevel)}
             size="small"
           />
         }
@@ -119,7 +128,7 @@ const ViolationInfoForm = () => {
             style={{ width: "100%" }}
             className={classes.inputFeild}
             variant="outlined"
-            disabled={!isHighestLevel}
+            disabled={checkDisableTab2(statusEvent, isHighestLevel)}
             size="small"
           />
         }
@@ -130,7 +139,9 @@ const ViolationInfoForm = () => {
         isRequired={true}
         error={errors["addressType"]}
         component={
-          <AddressSelectTab />
+          <AddressSelectTab
+            disabled={checkDisableTab2(statusEvent, isHighestLevel)}
+          />
         }
       />
 
@@ -144,9 +155,7 @@ const ViolationInfoForm = () => {
         error={errors["infoNumber"]}
         component={
           <TextField
-            {...register("infoNumber", {
-              required: "Địa chỉ chi tiết is required",
-            })}
+            {...register("infoNumber", { required: "Số thông báo" })}
             error={!!errors["infoNumber"]}
             style={{ width: "100%" }}
             className={classes.inputFeild}
@@ -157,86 +166,75 @@ const ViolationInfoForm = () => {
         }
       />
 
-      <Grid container justifyContent="space-between">
-        <Grid item xs={6} lg={6}>
-          <Grid container alignItems="center">
-            <Grid item xs={6} lg={6}>
-              <Typography style={{ fontSize: "14px" }}>
-                Thông báo gửi lần 1
-              </Typography>
-            </Grid>
-            <Grid item xs={6} lg={6}>
-              <BaseDatePickerForm
-                name="send1"
-                format="DD/MM/YYYY"
-                disabled={!isHighestLevel}
-                width="94%"
-                endIcon
-              />
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={6} lg={6} style={{ paddingLeft: "5px" }}>
-          <Grid container alignItems="center">
-            <Grid item xs={6} lg={6}>
-              <Typography style={{ fontSize: "14px" }}>
-                Thông báo gửi lần 2
-              </Typography>
-            </Grid>
-            <Grid item xs={6} lg={6}>
-              <BaseDatePickerForm
-                name="send2"
-                format="DD/MM/YYYY"
-                disabled={!isHighestLevel}
-                width="94%"
-                endIcon
-              />
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
-      <Grid
-        container
-        justifyContent="space-between"
-        style={{ marginTop: "5px", marginBottom: "5px" }}
-      >
-        <Grid item xs={6} lg={6}>
-          <Grid container alignItems="center">
-            <Grid item xs={6} lg={6}>
-              <Typography style={{ fontSize: "14px" }}>
-                Thông báo gửi sở GTVT
-              </Typography>
-            </Grid>
-            <Grid item xs={6} lg={6}>
-              <BaseDatePickerForm
-                name="sendGTVT"
-                format="DD/MM/YYYY"
-                disabled={!isHighestLevel}
-                width="94%"
-                endIcon
-              />
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={6} lg={6} style={{ paddingLeft: "5px" }}>
-          <Grid container alignItems="center">
-            <Grid item xs={6} lg={6}>
-              <Typography style={{ fontSize: "14px" }}>
-                Thông báo hoàn lại
-              </Typography>
-            </Grid>
-            <Grid item xs={6} lg={6}>
-              <BaseDatePickerForm
-                name="infoReturn"
-                format="DD/MM/YYYY"
-                disabled={!isHighestLevel}
-                width="94%"
-                endIcon
-              />
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
+      <Box style={{ display: "flex" }}>
+        <Box style={{ display: "flex", marginRight: "auto" }}>
+          <Box style={{ margin: "auto", width: "180px" }}>
+            <Typography style={{ fontSize: "14px" }}>
+              Thông báo gửi lần 1
+            </Typography>
+          </Box>
+          <Box>
+            <BaseDatePickerForm
+              name="send1"
+              format="DD/MM/YYYY"
+              disabled={checkDisableTab2(statusEvent, isHighestLevel)}
+              width="124px"
+              endIcon
+            />
+          </Box>
+        </Box>
+        <Box style={{ width: "300px", display: "flex" }}>
+          <Box style={{ margin: "auto", marginLeft: 0 }}>
+            <Typography style={{ fontSize: "14px" }}>
+              Thông báo gửi lần 2
+            </Typography>
+          </Box>
+          <Box>
+            <BaseDatePickerForm
+              name="send2"
+              format="DD/MM/YYYY"
+              disabled={checkDisableTab2(statusEvent, isHighestLevel)}
+              width="124px"
+              endIcon
+            />
+          </Box>
+        </Box>
+      </Box>
+
+      <Box style={{ marginTop: "5px", marginBottom: "5px", display: "flex" }}>
+        <Box style={{ display: "flex", marginRight: "auto" }}>
+          <Box style={{ margin: "auto", width: "180px" }}>
+            <Typography style={{ fontSize: "14px" }}>
+              Thông báo gửi sở GTVT
+            </Typography>
+          </Box>
+          <Box>
+            <BaseDatePickerForm
+              name="sendGTVT"
+              format="DD/MM/YYYY"
+              disabled={checkDisableTab2(statusEvent, isHighestLevel)}
+              width="124px"
+              endIcon
+            />
+          </Box>
+        </Box>
+        <Box style={{ width: "300px", display: "flex" }}>
+          <Box style={{ margin: "auto", marginLeft: 0 }}>
+            <Typography style={{ fontSize: "14px" }}>
+              Thông báo hoàn lại
+            </Typography>
+          </Box>
+          <Box>
+            <BaseDatePickerForm
+              name="infoReturn"
+              format="DD/MM/YYYY"
+              disabled={checkDisableTab2(statusEvent, isHighestLevel)}
+              width="124px"
+              endIcon
+            />
+          </Box>
+        </Box>
+      </Box>
 
       <BaseFormGroup
         label="Ngày giờ hẹn"
@@ -246,7 +244,7 @@ const ViolationInfoForm = () => {
           <BaseDatePickerForm
             name="appointmentDate"
             format="DD/MM/YYYY"
-            disabled={!isHighestLevel}
+            disabled={checkDisableTab2(statusEvent, isHighestLevel)}
             width="100%"
             endIcon
           />
@@ -267,7 +265,7 @@ const ViolationInfoForm = () => {
             className={classes.inputFeild}
             variant="outlined"
             size="small"
-            disabled={!isHighestLevel}
+            disabled={checkDisableTab2(statusEvent, isHighestLevel)}
           />
         }
       />
@@ -285,16 +283,12 @@ const useSceneInfoFormStyle = makeStyles({
     position: "relative",
     borderBottomRightRadius: "8px",
     borderBottomLeftRadius: "8px",
-    height: "480px",
+    minHeight: "495px",
   },
   inputFeild: {
     height: "32px",
-    "& input": {
-      height: "100%",
-    },
-    "& .MuiOutlinedInput-inputMarginDense": {
-      padding: "8px",
-    },
+    "& input": { height: "100%" },
+    "& .MuiOutlinedInput-inputMarginDense": { padding: "8px" },
     "& .MuiInputBase-root.Mui-disabled": {
       color: "#939393",
       background: "#ebebeb",
@@ -302,9 +296,7 @@ const useSceneInfoFormStyle = makeStyles({
   },
   selectFeild: {
     height: "34px",
-    "& .MuiOutlinedInput-input": {
-      padding: "10px",
-    },
+    "& .MuiOutlinedInput-input": { padding: "10px" },
     "&.MuiInputBase-root.Mui-disabled": {
       color: "#939393",
       background: "#ebebeb",

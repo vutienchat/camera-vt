@@ -9,7 +9,13 @@ import React, {
 import { FormProvider, useForm } from "react-hook-form";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
-import { Box, Modal, Typography, makeStyles } from "@material-ui/core";
+import {
+  Box,
+  Modal,
+  Typography,
+  makeStyles,
+  IconButton,
+} from "@material-ui/core";
 
 import { NextIcon, PreviousIcon } from "../Icons";
 import {
@@ -22,6 +28,8 @@ import SceneInfoForm from "../component/SceneInfoForm/SceneInfoForm";
 import BaseTabCommon from "../component/BaseTabCommon";
 import { TrafficContext } from "../TrafficContent";
 import { StatusEventComponent } from "../javacript/common";
+import CloseModalIcon from "../../masterMap/Icons/CloseModalIcon";
+import { useEffect } from "react";
 
 export const ListTrafficModalContext = createContext({});
 
@@ -71,7 +79,7 @@ const ListTrafficModal = ({
     if (!selectedItem.description.licencePlate) return [];
 
     return selectedItem.description.licencePlate.split("-");
-  }, [selectedItem, isHighestLevel]);
+  }, [selectedItem]);
 
   const data = {
     selectedItem,
@@ -99,6 +107,7 @@ const ListTrafficModal = ({
   const classes = useListTrafficModalStyle();
 
   const [tabPane, setTabPane] = useState(listSceneTab[0].value);
+  const [isEditDataForm, setIsEditDataForm] = useState(false);
 
   const itemId = useMemo(() => {
     return trafficList.findIndex((element) => element.id === selectedItem.id);
@@ -135,6 +144,8 @@ const ListTrafficModal = ({
     });
   };
 
+  useEffect(() => setIsEditDataForm(false), [itemId]);
+
   const handlePrevious = () => {
     if (itemId > 0) {
       setSelectedItem(trafficList[itemId - 1]);
@@ -164,9 +175,12 @@ const ListTrafficModal = ({
     <Modal open={isOpen} onClose={handleClose} className={classes.root}>
       <FormProvider {...methods}>
         <ListTrafficModalContext.Provider value={data}>
-          <form onSubmit={methods.handleSubmit(handleUpdateScene)}>
+          <form
+            onSubmit={methods.handleSubmit(handleUpdateScene)}
+            onChange={() => setIsEditDataForm(true)}
+          >
             <Box className={classes.content}>
-              <Box className={classes.header}>
+              <Box className={classes.header} style={{ position: "relative" }}>
                 <Typography className={classes.titlePlace}>
                   {selectedItem.description.licencePlate}
                 </Typography>
@@ -193,6 +207,13 @@ const ListTrafficModal = ({
                     {statusErrEvent[selectedItem.statusEvent]}
                   </Typography>
                 </Box>
+                <IconButton
+                  onClick={handleClose}
+                  className={classes.icon}
+                  style={{ right: 0 }}
+                >
+                  <CloseModalIcon width={16} height={16} color="#000" />
+                </IconButton>
               </Box>
               <Box
                 style={{
@@ -261,7 +282,7 @@ const ListTrafficModal = ({
                   )}
                 </Box>
               </Box>
-              {StatusEventComponent(selectedItem.statusEvent)}
+              {StatusEventComponent(selectedItem.statusEvent, isEditDataForm)}
               <Box
                 className={classes.icon}
                 style={{ left: "-90px" }}
