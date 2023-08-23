@@ -52,7 +52,7 @@ const BaseTabCommon = ({
                 color: isTabSelected && isBaseTabModal ? "white" : "black",
               }}
             >
-              {label} {!isBaseTabModal && 120}
+              {label} {!isBaseTabModal && `(120)`}
             </Typography>
             {isTabSelected && (
               <Box

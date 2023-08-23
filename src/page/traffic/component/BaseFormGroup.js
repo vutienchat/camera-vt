@@ -50,7 +50,7 @@ const BaseFormGroup = ({
       </Box>
       <React.Fragment>
         <Box style={{ width: "100%" }}>
-          <Box style={{ width: "500px", marginLeft: "auto" }}>
+          <Box style={{ width: widthCustom || "500px", marginLeft: "auto" }}>
             <Typography color="error" style={{ marginTop: "5px" }}>
               {showErrorMessage && error ? error.message : ""}
             </Typography>

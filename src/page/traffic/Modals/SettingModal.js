@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useContext, useMemo } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 
 import {
@@ -14,44 +14,51 @@ import {
 import { jsonAddress } from "../../../jsonAddress";
 import SelectForm from "../../../component/SelectForm";
 import BaseFormGroup from "../component/BaseFormGroup";
-import { settingArr, SPECIAL_CHARACTER_TEXT } from "../../../utils/traffic";
+import {
+  settingArr,
+  SPECIAL_CHARACTER_NUMBER,
+  SPECIAL_CHARACTER_TEXT,
+} from "../../../utils/traffic";
 import yup from "../javacript/yupGlobal";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { validateText } from "../javacript/common";
+import { TrafficContext } from "../TrafficContent";
 
 const schema = yup.object().shape({
-  direct: yup.string().required("Direct is required"),
-  subDirect: yup.string().required("Sub Direct is required"),
-  phone: yup.string().required("Phone is required").phone("Phone is invalid"),
-  email: yup.string().required("Email is required").email("Email is invalid"),
+  city: yup.string().required("Thành phố là trường bắt buộc"),
+  province: yup.string().required("Địa chỉ quận huyện là trường bắt buộc"),
+  address: yup.string().required("Địa chỉ chi tiết là trường bắt buộc"),
+  unitHeads: yup.string().required("Tên thủ trường là trường bắt buộc"),
+  manager: yup.string().required("Tên trưởng phòng là trường bắt buộc"),
+  deputy: yup.string().required("Tên phó phòng là trường bắt buộc"),
+  phone: yup
+    .string()
+    .required("Số điện thoại là bắt buộc")
+    .matches(/^[0-9]{10,15}$/, "Số điện thoại không hợp lệ"),
+  email: yup.string().email("Email không hợp lệ"),
 });
-const defaultValues = {
-  city: "01", // Mã code Tỉnh/TP
-  province: "002", // Mã code Quận/Huyện
-  address: "string", // Địa chỉ chi tiết
-  headConfirmation: "01", // Ký thay Trưởng phòng
-  unitHeads: "string", // Tên thủ trưởng
-  manager: "string", // Tên Trưởng phòng
-  deputy: "string", // Tên Phó phòng
-  phone: 2123456789, // Số điện thoại phòng
-  email: "vuongdv3012@gmail.com", // Địa chỉ Email phòng
-};
+// const defaultValues = {
+//   city: "", // Mã code Tỉnh/TP
+//   province: "", // Mã code Quận/Huyện
+//   address: "", // Địa chỉ chi tiết
+//   headConfirmation: "01", // Ký thay Trưởng phòng
+//   unitHeads: "", // Tên thủ trưởng
+//   manager: "", // Tên Trưởng phòng
+//   deputy: "", // Tên Phó phòng
+//   phone: "", // Số điện thoại phòng
+//   email: "", // Địa chỉ Email phòng
+// };
 
 const SettingModal = ({ handleCancel }) => {
+  const { modelSetting } = useContext(TrafficContext);
   const methods = useForm({
-    defaultValues: {
-      ...defaultValues,
-      name: "",
-      signer: "01",
-      direct: "",
-    },
+    defaultValues: modelSetting,
     mode: "onBlur",
     resolver: yupResolver(schema),
   });
 
   const {
     register,
-    handleSubmit,
     control,
     watch,
     formState: { errors },
@@ -91,13 +98,15 @@ const SettingModal = ({ handleCancel }) => {
     <Box className={classes.root}>
       <FormProvider {...methods}>
         <form
-          onSubmit={handleSubmit(handleChangeSetting)}
+          onSubmit={methods.handleSubmit(handleChangeSetting)}
           style={{ display: "flex", flexDirection: "column", gap: "8px" }}
         >
           <BaseFormGroup
             label="Tỉnh/Thành phố"
             isRequired={true}
             showErrorMessage
+            widthCustom={"400px"}
+            error={errors["city"]}
             component={
               <SelectForm
                 keyForm="city"
@@ -111,6 +120,8 @@ const SettingModal = ({ handleCancel }) => {
             label="Quận/Huyện"
             isRequired={true}
             showErrorMessage
+            widthCustom={"400px"}
+            error={errors["province"]}
             component={
               <SelectForm
                 keyForm="province"
@@ -122,6 +133,7 @@ const SettingModal = ({ handleCancel }) => {
           />
 
           {settingArr.map((setting, index) => {
+            // console.log(setting);
             if (setting.type === "text") {
               return (
                 <Controller
@@ -135,23 +147,39 @@ const SettingModal = ({ handleCancel }) => {
                       <BaseFormGroup
                         label={setting.label}
                         isRequired={setting.key !== "email"}
-                        //key={`${setting.key}_${index}`}
                         showErrorMessage
                         error={errors[setting.key]}
+                        widthCustom={"400px"}
                         component={
                           <TextField
                             ref={ref}
                             {...register(setting.key)}
                             onChange={(e) => {
-                              if (!setting.pattern)
-                                onChange(validateText(e.target.value));
+                              const { value } = e.target;
+                              if (!setting.pattern) {
+                                if (setting.key === "email") {
+                                  onChange(validateText(value.trim()));
+                                } else {
+                                  onChange(validateText(value));
+                                }
+                              }
 
-                              if (
-                                !SPECIAL_CHARACTER_TEXT.test(e.target.value) &&
-                                setting.pattern &&
-                                setting.pattern.test(e.target.value)
-                              ) {
-                                onChange(validateText(e.target.value));
+                              if (setting.key === "phone") {
+                                if (!SPECIAL_CHARACTER_NUMBER.test(value))
+                                  onChange(validateText(value));
+                              } else if (setting.key === "address") {
+                                if (
+                                  setting.pattern &&
+                                  setting.pattern.test(value)
+                                )
+                                  onChange(validateText(value));
+                              } else {
+                                if (
+                                  !SPECIAL_CHARACTER_TEXT.test(value) &&
+                                  setting.pattern &&
+                                  setting.pattern.test(value)
+                                )
+                                  onChange(validateText(value));
                               }
                             }}
                             value={value}
@@ -176,6 +204,7 @@ const SettingModal = ({ handleCancel }) => {
                   error={errors[setting.key]}
                   key={`${setting.key}_${index}`}
                   showErrorMessage
+                  widthCustom={"400px"}
                   component={
                     <Controller
                       control={control}

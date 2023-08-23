@@ -2,6 +2,7 @@ import { Box, Table, TableContainer } from "@material-ui/core";
 import { createContext, memo } from "react";
 import TableHeaderContent from "./TableHeader";
 import TableBodyContent from "./TableBodyContent";
+import TableFooterContent from "./TableFooter";
 
 export const TableCommonContext = createContext({});
 
@@ -30,6 +31,7 @@ const TableContent = ({
         <Table aria-label="simple table">
           <TableHeaderContent />
           <TableBodyContent />
+          <TableFooterContent />
         </Table>
       </TableContainer>
     </TableCommonContext.Provider>

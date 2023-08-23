@@ -10,10 +10,16 @@ import { TrafficContext } from "../../TrafficContent";
 
 const UnformattedButtons = ({ status }) => {
   const classes = useStatusEventStyle();
-  const { handleOpenHistoryModal, handleOpenReasonModal } = useContext(
-    ListTrafficModalContext
-  );
+  const {
+    handleOpenHistoryModal,
+    handleOpenReasonModal,
+    handleUpdateStatusTrafficModal,
+  } = useContext(ListTrafficModalContext);
   const { isHighestLevel } = useContext(TrafficContext);
+
+  const onUpdateStatusTraffic = (status) => {
+    handleUpdateStatusTrafficModal(status);
+  };
 
   return (
     <Box
@@ -44,6 +50,9 @@ const UnformattedButtons = ({ status }) => {
           <BaseButton
             content="Gửi duyệt lỗi"
             typeStyle="contained"
+            onClick={() =>
+              onUpdateStatusTraffic(isHighestLevel ? "CDD" : "CDVP")
+            }
             startIcon={<SendIcon color="#fff" />}
             customStyle={{ minWidth: "150px" }}
           />
@@ -65,6 +74,7 @@ const UnformattedButtons = ({ status }) => {
             typeStyle="contained"
             startIcon={<SendIcon color="#fff" />}
             customStyle={{ minWidth: "150px" }}
+            onClick={() => onUpdateStatusTraffic("CDD")}
           />
         </Box>
       )}
@@ -79,10 +89,12 @@ const UnformattedButtons = ({ status }) => {
               marginRight: "auto",
               marginLeft: "16px",
             }}
+            onClick={() => onUpdateStatusTraffic("CDD")}
           />
           <BaseButton
             content="Duyệt không lỗi"
             customStyle={{ minWidth: "150px" }}
+            onClick={() => onUpdateStatusTraffic("KVP")}
           />
         </Box>
       )}
@@ -96,6 +108,7 @@ const UnformattedButtons = ({ status }) => {
                 marginRight: "auto",
                 marginLeft: "16px",
               }}
+              onClick={() => onUpdateStatusTraffic("KVP")}
             />
           ) : (
             <Box style={{ marginRight: "auto" }} />
@@ -105,6 +118,7 @@ const UnformattedButtons = ({ status }) => {
               content={"Từ chối định danh"}
               typeStyle="border"
               customStyle={{ minWidth: "150px" }}
+              onClick={() => onUpdateStatusTraffic("CDD")}
             />
           )}
           <BaseButton
@@ -112,6 +126,9 @@ const UnformattedButtons = ({ status }) => {
             typeStyle="contained"
             startIcon={<SendIcon color="#fff" />}
             customStyle={{ minWidth: "150px" }}
+            onClick={() =>
+              onUpdateStatusTraffic(isHighestLevel ? "DDD" : "CDDD")
+            }
           />
         </Box>
       )}

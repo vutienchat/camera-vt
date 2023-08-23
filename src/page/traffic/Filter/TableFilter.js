@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { Box, InputAdornment, TextField, makeStyles } from "@material-ui/core";
@@ -31,9 +31,20 @@ const TableFilter = () => {
     queryClient.invalidateQueries([QUERY_KEYS.TRAFFIC_LIST]);
   };
 
-  const handleChangeKeyword = () => {};
+  const handleChangeKeyword = (e) => {
+    const { value } = e.target;
+    if (value.trim() === "") {
+      setTextSearch("");
+      return;
+    }
+    const maxLength = 20;
 
-  const handleResetTextSearch = () => {};
+    if (value.length <= maxLength) setTextSearch(value.replace(/ {2,}/g, " "));
+  };
+
+  const handleResetTextSearch = () => {
+    setTextSearch("");
+  };
 
   return (
     <Box className={classes.root}>

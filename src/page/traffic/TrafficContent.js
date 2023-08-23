@@ -20,6 +20,8 @@ import ViolationHistoryModal from "./Modals/ViolationHistoryModal";
 import QuestionModal from "./component/QuestionModal";
 import NoErrorReasonModal from "./Modals/NoErrorReasonModal";
 import useModalAction from "./hooks/useModalAction";
+import { useEffect } from "react";
+import { useMemo } from "react";
 
 export const TrafficContext = createContext({});
 
@@ -57,9 +59,9 @@ const TrafficContent = () => {
   const [modelSetting, setModelSetting] = useState({
     id: "Mã code collection setting account Traffic",
     userId: "Mã Code tài khoản của người cấu hình",
-    provinceId: "01",
-    districtId: "001",
-    headConfirmation: true,
+    city: "01",
+    province: "001",
+    headConfirmation: "01",
     address: "60 Hoàng Quốc Việt",
     unitHeads: "Nguyễn Văn C",
     manager: "Nguyễn Văn B",
@@ -111,6 +113,11 @@ const TrafficContent = () => {
     console.log("listStatusTraffic", listStatusTraffic);
   };
 
+  const handleUpdateDateTraffic = (newValueTraffic, selectedItem) => {
+    console.log("selectedItem", selectedItem);
+    console.log("newValueTraffic", newValueTraffic);
+  };
+
   const data = {
     trafficList,
     checkedItemList,
@@ -124,12 +131,50 @@ const TrafficContent = () => {
     setIsOpenReasonsModal,
     handleUpdateStatusTraffic,
     handleOpenReasonModal,
+    handleUpdateDateTraffic,
   };
+  const [selectTabPane, setSelectTabPane] = useState(status[0].value);
 
   const handleChangeTabPane = (value) => {
-    setParamTrafficSearch((prev) => ({ ...prev, tabPane: value }));
+    setSelectTabPane(value);
     setCheckedItemList([]);
   };
+
+  const trafficListShow = useMemo(() => {
+    if (!trafficList) return [];
+    let trafficListShow = [];
+
+    switch (selectTabPane) {
+      case status[1].value:
+        trafficListShow = trafficList.filter(
+          (trafficItem) =>
+            trafficItem.statusEvent === "VP" ||
+            trafficItem.statusEvent === "CDVP" ||
+            trafficItem.statusEvent === "CDKVP"
+        );
+        break;
+      case status[2].value:
+        trafficListShow = trafficList.filter(
+          (trafficItem) =>
+            trafficItem.statusEvent === "CDD" ||
+            trafficItem.statusEvent === "CDDD"
+        );
+        break;
+      case status[3].value:
+        trafficListShow = trafficList.filter(
+          (trafficItem) => trafficItem.statusEvent === "DDD"
+        );
+        break;
+      default:
+        trafficListShow = trafficList;
+        break;
+    }
+    console.log(trafficListShow);
+    return trafficListShow.map((trafficItem, index) => ({
+      ...trafficItem,
+      stt: index + 1,
+    }));
+  }, [trafficList, selectTabPane]);
 
   return (
     <TrafficContext.Provider value={data}>
@@ -140,13 +185,13 @@ const TrafficContent = () => {
           <BaseTabCommon
             badge
             list={status}
-            selectedTab={paramTrafficSearch.tabPane}
+            selectedTab={selectTabPane}
             handleChangeSelectedTab={handleChangeTabPane}
           />
           <TableContent
             checkedAble
             isLoading={isTrafficLoading || isTrafficFetching}
-            tableData={trafficList}
+            tableData={trafficListShow}
             tableHeader={columnsTrafficData}
             handleCheckData={handleCheckData}
             checkedItems={checkedItemList}
@@ -157,7 +202,7 @@ const TrafficContent = () => {
           <ListTrafficModal
             isOpen={isTrafficListOpenModal}
             handleClose={handleClose}
-            trafficList={trafficList}
+            trafficList={trafficListShow}
             setSelectedItem={setSelectedItem}
             handleOpenViolationModal={handleOpenViolationModal}
             handleOpenHistoryModal={handleOpenHistoryModal}

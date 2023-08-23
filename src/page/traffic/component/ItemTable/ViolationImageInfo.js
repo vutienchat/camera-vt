@@ -39,6 +39,7 @@ const useViolationImageInfoStyle = makeStyles({
     width: "100%",
     display: "flex",
     alignItems: "center",
+    justifyContent: "center",
   },
 });
 

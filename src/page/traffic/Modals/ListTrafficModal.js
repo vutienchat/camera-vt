@@ -5,6 +5,7 @@ import React, {
   memo,
   useMemo,
   useState,
+  useCallback,
 } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
@@ -20,7 +21,7 @@ import {
 import { NextIcon, PreviousIcon } from "../Icons";
 import {
   colorStatusErrEvent,
-  // listSceneTab,
+  convertToAbbreviation,
   statusErrEvent,
 } from "../../../utils/traffic";
 import ViolationInfoForm from "../component/ViolationInfoForm/ViolationInfoForm";
@@ -30,6 +31,7 @@ import { TrafficContext } from "../TrafficContent";
 import { StatusEventComponent } from "../javacript/common";
 import CloseModalIcon from "../../masterMap/Icons/CloseModalIcon";
 import { useEffect } from "react";
+import extendedDayJs from "../../../utils/dayjs";
 
 export const ListTrafficModalContext = createContext({});
 
@@ -41,13 +43,15 @@ const ListTrafficModal = ({
   handleOpenHistoryModal,
   handleOpenReasonModal,
 }) => {
-  const { isHighestLevel, selectedItem } = useContext(TrafficContext);
+  const {
+    isHighestLevel,
+    selectedItem,
+    handleUpdateDateTraffic,
+    handleUpdateStatusTraffic,
+  } = useContext(TrafficContext);
 
-  const methods = useForm({
-    mode: "onBlur",
-    reValidateMode: "onChange",
-    shouldUnregister: false,
-    defaultValues: {
+  const defaultValues = useMemo(
+    () => ({
       numberPlate: selectedItem.description.licencePlate,
       note: selectedItem.note,
       camName: selectedItem.camName,
@@ -73,21 +77,21 @@ const ListTrafficModal = ({
       infoReturn: selectedItem.infoSanction.infoReturn.split(" ")[1],
       appointmentDate: selectedItem.infoSanction.appointmentDate.split(" ")[1],
       infoSactionNote: selectedItem.infoSanction.note,
-    },
+    }),
+    [selectedItem]
+  );
+
+  const methods = useForm({
+    mode: "onBlur",
+    reValidateMode: "onChange",
+    shouldUnregister: false,
+    defaultValues: defaultValues,
   });
   const plates = useMemo(() => {
     if (!selectedItem.description.licencePlate) return [];
 
     return selectedItem.description.licencePlate.split("-");
   }, [selectedItem]);
-
-  const data = {
-    selectedItem,
-    plates,
-    isHighestLevel,
-    handleOpenHistoryModal,
-    handleOpenReasonModal,
-  };
 
   const listSceneTab = useMemo(() => {
     const statusEvent = selectedItem.statusEvent;
@@ -113,35 +117,54 @@ const ListTrafficModal = ({
     return trafficList.findIndex((element) => element.id === selectedItem.id);
   }, [trafficList, selectedItem]);
 
-  const handleResetDataForm = (index) => {
-    methods.reset({
-      numberPlate: trafficList[index].description.licencePlate,
-      note: trafficList[index].note,
-      camName: trafficList[index].camName,
-      violationError: trafficList[index].typeError,
-      fineAmount: trafficList[index].fineAmount,
-      holdGPLX: String(trafficList[index].holdGPLX),
-      colorPlate: trafficList[index].description.colorPlate,
-      color: trafficList[index].description.color,
-      vehicleType: trafficList[index].description.vehicleType,
-      direction: trafficList[index].description.direction,
-      violationDate: trafficList[index].violationDate,
-      location: selectedItem.location,
+  const { watch } = methods;
+  const watchAllFields = watch();
 
-      fullName: trafficList[index].vehicleOwner.fullName,
-      address: trafficList[index].vehicleOwner.address,
-      cccd: trafficList[index].vehicleOwner.cccd,
-      phoneNumber: trafficList[index].vehicleOwner.phoneNumber,
-      birthday: trafficList[index].vehicleOwner.birthday,
-      infoNumber: trafficList[index].infoSanction.infoNumber,
-      send1: trafficList[index].infoSanction.send1.split(" ")[1],
-      send2: trafficList[index].infoSanction.send2.split(" ")[1],
-      sendGTVT: trafficList[index].infoSanction.sendGTVT.split(" ")[1],
-      infoReturn: trafficList[index].infoSanction.infoReturn.split(" ")[1],
-      appointmentDate:
-        trafficList[index].infoSanction.appointmentDate.split(" ")[1],
-      infoSactionNote: trafficList[index].infoSanction.note,
-    });
+  useEffect(() => {
+    const handleValueChange = (newValues) => {
+      const hasChanges = Object.keys(defaultValues).some(
+        (key) => defaultValues[key] !== newValues[key]
+      );
+      setIsEditDataForm(hasChanges);
+    };
+
+    handleValueChange(watchAllFields);
+  }, [watchAllFields, defaultValues]);
+
+  useEffect(() => handleResetFormData(), [selectedItem]);
+
+  const handleResetDataForm = (index) => {
+    methods.reset(defaultValues);
+
+    // return;
+    // methods.reset({
+    //   numberPlate: trafficList[index].description.licencePlate,
+    //   note: trafficList[index].note,
+    //   camName: trafficList[index].camName,
+    //   violationError: trafficList[index].typeError,
+    //   fineAmount: trafficList[index].fineAmount,
+    //   holdGPLX: String(trafficList[index].holdGPLX),
+    //   colorPlate: trafficList[index].description.colorPlate,
+    //   color: trafficList[index].description.color,
+    //   vehicleType: trafficList[index].description.vehicleType,
+    //   direction: trafficList[index].description.direction,
+    //   violationDate: trafficList[index].violationDate,
+    //   location: selectedItem.location,
+
+    //   fullName: trafficList[index].vehicleOwner.fullName,
+    //   address: trafficList[index].vehicleOwner.address,
+    //   cccd: trafficList[index].vehicleOwner.cccd,
+    //   phoneNumber: trafficList[index].vehicleOwner.phoneNumber,
+    //   birthday: trafficList[index].vehicleOwner.birthday,
+    //   infoNumber: trafficList[index].infoSanction.infoNumber,
+    //   send1: trafficList[index].infoSanction.send1.split(" ")[1],
+    //   send2: trafficList[index].infoSanction.send2.split(" ")[1],
+    //   sendGTVT: trafficList[index].infoSanction.sendGTVT.split(" ")[1],
+    //   infoReturn: trafficList[index].infoSanction.infoReturn.split(" ")[1],
+    //   appointmentDate:
+    //     trafficList[index].infoSanction.appointmentDate.split(" ")[1],
+    //   infoSactionNote: trafficList[index].infoSanction.note,
+    // });
   };
 
   useEffect(() => setIsEditDataForm(false), [itemId]);
@@ -149,17 +172,14 @@ const ListTrafficModal = ({
   const handlePrevious = () => {
     if (itemId > 0) {
       setSelectedItem(trafficList[itemId - 1]);
-      handleResetDataForm(itemId - 1);
     }
   };
 
   const handleNext = () => {
     if (itemId < trafficList.length) {
       setSelectedItem(trafficList[itemId + 1]);
-      handleResetDataForm(itemId + 1);
     } else {
       setSelectedItem(trafficList[0]);
-      handleResetDataForm(0);
     }
   };
 
@@ -167,18 +187,62 @@ const ListTrafficModal = ({
     setTabPane(value);
   };
 
+  const handleUpdateStatusTrafficModal = useCallback(
+    (status, typeNotError = 1) => {
+      //TODO: Kiểm tra setting Modal
+      const { id } = selectedItem;
+      let label1 = "";
+      let label2 = "";
+      if (isHighestLevel) {
+        label1 = label1
+          ? label1
+          : `dieuhanh_${convertToAbbreviation(
+              "Phạm Ngọc Mai Lâm"
+            )} - ${extendedDayJs(new Date()).format("HH:mm:ss DD/MM/YYYY")}`;
+        label2 = `dieuhanh_${convertToAbbreviation(
+          "Phạm Ngọc Mai Lâm"
+        )} - ${extendedDayJs(new Date()).format("HH:mm:ss DD/MM/YYYY")}`;
+      } else {
+        label1 = `dieuhanh_${convertToAbbreviation(
+          "Phạm Ngọc Mai Lâm"
+        )} - ${extendedDayJs(new Date()).format("HH:mm:ss DD/MM/YYYY")}`;
+      }
+
+      const formUpdate = {
+        id,
+        label2,
+        typeNotError: typeNotError,
+        statusEvent: status,
+        label1,
+      };
+
+      handleUpdateStatusTraffic([formUpdate]);
+    },
+    [selectedItem, isHighestLevel]
+  );
+
   const handleUpdateScene = (data) => {
-    console.log(data);
+    handleUpdateDateTraffic(data, selectedItem);
+  };
+
+  const handleResetFormData = () => methods.reset(defaultValues);
+
+  const data = {
+    selectedItem,
+    plates,
+    isHighestLevel,
+    handleOpenHistoryModal,
+    handleOpenReasonModal,
+
+    handleResetFormData,
+    handleUpdateStatusTrafficModal,
   };
 
   return (
     <Modal open={isOpen} onClose={handleClose} className={classes.root}>
       <FormProvider {...methods}>
         <ListTrafficModalContext.Provider value={data}>
-          <form
-            onSubmit={methods.handleSubmit(handleUpdateScene)}
-            onChange={() => setIsEditDataForm(true)}
-          >
+          <form onSubmit={methods.handleSubmit(handleUpdateScene)}>
             <Box className={classes.content}>
               <Box className={classes.header} style={{ position: "relative" }}>
                 <Typography className={classes.titlePlace}>
@@ -352,9 +416,7 @@ const useListTrafficModalStyle = makeStyles({
     display: "flex",
     alignItems: "center",
     gap: "10px",
-    "& p": {
-      lineHeight: "21.4px",
-    },
+    "& p": { lineHeight: "21.4px" },
   },
   btnContent: {
     border: "1px solid rgba(221, 61, 75, 1)",

@@ -47,7 +47,9 @@ const TableHeaderContent = () => {
   };
 
   return (
-    <TableHead style={{ backgroundColor: "#ebebeb", height: "40px" }}>
+    <TableHead
+      style={{ backgroundColor: "#ebebeb", height: "40px", texWrap: "nowrap" }}
+    >
       <TableRow>
         {checkedAble && (
           <TableCell className={classes.checkbox}>
@@ -93,6 +95,7 @@ const TableHeaderContent = () => {
 const useTableHeaderStyle = makeStyles({
   checkbox: {
     textAlign: "center",
+    minWidth: "72px",
     "& .MuiIconButton-label": { color: "#000" },
     "&.MuiTableCell-root": { padding: "0" },
   },

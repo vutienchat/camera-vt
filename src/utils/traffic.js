@@ -181,6 +181,7 @@ export const columnsTrafficData = [
   {
     field: "stt",
     name: "#",
+    customStyles: { minWidth: "57px", padding: 0, textAlign: "center" },
   },
   {
     field: "statusEvent",
@@ -193,7 +194,12 @@ export const columnsTrafficData = [
   {
     field: "imageDetail",
     name: "Hình Ảnh Vi Phạm",
-    customStyles: { flex: 1 },
+    customStyles: {
+      flex: 1,
+      minWidth: "650px",
+      textAlign: "center",
+      padding: "12px 0",
+    },
     component: (data) => {
       return <ViolationImageInfo data={data} />;
     },
