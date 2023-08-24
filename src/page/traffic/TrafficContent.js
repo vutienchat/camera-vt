@@ -289,10 +289,12 @@ const TrafficContent = () => {
             isOpen={isOpenReasonsModal}
             handleConfirm={handleConfirmReason}
             styleFooterCustom={{ margin: "8px 0" }}
+            disableConfirm={selectedReason === "00"}
           >
             <NoErrorReasonModal
               list={noErrorReasonList}
               handleSelect={handleChangeSelectReason}
+              selectedReason={selectedReason}
             />
           </QuestionModal>
         )}

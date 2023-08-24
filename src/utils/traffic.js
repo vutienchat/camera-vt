@@ -256,6 +256,10 @@ export const listSceneTab = [
 
 export const noErrorReasonList = [
   {
+    label: "Chọn lý do không lỗi",
+    value: "00",
+  },
+  {
     label: "Xe ưu tiên",
     value: "01",
   },

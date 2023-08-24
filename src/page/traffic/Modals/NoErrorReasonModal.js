@@ -8,7 +8,7 @@ import {
   makeStyles,
 } from "@material-ui/core";
 
-const NoErrorReasonModal = ({ list, handleSelect }) => {
+const NoErrorReasonModal = ({ list, handleSelect, selectedReason }) => {
   const classes = useStyles();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -40,7 +40,13 @@ const NoErrorReasonModal = ({ list, handleSelect }) => {
         >
           {list.map((item) => {
             return (
-              <MenuItem value={item.value} key={item.value}>
+              <MenuItem
+                value={item.value}
+                key={item.value}
+                style={{
+                  display: item.value === list[0].value ? "none" : "block",
+                }}
+              >
                 {item.label}
               </MenuItem>
             );
