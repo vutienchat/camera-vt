@@ -88,6 +88,7 @@ const ListTrafficModal = ({
     shouldUnregister: false,
     defaultValues: defaultValues,
   });
+
   const plates = useMemo(() => {
     if (!selectedItem.description.licencePlate) return [];
 
@@ -122,6 +123,32 @@ const ListTrafficModal = ({
   const watchAllFields = watch();
 
   useEffect(() => {
+    const input = watchAllFields.fineAmount;
+    if (/[^0-9.]/g.test(input)) {
+      methods.setValue("fineAmount", input.replace(/[^0-9.]/g, ""));
+      return;
+    }
+
+    const strippedString = input.replace(/\./g, "");
+    const reversedString = strippedString.split("").reverse().join("");
+    const formattedString = reversedString
+      .replace(/(\d{3})/g, "$1.")
+      .split("")
+      .reverse()
+      .join("");
+
+    const finalString = formattedString.replace(/^\./, "");
+
+    methods.setValue("fineAmount", finalString);
+  }, [watchAllFields.fineAmount]);
+
+  useEffect(() => {
+    //console.log(watchAllFields.fineAmount);
+    //console.log(number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+    //methods.setValue();
+  }, [defaultValues]);
+
+  useEffect(() => {
     const handleValueChange = (newValues) => {
       const hasChanges = Object.keys(defaultValues).some(
         (key) => defaultValues[key] !== newValues[key]
@@ -133,40 +160,6 @@ const ListTrafficModal = ({
   }, [watchAllFields, defaultValues]);
 
   useEffect(() => handleResetFormData(), [selectedItem]);
-
-  const handleResetDataForm = (index) => {
-    methods.reset(defaultValues);
-
-    // return;
-    // methods.reset({
-    //   numberPlate: trafficList[index].description.licencePlate,
-    //   note: trafficList[index].note,
-    //   camName: trafficList[index].camName,
-    //   violationError: trafficList[index].typeError,
-    //   fineAmount: trafficList[index].fineAmount,
-    //   holdGPLX: String(trafficList[index].holdGPLX),
-    //   colorPlate: trafficList[index].description.colorPlate,
-    //   color: trafficList[index].description.color,
-    //   vehicleType: trafficList[index].description.vehicleType,
-    //   direction: trafficList[index].description.direction,
-    //   violationDate: trafficList[index].violationDate,
-    //   location: selectedItem.location,
-
-    //   fullName: trafficList[index].vehicleOwner.fullName,
-    //   address: trafficList[index].vehicleOwner.address,
-    //   cccd: trafficList[index].vehicleOwner.cccd,
-    //   phoneNumber: trafficList[index].vehicleOwner.phoneNumber,
-    //   birthday: trafficList[index].vehicleOwner.birthday,
-    //   infoNumber: trafficList[index].infoSanction.infoNumber,
-    //   send1: trafficList[index].infoSanction.send1.split(" ")[1],
-    //   send2: trafficList[index].infoSanction.send2.split(" ")[1],
-    //   sendGTVT: trafficList[index].infoSanction.sendGTVT.split(" ")[1],
-    //   infoReturn: trafficList[index].infoSanction.infoReturn.split(" ")[1],
-    //   appointmentDate:
-    //     trafficList[index].infoSanction.appointmentDate.split(" ")[1],
-    //   infoSactionNote: trafficList[index].infoSanction.note,
-    // });
-  };
 
   useEffect(() => setIsEditDataForm(false), [itemId]);
 
@@ -243,6 +236,12 @@ const ListTrafficModal = ({
   const videoRef = useRef(null);
 
   const onPlay = () => videoRef.current.play();
+
+  useEffect(() => {
+    if (!videoRef || !videoRef.current) return;
+    // resetScreen();
+    return () => videoRef.current.pause();
+  }, [selectedItem]);
 
   return (
     <Modal open={isOpen} onClose={handleClose} className={classes.root}>
@@ -352,7 +351,7 @@ const ListTrafficModal = ({
                     isBaseTabModal={true}
                   />
                   {tabPane === "scence_info" ? (
-                    <SceneInfoForm />
+                    <SceneInfoForm watchAllFields={watchAllFields} />
                   ) : (
                     <ViolationInfoForm />
                   )}

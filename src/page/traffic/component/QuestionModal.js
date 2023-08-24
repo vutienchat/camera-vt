@@ -17,6 +17,7 @@ const QuestionModal = ({
   handleClose,
   confirmText = "Xác nhận",
   styleFooterCustom = {},
+  disableConfirm,
 }) => {
   const classes = useQuestionModalStyle();
 
@@ -45,6 +46,7 @@ const QuestionModal = ({
             typeStyle="contained"
             onClick={handleConfirm}
             content={confirmText}
+            disabled={disableConfirm}
           />
         </Box>
       </Box>

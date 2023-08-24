@@ -36,7 +36,7 @@ const checkDisableTab1 = (statusEvent, isHighestLevel) => {
   }
 };
 
-const SceneInfoForm = () => {
+const SceneInfoForm = ({ watchAllFields }) => {
   const methods = useFormContext();
   const { plates, isHighestLevel, selectedItem } = useContext(
     ListTrafficModalContext
@@ -124,7 +124,6 @@ const SceneInfoForm = () => {
               <Typography style={{ fontWeight: 700, fontSize: "14px" }}>
                 VNĐ
               </Typography>
-              <Box style={{ width: "200px" }}></Box>
             </Box>
           }
         />
