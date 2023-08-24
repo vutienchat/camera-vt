@@ -66,6 +66,8 @@ const useStyles = makeStyles(() => ({
     borderRadius: "4px",
     fontSize: "16px",
     justifyContent: "space-between",
+    display: "flex",
+    alignItems: "center",
     "&:hover": {
       backgroundColor: "#f6f4f5",
     },
@@ -77,6 +79,29 @@ const useStyles = makeStyles(() => ({
   },
   checked: {
     "& svg": { color: "#dd3d4b !important" },
+  },
+  menu: {
+    /* width */
+    "&::-webkit-scrollbar": {
+      width: "5px",
+    },
+
+    /* Track */
+    "&::-webkit-scrollbar-track": {
+      background: "#f1f1f1",
+      borderRadius: "10px",
+    },
+
+    /* Handle */
+    "&::-webkit-scrollbar-thumb": {
+      background: "#888",
+      borderRadius: "10px",
+    },
+
+    /* Handle on hover */
+    "&::-webkit-scrollbar-thumb:hover": {
+      background: "#555",
+    },
   },
 }));
 
@@ -165,7 +190,7 @@ export default function SelectMultiple({
     }
 
     if (selected.length === 1) {
-      return listFilter[selected[0]].label;
+      return listFilter[0].label;
     }
 
     if (selected.length) return lowerCaseStringCustom(selected.length, btnText);
@@ -229,12 +254,13 @@ export default function SelectMultiple({
               <Box
                 style={{
                   marginTop: "12px",
-                  maxHeight: "400px",
-                  overflow: "auto",
+                  height: "200px",
+                  overflowY: "scroll",
                 }}
+                className={classes.menu}
               >
                 {titleDropdownText && listFilter.length > 0 && (
-                  <MenuItem className={classes.listItem}>
+                  <label className={classes.listItem}>
                     <Typography>{titleDropdownText}</Typography>
                     <Checkbox
                       onChange={handleCheckAll}
@@ -248,16 +274,16 @@ export default function SelectMultiple({
                       }
                       style={{ padding: 0 }}
                     />
-                  </MenuItem>
+                  </label>
                 )}
                 {listFilter.map((item) => {
                   const isChecked = selected.includes(String(item.value));
                   return (
-                    <MenuItem
+                    <label
+                      key={item.value}
                       className={`${classes.listItem} ${
                         isChecked && classes.isChecked
                       }`}
-                      key={item.value}
                     >
                       <Typography
                         style={{
@@ -278,7 +304,7 @@ export default function SelectMultiple({
                           isChecked && classes.checked
                         }`}
                       />
-                    </MenuItem>
+                    </label>
                   );
                 })}
               </Box>

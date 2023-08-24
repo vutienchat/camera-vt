@@ -28,6 +28,7 @@ const ViolationImageInfo = ({ data }) => {
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
+          muted
           controls={false}
         >
           <source

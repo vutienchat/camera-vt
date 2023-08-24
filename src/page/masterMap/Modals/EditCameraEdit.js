@@ -18,7 +18,6 @@ import useDebounce from "../../../hooks/useDebounce";
 import { MasterMapContext } from "../MasterMap";
 import { editMarker } from "../../../utils/api/map";
 import { useRef } from "react";
-import { useScreenshot } from "use-react-screenshot";
 
 const VIET_NAM_BOUNDS = {
   north: 26.625282609530778,
@@ -43,9 +42,6 @@ const EditCameraMapModal = ({ place, handleClose, isOpenEditModal }) => {
 
   const mapRef = useRef();
 
-  const [image, takeScreenshot] = useScreenshot();
-  const getImage = () => takeScreenshot(mapRef.current);
-
   const [isPopupOpen, setIsPopupOpen] = useState(true);
   const [searchValue, setSearchValue] = useState("");
   const [placeCustom, setPlaceCustom] = useState({
@@ -54,7 +50,6 @@ const EditCameraMapModal = ({ place, handleClose, isOpenEditModal }) => {
     lat: place.lat,
   });
 
-  console.log(image);
   const keyword = useDebounce(searchValue, 1000);
 
   const handleSearch = (e) => {
@@ -78,7 +73,6 @@ const EditCameraMapModal = ({ place, handleClose, isOpenEditModal }) => {
   const handleDragMarker = (event) => {
     setIsPopupOpen(true);
     const geocoder = new window.google.maps.Geocoder();
-    getImage();
 
     geocoder
       .geocode({
