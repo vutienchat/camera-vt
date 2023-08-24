@@ -22,7 +22,7 @@ import BaseButton from "../component/BaseButton";
 const TableFilter = () => {
   const queryClient = useQueryClient();
   const classes = useTableFilterStyle();
-  const { paramTrafficSearch } = useContext(TrafficContext);
+  const { selectTabPane } = useContext(TrafficContext);
 
   const [textSearch, setTextSearch] = useState("");
   const [isOpenSettingModal, setIsOpenSettingModal] = useState(false);
@@ -81,13 +81,13 @@ const TableFilter = () => {
             ) : null,
         }}
       />
-      {paramTrafficSearch.tabPane === "01" && (
+      {selectTabPane === "01" && (
         <Box style={{ display: "flex" }}>
           <UnViolationPendingApproval />
           <ViolationPendingApproval />
         </Box>
       )}
-      {paramTrafficSearch.tabPane === "03" && <NotificationShowing />}
+      {selectTabPane === "03" && <NotificationShowing />}
       <BaseButton
         content="Xuất danh sách"
         customStyle={{ minWidth: "150px" }}

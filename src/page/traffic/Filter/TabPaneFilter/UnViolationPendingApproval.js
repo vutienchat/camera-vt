@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import BaseButton from "../../component/BaseButton";
 import { TrafficContext } from "../../TrafficContent";
+import SendIcon from "../../Icons/SendIcon";
 
 const UnViolationPendingApproval = () => {
   const { checkedItemList, handleOpenReasonModal, isHighestLevel } =
@@ -19,6 +20,7 @@ const UnViolationPendingApproval = () => {
         }}
         typeStyle="borderStyle2"
         customStyle={{ marginRight: "16px" }}
+        startIcon={<SendIcon color={disabled ? "#939393" : "green"} />}
       />
     </React.Fragment>
   );

@@ -22,11 +22,13 @@ const NoErrorReasonModal = ({ list, handleSelect }) => {
 
   return (
     <Box className={classes.content}>
-      <Typography>Lý do vi phạm không lỗi(*)</Typography>
+      <Typography style={{ fontWeight: 500 }}>
+        Lý do vi phạm không lỗi <span style={{ color: "#dd3d4b" }}>*</span>
+      </Typography>
       <FormControl
         variant="outlined"
         size="small"
-        style={{ minWidth: "500px" }}
+        style={{ minWidth: "500px", height: "48px" }}
       >
         <Select
           open={isOpen}

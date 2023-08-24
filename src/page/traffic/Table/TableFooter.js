@@ -8,11 +8,21 @@ import {
 } from "@material-ui/core";
 import React from "react";
 import Pagination from "@material-ui/lab/Pagination";
+import { useState } from "react";
 
 const TableFooterContent = () => {
   const classes = useTableFooterStyle();
-  const handleChange = () => {};
-  const rowPerPage = 10;
+
+  const [rowPerPage, setRowPerPage] = useState(10);
+  const [page, setPage] = useState(1);
+
+  const handleChangeRow = (e) => {
+    setPage(1);
+    setRowPerPage(e.target.value);
+  };
+
+  const handleChangePage = (_, value) => setPage(value);
+
   return (
     <TableFooter>
       <TableRow>
@@ -23,12 +33,8 @@ const TableFooterContent = () => {
           <div className={classes.root}>
             <div className={classes.leftContent}>
               <span>Hiển thị:</span>{" "}
-              <FormControl>
-                <NativeSelect
-                  value={rowPerPage}
-                  onChange={handleChange}
-                  className={classes.selectEmpty}
-                >
+              <FormControl className={classes.selectPerPage}>
+                <NativeSelect value={rowPerPage} onChange={handleChangeRow}>
                   <option value={10}>10</option>
                   <option value={20}>20</option>
                   <option value={30}>30</option>
@@ -39,8 +45,8 @@ const TableFooterContent = () => {
             </div>
             <Pagination
               count={10}
-              page={1}
-              onChange={handleChange}
+              page={page}
+              onChange={handleChangePage}
               className={classes.paginationCustom}
             />
           </div>
@@ -65,19 +71,21 @@ const useTableFooterStyle = makeStyles({
       backgroundColor: "#ec1b2e",
       color: "white",
     },
-    "& .MuiPaginationItem-page": { fontWeight: 600 },
+    "& .MuiPaginationItem-root": { fontWeight: 600 },
     color: "#939393",
   },
-  //   checkbox: {
-  //     textAlign: "center",
-  //     minWidth: "72px",
-  //     "& .MuiIconButton-label": { color: "#000" },
-  //     "&.MuiTableCell-root": { padding: "0" },
-  //   },
-  //   checkBoxed: {
-  //     padding: 0,
-  //     "& svg": { color: "#b3b3b3" },
-  //   },
-  //   checked: { "& svg": { color: "#dd3d4b !important" } },
+  selectPerPage: {
+    "& .MuiInput-underline:before": { border: "none" },
+    "& .MuiInput-underline:after": { border: "none" },
+    "& .MuiInput-underline:hover:not(.Mui-disabled):before": {
+      border: "none !important",
+    },
+    "& select": { background: "white !important" },
+    "& svg": { color: "black !important" },
+    borderRadius: "4px",
+    border: "solid 1px #d3d3d3",
+    padding: "0px 6px",
+    margin: "0 16px",
+  },
 });
 export default TableFooterContent;

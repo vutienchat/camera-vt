@@ -6,6 +6,7 @@ import React, {
   useMemo,
   useState,
   useCallback,
+  useRef,
 } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
@@ -237,6 +238,9 @@ const ListTrafficModal = ({
     handleResetFormData,
     handleUpdateStatusTrafficModal,
   };
+  const videoRef = useRef(null);
+
+  const onPlay = () => videoRef.current.play();
 
   return (
     <Modal open={isOpen} onClose={handleClose} className={classes.root}>
@@ -311,8 +315,12 @@ const ListTrafficModal = ({
                     </TransformWrapper>
                   </Box>
                 </Box>
-                <Box style={{ width: "49.5%", marginTop: "10px" }}>
+                <Box
+                  style={{ width: "49.5%", marginTop: "10px" }}
+                  onMouseOver={onPlay}
+                >
                   <video
+                    ref={videoRef}
                     style={{
                       width: "100%",
                       height: "100%",
@@ -322,9 +330,11 @@ const ListTrafficModal = ({
                       backgroundPosition: "center",
                     }}
                     controls={false}
-                    autoPlay
                   >
-                    <source src={""} type="video/mp4" />
+                    <source
+                      src={"/static/media/video1.74efbde570da071de4a9.mp4"}
+                      type="video/mp4"
+                    />
                   </video>
                 </Box>
                 <Box style={{ width: "49.5%", marginTop: "10px" }}>

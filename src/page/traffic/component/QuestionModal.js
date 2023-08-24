@@ -16,6 +16,7 @@ const QuestionModal = ({
   handleConfirm,
   handleClose,
   confirmText = "Xác nhận",
+  styleFooterCustom = {},
 }) => {
   const classes = useQuestionModalStyle();
 
@@ -33,8 +34,8 @@ const QuestionModal = ({
             <CloseModalIcon width={16} height={16} color="#000" />
           </IconButton>
         </Box>
-        <Box style={{ padding: "20px 0px" }}>{children}</Box>
-        <Box className={classes.footer}>
+        <Box style={{ padding: "24px 0px" }}>{children}</Box>
+        <Box className={classes.footer} style={{ ...styleFooterCustom }}>
           <BaseButton
             typeStyle="border"
             content="Hủy Bỏ"
@@ -53,37 +54,21 @@ const QuestionModal = ({
 
 const useQuestionModalStyle = makeStyles({
   root: {
-    "& .MuiDialog-paper": {
-      overflowY: "unset",
-    },
-    "& .MuiPaper-rounded": {
-      borderRadius: "12px",
-    },
+    "& .MuiDialog-paper": { overflowY: "unset" },
+    "& .MuiPaper-rounded": { borderRadius: "12px" },
   },
-  content: {
-    padding: "20px",
-    minWidth: "480px",
-  },
+  content: { padding: "24px", minWidth: "480px" },
   header: {
     position: "relative",
     width: "100%",
-    "& p": {
-      textAlign: "center",
-      fontSize: "21px",
-    },
+    "& p": { textAlign: "center", fontSize: "21px" },
   },
-  icon: {
-    position: "absolute",
-    top: -5,
-    right: 0,
-  },
+  icon: { position: "absolute", top: -5, right: 0 },
   footer: {
     display: "flex",
     justifyContent: "center",
     gap: "32px",
-    "& p": {
-      textTransform: "none",
-    },
+    "& p": { textTransform: "none" },
   },
 });
 

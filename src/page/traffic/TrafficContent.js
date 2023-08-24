@@ -1,4 +1,4 @@
-import React, { useState, createContext, useCallback } from "react";
+import React, { useState, createContext, useCallback, useMemo } from "react";
 import { Box } from "@material-ui/core";
 
 import HeaderFilter from "./Filter/HeaderFilter";
@@ -20,8 +20,6 @@ import ViolationHistoryModal from "./Modals/ViolationHistoryModal";
 import QuestionModal from "./component/QuestionModal";
 import NoErrorReasonModal from "./Modals/NoErrorReasonModal";
 import useModalAction from "./hooks/useModalAction";
-import { useEffect } from "react";
-import { useMemo } from "react";
 
 export const TrafficContext = createContext({});
 
@@ -117,6 +115,7 @@ const TrafficContent = () => {
     console.log("selectedItem", selectedItem);
     console.log("newValueTraffic", newValueTraffic);
   };
+  const [selectTabPane, setSelectTabPane] = useState(status[0].value);
 
   const data = {
     trafficList,
@@ -125,6 +124,7 @@ const TrafficContent = () => {
     isHighestLevel,
     selectedItem,
     modelSetting,
+    selectTabPane,
 
     setParamTrafficSearch,
     setCheckedItemList,
@@ -133,7 +133,6 @@ const TrafficContent = () => {
     handleOpenReasonModal,
     handleUpdateDateTraffic,
   };
-  const [selectTabPane, setSelectTabPane] = useState(status[0].value);
 
   const handleChangeTabPane = (value) => {
     setSelectTabPane(value);
@@ -169,7 +168,7 @@ const TrafficContent = () => {
         trafficListShow = trafficList;
         break;
     }
-    console.log(trafficListShow);
+
     return trafficListShow.map((trafficItem, index) => ({
       ...trafficItem,
       stt: index + 1,
@@ -239,9 +238,12 @@ const TrafficContent = () => {
               }
               setSelectedReason(noErrorReasonList[0].value);
             }}
-            confirmText="Gửi lỗi không duyệt"
+            confirmText={
+              isHighestLevel ? "Duyệt không lỗi" : "Gửi duyệt không lỗi"
+            }
             isOpen={isOpenReasonsModal}
             handleConfirm={handleConfirmReason}
+            styleFooterCustom={{ margin: "8px 0" }}
           >
             <NoErrorReasonModal
               list={noErrorReasonList}

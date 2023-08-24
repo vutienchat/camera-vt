@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useRef } from "react";
 
 import { Box, makeStyles } from "@material-ui/core";
 
 const ViolationImageInfo = ({ data }) => {
   const classes = useViolationImageInfoStyle();
+  const videoRef = useRef(null);
+
+  const onPlay = () => videoRef.current.play();
 
   return (
     <Box className={classes.root}>
@@ -14,8 +17,9 @@ const ViolationImageInfo = ({ data }) => {
           style={{ width: "197px", height: "197px", objectFit: "fill" }}
         />
       </Box>
-      <Box style={{ display: "flex" }}>
+      <Box style={{ display: "flex" }} onMouseOver={onPlay}>
         <video
+          ref={videoRef}
           style={{
             width: "350px",
             height: "197px",
@@ -25,9 +29,11 @@ const ViolationImageInfo = ({ data }) => {
             backgroundPosition: "center",
           }}
           controls={false}
-          autoPlay
         >
-          <source src={""} type="video/mp4" />
+          <source
+            src={"/static/media/video1.74efbde570da071de4a9.mp4"}
+            type="video/mp4"
+          />
         </video>
       </Box>
     </Box>
