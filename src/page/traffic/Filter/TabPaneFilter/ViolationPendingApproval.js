@@ -4,32 +4,53 @@ import SendIcon from "../../Icons/SendIcon";
 import BaseButton from "../../component/BaseButton";
 import QuestionModal from "../../component/QuestionModal";
 import { TrafficContext } from "../../TrafficContent";
-import { convertToAbbreviation } from "../../../../utils/traffic";
+import {
+  checkIsSettingModal,
+  convertToAbbreviation,
+} from "../../../../utils/traffic";
 import extendedDayJs from "../../../../utils/dayjs";
 
 const ViolationPendingApproval = () => {
-  const { checkedItemList, handleUpdateStatusTraffic, isHighestLevel } =
-    useContext(TrafficContext);
+  const {
+    checkedItemList,
+    handleUpdateStatusTraffic,
+    isHighestLevel,
+    modelSetting,
+    handleSetOpenOpenModalWarningSetting,
+  } = useContext(TrafficContext);
 
   const [isOpenConfirmErrorModal, setIsOpenConfirmErrorModal] = useState(false);
   const disabled = checkedItemList.length === 0;
 
   const handleConfirmError = () => {
+    if (!checkIsSettingModal(modelSetting)) {
+      handleSetOpenOpenModalWarningSetting(true);
+      return;
+    }
+
+    const dateNow = extendedDayJs(new Date()).format("HH:mm:ss DD/MM/YYYY");
+    const statusEvent = isHighestLevel ? "CDD" : "CDVP";
+
     const label1 = `dieuhanh_${convertToAbbreviation(
       "Phạm Ngọc Mai Lâm"
-    )} - ${extendedDayJs(new Date()).format("HH:mm:ss DD/MM/YYYY")}`;
+    )} - ${dateNow}`;
+
+    const label2 = isHighestLevel
+      ? `pheduyet_${convertToAbbreviation("Phạm Ngọc Mai Lâm")} - ${dateNow}`
+      : "";
 
     handleUpdateStatusTraffic(
       checkedItemList.map((trafficItem) => {
-        const { id, label2, typeNotError } = trafficItem;
+        const { id, typeNotError } = trafficItem;
         return {
           id,
           label2,
           typeNotError,
-          statusEvent: "CDVP",
+          statusEvent,
           label1,
         };
-      })
+      }),
+      () => {}
     );
   };
 

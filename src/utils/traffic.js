@@ -306,3 +306,7 @@ export const lowerCaseStringCustom = (numberChecked, originalString) => {
     numberChecked ? numberChecked : "Tất cả"
   } ${originalString.toLowerCase()}`;
 };
+
+export const checkIsSettingModal = (dataSetting) => {
+  return dataSetting && dataSetting.id;
+};

@@ -6,7 +6,9 @@ import TableFilter from "./Filter/TableFilter";
 import useTrafficData from "../../hooks/api/useTrafficData";
 import TableContent from "./Table/TableContent";
 import {
+  checkIsSettingModal,
   columnsTrafficData,
+  convertToAbbreviation,
   noErrorReasonList,
   status,
 } from "../../utils/traffic";
@@ -20,6 +22,8 @@ import ViolationHistoryModal from "./Modals/ViolationHistoryModal";
 import QuestionModal from "./component/QuestionModal";
 import NoErrorReasonModal from "./Modals/NoErrorReasonModal";
 import useModalAction from "./hooks/useModalAction";
+import SettingModal from "./Modals/SettingModal";
+import extendedDayJs from "../../utils/dayjs";
 
 export const TrafficContext = createContext({});
 
@@ -30,6 +34,7 @@ const TrafficContent = () => {
     isOpenReasonsModal,
     isOpenHistoryModal,
     isHandleMulti,
+    isOpenModalWarningSetting,
 
     setIsOpenReasonsModal,
     setIsTrafficListOpenModal,
@@ -40,6 +45,7 @@ const TrafficContent = () => {
     handleCloseHistoryModal,
     handleOpenReasonModal,
     handleCloseReasonModal,
+    handleSetOpenOpenModalWarningSetting,
   } = useModalAction();
 
   const [paramTrafficSearch, setParamTrafficSearch] = useState({
@@ -55,7 +61,7 @@ const TrafficContent = () => {
   });
 
   const [modelSetting, setModelSetting] = useState({
-    id: "Mã code collection setting account Traffic",
+    id: "1234",
     userId: "Mã Code tài khoản của người cấu hình",
     city: "01",
     province: "001",
@@ -100,22 +106,58 @@ const TrafficContent = () => {
   }, []);
 
   const handleConfirmReason = () => {
-    if (isHandleMulti) {
-      console.log("checkedItemList", checkedItemList);
-    } else {
-      console.log("selectedItem", selectedItem);
+    if (!checkIsSettingModal(modelSetting)) {
+      handleSetOpenOpenModalWarningSetting(true);
+      return;
     }
+
+    const dateNow = extendedDayJs(new Date()).format("HH:mm:ss DD/MM/YYYY");
+
+    const label1 = `dieuhanh_${convertToAbbreviation(
+      "Phạm Ngọc Mai Lâm"
+    )} - ${dateNow}`;
+
+    const label2 = isHighestLevel
+      ? `pheduyet_${convertToAbbreviation("Phạm Ngọc Mai Lâm")} - ${dateNow}`
+      : "";
+
+    const listItemTrafficHandle = isHandleMulti
+      ? [...checkedItemList]
+      : [selectedItem];
+
+    handleUpdateStatusTraffic(
+      listItemTrafficHandle.map((trafficItem) => {
+        const { id, statusEvent } = trafficItem;
+        return {
+          id,
+          label2,
+          typeNotError: selectedReason,
+          statusEvent,
+          label1,
+        };
+      }),
+      () => {
+        handleCloseReasonModal();
+        if (isHandleMulti) {
+          setCheckedItemList([]);
+        }
+        setSelectedReason(noErrorReasonList[0].value);
+      }
+    );
   };
 
-  const handleUpdateStatusTraffic = (listStatusTraffic) => {
-    console.log("listStatusTraffic", listStatusTraffic);
+  const handleUpdateStatusTraffic = (listStatusTraffic, callBack) => {
+    console.log("Xử lý gọi API Update trạng thái", listStatusTraffic);
+    callBack();
   };
 
   const handleUpdateDateTraffic = (newValueTraffic, selectedItem) => {
+    console.log("Xử lý call update API data traffic");
     console.log("selectedItem", selectedItem);
     console.log("newValueTraffic", newValueTraffic);
   };
   const [selectTabPane, setSelectTabPane] = useState(status[0].value);
+  const [isOpenSettingModal, setIsOpenSettingModal] = useState(false);
 
   const data = {
     trafficList,
@@ -125,6 +167,7 @@ const TrafficContent = () => {
     selectedItem,
     modelSetting,
     selectTabPane,
+    isOpenSettingModal,
 
     setParamTrafficSearch,
     setCheckedItemList,
@@ -132,6 +175,8 @@ const TrafficContent = () => {
     handleUpdateStatusTraffic,
     handleOpenReasonModal,
     handleUpdateDateTraffic,
+    handleSetOpenOpenModalWarningSetting,
+    setIsOpenSettingModal,
   };
 
   const handleChangeTabPane = (value) => {
@@ -250,6 +295,34 @@ const TrafficContent = () => {
               handleSelect={handleChangeSelectReason}
             />
           </QuestionModal>
+        )}
+        {isOpenModalWarningSetting && (
+          <QuestionModal
+            title="Cảnh báo tài khoản chưa thiệt lập"
+            handleClose={() => handleSetOpenOpenModalWarningSetting(false)}
+            confirmText={"Thực hiện thiết lập "}
+            isOpen={isOpenModalWarningSetting}
+            handleConfirm={() => {
+              handleSetOpenOpenModalWarningSetting(false);
+              setIsOpenSettingModal(true);
+            }}
+            styleFooterCustom={{ margin: "8px 0" }}
+          >
+            <div
+              style={{ textAlign: "center", fontSize: "18px", fontWeight: 600 }}
+            >
+              Yêu cầu thực hiện thiết lập cho tài khoản
+            </div>
+          </QuestionModal>
+        )}
+        {isOpenSettingModal && (
+          <CustomModal
+            isOpen={isOpenSettingModal}
+            handleClose={() => setIsOpenSettingModal(false)}
+            title="Thông tin tuỳ chỉnh"
+          >
+            <SettingModal handleCancel={() => setIsOpenSettingModal(false)} />
+          </CustomModal>
         )}
       </Box>
     </TrafficContext.Provider>

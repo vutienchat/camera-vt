@@ -75,6 +75,7 @@ const TableBodyContent = () => {
           <TableRow
             key={dataBody.id}
             style={{ backgroundColor: isChecked ? "#f6f4f5" : "transparent" }}
+            className={classes.rowTrafficItem}
           >
             {checkedAble && (
               <TableCell className={classes.tableCellCustom}>
@@ -129,6 +130,7 @@ const useTableBodyStyle = makeStyles({
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
   },
+  rowTrafficItem: { "&:hover": { backgroundColor: "#f6f4f5 !important" } },
   tableCellCustom: { padding: "12px 24px" },
   checkBoxed: {
     padding: 0,

@@ -22,10 +22,10 @@ import BaseButton from "../component/BaseButton";
 const TableFilter = () => {
   const queryClient = useQueryClient();
   const classes = useTableFilterStyle();
-  const { selectTabPane } = useContext(TrafficContext);
+  const { selectTabPane, isOpenSettingModal, setIsOpenSettingModal } =
+    useContext(TrafficContext);
 
   const [textSearch, setTextSearch] = useState("");
-  const [isOpenSettingModal, setIsOpenSettingModal] = useState(false);
 
   const handleReloadDataTable = () => {
     queryClient.invalidateQueries([QUERY_KEYS.TRAFFIC_LIST]);

@@ -217,7 +217,9 @@ const ListTrafficModal = ({
         label1,
       };
 
-      handleUpdateStatusTraffic([formUpdate]);
+      handleUpdateStatusTraffic([formUpdate], () =>
+        console.log("hàm call back sau update")
+      );
     },
     [selectedItem, isHighestLevel]
   );

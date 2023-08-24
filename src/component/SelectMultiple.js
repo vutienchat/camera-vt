@@ -270,7 +270,7 @@ export default function SelectMultiple({
                         {item.label}
                       </Typography>
                       <Checkbox
-                        id={item.value}
+                        id={String(item.value)}
                         value={String(item.value)}
                         onChange={handleCheckItem}
                         checked={isChecked}
