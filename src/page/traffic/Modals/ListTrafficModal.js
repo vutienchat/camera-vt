@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
+import * as yup from "yup";
 import React, {
   useContext,
   createContext,
@@ -33,8 +34,30 @@ import { StatusEventComponent } from "../javacript/common";
 import CloseModalIcon from "../../masterMap/Icons/CloseModalIcon";
 import { useEffect } from "react";
 import extendedDayJs from "../../../utils/dayjs";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 export const ListTrafficModalContext = createContext({});
+
+const schema = yup.object().shape({
+  numberPlate: yup.string().required(),
+  fineAmount: yup.string().required(),
+  holdGPLX: yup.string().required(),
+  vehicleType: yup.string().required(),
+  colorPlate: yup.string().required(),
+  color: yup.string().required(),
+  violationDate: yup.string().required(),
+  violationError: yup.string().required(),
+  location: yup.string().required(),
+  camName: yup.string().required(),
+  direction: yup.string().required(),
+
+  fullName: yup.string().required(),
+  cccd: yup.string().required(),
+  phoneNumber: yup.string().required(),
+  address: yup.string().required(),
+  infoNumber: yup.string().required(),
+  infoSactionNote: yup.string().required(),
+});
 
 const ListTrafficModal = ({
   isOpen,
@@ -87,6 +110,7 @@ const ListTrafficModal = ({
     reValidateMode: "onChange",
     shouldUnregister: false,
     defaultValues: defaultValues,
+    resolver: yupResolver(schema),
   });
 
   const plates = useMemo(() => {
@@ -113,13 +137,15 @@ const ListTrafficModal = ({
   const classes = useListTrafficModalStyle();
 
   const [tabPane, setTabPane] = useState(listSceneTab[0].value);
-  const [isEditDataForm, setIsEditDataForm] = useState(false);
 
   const itemId = useMemo(() => {
     return trafficList.findIndex((element) => element.id === selectedItem.id);
   }, [trafficList, selectedItem]);
 
-  const { watch } = methods;
+  const {
+    watch,
+    formState: { isDirty },
+  } = methods;
   const watchAllFields = watch();
 
   useEffect(() => {
@@ -142,26 +168,7 @@ const ListTrafficModal = ({
     methods.setValue("fineAmount", finalString);
   }, [watchAllFields.fineAmount]);
 
-  useEffect(() => {
-    //console.log(watchAllFields.fineAmount);
-    //console.log(number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
-    //methods.setValue();
-  }, [defaultValues]);
-
-  useEffect(() => {
-    const handleValueChange = (newValues) => {
-      const hasChanges = Object.keys(defaultValues).some(
-        (key) => defaultValues[key] !== newValues[key]
-      );
-      setIsEditDataForm(hasChanges);
-    };
-
-    handleValueChange(watchAllFields);
-  }, [watchAllFields, defaultValues]);
-
   useEffect(() => handleResetFormData(), [selectedItem]);
-
-  useEffect(() => setIsEditDataForm(false), [itemId]);
 
   const handlePrevious = () => {
     if (itemId > 0) {
@@ -331,6 +338,7 @@ const ListTrafficModal = ({
                       backgroundPosition: "center",
                     }}
                     controls={false}
+                    muted
                   >
                     <source
                       src={"/static/media/video1.74efbde570da071de4a9.mp4"}
@@ -351,13 +359,13 @@ const ListTrafficModal = ({
                     isBaseTabModal={true}
                   />
                   {tabPane === "scence_info" ? (
-                    <SceneInfoForm watchAllFields={watchAllFields} />
+                    <SceneInfoForm />
                   ) : (
                     <ViolationInfoForm />
                   )}
                 </Box>
               </Box>
-              {StatusEventComponent(selectedItem.statusEvent, isEditDataForm)}
+              {StatusEventComponent(selectedItem.statusEvent, isDirty)}
               <Box
                 className={classes.icon}
                 style={{ left: "-90px" }}

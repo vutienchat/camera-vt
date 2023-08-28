@@ -49,9 +49,7 @@ const ViolationInfoForm = () => {
         error={errors["fullName"]}
         component={
           <TextField
-            {...register("fullName", {
-              required: "Tên chủ phương tiện là bắt buộc",
-            })}
+            {...register("fullName")}
             className={classes.inputFeild}
             error={!!errors["fullName"]}
             style={{ width: "350px" }}
@@ -83,9 +81,7 @@ const ViolationInfoForm = () => {
         error={errors["cccd"]}
         component={
           <TextField
-            {...register("cccd", {
-              required: "Vui lòng nhâp CMND/ CCCD",
-            })}
+            {...register("cccd")}
             className={classes.inputFeild}
             error={!!errors["cccd"]}
             style={{ width: "350px" }}
@@ -102,9 +98,7 @@ const ViolationInfoForm = () => {
         error={errors["phoneNumber"]}
         component={
           <TextField
-            {...register("phoneNumber", {
-              required: "Phone Number is required",
-            })}
+            {...register("phoneNumber")}
             error={!!errors["phoneNumber"]}
             style={{ width: "100%" }}
             className={classes.inputFeild}
@@ -121,10 +115,8 @@ const ViolationInfoForm = () => {
         error={errors["address"]}
         component={
           <TextField
-            {...register("address", {
-              required: "Địa chỉ chi tiết is required",
-            })}
-            error={!!errors["addressDetail"]}
+            {...register("address")}
+            error={!!errors["address"]}
             style={{ width: "100%" }}
             className={classes.inputFeild}
             variant="outlined"
@@ -155,7 +147,7 @@ const ViolationInfoForm = () => {
         error={errors["infoNumber"]}
         component={
           <TextField
-            {...register("infoNumber", { required: "Số thông báo" })}
+            {...register("infoNumber")}
             error={!!errors["infoNumber"]}
             style={{ width: "100%" }}
             className={classes.inputFeild}
@@ -257,9 +249,7 @@ const ViolationInfoForm = () => {
         error={errors["infoSactionNote"]}
         component={
           <TextField
-            {...register("infoSactionNote", {
-              required: "Vui lòng nhâp chú thích",
-            })}
+            {...register("infoSactionNote")}
             error={!!errors["infoSactionNote"]}
             style={{ width: "100%" }}
             className={classes.inputFeild}

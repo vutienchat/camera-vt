@@ -8,6 +8,7 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import { Controller, useFormContext } from "react-hook-form";
+import DatePicker, { DateObject } from "react-multi-date-picker";
 import BaseFormGroup from "../BaseFormGroup";
 import SelectForm from "../../../../component/SelectForm";
 import {
@@ -18,7 +19,6 @@ import {
 } from "../../../../utils/traffic";
 import React, { useContext, useMemo } from "react";
 import { ListTrafficModalContext } from "../../Modals/ListTrafficModal";
-import DatePicker, { DateObject } from "react-multi-date-picker";
 
 const checkDisableTab1 = (statusEvent, isHighestLevel) => {
   switch (statusEvent) {
@@ -36,7 +36,7 @@ const checkDisableTab1 = (statusEvent, isHighestLevel) => {
   }
 };
 
-const SceneInfoForm = ({ watchAllFields }) => {
+const SceneInfoForm = () => {
   const methods = useFormContext();
   const { plates, isHighestLevel, selectedItem } = useContext(
     ListTrafficModalContext
@@ -82,9 +82,7 @@ const SceneInfoForm = ({ watchAllFields }) => {
         widthCustom={"500px"}
         component={
           <TextField
-            {...register("numberPlate", {
-              required: "Number Plate is required",
-            })}
+            {...register("numberPlate")}
             className={classes.inputField}
             error={errors["numberPlate"]}
             style={{ width: "360px" }}
@@ -111,9 +109,7 @@ const SceneInfoForm = ({ watchAllFields }) => {
               }}
             >
               <TextField
-                {...register("fineAmount", {
-                  required: "Fine Amount is required",
-                })}
+                {...register("fineAmount")}
                 variant="outlined"
                 className={classes.inputField}
                 style={{ width: "auto" }}
@@ -136,19 +132,18 @@ const SceneInfoForm = ({ watchAllFields }) => {
             <Controller
               name="holdGPLX"
               control={control}
-              rules={{ required: "Vui long chon" }}
               render={({ field }) => (
                 <RadioGroup {...field} row>
                   <FormControlLabel
                     disabled={isDisableTab1.holdGPLX()}
                     value={"0"}
-                    control={<Radio />}
+                    control={<Radio className={classes.radioBtn} />}
                     label="Giữ GPLX"
                   />
                   <FormControlLabel
                     value={"1"}
                     disabled={isDisableTab1.holdGPLX()}
-                    control={<Radio />}
+                    control={<Radio className={classes.radioBtn} />}
                     label="Không giữ GPLX"
                   />
                 </RadioGroup>
@@ -225,7 +220,6 @@ const SceneInfoForm = ({ watchAllFields }) => {
           <Controller
             control={control}
             name="violationDate"
-            rules={{ required: true }} //optional
             render={({ field: { onChange, value } }) => {
               return (
                 <DatePicker
@@ -276,9 +270,7 @@ const SceneInfoForm = ({ watchAllFields }) => {
         error={errors["location"]}
         component={
           <TextField
-            {...register("location", {
-              required: "Vị trí là bắt buộc",
-            })}
+            {...register("location")}
             className={classes.inputField}
             error={!!errors["location"]}
             style={{ width: "100%" }}
@@ -296,9 +288,7 @@ const SceneInfoForm = ({ watchAllFields }) => {
         error={errors["camName"]}
         component={
           <TextField
-            {...register("camName", {
-              required: "Place is required",
-            })}
+            {...register("camName")}
             className={classes.inputField}
             error={!!errors["camName"]}
             style={{ width: "100%" }}
@@ -316,9 +306,7 @@ const SceneInfoForm = ({ watchAllFields }) => {
         widthCustom={"500px"}
         component={
           <TextField
-            {...register("direction", {
-              required: "Direction is required",
-            })}
+            {...register("direction")}
             className={classes.inputField}
             error={!!errors["direction"]}
             style={{ width: "100%" }}
@@ -393,6 +381,15 @@ const useSceneInfoFormStyle = makeStyles({
       fontWeight: "bold",
       fontSize: "21px",
       lineHeight: 1.14,
+    },
+  },
+  radioBtn: {
+    "& .MuiSvgIcon-root": {
+      fontSize: 28,
+      color: "rgba(221, 61, 75, 1)",
+      "&.Mui-checked": {
+        color: "rgba(221, 61, 75, 1)",
+      },
     },
   },
 });
