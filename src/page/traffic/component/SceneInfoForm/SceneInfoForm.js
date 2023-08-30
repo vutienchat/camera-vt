@@ -19,6 +19,7 @@ import {
 } from "../../../../utils/traffic";
 import React, { useContext, useMemo } from "react";
 import { ListTrafficModalContext } from "../../Modals/ListTrafficModal";
+import BaseInputForm from "../BaseInputForm";
 
 const checkDisableTab1 = (statusEvent, isHighestLevel) => {
   switch (statusEvent) {
@@ -81,12 +82,14 @@ const SceneInfoForm = () => {
         error={errors["numberPlate"]}
         widthCustom={"500px"}
         component={
-          <TextField
-            {...register("numberPlate")}
+          <BaseInputForm
+            name="numberPlate"
             className={classes.inputField}
             error={errors["numberPlate"]}
             style={{ width: "360px" }}
             variant="outlined"
+            typeInput="normal"
+            isNoSpace={true}
             size="small"
             disabled={isDisableTab1.numberPlate()}
           />
@@ -220,7 +223,7 @@ const SceneInfoForm = () => {
           <Controller
             control={control}
             name="violationDate"
-            render={({ field: { onChange, value } }) => {
+            render={({ field: { onChange, value, ref } }) => {
               return (
                 <DatePicker
                   value={value || ""}
@@ -231,6 +234,7 @@ const SceneInfoForm = () => {
                         : ""
                     );
                   }}
+                  ref={ref}
                   format="HH:mm:ss DD/MM/YYYY"
                   style={{
                     width: "487px",
@@ -287,8 +291,9 @@ const SceneInfoForm = () => {
         widthCustom={"500px"}
         error={errors["camName"]}
         component={
-          <TextField
-            {...register("camName")}
+          <BaseInputForm
+            name="camName"
+            typeInput="normal"
             className={classes.inputField}
             error={!!errors["camName"]}
             style={{ width: "100%" }}
@@ -322,8 +327,9 @@ const SceneInfoForm = () => {
         error={errors["note"]}
         widthCustom={"500px"}
         component={
-          <TextField
-            {...register("note")}
+          <BaseInputForm
+            name="note"
+            typeInput="normal"
             style={{ width: "100%" }}
             className={classes.inputField}
             variant="outlined"

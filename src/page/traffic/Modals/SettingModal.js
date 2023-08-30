@@ -152,7 +152,7 @@ const SettingModal = ({ handleCancel }) => {
                         widthCustom={"400px"}
                         component={
                           <TextField
-                            ref={ref}
+                            inputRef={ref}
                             {...register(setting.key)}
                             onChange={(e) => {
                               const { value } = e.target;

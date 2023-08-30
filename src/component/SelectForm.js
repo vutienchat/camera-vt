@@ -47,6 +47,7 @@ const SelectForm = ({
               disabled={disabled || false}
               style={customStyle}
               {...field}
+              innerRef={field.ref}
             >
               {list.map((item, index) => {
                 return (

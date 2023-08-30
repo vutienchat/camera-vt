@@ -3,20 +3,7 @@ import ViolationImageInfo from "../page/traffic/component/ItemTable/ViolationIma
 export const SPECIAL_CHARACTER_TEXT = /[-!$%^&*()_+|~=`{}\[\]:\/;<>?,.@#0-9]/;
 export const SPECIAL_CHARACTER_NUMBER =
   /[-!$%^&*()_+|~=`{}\[\]:\/;<>?,.@#a-zA-ZÀ-ỹ\s]/;
-
-export const getSpecialCharacter = (type) => {
-  let regex;
-
-  if (type === "number") {
-    regex = "a-zA-ZÀ-ỹs";
-  } else if (type === "text") {
-    regex = "0-9";
-  }
-
-  // const pattern = new RegExp(/[-!$%^&*()_+|~=`{}\\[\]:\\\/;<>?,.@#' + + `]\/)
-
-  return "/[-!$%^&*()_+|~=`{}\\[]:\\/;<>?,.@#" + +`]\/`;
-};
+export const SPECIAL_CHARACTER = /[!$%^&*#()_+|~=`{}\[\]:\/;<>?,@]/;
 
 export const settingArr = [
   {

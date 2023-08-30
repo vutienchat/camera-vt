@@ -5,6 +5,7 @@ import { useContext } from "react";
 import { ListTrafficModalContext } from "../../Modals/ListTrafficModal";
 import BaseDatePickerForm from "../BaseDatePickerForm";
 import { AddressSelectTab } from "../../../../component/HeaderAction/select-tab/address";
+import BaseInputForm from "../BaseInputForm";
 
 const checkDisableTab2 = (statusEvent, isHighestLevel) => {
   switch (statusEvent) {
@@ -48,8 +49,8 @@ const ViolationInfoForm = () => {
         isRequired={true}
         error={errors["fullName"]}
         component={
-          <TextField
-            {...register("fullName")}
+          <BaseInputForm
+            name="fullName"
             className={classes.inputFeild}
             error={!!errors["fullName"]}
             style={{ width: "350px" }}
@@ -80,8 +81,10 @@ const ViolationInfoForm = () => {
         isRequired={true}
         error={errors["cccd"]}
         component={
-          <TextField
-            {...register("cccd")}
+          <BaseInputForm
+            name="cccd"
+            isNoSpace={true}
+            typeInput="number"
             className={classes.inputFeild}
             error={!!errors["cccd"]}
             style={{ width: "350px" }}
@@ -97,8 +100,9 @@ const ViolationInfoForm = () => {
         isRequired={true}
         error={errors["phoneNumber"]}
         component={
-          <TextField
-            {...register("phoneNumber")}
+          <BaseInputForm
+            name="phoneNumber"
+            isNoSpace={true}
             error={!!errors["phoneNumber"]}
             style={{ width: "100%" }}
             className={classes.inputFeild}
@@ -114,8 +118,9 @@ const ViolationInfoForm = () => {
         isRequired={true}
         error={errors["address"]}
         component={
-          <TextField
-            {...register("address")}
+          <BaseInputForm
+            name="address"
+            typeInput="normal"
             error={!!errors["address"]}
             style={{ width: "100%" }}
             className={classes.inputFeild}
@@ -248,8 +253,9 @@ const ViolationInfoForm = () => {
         isRequired={true}
         error={errors["infoSactionNote"]}
         component={
-          <TextField
-            {...register("infoSactionNote")}
+          <BaseInputForm
+            name="infoSactionNote"
+            typeInput="normal"
             error={!!errors["infoSactionNote"]}
             style={{ width: "100%" }}
             className={classes.inputFeild}

@@ -244,12 +244,6 @@ const ListTrafficModal = ({
 
   const onPlay = () => videoRef.current.play();
 
-  useEffect(() => {
-    if (!videoRef || !videoRef.current) return;
-    // resetScreen();
-    return () => videoRef.current.pause();
-  }, [selectedItem]);
-
   return (
     <Modal open={isOpen} onClose={handleClose} className={classes.root}>
       <FormProvider {...methods}>

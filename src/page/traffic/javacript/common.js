@@ -63,11 +63,15 @@ export const StatusEventComponent = (status, isEditDataForm) => {
   return component;
 };
 
-export const validateText = (text) => {
+export const validateText = (text, isTrim) => {
   let val = text;
 
   val = val.replace(/^\s+/, "");
   val = val.replace(/\s{2,}/g, " ");
 
-  return val;
+  if (isTrim) {
+    return val.trim();
+  } else {
+    return val;
+  }
 };
