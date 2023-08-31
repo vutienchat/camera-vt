@@ -2,7 +2,7 @@ import ViolationInfo from "../page/traffic/component/ItemTable/ViolationInfo";
 import ViolationImageInfo from "../page/traffic/component/ItemTable/ViolationImageInfo";
 export const SPECIAL_CHARACTER_TEXT = /[-!$%^&*()_+|~=`{}\[\]:\/;<>?,.@#0-9]/;
 export const SPECIAL_CHARACTER_NUMBER =
-  /[-!$%^&*()_+|~=`{}\[\]:\/;<>?,.@#a-zA-ZÀ-ỹ\s]/;
+  /[-!$%^&*()_+|~=`{}\[\]:\/;<>?@#a-zA-ZÀ-ỹ\s]/;
 export const SPECIAL_CHARACTER = /[!$%^&*#()_+|~=`{}\[\]:\/;<>?,@]/;
 
 export const settingArr = [

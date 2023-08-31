@@ -48,6 +48,7 @@ const ViolationInfoForm = () => {
         label="Chủ phương tiện"
         isRequired={true}
         error={errors["fullName"]}
+        widthCustom={470}
         component={
           <BaseInputForm
             name="fullName"
@@ -64,6 +65,7 @@ const ViolationInfoForm = () => {
       <BaseFormGroup
         label="Ngày sinh"
         isRequired={true}
+        widthCustom={470}
         error={errors["birthday"]}
         component={
           <BaseDatePickerForm
@@ -80,6 +82,7 @@ const ViolationInfoForm = () => {
         label="CMND/ CCCD"
         isRequired={true}
         error={errors["cccd"]}
+        widthCustom={470}
         component={
           <BaseInputForm
             name="cccd"
@@ -99,10 +102,12 @@ const ViolationInfoForm = () => {
         label="Số điện thoại"
         isRequired={true}
         error={errors["phoneNumber"]}
+        widthCustom={470}
         component={
           <BaseInputForm
             name="phoneNumber"
             isNoSpace={true}
+            typeInput="number"
             error={!!errors["phoneNumber"]}
             style={{ width: "100%" }}
             className={classes.inputFeild}
@@ -117,6 +122,7 @@ const ViolationInfoForm = () => {
         label="Địa chỉ chi tiết"
         isRequired={true}
         error={errors["address"]}
+        widthCustom={470}
         component={
           <BaseInputForm
             name="address"
@@ -135,6 +141,7 @@ const ViolationInfoForm = () => {
         label="Địa chỉ"
         isRequired={true}
         error={errors["addressType"]}
+        widthCustom={470}
         component={
           <AddressSelectTab
             disabled={checkDisableTab2(statusEvent, isHighestLevel)}
@@ -150,6 +157,7 @@ const ViolationInfoForm = () => {
         label="Số thông báo"
         isRequired={true}
         error={errors["infoNumber"]}
+        widthCustom={470}
         component={
           <TextField
             {...register("infoNumber")}
@@ -165,8 +173,8 @@ const ViolationInfoForm = () => {
 
       <Box style={{ display: "flex" }}>
         <Box style={{ display: "flex", marginRight: "auto" }}>
-          <Box style={{ margin: "auto", width: "180px" }}>
-            <Typography style={{ fontSize: "14px" }}>
+          <Box style={{ margin: "auto", width: "142px" }}>
+            <Typography style={{ fontSize: "13px" }}>
               Thông báo gửi lần 1
             </Typography>
           </Box>
@@ -175,14 +183,14 @@ const ViolationInfoForm = () => {
               name="send1"
               format="DD/MM/YYYY"
               disabled={checkDisableTab2(statusEvent, isHighestLevel)}
-              width="124px"
+              width="140px"
               endIcon
             />
           </Box>
         </Box>
-        <Box style={{ width: "300px", display: "flex" }}>
+        <Box style={{ width: "280px", display: "flex" }}>
           <Box style={{ margin: "auto", marginLeft: 0 }}>
-            <Typography style={{ fontSize: "14px" }}>
+            <Typography style={{ fontSize: "13px" }}>
               Thông báo gửi lần 2
             </Typography>
           </Box>
@@ -191,7 +199,7 @@ const ViolationInfoForm = () => {
               name="send2"
               format="DD/MM/YYYY"
               disabled={checkDisableTab2(statusEvent, isHighestLevel)}
-              width="124px"
+              width="140px"
               endIcon
             />
           </Box>
@@ -200,8 +208,8 @@ const ViolationInfoForm = () => {
 
       <Box style={{ marginTop: "5px", marginBottom: "5px", display: "flex" }}>
         <Box style={{ display: "flex", marginRight: "auto" }}>
-          <Box style={{ margin: "auto", width: "180px" }}>
-            <Typography style={{ fontSize: "14px" }}>
+          <Box style={{ margin: "auto", width: "142px" }}>
+            <Typography style={{ fontSize: "12px" }}>
               Thông báo gửi sở GTVT
             </Typography>
           </Box>
@@ -210,14 +218,14 @@ const ViolationInfoForm = () => {
               name="sendGTVT"
               format="DD/MM/YYYY"
               disabled={checkDisableTab2(statusEvent, isHighestLevel)}
-              width="124px"
+              width="140px"
               endIcon
             />
           </Box>
         </Box>
-        <Box style={{ width: "300px", display: "flex" }}>
+        <Box style={{ width: "280px", display: "flex" }}>
           <Box style={{ margin: "auto", marginLeft: 0 }}>
-            <Typography style={{ fontSize: "14px" }}>
+            <Typography style={{ fontSize: "13px" }}>
               Thông báo hoàn lại
             </Typography>
           </Box>
@@ -226,7 +234,7 @@ const ViolationInfoForm = () => {
               name="infoReturn"
               format="DD/MM/YYYY"
               disabled={checkDisableTab2(statusEvent, isHighestLevel)}
-              width="124px"
+              width="140px"
               endIcon
             />
           </Box>
@@ -237,6 +245,7 @@ const ViolationInfoForm = () => {
         label="Ngày giờ hẹn"
         isRequired={true}
         error={errors["appointmentDate"]}
+        widthCustom={470}
         component={
           <BaseDatePickerForm
             name="appointmentDate"
@@ -251,6 +260,7 @@ const ViolationInfoForm = () => {
       <BaseFormGroup
         label="Ghi chú"
         isRequired={true}
+        widthCustom={470}
         error={errors["infoSactionNote"]}
         component={
           <BaseInputForm
@@ -301,7 +311,7 @@ const useSceneInfoFormStyle = makeStyles({
   plate: {
     position: "absolute",
     top: "60px",
-    right: "30px",
+    right: "20px",
     padding: "5px 10px",
     display: "flex",
     flexDirection: "column",

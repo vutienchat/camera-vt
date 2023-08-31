@@ -22,7 +22,7 @@ const BaseFormGroup = ({
       <Box>
         <Typography
           style={{
-            fontSize: "16px",
+            fontSize: "0.9rem",
             color: "black",
             lineHeight: "normal",
             letterSpacing: "normal",

@@ -20,6 +20,7 @@ import {
 import React, { useContext, useMemo } from "react";
 import { ListTrafficModalContext } from "../../Modals/ListTrafficModal";
 import BaseInputForm from "../BaseInputForm";
+import { validateText } from "../../javacript/common";
 
 const checkDisableTab1 = (statusEvent, isHighestLevel) => {
   switch (statusEvent) {
@@ -80,13 +81,13 @@ const SceneInfoForm = () => {
         label="Biển số xe"
         isRequired={true}
         error={errors["numberPlate"]}
-        widthCustom={"500px"}
+        widthCustom={470}
         component={
           <BaseInputForm
             name="numberPlate"
             className={classes.inputField}
             error={errors["numberPlate"]}
-            style={{ width: "360px" }}
+            style={{ width: "330px" }}
             variant="outlined"
             typeInput="normal"
             isNoSpace={true}
@@ -102,6 +103,7 @@ const SceneInfoForm = () => {
           isRequired={true}
           error={errors["fineAmount"]}
           width="100%"
+          widthCustom={470}
           component={
             <Box
               style={{
@@ -111,14 +113,30 @@ const SceneInfoForm = () => {
                 gap: 20,
               }}
             >
-              <TextField
-                {...register("fineAmount")}
-                variant="outlined"
-                className={classes.inputField}
-                style={{ width: "auto" }}
-                error={errors["fineAmount"]}
-                size="small"
-                disabled={isDisableTab1.fineAmount()}
+              <Controller
+                control={control}
+                key="fineAmount"
+                name="fineAmount"
+                render={({ field }) => {
+                  const { onChange, value, ref } = field;
+                  return (
+                    <TextField
+                      value={value}
+                      onChange={(event) => {
+                        onChange(validateText(event.target.value, true));
+                      }}
+                      onKeyDown={(event) => {
+                        // if (regex.test(event.target.value)) {
+                        //   event.preventDefault();
+                        // }
+                      }}
+                      variant="outlined"
+                      size="small"
+                      inputRef={ref}
+                      disabled={isDisableTab1.fineAmount()}
+                    />
+                  );
+                }}
               />
               <Typography style={{ fontWeight: 700, fontSize: "14px" }}>
                 VNĐ
@@ -131,6 +149,7 @@ const SceneInfoForm = () => {
           label="Giữ GPLX"
           isRequired={true}
           error={errors["holdGPLX"]}
+          widthCustom={470}
           component={
             <Controller
               name="holdGPLX"
@@ -160,7 +179,7 @@ const SceneInfoForm = () => {
         label="Phương tiện"
         isRequired={true}
         error={errors["vehicleType"]}
-        widthCustom={"500px"}
+        widthCustom={470}
         component={
           <SelectForm
             className={classes.selectField}
@@ -179,8 +198,8 @@ const SceneInfoForm = () => {
           label="Màu biển"
           isRequired={true}
           error={errors["colorPlate"]}
-          widthCustom={"50%"}
-          width={"265px"}
+          widthCustom={"55.5%"}
+          width={"284px"}
           customStyle={{ width: "320px", marginRight: "auto" }}
           component={
             <SelectForm
@@ -197,7 +216,7 @@ const SceneInfoForm = () => {
           isRequired={true}
           error={errors["color"]}
           widthCustom={"auto"}
-          width={"260px"}
+          width={"254px"}
           customStyle={{ justifyContent: "unset" }}
           component={
             <SelectForm
@@ -218,7 +237,8 @@ const SceneInfoForm = () => {
         label="Thời gian vi phạm"
         isRequired={true}
         error={errors["violationDate"]}
-        widthCustom={"500px"}
+        width="100%"
+        widthCustom={470}
         component={
           <Controller
             control={control}
@@ -237,7 +257,7 @@ const SceneInfoForm = () => {
                   ref={ref}
                   format="HH:mm:ss DD/MM/YYYY"
                   style={{
-                    width: "487px",
+                    width: "458px",
                     height: "32px",
                     backgroundColor: isDisableTab1.violationDate
                       ? "#ebebeb"
@@ -255,7 +275,7 @@ const SceneInfoForm = () => {
       <BaseFormGroup
         label="Vi phạm"
         isRequired={true}
-        widthCustom={"500px"}
+        widthCustom={470}
         error={errors["violationError"]}
         component={
           <SelectForm
@@ -270,7 +290,7 @@ const SceneInfoForm = () => {
       <BaseFormGroup
         label="Vị trí"
         isRequired={true}
-        widthCustom={"500px"}
+        widthCustom={470}
         error={errors["location"]}
         component={
           <TextField
@@ -288,7 +308,7 @@ const SceneInfoForm = () => {
       <BaseFormGroup
         label="Tên camera"
         isRequired={true}
-        widthCustom={"500px"}
+        widthCustom={470}
         error={errors["camName"]}
         component={
           <BaseInputForm
@@ -308,7 +328,7 @@ const SceneInfoForm = () => {
         label="Hướng đi"
         isRequired={true}
         error={errors["direction"]}
-        widthCustom={"500px"}
+        widthCustom={470}
         component={
           <TextField
             {...register("direction")}
@@ -325,7 +345,7 @@ const SceneInfoForm = () => {
       <BaseFormGroup
         label="Ghi chú"
         error={errors["note"]}
-        widthCustom={"500px"}
+        widthCustom={470}
         component={
           <BaseInputForm
             name="note"
@@ -348,11 +368,11 @@ const useSceneInfoFormStyle = makeStyles({
     flexDirection: "column",
     gap: "2px",
     border: "1px solid #d3d3d3",
-    padding: "16px 20px",
+    padding: "10px",
     position: "relative",
     borderBottomRightRadius: "8px",
     borderBottomLeftRadius: "8px",
-    minHeight: "485px",
+    minHeight: "495px",
   },
   inputField: {
     height: "32px",

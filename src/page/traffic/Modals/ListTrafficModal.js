@@ -150,6 +150,7 @@ const ListTrafficModal = ({
 
   useEffect(() => {
     const input = watchAllFields.fineAmount;
+    if (input[0] === "0") return;
     if (/[^0-9.]/g.test(input)) {
       methods.setValue("fineAmount", input.replace(/[^0-9.]/g, ""));
       return;
@@ -291,7 +292,7 @@ const ListTrafficModal = ({
                   justifyContent: "space-between",
                   width: "100%",
                   flexWrap: "wrap",
-                  marginTop: "24px",
+                  marginTop: "10px",
                 }}
               >
                 <Box className={classes.infoImage}>
@@ -317,10 +318,7 @@ const ListTrafficModal = ({
                     </TransformWrapper>
                   </Box>
                 </Box>
-                <Box
-                  style={{ width: "49.5%", marginTop: "10px" }}
-                  onMouseOver={onPlay}
-                >
+                <Box style={{ width: "49.5%" }} onMouseOver={onPlay}>
                   <video
                     ref={videoRef}
                     style={{
@@ -340,7 +338,7 @@ const ListTrafficModal = ({
                     />
                   </video>
                 </Box>
-                <Box style={{ width: "49.5%", marginTop: "10px" }}>
+                <Box style={{ width: "49.5%" }}>
                   <BaseTabCommon
                     width="100%"
                     list={listSceneTab}
@@ -386,8 +384,8 @@ const useListTrafficModalStyle = makeStyles({
   root: { padding: "0px" },
   content: {
     position: "absolute",
-    padding: "24px",
-    width: "1420px",
+    padding: "15px",
+    width: "1280px",
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",

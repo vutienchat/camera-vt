@@ -46,10 +46,15 @@ const BaseTabCommon = ({
             <Typography
               className={classes.textStatusBox}
               style={{
-                fontWeight: isTabSelected ? "bold" : "normal",
+                fontWeight: isTabSelected ? 600 : 500,
+                color: isTabSelected && isBaseTabModal ? "white" : "black",
+                fontSize: "14px",
+                fontStretch: "normal",
+                fontStyle: "normal",
                 lineHeight: "normal",
                 letterSpacing: "normal",
-                color: isTabSelected && isBaseTabModal ? "white" : "black",
+                textTransform: "unset",
+                textAlign: "center",
               }}
             >
               {label} {!isBaseTabModal && `(120)`}

@@ -126,7 +126,7 @@ export const useStylesAddressTab = makeStyles({
     background: "#fff",
     border: "1px solid #939393",
     display: "flex",
-    height: "40px",
+    height: "35px",
     justifyContent: "space-between",
     alignItems: "center",
     borderRadius: "4px",
