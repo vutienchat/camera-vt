@@ -158,6 +158,17 @@ const TrafficContent = () => {
   };
   const [selectTabPane, setSelectTabPane] = useState(status[0].value);
   const [isOpenSettingModal, setIsOpenSettingModal] = useState(false);
+  const [pagination, setPagination] = useState({
+    page: 0,
+    rowPerPage: 9,
+  });
+
+  const handleChangePagination = (pag) => {
+    setPagination({
+      page: pag.page,
+      rowPerPage: pag.rowPerPage,
+    });
+  };
 
   const data = {
     trafficList,
@@ -214,11 +225,16 @@ const TrafficContent = () => {
         break;
     }
 
-    return trafficListShow.map((trafficItem, index) => ({
+    const trafficData = trafficListShow.map((trafficItem, index) => ({
       ...trafficItem,
       stt: index + 1,
     }));
-  }, [trafficList, selectTabPane]);
+
+    return trafficData.slice(
+      pagination.page * (pagination.rowPerPage + 1),
+      pagination.page * (pagination.rowPerPage + 1) + pagination.rowPerPage
+    );
+  }, [trafficList, selectTabPane, pagination]);
 
   return (
     <TrafficContext.Provider value={data}>
@@ -239,7 +255,13 @@ const TrafficContent = () => {
             tableHeader={columnsTrafficData}
             handleCheckData={handleCheckData}
             checkedItems={checkedItemList}
+            pagination={{
+              page: pagination.page,
+              rowPerPage: pagination.rowPerPage,
+              length: trafficList ? trafficList.length : 0,
+            }}
             handleClickColumns={handleClickColumns}
+            handleChangePagination={handleChangePagination}
           />
         </Box>
         {selectedItem && trafficList && (

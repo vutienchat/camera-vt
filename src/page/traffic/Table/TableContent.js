@@ -14,6 +14,8 @@ const TableContent = ({
   checkedItems,
   handleClickColumns,
   checkedAble,
+  handleChangePagination,
+  pagination,
 }) => {
   const data = {
     isLoading,
@@ -23,6 +25,8 @@ const TableContent = ({
     handleCheckData,
     handleClickColumns,
     checkedAble,
+    pagination,
+    handleChangePagination,
   };
 
   return (

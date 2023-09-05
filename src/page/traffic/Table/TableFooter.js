@@ -6,22 +6,27 @@ import {
   TableRow,
   makeStyles,
 } from "@material-ui/core";
-import React from "react";
+import React, { useContext } from "react";
 import Pagination from "@material-ui/lab/Pagination";
-import { useState } from "react";
+import { TableCommonContext } from "./TableContent";
 
 const TableFooterContent = () => {
   const classes = useTableFooterStyle();
-
-  const [rowPerPage, setRowPerPage] = useState(10);
-  const [page, setPage] = useState(1);
+  const { handleChangePagination, pagination } = useContext(TableCommonContext);
 
   const handleChangeRow = (e) => {
-    setPage(1);
-    setRowPerPage(e.target.value);
+    handleChangePagination({
+      page: 0,
+      rowPerPage: Number(e.target.value) - 1,
+    });
   };
 
-  const handleChangePage = (_, value) => setPage(value);
+  const handleChangePage = (_, value) => {
+    handleChangePagination({
+      page: Number(value) - 1,
+      rowPerPage: Number(pagination.rowPerPage),
+    });
+  };
 
   return (
     <TableFooter>
@@ -34,7 +39,10 @@ const TableFooterContent = () => {
             <div className={classes.leftContent}>
               <span>Hiển thị:</span>{" "}
               <FormControl className={classes.selectPerPage}>
-                <NativeSelect value={rowPerPage} onChange={handleChangeRow}>
+                <NativeSelect
+                  value={pagination.rowPerPage + 1}
+                  onChange={handleChangeRow}
+                >
                   <option value={10}>10</option>
                   <option value={20}>20</option>
                   <option value={30}>30</option>
@@ -44,8 +52,12 @@ const TableFooterContent = () => {
               <span>trong số 30 kết quả</span>
             </div>
             <Pagination
-              count={10}
-              page={page}
+              count={
+                Math.round(
+                  Number(pagination.length) / Number(pagination.rowPerPage + 1)
+                ) + 1
+              }
+              page={pagination.page + 1}
               onChange={handleChangePage}
               className={classes.paginationCustom}
             />
