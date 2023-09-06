@@ -57,6 +57,23 @@ export const settingArr = [
   },
 ];
 
+export const notificationShowingArr = [
+  {
+    label: "In thông báo VP",
+    key: "noti",
+    type: "print",
+  },
+  {
+    label: "In phiếu gửi",
+    key: "dispatch",
+    type: "print",
+  },
+  {
+    label: "Tải xuống",
+    key: "download",
+    type: "download",
+  },
+];
 export const violationError = [
   { label: "Không chấp hành hiệu lệnh của tin hiệu giao thông", value: 1 },
   {
@@ -300,4 +317,45 @@ export const lowerCaseStringCustom = (numberChecked, originalString) => {
 
 export const checkIsSettingModal = (dataSetting) => {
   return dataSetting && dataSetting.id;
+};
+
+export const sendingData = {
+  provinceName: "tỉnh Thái Nguyên",
+  cityName: "thành phố Thái Nguyên",
+  sendingNo: "300623-0001",
+  sendingCode: "CATP",
+  province: "Thái Nguyên",
+  day: "30",
+  month: "6",
+  year: "2023",
+  policeHeadquarters: "Minh Đức",
+  trafficViolator: "CÔNG TY TNHH MTV EAGON",
+  violatorAddress:
+    "TỔ DÂN PHỐ NGHĨA SƠN, MINH ĐỨC, QUẬN ĐỒ SƠN, THÀNH PHỐ HẢI PHÒNG.",
+  transportation: "Ô tô",
+  plateNumber: "15A-235.18",
+  violationType: "Không chấp hành hiệu lệnh của đèn tín hiệu giao thông",
+  phoneNumber: "0394.690.802",
+};
+export const notiData = {
+  provinceName: "tỉnh Thái Nguyên",
+  cityName: "thành phố Thái Nguyên",
+  sendingNo: "300623-0001",
+  sendingCode: "CATP",
+  province: "Thái Nguyên",
+  policeHeadquarters: "Minh Đức",
+  trafficViolator: "CÔNG TY TNHH MTV EAGON",
+  violatorAddress:
+    "TỔ DÂN PHỐ NGHĨA SƠN, MINH ĐỨC, QUẬN ĐỒ SƠN, THÀNH PHỐ HẢI PHÒNG.",
+  transportation: "Ô tô",
+  plateNumber: "15A-235.18",
+  violationType: "Không chấp hành hiệu lệnh của đèn tín hiệu giao thông",
+  phoneNumber: "0394.690.802",
+  time: "05:33:35",
+  date: "29/06/2023",
+  location:
+    "Nút giao Phạm Văn Đồng - đường tỉnh 363 (phường Hải Thành, quận Dương Kinh, thành phố Hải Phòng)",
+  policeAddress: "số 1 Trần Hữu Dực, Nam Từ Liêm",
+  otherpoliceHeadquarters: "Công an Quận Đồ Sơn, Thành phố Hải Phòng"
+  
 };
