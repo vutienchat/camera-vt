@@ -31,10 +31,10 @@
       "fineAmount": "1.000.000",
       "note": "Chú thích",
       "vehicleOwner": {
-        "fullName": "Nguyễn Thái Bảo",
+        "fullName": "",
         "birthday": "07/09/1991",
-        "cccd": "030091009100",
-        "phoneNumber": "0333889598",
+        "cccd": "",
+        "phoneNumber": "",
         "address": "1 Trần Nhân Tông",
         "provinceId": "01",
         "districtId": "001",
@@ -955,7 +955,7 @@
       "statusEvent": "CDD",
       "deviceId": "1234",
       "videoId": "Mã code video Id",
-      "camName": "Tên camera",
+      "camName": "",
       "lat": 26.32443324,
       "lng": 106.2135456,
       "parentId": "Mã code nhóm event ITS",
@@ -978,7 +978,7 @@
         "direction": "Hướng về UBND phường Ngọc Sơn"
       },
       "holdGPLX": 0,
-      "fineAmount": "1.000.000",
+      "fineAmount": "",
       "note": "Chú thích",
       "vehicleOwner": {
         "fullName": "Nguyễn Thái Bảo",
