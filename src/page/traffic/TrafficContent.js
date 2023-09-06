@@ -161,6 +161,7 @@ const TrafficContent = () => {
   const [pagination, setPagination] = useState({
     page: 0,
     rowPerPage: 9,
+    length: 0,
   });
 
   const handleChangePagination = (pag) => {
@@ -230,10 +231,13 @@ const TrafficContent = () => {
       stt: index + 1,
     }));
 
-    return trafficData.slice(
-      pagination.page * (pagination.rowPerPage + 1),
-      pagination.page * (pagination.rowPerPage + 1) + pagination.rowPerPage
-    );
+    return {
+      length: trafficData.length,
+      data: trafficData.slice(
+        pagination.page * (pagination.rowPerPage + 1),
+        pagination.page * (pagination.rowPerPage + 1) + pagination.rowPerPage
+      ),
+    };
   }, [trafficList, selectTabPane, pagination]);
 
   return (
@@ -251,14 +255,14 @@ const TrafficContent = () => {
           <TableContent
             checkedAble
             isLoading={isTrafficLoading || isTrafficFetching}
-            tableData={trafficListShow}
+            tableData={trafficListShow.data}
             tableHeader={columnsTrafficData}
             handleCheckData={handleCheckData}
             checkedItems={checkedItemList}
             pagination={{
               page: pagination.page,
               rowPerPage: pagination.rowPerPage,
-              length: trafficList ? trafficList.length : 0,
+              length: trafficListShow.length,
             }}
             handleClickColumns={handleClickColumns}
             handleChangePagination={handleChangePagination}
@@ -268,7 +272,7 @@ const TrafficContent = () => {
           <ListTrafficModal
             isOpen={isTrafficListOpenModal}
             handleClose={handleClose}
-            trafficList={trafficListShow}
+            trafficList={trafficListShow.data}
             setSelectedItem={setSelectedItem}
             handleOpenViolationModal={handleOpenViolationModal}
             handleOpenHistoryModal={handleOpenHistoryModal}

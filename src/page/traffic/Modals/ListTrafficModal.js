@@ -38,7 +38,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 export const ListTrafficModalContext = createContext({});
 
-const schema = yup.object().shape({
+const schemaScenceInfo = yup.object().shape({
   numberPlate: yup.string().required(),
   fineAmount: yup.string().required(),
   holdGPLX: yup.string().required(),
@@ -50,7 +50,9 @@ const schema = yup.object().shape({
   location: yup.string().required(),
   camName: yup.string().required(),
   direction: yup.string().required(),
+});
 
+const schemaViolationInfo = yup.object().shape({
   fullName: yup.string().required(),
   cccd: yup.string().required(),
   phoneNumber: yup.string().required(),
@@ -73,6 +75,23 @@ const ListTrafficModal = ({
     handleUpdateDateTraffic,
     handleUpdateStatusTraffic,
   } = useContext(TrafficContext);
+
+  const listSceneTab = useMemo(() => {
+    const statusEvent = selectedItem.statusEvent;
+    if (
+      statusEvent === "VP" ||
+      statusEvent === "CDVP" ||
+      statusEvent === "CDKVP"
+    ) {
+      return [{ label: "Thông tin hiện trường", value: "scence_info" }];
+    }
+    return [
+      { label: "Thông tin hiện trường", value: "scence_info" },
+      { label: "Thông tin xử phạt", value: "ban_info" },
+    ];
+  }, [selectedItem]);
+
+  const [tabPane, setTabPane] = useState(listSceneTab[0].value);
 
   const defaultValues = useMemo(
     () => ({
@@ -110,7 +129,9 @@ const ListTrafficModal = ({
     reValidateMode: "onChange",
     shouldUnregister: false,
     defaultValues: defaultValues,
-    resolver: yupResolver(schema),
+    resolver: yupResolver(
+      tabPane === "scence_info" ? schemaScenceInfo : schemaViolationInfo
+    ),
   });
 
   const plates = useMemo(() => {
@@ -119,24 +140,7 @@ const ListTrafficModal = ({
     return selectedItem.description.licencePlate.split("-");
   }, [selectedItem]);
 
-  const listSceneTab = useMemo(() => {
-    const statusEvent = selectedItem.statusEvent;
-    if (
-      statusEvent === "VP" ||
-      statusEvent === "CDVP" ||
-      statusEvent === "CDKVP"
-    ) {
-      return [{ label: "Thông tin hiện trường", value: "scence_info" }];
-    }
-    return [
-      { label: "Thông tin hiện trường", value: "scence_info" },
-      { label: "Thông tin xử phạt", value: "ban_info" },
-    ];
-  }, [selectedItem]);
-
   const classes = useListTrafficModalStyle();
-
-  const [tabPane, setTabPane] = useState(listSceneTab[0].value);
 
   const itemId = useMemo(() => {
     return trafficList.findIndex((element) => element.id === selectedItem.id);
