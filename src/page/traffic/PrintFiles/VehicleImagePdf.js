@@ -3,193 +3,194 @@ import { makeStyles } from "@material-ui/styles";
 import { Grid, Typography } from "@material-ui/core";
 import { notiData } from "../../../utils/traffic";
 
-const VehicleImagePdf = ({item}) => {
+const VehicleImagePdf = React.forwardRef((violationInfor, ref) => {
+  const item = violationInfor?.violationInfor;
   const classes = styles();
   return (
-    <Grid className={classes.rowSpan}>
-      <Grid
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          width: "100%",
-          justifyContent: "space-between",
-          marginTop: 50,
-        }}
-      >
-        <img
-          src="./csgt.jpg"
-          alt="Image"
-          style={{ marginLeft: 60, width: 40, height: 50 }}
-        />
+    <Grid className={classes.rowSpan} ref={ref}>
+      <div style={{margin: "0 40px"}}>
         <Grid
           style={{
             display: "flex",
-            flexDirection: "column",
-            alignContent: "center",
-            alignItems: "center",
-            marginRight: 60,
+            flexDirection: "row",
+            width: "100%",
+            justifyContent: "space-between",
+            marginTop: 50,
           }}
         >
-          <Typography
-            className={classes.uppercaseText}
-            style={{ textAlign: "center", fontWeight: 600 }}
-          >
-            HỆ THỐNG GIÁM SÁT TRẬT TỰ
-          </Typography>
-          <Typography
-            className={classes.uppercaseText}
-            style={{ textAlign: "center", fontWeight: 600 }}
-          >
-            AN TOÀN GIAO THÔNG ĐƯỜNG BỘ BẰNG HÌNH ẢNH
-          </Typography>
+          <img
+            src="./csgt.jpg"
+            alt="Image"
+            style={{ marginLeft: 60, width: 40, height: 50 }}
+          />
           <Grid
             style={{
-              width: 180,
-              height: 1,
-              backgroundColor: "#000",
-              marginTop: 10,
+              display: "flex",
+              flexDirection: "column",
+              alignContent: "center",
+              alignItems: "center",
+              marginRight: 60,
             }}
-          ></Grid>
+          >
+            <Typography
+              className={classes.uppercaseText}
+              style={{ textAlign: "center", fontWeight: 600 }}
+            >
+              HỆ THỐNG GIÁM SÁT TRẬT TỰ
+            </Typography>
+            <Typography
+              className={classes.uppercaseText}
+              style={{ textAlign: "center", fontWeight: 600 }}
+            >
+              AN TOÀN GIAO THÔNG ĐƯỜNG BỘ BẰNG HÌNH ẢNH
+            </Typography>
+            <Grid
+              style={{
+                width: 180,
+                height: 1,
+                backgroundColor: "#000",
+                marginTop: 10,
+              }}
+            ></Grid>
+          </Grid>
         </Grid>
-      </Grid>
-      <Typography
-        style={{
-          textAlign: "center",
-          letterSpacing: 0.5,
-          paddingVertical: 30,
-          fontWeight: 600,
-          margin: "40px 0 40px 0",
-        }}
-      >
-        HÌNH ẢNH PHƯƠNG TIỆN VI PHẠM
-      </Typography>
-
-      <Grid
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          flexDirection: "row",
-          width: "100%",
-        }}
-      >
-        <Typography style={{ letterSpacing: 0.5, width: 260 }}>
-          - Vào hồi :
+        <Typography
+          style={{
+            textAlign: "center",
+            letterSpacing: 0.5,
+            paddingVertical: 30,
+            fontWeight: 600,
+            margin: "40px 0 40px 0",
+          }}
+        >
+          HÌNH ẢNH PHƯƠNG TIỆN VI PHẠM
         </Typography>
-        <Grid style={{ flex: 1 }}>
-          <Typography style={{ letterSpacing: 0.5, fontWeight: 600 }}>
-            {item?.violationDate?.substring(0, 8)} ngày {item?.violationDate?.substring(9, 18)}
+        <Grid
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            flexDirection: "row",
+            width: "100%",
+          }}
+        >
+          <Typography style={{ letterSpacing: 0.5, width: 260 }}>
+            - Vào hồi :
           </Typography>
+          <Grid style={{ flex: 1 }}>
+            <Typography style={{ letterSpacing: 0.5, fontWeight: 600 }}>
+              {item?.violationDate?.substring(0, 8)} ngày{" "}
+              {item?.violationDate?.substring(9, 18)}
+            </Typography>
+          </Grid>
         </Grid>
-      </Grid>
-      <Grid
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          flexDirection: "row",
-          width: "100%",
-          marginTop: 10,
-        }}
-      >
-        <Typography style={{ letterSpacing: 0.5, width: 260 }}>
-          - Địa điểm :
-        </Typography>
-        <Grid style={{ flex: 1 }}>
-          <Typography style={{ letterSpacing: 0.5, fontWeight: 600 }}>
-            {item?.location}
+        <Grid
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            flexDirection: "row",
+            width: "100%",
+            marginTop: 10,
+          }}
+        >
+          <Typography style={{ letterSpacing: 0.5, width: 260 }}>
+            - Địa điểm :
           </Typography>
+          <Grid style={{ flex: 1 }}>
+            <Typography style={{ letterSpacing: 0.5, fontWeight: 600 }}>
+              {item?.location}
+            </Typography>
+          </Grid>
         </Grid>
-      </Grid>
-      <Grid
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          flexDirection: "row",
-          width: "100%",
-          marginTop: 10,
-        }}
-      >
-        <Typography style={{ letterSpacing: 0.5, width: 260 }}>
-          - Hành vi vi phạm :
-        </Typography>
-        <Grid style={{ flex: 1 }}>
-          <Typography style={{ letterSpacing: 0.5, fontWeight: 600 }}>
-            {item?.statusEvent}
+        <Grid
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            flexDirection: "row",
+            width: "100%",
+            marginTop: 10,
+          }}
+        >
+          <Typography style={{ letterSpacing: 0.5, width: 260 }}>
+            - Hành vi vi phạm :
           </Typography>
+          <Grid style={{ flex: 1 }}>
+            <Typography style={{ letterSpacing: 0.5, fontWeight: 600 }}>
+              {item?.statusEvent}
+            </Typography>
+          </Grid>
         </Grid>
-      </Grid>
-      <Grid
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          flexDirection: "row",
-          width: "100%",
-          marginTop: 10,
-        }}
-      >
-        <Typography style={{ letterSpacing: 0.5, width: 260 }}>
-          - Biển số phương tiện vi phạm :
-        </Typography>
-        <Grid style={{ flex: 1 }}>
-          <Typography style={{ letterSpacing: 0.5, fontWeight: 600 }}>
-            {item?.description?.licencePlate}
+        <Grid
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            flexDirection: "row",
+            width: "100%",
+            marginTop: 10,
+          }}
+        >
+          <Typography style={{ letterSpacing: 0.5, width: 260 }}>
+            - Biển số phương tiện vi phạm :
           </Typography>
+          <Grid style={{ flex: 1 }}>
+            <Typography style={{ letterSpacing: 0.5, fontWeight: 600 }}>
+              {item?.description?.licencePlate}
+            </Typography>
+          </Grid>
         </Grid>
-      </Grid>
-      <Grid
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          flexDirection: "row",
-          width: "100%",
-          marginTop: 10,
-        }}
-      >
-        <Typography style={{ letterSpacing: 0.5, width: 260 }}>
-          - Thiết bị phát hiện:
-        </Typography>
-        <Grid style={{ flex: 1 }}>
-          <Typography style={{ letterSpacing: 0.5, fontWeight: 600 }}>
-            {item?.camName}
+        <Grid
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            flexDirection: "row",
+            width: "100%",
+            marginTop: 10,
+          }}
+        >
+          <Typography style={{ letterSpacing: 0.5, width: 260 }}>
+            - Thiết bị phát hiện:
           </Typography>
+          <Grid style={{ flex: 1 }}>
+            <Typography style={{ letterSpacing: 0.5, fontWeight: 600 }}>
+              {item?.camName}
+            </Typography>
+          </Grid>
         </Grid>
-      </Grid>
-      <Grid
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          flexDirection: "row",
-          width: "100%",
-          marginTop: 10,
-        }}
-      >
-        <Typography style={{ letterSpacing: 0.5, width: 260 }}>
-          - Đơn vị vận hành :
-        </Typography>
-        <Grid style={{ flex: 1 }}>
-          <Typography style={{ letterSpacing: 0.5, fontWeight: 600 }}>
-            Công an {notiData.cityName} - Công an {notiData.provinceName}
+        <Grid
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            flexDirection: "row",
+            width: "100%",
+            marginTop: 10,
+          }}
+        >
+          <Typography style={{ letterSpacing: 0.5, width: 260 }}>
+            - Đơn vị vận hành :
           </Typography>
+          <Grid style={{ flex: 1 }}>
+            <Typography style={{ letterSpacing: 0.5, fontWeight: 600 }}>
+              Công an {notiData.cityName} - Công an {notiData.provinceName}
+            </Typography>
+          </Grid>
         </Grid>
-      </Grid>
-      <Grid
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          flexDirection: "row",
-          width: "100%",
-          marginTop: 10,
-        }}
-      >
-        <Typography style={{ letterSpacing: 0.5, width: 260 }}>
-          - Toạ độ :
-        </Typography>
-        <Grid style={{ flex: 1 }}>
-          <Typography style={{ letterSpacing: 0.5, fontWeight: 600 }}>
-            {item?.lat}{" "}{item?.lng}
+        <Grid
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            flexDirection: "row",
+            width: "100%",
+            marginTop: 10,
+          }}
+        >
+          <Typography style={{ letterSpacing: 0.5, width: 260 }}>
+            - Toạ độ :
           </Typography>
+          <Grid style={{ flex: 1 }}>
+            <Typography style={{ letterSpacing: 0.5, fontWeight: 600 }}>
+              {item?.lat} {item?.lng}
+            </Typography>
+          </Grid>
         </Grid>
-      </Grid>
-     
         <Grid
           style={{
             display: "flex",
@@ -254,7 +255,7 @@ const VehicleImagePdf = ({item}) => {
             gap: 20,
             width: "100%",
             marginTop: 10,
-            marginBottom: 50
+            marginBottom: 50,
           }}
         >
           <Grid style={{ width: 150 }}>
@@ -299,14 +300,14 @@ const VehicleImagePdf = ({item}) => {
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
+      </div>
+    </Grid>
   );
-};
+});
 
 const styles = makeStyles({
   rowSpan: {
     display: "flex",
-    marginTop: 500,
     flexDirection: "column",
     alignContent: "center",
     alignItems: "center",

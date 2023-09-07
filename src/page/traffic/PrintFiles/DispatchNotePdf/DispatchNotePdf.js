@@ -5,11 +5,12 @@ import DispatchNoteContent from "./DispatchNoteContentPdf";
 import HeaderSprintPdf from "./HeaderSprintPdf";
 import NewSprintContent from "./NewSprintContent";
 
-const DispatchNote = React.forwardRef((checkedItemList, ref) => {
+const DispatchNote = React.forwardRef((listItem, ref) => {
+  console.log("item", listItem);
   const classes = style();
   return (
     <div className={classes.page} ref={ref}>
-      {checkedItemList?.checkedItemList?.map((item) => (
+      {listItem?.listItem?.map((item) => (
         <React.Fragment key={item.id}>
           <div className={classes.header}>
             <HeaderFilePdf />

@@ -14,6 +14,7 @@ const UnformattedButtons = ({ status }) => {
     handleOpenHistoryModal,
     handleOpenReasonModal,
     handleUpdateStatusTrafficModal,
+    handlePrintViolationImg
   } = useContext(ListTrafficModalContext);
   const { isHighestLevel } = useContext(TrafficContext);
 
@@ -32,6 +33,7 @@ const UnformattedButtons = ({ status }) => {
           content="In hình ảnh vi phạm"
           typeStyle="contained"
           customStyle={{ minWidth: "206px" }}
+          onClick={handlePrintViolationImg}
         />
         <BaseButton
           content="Lịch sử vi phạm"

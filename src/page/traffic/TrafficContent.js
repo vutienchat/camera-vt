@@ -218,6 +218,7 @@ const TrafficContent = () => {
     setCheckedItemList([]);
   };
 
+  console.log("checkList", checkedItemList);
   const trafficListShow = useMemo(() => {
     if (!trafficList) return [];
     let trafficListShow = [];
@@ -375,10 +376,10 @@ const TrafficContent = () => {
           </CustomModal>
         )}
         <div style={{ display: "none" }}>
-          <DispatchNote ref={sendDataRef} checkedItemList={checkedItemList} />
+          <DispatchNote ref={sendDataRef} listItem={checkedItemList} />
           <ViolationNotificationPdf
             ref={notiDataRef}
-            checkedItemList={checkedItemList}
+            listItem={checkedItemList}
           />
         </div>
       </Box>

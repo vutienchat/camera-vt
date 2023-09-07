@@ -10,7 +10,7 @@ import { ListTrafficModalContext } from "../../Modals/ListTrafficModal";
 
 const FormattedButtons = () => {
   const classes = useStatusEventStyle();
-  const { handleOpenHistoryModal, handleOpenReasonModal } = useContext(
+  const { handleOpenHistoryModal, handleOpenReasonModal, handlePrintViolationImg,handlePrintDispatch,handlePrintNoti} = useContext(
     ListTrafficModalContext
   );
 
@@ -22,6 +22,7 @@ const FormattedButtons = () => {
           content="In hình ảnh vi phạm"
           typeStyle="contained"
           customStyle={{ minWidth: "206px" }}
+          onClick={handlePrintViolationImg}
         />
         <BaseButton
           startIcon={<DownloadIcon style={{ color: "#fff" }} />}
@@ -47,12 +48,14 @@ const FormattedButtons = () => {
           content="In thông báo VP"
           typeStyle="contained"
           customStyle={{ minWidth: "206px" }}
+          onClick={handlePrintNoti}
         />
         <BaseButton
           startIcon={<PrintIcon color="#fff" />}
           content="In phiếu gửi"
           typeStyle="contained"
           customStyle={{ minWidth: "150px" }}
+          onClick={handlePrintDispatch}
         />
       </Box>
     </Box>

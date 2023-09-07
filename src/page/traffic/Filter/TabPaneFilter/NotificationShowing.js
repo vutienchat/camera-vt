@@ -1,18 +1,15 @@
-import { Button, Typography, makeStyles } from "@material-ui/core";
-import React, { useRef } from "react";
+import { makeStyles } from "@material-ui/core";
+import React from "react";
 import { useContext } from "react";
 import { TrafficContext } from "../../TrafficContent";
 import { PrintIcon } from "../../Icons";
-import { useState } from "react";
 import DownloadIcon from "@material-ui/icons/GetApp";
 import BaseButton from "../../component/BaseButton";
-import { useReactToPrint } from "react-to-print";
-import DispatchNote from "../../PrintFiles/DispatchNotePdf/DispatchNotePdf";
 import { notificationShowingArr } from "../../../../utils/traffic";
 const NotificationShowing = () => {
-  const { checkedItemList, handlePrintDispatch, handlePrintNoti } = useContext(TrafficContext);
+  const { checkedItemList, handlePrintDispatch, handlePrintNoti } =
+    useContext(TrafficContext);
   const classes = useStyles();
-
 
   const handleDownload = () => {};
   return (
@@ -57,7 +54,6 @@ const NotificationShowing = () => {
           );
         }
       })}
-      
     </React.Fragment>
   );
 };
