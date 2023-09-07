@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/styles";
 import { Grid, Typography } from "@material-ui/core";
 import { notiData } from "../../../../utils/traffic";
 
-const ViolationNotificationContentPdf = () => {
+const ViolationNotificationContentPdf = ({item}) => {
   const classes = styles();
   return (
     <Grid className={classes.rowSpan}>
@@ -21,7 +21,7 @@ const ViolationNotificationContentPdf = () => {
         Vi phạm hành chính về trật tự an toàn giao thông đường bộ
       </Typography>
       <Typography style={{ marginTop: 10 }}>
-        Kính gửi: Ông (Bà)/Tổ chức: <span>{notiData.trafficViolator}</span>
+        Kính gửi: Ông (Bà)/Tổ chức: <span>{item?.vehicleOwner?.fullName}</span>
       </Typography>
       <Grid style={{ marginTop: 10 }}>
         <Typography className={classes.textIndent} style={{ fontSize: 14 }}>
@@ -33,23 +33,22 @@ const ViolationNotificationContentPdf = () => {
           phát hiện và ghi nhận:
         </Typography>
         <Typography className={classes.textIndent} style={{ fontSize: 14 }}>
-          Phương tiện: <span>{notiData.transportation}</span>, biển kiểm soát:{" "}
-          <span>{notiData.plateNumber}</span>.
+          Phương tiện: <span>{item?.description?.vehicleType}</span>, biển kiểm soát:{" "}
+          <span>{item?.description?.licencePlate}</span>.
         </Typography>
         <Typography className={classes.textIndent} style={{ fontSize: 14 }}>
-          Chủ phương tiện: <span>{notiData.trafficViolator}</span>.
+          Chủ phương tiện: <span>{item?.vehicleOwner?.fullName}</span>.
         </Typography>
         <Typography className={classes.textIndent} style={{ fontSize: 14 }}>
-          Địa chỉ: <span>{notiData.violatorAddress}</span>
+          Địa chỉ: <span>{item?.vehicleOwner?.address}</span>
         </Typography>
         <Typography className={classes.textIndent} style={{ fontSize: 14 }}>
-          Thời gian, địa điểm vi phạm: <span>{notiData.time}</span>, ngày{" "}
-          <span>{notiData.date}</span>, tại Nút giao{" "}
-          <span>{notiData.location}</span>
+          Thời gian, địa điểm vi phạm: <span>{item?.violationDate?.substring(0, 8)}</span>, ngày{" "}
+          <span>{item?.violationDate?.substring(9, 18)}</span>, tại Nút giao{" "}
+          <span>{item?.location}</span>
         </Typography>
         <Typography className={classes.textIndent} style={{ fontSize: 14 }}>
-          Hành vi vi phạm: Không chấp hành hiệu lệnh của đèn tín hiệu giao
-          thông, được quy định tại điểm a khoản 5 điều 5 Nghị định số
+          Hành vi vi phạm: {item?.statusEvent}, được quy định tại điểm a khoản 5 điều 5 Nghị định số
           100/2019/NĐ-CP ngày 30/12/2019 quy định xử phạt vi phạm hành chính
           trong lĩnh vực giao thông đường bộ và đường sắt, được sửa đổi bổ sung
           tại điểm đ khoản 34 điều 2 Nghị định 123/2021/NĐ-CP ngày 28/12/2021

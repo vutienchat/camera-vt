@@ -1099,6 +1099,106 @@
         "appointmentDate": "19:12:25 27/06/2023",
         "note": ""
       }
+    },
+    {
+      "id": "37012e00e59711eádd879f1",
+      "statusEvent": "DDD",
+      "deviceId": "1234",
+      "videoId": "Mã code video Id",
+      "camName": "Tên camera WTF",
+      "lat": 26.32443324,
+      "lng": 106.2135456,
+      "parentId": "Mã code nhóm event ITS WTF",
+      "location": "Ngã Tư An Dương Vương WTF",
+      "groupId": "Mã code Group Id WTF",
+      "typeError": 2,
+      "typeNotError": 0,
+      "violationDate": "19:12:25 27/06/2023",
+      "imageCrop": "đường dẫn ảnh chụp xe WTF",
+      "imageDetail": "đường dẫn ảnh chụp biển số xe WTF",
+      "imageFull": "đường dẫn ảnh full WTF",
+      "createDate": "19:12:25 27/06/2023",
+      "label1": "dieuhanh_hpg - 14:15:15 28/06/2023",
+      "label2": "pheduyet_hpg - 14:15:15 28/06/2023",
+      "description": {
+        "licencePlate": "88A-888.88",
+        "vehicleType": "bus",
+        "color": "black",
+        "colorPlate": "white",
+        "direction": "Hướng về UBND phường Ngọc Sơn"
+      },
+      "holdGPLX": 0,
+      "fineAmount": "1.000.000",
+      "note": "Chú thích WTF",
+      "vehicleOwner": {
+        "fullName": "Nguyễn Thái Bảo",
+        "birthday": "07/09/1991",
+        "cccd": "030091009100",
+        "address": "1 Trần Nhân Tông",
+        "phoneNumber": "0333889598",
+        "provinceId": "01",
+        "districtId": "001",
+        "wardId": "0001"
+      },
+      "infoSanction": {
+        "infoNumber": "20230629-0001",
+        "send1": "19:12:25 27/06/2023",
+        "send2": "19:12:25 27/06/2023",
+        "sendGTVT": "19:12:25 27/06/2023",
+        "infoReturn": "19:12:25 27/06/2023",
+        "appointmentDate": "19:12:25 27/06/2023",
+        "note": ""
+      }
+    },
+    {
+      "id": "37012e00sssse59711eádd879f1",
+      "statusEvent": "DDD",
+      "deviceId": "1234",
+      "videoId": "Mã code video Id",
+      "camName": "Tên camera WTF",
+      "lat": 26.32443324,
+      "lng": 106.2135456,
+      "parentId": "Mã code nhóm event ITS WTF",
+      "location": "Ngã Tư An Dương Vương WTF",
+      "groupId": "Mã code Group Id WTF",
+      "typeError": 2,
+      "typeNotError": 0,
+      "violationDate": "19:12:25 27/06/2023",
+      "imageCrop": "đường dẫn ảnh chụp xe WTF",
+      "imageDetail": "đường dẫn ảnh chụp biển số xe WTF",
+      "imageFull": "đường dẫn ảnh full WTF",
+      "createDate": "19:12:25 27/06/2023",
+      "label1": "dieuhanh_hpg - 14:15:15 28/06/2023",
+      "label2": "pheduyet_hpg - 14:15:15 28/06/2023",
+      "description": {
+        "licencePlate": "88A-888.88",
+        "vehicleType": "bus",
+        "color": "black",
+        "colorPlate": "white",
+        "direction": "Hướng về UBND phường Ngọc Sơn"
+      },
+      "holdGPLX": 0,
+      "fineAmount": "1.000.000",
+      "note": "Chú thích WTF",
+      "vehicleOwner": {
+        "fullName": "Nguyễn Thái Bảo",
+        "birthday": "07/09/1991",
+        "cccd": "030091009100",
+        "address": "1 Trần Nhân Tông",
+        "phoneNumber": "0333889598",
+        "provinceId": "01",
+        "districtId": "001",
+        "wardId": "0001"
+      },
+      "infoSanction": {
+        "infoNumber": "20230629-0001",
+        "send1": "19:12:25 27/06/2023",
+        "send2": "19:12:25 27/06/2023",
+        "sendGTVT": "19:12:25 27/06/2023",
+        "infoReturn": "19:12:25 27/06/2023",
+        "appointmentDate": "19:12:25 27/06/2023",
+        "note": ""
+      }
     }
   ],
   "groupList": [

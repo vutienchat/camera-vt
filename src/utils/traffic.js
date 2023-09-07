@@ -356,6 +356,8 @@ export const notiData = {
   location:
     "Nút giao Phạm Văn Đồng - đường tỉnh 363 (phường Hải Thành, quận Dương Kinh, thành phố Hải Phòng)",
   policeAddress: "số 1 Trần Hữu Dực, Nam Từ Liêm",
-  otherpoliceHeadquarters: "Công an Quận Đồ Sơn, Thành phố Hải Phòng"
+  otherpoliceHeadquarters: "Công an Quận Đồ Sơn, Thành phố Hải Phòng",
+  camera: "CAMERA Ngã tư 363 (2)",
+  coordinates: "20.79274500 106.71510200"
   
 };

@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/styles";
 import React from "react";
 import { sendingData } from "../../../utils/traffic";
 
-const HeaderFilePdf = () => {
+const HeaderFilePdf = ({item}) => {
   const classes = styles();
   return (
     <div className={classes.root}>

@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/styles";
 import { sendingData } from "../../../../utils/traffic";
 import SignViewPdf from "../SignViewPdf";
 
-const DispatchNoteContent = () => {
+const DispatchNoteContent = ({item}) => {
   const classes = style();
   return (
     <Grid className={classes.rowSpan}>
@@ -29,32 +29,32 @@ const DispatchNoteContent = () => {
           <Typography className={classes.textIndent}>
             Đối với: Ông(bà)/Tổ chức:{" "}
             <span className={classes.uppercaseText} style={{ fontWeight: 600 }}>
-              {sendingData.trafficViolator}.
+              {item?.vehicleOwner?.fullName}.
             </span>
           </Typography>
           <Typography className={classes.textIndent}>
             Địa chỉ:{" "}
             <span className={classes.uppercaseText} style={{ fontWeight: 600 }}>
-              {sendingData.violatorAddress}.
+              {item?.vehicleOwner?.address}.
             </span>
           </Typography>
           <Typography className={classes.textIndent}>
             Là chủ phương tiện:<span>{sendingData.transportation}</span>, biển
             kiểm soát:{" "}
-            <span style={{ fontWeight: 600 }}>{sendingData.plateNumber}</span>,
-            vi phạm <span>{sendingData.violationType}</span>.
+            <span style={{ fontWeight: 600 }}>{item?.description?.licencePlate}</span>,
+            vi phạm <span>{item?.statusEvent}</span>.
           </Typography>
           <Typography className={classes.textIndent}>
             Đề nghị Công an(phường xã, thị trấn):{" "}
-            <span>{sendingData.policeHeadquarters}</span>chuyển thông báo tới
-            Ông(bà)/Tổ chức <span>{sendingData.trafficViolator}</span>.
+            <span>{sendingData.policeHeadquarters}</span>{" "}chuyển thông báo tới
+            Ông(bà)/Tổ chức <span>{item?.vehicleOwner?.fullName}</span>.
           </Typography>
           <Typography
             style={{ fontStyle: "italic", fontSize: 14 }}
             className={classes.textIndent}
           >
             Mọi thắc mắc vui lòng liên hệ đội tuyên truyền xử lý:
-            <span>{sendingData.phoneNumber}</span>(giờ hành chính, trừ thứ 7,
+            <span style={{fontWeight: 600}}>{sendingData.phoneNumber}</span>(giờ hành chính, trừ thứ 7,
             chủ nhật, ngày lễ).
           </Typography>
         </Grid>

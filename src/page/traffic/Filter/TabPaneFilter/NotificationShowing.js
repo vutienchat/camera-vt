@@ -9,23 +9,10 @@ import BaseButton from "../../component/BaseButton";
 import { useReactToPrint } from "react-to-print";
 import DispatchNote from "../../PrintFiles/DispatchNotePdf/DispatchNotePdf";
 import { notificationShowingArr } from "../../../../utils/traffic";
-import ViolationNotificationPdf from "../../PrintFiles/ViolationNotificationPdf/ViolationNotificationPdf";
-
 const NotificationShowing = () => {
-  const sendDataRef = useRef();
-  const notiDataRef = useRef();
-
-  const { checkedItemList } = useContext(TrafficContext);
+  const { checkedItemList, handlePrintDispatch, handlePrintNoti } = useContext(TrafficContext);
   const classes = useStyles();
 
-  const handlePrintDispatch = useReactToPrint({
-    content: () => {
-      return sendDataRef.current;
-    },
-  });
-  const handlePrintNoti = useReactToPrint({
-    content: () => notiDataRef.current,
-  });
 
   const handleDownload = () => {};
   return (
@@ -70,10 +57,7 @@ const NotificationShowing = () => {
           );
         }
       })}
-      <div style={{ display: "none" }}>
-        <DispatchNote ref={sendDataRef} />
-        <ViolationNotificationPdf ref={notiDataRef} />
-      </div>
+      
     </React.Fragment>
   );
 };

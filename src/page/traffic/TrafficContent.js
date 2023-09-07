@@ -1,4 +1,10 @@
-import React, { useState, createContext, useCallback, useMemo } from "react";
+import React, {
+  useState,
+  createContext,
+  useCallback,
+  useMemo,
+  useRef,
+} from "react";
 import { Box } from "@material-ui/core";
 
 import HeaderFilter from "./Filter/HeaderFilter";
@@ -24,6 +30,9 @@ import NoErrorReasonModal from "./Modals/NoErrorReasonModal";
 import useModalAction from "./hooks/useModalAction";
 import SettingModal from "./Modals/SettingModal";
 import extendedDayJs from "../../utils/dayjs";
+import { useReactToPrint } from "react-to-print";
+import DispatchNote from "./PrintFiles/DispatchNotePdf/DispatchNotePdf";
+import ViolationNotificationPdf from "./PrintFiles/ViolationNotificationPdf/ViolationNotificationPdf";
 
 export const TrafficContext = createContext({});
 
@@ -48,6 +57,8 @@ const TrafficContent = () => {
     handleSetOpenOpenModalWarningSetting,
   } = useModalAction();
 
+  const sendDataRef = useRef();
+  const notiDataRef = useRef();
   const [paramTrafficSearch, setParamTrafficSearch] = useState({
     status: [],
     errors: [],
@@ -58,6 +69,15 @@ const TrafficContent = () => {
     startDate: "",
     tabPane: "all",
     keyword: "",
+  });
+
+  const handlePrintDispatch = useReactToPrint({
+    content: () => {
+      return sendDataRef.current;
+    },
+  });
+  const handlePrintNoti = useReactToPrint({
+    content: () => notiDataRef.current,
   });
 
   const [modelSetting, setModelSetting] = useState({
@@ -189,6 +209,8 @@ const TrafficContent = () => {
     handleUpdateDateTraffic,
     handleSetOpenOpenModalWarningSetting,
     setIsOpenSettingModal,
+    handlePrintDispatch,
+    handlePrintNoti,
   };
 
   const handleChangeTabPane = (value) => {
@@ -352,6 +374,13 @@ const TrafficContent = () => {
             <SettingModal handleCancel={() => setIsOpenSettingModal(false)} />
           </CustomModal>
         )}
+        <div style={{ display: "none" }}>
+          <DispatchNote ref={sendDataRef} checkedItemList={checkedItemList} />
+          <ViolationNotificationPdf
+            ref={notiDataRef}
+            checkedItemList={checkedItemList}
+          />
+        </div>
       </Box>
     </TrafficContext.Provider>
   );
