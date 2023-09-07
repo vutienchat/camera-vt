@@ -6,13 +6,21 @@ import DownloadIcon from "@material-ui/icons/GetApp";
 import { useStatusEventStyle } from "./styles";
 import BaseButton from "../BaseButton";
 import { PrintIcon } from "../../Icons";
+import { TrafficContext } from "../../TrafficContent";
 import { ListTrafficModalContext } from "../../Modals/ListTrafficModal";
 
 const FormattedButtons = () => {
   const classes = useStatusEventStyle();
-  const { handleOpenHistoryModal, handleOpenReasonModal, handlePrintViolationImg,handlePrintDispatch,handlePrintNoti} = useContext(
-    ListTrafficModalContext
-  );
+  const {
+    handleOpenReasonModal,
+    handlePrintViolationImg,
+    handlePrintNoti,
+    handlePrintDispatch,
+  } = useContext(TrafficContext);
+
+  const {
+    handleOpenHistoryModal,
+  } = useContext(ListTrafficModalContext)
 
   return (
     <Box className={classes.root}>

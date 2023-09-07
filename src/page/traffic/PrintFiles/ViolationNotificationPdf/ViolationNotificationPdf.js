@@ -5,11 +5,14 @@ import BriefInformation from "../BriefInformPdf";
 import ViolationNotificationContentPdf from "./ViolationNotificationContentPdf";
 import VehicleImagePdf from "../VehicleImagePdf";
 
-const ViolationNotificationPdf = React.forwardRef((listItem, ref) => {
+const ViolationNotificationPdf = React.forwardRef((props, ref) => {
   const classes = style();
+
+  const listItem = props.listItem || [];
+
   return (
     <div className={classes.page} ref={ref}>
-      {listItem?.listItem?.map((item) => (
+      {listItem.map((item) => (
         <React.Fragment key={item.id}>
           <div className={classes.brief}>
             <BriefInformation />

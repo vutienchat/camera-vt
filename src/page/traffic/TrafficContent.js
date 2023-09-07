@@ -33,6 +33,8 @@ import extendedDayJs from "../../utils/dayjs";
 import { useReactToPrint } from "react-to-print";
 import DispatchNote from "./PrintFiles/DispatchNotePdf/DispatchNotePdf";
 import ViolationNotificationPdf from "./PrintFiles/ViolationNotificationPdf/ViolationNotificationPdf";
+import VehicleImagePdf from "./PrintFiles/VehicleImagePdf";
+import useRefPrint from "./hooks/useRefPrints";
 
 export const TrafficContext = createContext({});
 
@@ -57,8 +59,16 @@ const TrafficContent = () => {
     handleSetOpenOpenModalWarningSetting,
   } = useModalAction();
 
-  const sendDataRef = useRef();
-  const notiDataRef = useRef();
+  const {
+    sendDataRef,
+    imageRef,
+    notiDataRef,
+
+    handlePrintDispatch,
+    handlePrintNoti,
+    handlePrintViolationImg,
+  } = useRefPrint();
+
   const [paramTrafficSearch, setParamTrafficSearch] = useState({
     status: [],
     errors: [],
@@ -70,16 +80,6 @@ const TrafficContent = () => {
     tabPane: "all",
     keyword: "",
   });
-
-  const handlePrintDispatch = useReactToPrint({
-    content: () => {
-      return sendDataRef.current;
-    },
-  });
-  const handlePrintNoti = useReactToPrint({
-    content: () => notiDataRef.current,
-  });
-
   const [modelSetting, setModelSetting] = useState({
     id: "1234",
     userId: "Mã Code tài khoản của người cấu hình",
@@ -99,7 +99,10 @@ const TrafficContent = () => {
   const [selectedReason, setSelectedReason] = useState(
     noErrorReasonList[0].value
   );
+
   const [isHighestLevel, setIsHighestLevel] = useState(true);
+
+  console.log(selectedItem);
 
   const {
     data: trafficList,
@@ -115,15 +118,18 @@ const TrafficContent = () => {
     setCheckedItemList(data);
   };
 
-  const handleClickColumns = useCallback((data) => {
-    setSelectedItem(data);
-    setIsTrafficListOpenModal(true);
-  }, []);
+  const handleClickColumns = useCallback(
+    (data) => {
+      setSelectedItem(data);
+      setIsTrafficListOpenModal(true);
+    },
+    [setIsTrafficListOpenModal]
+  );
 
   const handleClose = useCallback(() => {
     setIsTrafficListOpenModal(false);
     setSelectedItem(undefined);
-  }, []);
+  }, [setIsTrafficListOpenModal]);
 
   const handleConfirmReason = () => {
     if (!checkIsSettingModal(modelSetting)) {
@@ -209,8 +215,10 @@ const TrafficContent = () => {
     handleUpdateDateTraffic,
     handleSetOpenOpenModalWarningSetting,
     setIsOpenSettingModal,
+
     handlePrintDispatch,
     handlePrintNoti,
+    handlePrintViolationImg,
   };
 
   const handleChangeTabPane = (value) => {
@@ -218,7 +226,6 @@ const TrafficContent = () => {
     setCheckedItemList([]);
   };
 
-  console.log("checkList", checkedItemList);
   const trafficListShow = useMemo(() => {
     if (!trafficList) return [];
     let trafficListShow = [];
@@ -376,10 +383,17 @@ const TrafficContent = () => {
           </CustomModal>
         )}
         <div style={{ display: "none" }}>
-          <DispatchNote ref={sendDataRef} listItem={checkedItemList} />
+          <VehicleImagePdf
+            ref={imageRef}
+            violationInfor={selectedItem ? [selectedItem] : checkedItemList}
+          />
+          <DispatchNote
+            ref={sendDataRef}
+            listItem={selectedItem ? [selectedItem] : checkedItemList}
+          />
           <ViolationNotificationPdf
             ref={notiDataRef}
-            listItem={checkedItemList}
+            listItem={selectedItem ? [selectedItem] : checkedItemList}
           />
         </div>
       </Box>

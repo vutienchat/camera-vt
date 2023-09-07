@@ -5,12 +5,14 @@ import DispatchNoteContent from "./DispatchNoteContentPdf";
 import HeaderSprintPdf from "./HeaderSprintPdf";
 import NewSprintContent from "./NewSprintContent";
 
-const DispatchNote = React.forwardRef((listItem, ref) => {
-  console.log("item", listItem);
+const DispatchNote = React.forwardRef((props, ref) => {
   const classes = style();
+
+  const list = props.listItem || [];
+
   return (
     <div className={classes.page} ref={ref}>
-      {listItem?.listItem?.map((item) => (
+      {list.map((item) => (
         <React.Fragment key={item.id}>
           <div className={classes.header}>
             <HeaderFilePdf />
@@ -31,10 +33,10 @@ const style = makeStyles({
     padding: "0px 40px",
   },
   header: {
-    paddingTop: 40
+    paddingTop: 40,
   },
   newSprint: {
-    marginBottom: 150
-  }
+    marginBottom: 150,
+  },
 });
 export default DispatchNote;

@@ -35,10 +35,6 @@ import CloseModalIcon from "../../masterMap/Icons/CloseModalIcon";
 import { useEffect } from "react";
 import extendedDayJs from "../../../utils/dayjs";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useReactToPrint } from "react-to-print";
-import VehicleImagePdf from "../PrintFiles/VehicleImagePdf";
-import DispatchNote from "../PrintFiles/DispatchNotePdf/DispatchNotePdf";
-import ViolationNotificationPdf from "../PrintFiles/ViolationNotificationPdf/ViolationNotificationPdf";
 
 export const ListTrafficModalContext = createContext({});
 
@@ -239,22 +235,6 @@ const ListTrafficModal = ({
 
   const handleResetFormData = () => methods.reset(defaultValues);
 
-  const imageRef = useRef(null);
-  const sendDataRef = useRef(null);
-  const notiDataRef = useRef(null);
-
-  const handlePrintViolationImg = useReactToPrint({
-    content: () => imageRef.current,
-  });
-  const handlePrintDispatch = useReactToPrint({
-    content: () => {
-      return sendDataRef.current;
-    },
-  });
-  const handlePrintNoti = useReactToPrint({
-    content: () => notiDataRef.current,
-  });
-
   const data = {
     selectedItem,
     plates,
@@ -264,10 +244,8 @@ const ListTrafficModal = ({
 
     handleResetFormData,
     handleUpdateStatusTrafficModal,
-    handlePrintViolationImg,
-    handlePrintDispatch,
-    handlePrintNoti,
   };
+
   const videoRef = useRef(null);
 
   const onPlay = () => videoRef.current.play();
@@ -403,14 +381,6 @@ const ListTrafficModal = ({
               </Box>
             </Box>
           </form>
-          <div style={{ display: "none" }}>
-            <VehicleImagePdf ref={imageRef} violationInfor={selectedItem} />
-            <DispatchNote ref={sendDataRef} listItem={[selectedItem]} />
-            <ViolationNotificationPdf
-              ref={notiDataRef}
-              listItem={[selectedItem]}
-            />
-          </div>
         </ListTrafficModalContext.Provider>
       </FormProvider>
     </Modal>

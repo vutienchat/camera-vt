@@ -3,12 +3,13 @@ import { makeStyles } from "@material-ui/styles";
 import { Grid, Typography } from "@material-ui/core";
 import { notiData } from "../../../utils/traffic";
 
-const VehicleImagePdf = React.forwardRef((violationInfor, ref) => {
-  const item = violationInfor?.violationInfor;
+const VehicleImagePdf = React.forwardRef((props, ref) => {
+  const item = props.violationInfor || [];
+
   const classes = styles();
   return (
     <Grid className={classes.rowSpan} ref={ref}>
-      <div style={{margin: "0 40px"}}>
+      <div style={{ margin: "0 40px" }}>
         <Grid
           style={{
             display: "flex",
@@ -238,7 +239,9 @@ const VehicleImagePdf = React.forwardRef((violationInfor, ref) => {
                 height: 30,
               }}
             >
-              <Typography style={{ fontSize: 8, textAlign: "center", width: 80 }}>
+              <Typography
+                style={{ fontSize: 8, textAlign: "center", width: 80 }}
+              >
                 Ảnh chụp màn hình
               </Typography>
               <Typography style={{ fontSize: 8, width: 230 }}>
