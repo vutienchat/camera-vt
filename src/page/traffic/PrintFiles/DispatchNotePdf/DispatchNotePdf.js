@@ -33,7 +33,7 @@ const style = makeStyles({
     paddingTop: 40
   },
   newSprint: {
-    marginBottom: 250
+    marginBottom: 150
   }
 });
 export default DispatchNote;
