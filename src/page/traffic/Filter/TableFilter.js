@@ -18,69 +18,27 @@ import CustomModal from "../component/CustomModal";
 import { SearchIcon } from "../../../common/icons/SearchIcon";
 import { ReloadIcon } from "../../../common/icons/ReloadIcon";
 import BaseButton from "../component/BaseButton";
+import BaseSearchForm from "../component/BaseSearchForm";
+import { Cloud } from "@material-ui/icons";
+import StreamingServer001 from "../Modals/StreamingServerModal-3";
 
 const TableFilter = () => {
   const queryClient = useQueryClient();
   const classes = useTableFilterStyle();
-  const { selectTabPane, isOpenSettingModal, setIsOpenSettingModal } =
-    useContext(TrafficContext);
-
-  const [textSearch, setTextSearch] = useState("");
+  const {
+    selectTabPane,
+    isOpenSettingModal,
+    setIsOpenSettingModal,
+    isOpenServerModal,
+    setIsOpentServerModal,
+  } = useContext(TrafficContext);
 
   const handleReloadDataTable = () => {
     queryClient.invalidateQueries([QUERY_KEYS.TRAFFIC_LIST]);
   };
-
-  const handleChangeKeyword = (e) => {
-    const { value } = e.target;
-    if (value.trim() === "") {
-      setTextSearch("");
-      return;
-    }
-    const maxLength = 20;
-
-    if (value.length <= maxLength) setTextSearch(value.replace(/ {2,}/g, " "));
-  };
-
-  const handleResetTextSearch = () => {
-    setTextSearch("");
-  };
-
   return (
     <Box className={classes.root}>
-      <TextField
-        id="input-with-icon-textfield"
-        placeholder="Biển số xe"
-        variant="outlined"
-        name="keyword"
-        value={textSearch}
-        onChange={handleChangeKeyword}
-        size="small"
-        fullWidth
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchIcon width={20} height={20} color="#939393" />
-            </InputAdornment>
-          ),
-          endAdornment:
-            textSearch.length > 0 ? (
-              <InputAdornment position="end">
-                <Box
-                  component="div"
-                  display="flex"
-                  alignContent="center"
-                  style={{
-                    cursor: "pointer",
-                  }}
-                  onClick={handleResetTextSearch}
-                >
-                  <CloseIcon />
-                </Box>
-              </InputAdornment>
-            ) : null,
-        }}
-      />
+      <BaseSearchForm placeholder={"Biển số xe"} />
       {selectTabPane === "01" && (
         <Box style={{ display: "flex" }}>
           <UnViolationPendingApproval />
@@ -98,6 +56,9 @@ const TableFilter = () => {
       <Box className={classes.icon} onClick={() => setIsOpenSettingModal(true)}>
         <SettingIcon width={24} height={24} color="#858585" />
       </Box>
+      <Box className={classes.icon} onClick={() => setIsOpentServerModal(true)}>
+        <Cloud width={24} height={24} color="#858585" />
+      </Box>
       {isOpenSettingModal && (
         <CustomModal
           isOpen={isOpenSettingModal}
@@ -107,6 +68,16 @@ const TableFilter = () => {
           <SettingModal handleCancel={() => setIsOpenSettingModal(false)} />
         </CustomModal>
       )}
+      {isOpenServerModal && (
+        <CustomModal
+        isOpen={isOpenServerModal}
+        handleClose={() => setIsOpentServerModal(false)}
+        title="Server 001"
+        >
+          <StreamingServer001 handleClose={() => setIsOpentServerModal(false)}/>
+        </CustomModal>
+      )
+      }
     </Box>
   );
 };

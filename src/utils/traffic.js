@@ -107,6 +107,12 @@ export const vehicles = [
   { label: "NgườI đi bộ", value: "human" },
 ];
 
+export const active = [
+  { label: "All Status", value: "all" },
+  { label: "Online", value: "onl" },
+  { label: "Offline", value: "off" },
+];
+
 export const vehicleColor = [
   { label: "Đen", value: "black" },
   { label: "Trắng", value: "white" },
@@ -123,6 +129,15 @@ export const plateCarsColor = [
   { label: "Trắng", value: "white" },
 ];
 
+export const serverArr = {
+  width: "100%",
+  btnText: "Status",
+  titleDropdownText: "Tất cả status",
+  key: "status",
+  list: active,
+  type: "select_multiple",
+  placeholderContent: "Status",
+};
 export const headerFilterArr = [
   {
     width: "100%",
@@ -358,6 +373,5 @@ export const notiData = {
   policeAddress: "số 1 Trần Hữu Dực, Nam Từ Liêm",
   otherpoliceHeadquarters: "Công an Quận Đồ Sơn, Thành phố Hải Phòng",
   camera: "CAMERA Ngã tư 363 (2)",
-  coordinates: "20.79274500 106.71510200"
-  
+  coordinates: "20.79274500 106.71510200",
 };

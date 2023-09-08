@@ -30,7 +30,6 @@ import NoErrorReasonModal from "./Modals/NoErrorReasonModal";
 import useModalAction from "./hooks/useModalAction";
 import SettingModal from "./Modals/SettingModal";
 import extendedDayJs from "../../utils/dayjs";
-import { useReactToPrint } from "react-to-print";
 import DispatchNote from "./PrintFiles/DispatchNotePdf/DispatchNotePdf";
 import ViolationNotificationPdf from "./PrintFiles/ViolationNotificationPdf/ViolationNotificationPdf";
 import VehicleImagePdf from "./PrintFiles/VehicleImagePdf";
@@ -102,7 +101,6 @@ const TrafficContent = () => {
 
   const [isHighestLevel, setIsHighestLevel] = useState(true);
 
-  console.log(selectedItem);
 
   const {
     data: trafficList,
@@ -184,6 +182,8 @@ const TrafficContent = () => {
   };
   const [selectTabPane, setSelectTabPane] = useState(status[0].value);
   const [isOpenSettingModal, setIsOpenSettingModal] = useState(false);
+  const [isOpenServerModal, setIsOpentServerModal] = useState(false);
+
   const [pagination, setPagination] = useState({
     page: 0,
     rowPerPage: 9,
@@ -206,6 +206,7 @@ const TrafficContent = () => {
     modelSetting,
     selectTabPane,
     isOpenSettingModal,
+    isOpenServerModal,
 
     setParamTrafficSearch,
     setCheckedItemList,
@@ -215,6 +216,7 @@ const TrafficContent = () => {
     handleUpdateDateTraffic,
     handleSetOpenOpenModalWarningSetting,
     setIsOpenSettingModal,
+    setIsOpentServerModal,
 
     handlePrintDispatch,
     handlePrintNoti,
