@@ -112,6 +112,12 @@ export const active = [
   { label: "Online", value: "onl" },
   { label: "Offline", value: "off" },
 ];
+export const cameraStorage = [
+  { label: "All Camera Storage", value: "all" },
+  { label: "On", value: "on" },
+  { label: "Off", value: "off" },
+  { label: "Error", value: "error" },
+];
 
 export const vehicleColor = [
   { label: "Đen", value: "black" },
@@ -129,15 +135,26 @@ export const plateCarsColor = [
   { label: "Trắng", value: "white" },
 ];
 
-export const serverArr = {
-  width: "100%",
-  btnText: "Status",
-  titleDropdownText: "Tất cả status",
-  key: "status",
-  list: active,
-  type: "select_multiple",
-  placeholderContent: "Status",
-};
+export const serverArr = [
+  {
+    width: "100%",
+    btnText: "Status",
+    titleDropdownText: "Tất cả status",
+    key: "status",
+    list: active,
+    type: "select_multiple",
+    placeholderContent: "Status",
+  },
+  {
+    width: "100%",
+    btnText: "Camera Storage",
+    titleDropdownText: "All Camera Storage",
+    key: "camera",
+    list: cameraStorage,
+    type: "select_multiple",
+    placeholderContent: "Camera Storage",
+  },
+];
 export const headerFilterArr = [
   {
     width: "100%",
@@ -224,6 +241,33 @@ export const columnsTrafficData = [
     },
   },
 ];
+
+export const cameraStorageData = [
+  {
+    field: "stt",
+    name: "#"
+  },
+  {
+    field: "camera name",
+    name: "Camera Name"
+  },
+  {
+    field: "status",
+    name: "Status"
+  },
+  {
+    field: "camera",
+    name: "Camera Storage"
+  },
+  {
+    field: "message",
+    name: "Camera Error Message"
+  },
+  {
+    field: "action",
+    name: "Action"
+  },
+]
 
 export const typeErrEvent = {
   1: "Không chấp hành hiệu lệnh của tin hiệu giao thông",

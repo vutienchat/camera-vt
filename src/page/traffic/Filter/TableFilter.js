@@ -20,7 +20,7 @@ import { ReloadIcon } from "../../../common/icons/ReloadIcon";
 import BaseButton from "../component/BaseButton";
 import BaseSearchForm from "../component/BaseSearchForm";
 import { Cloud } from "@material-ui/icons";
-import StreamingServer001 from "../Modals/StreamingServerModal-3";
+import CameraListModal from "../Modals/CameraListModal";
 
 const TableFilter = () => {
   const queryClient = useQueryClient();
@@ -74,7 +74,7 @@ const TableFilter = () => {
         handleClose={() => setIsOpentServerModal(false)}
         title="Server 001"
         >
-          <StreamingServer001 handleClose={() => setIsOpentServerModal(false)}/>
+          <CameraListModal handleClose={() => setIsOpentServerModal(false)}/>
         </CustomModal>
       )
       }

@@ -1243,5 +1243,42 @@
       "address": null,
       "auto": true
     }
+  ],
+  "cameraList": [
+    {
+      "id": "111111",
+      "name": "camera 1",
+      "status": "Online",
+      "cameraStorage": "On",
+      "message": "Some thing funny will happen right now!"
+    },
+    {
+      "id": "111112",
+      "name": "camera 2",
+      "status": "Offline",
+      "cameraStorage": "off",
+      "message": " Nothing will happen right now!"
+    },
+    {
+      "id": "111113",
+      "name": "camera 3",
+      "status": "Online",
+      "cameraStorage": "On",
+      "message": "Some violations will happen right now!"
+    },
+    {
+      "id": "111114",
+      "name": "camera 4",
+      "status": "Online",
+      "cameraStorage": "On",
+      "message": "Running!"
+    },
+    {
+      "id": "111115",
+      "name": "camera 5",
+      "status": "Online",
+      "cameraStorage": "Error",
+      "message": "Camera error"
+    }
   ]
 }

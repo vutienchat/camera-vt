@@ -29,6 +29,7 @@ const TableContent = ({
     handleChangePagination,
   };
 
+  console.log("Data", tableData);
   return (
     <TableCommonContext.Provider value={data}>
       <TableContainer component={Box}>

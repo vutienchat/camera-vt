@@ -28,6 +28,7 @@ const TableFooterContent = () => {
     });
   };
 
+  // console.log("count", pagination.length, pagination.rowPerPage);
   return (
     <TableFooter>
       <TableRow>
@@ -49,7 +50,7 @@ const TableFooterContent = () => {
                   <option value={50}>50</option>
                 </NativeSelect>
               </FormControl>{" "}
-              <span>trong số 30 kết quả</span>
+              <span>trong số {pagination.length > 0 ? pagination.length : 0} kết quả</span>
             </div>
             <Pagination
               count={
@@ -59,7 +60,7 @@ const TableFooterContent = () => {
               }
               page={pagination.page + 1}
               onChange={handleChangePage}
-              className={classes.paginationCustom}
+              className={classes.paginationCustom}  
             />
           </div>
         </TableCell>
