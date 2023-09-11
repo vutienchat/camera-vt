@@ -250,8 +250,6 @@ const ListTrafficModal = ({
 
   const onPlay = () => videoRef.current.play();
 
-  console.log("selectItem", [selectedItem]);
-
   return (
     <Modal open={isOpen} onClose={handleClose} className={classes.root}>
       <FormProvider {...methods}>

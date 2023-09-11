@@ -1246,39 +1246,108 @@
   ],
   "cameraList": [
     {
-      "id": "111111",
-      "name": "camera 1",
+      "stt": 1,
+      "cameraName": "camera 1",
       "status": "Online",
       "cameraStorage": "On",
-      "message": "Some thing funny will happen right now!"
+      "message": "Some thing funny will happen right now!",
+      "id": "1"
     },
     {
-      "id": "111112",
-      "name": "camera 2",
+      "stt": 2,
+      "cameraName": "camera 2",
       "status": "Offline",
-      "cameraStorage": "off",
-      "message": " Nothing will happen right now!"
+      "cameraStorage": "Off",
+      "message": " Nothing will happen right now!",
+      "id": "2"
     },
     {
-      "id": "111113",
-      "name": "camera 3",
+      "stt": 3,
+      "cameraName": "camera 3",
       "status": "Online",
       "cameraStorage": "On",
-      "message": "Some violations will happen right now!"
+      "message": "Some violations will happen right now!",
+      "id": "3"
     },
     {
-      "id": "111114",
-      "name": "camera 4",
+      "stt": 4,
+      "cameraName": "camera 4",
       "status": "Online",
       "cameraStorage": "On",
-      "message": "Running!"
+      "message": "Running!",
+      "id": "4"
     },
     {
-      "id": "111115",
-      "name": "camera 5",
-      "status": "Online",
+      "stt": 5,
+      "cameraName": "camera 5",
+      "status": "Offline",
       "cameraStorage": "Error",
-      "message": "Camera error"
+      "message": "Camera error",
+      "id": "5"
+    },
+    {
+      "stt": 6,
+      "cameraName": "camera 6",
+      "status": "Offline",
+      "cameraStorage": "Error",
+      "message": "Camera error",
+      "id": "6"
+    },
+    {
+      "stt": 7,
+      "cameraName": "camera 7",
+      "status": "Offline",
+      "cameraStorage": "Error",
+      "message": "Camera error",
+      "id": "7"
+    },
+    {
+      "stt": 8,
+      "cameraName": "camera 8",
+      "status": "Offline",
+      "cameraStorage": "Off",
+      "message": "Camera off",
+      "id": "8"
+    },
+    {
+      "stt": 9,
+      "cameraName": "camera 9",
+      "status": "Offline",
+      "cameraStorage": "On",
+      "message": "Camera on",
+      "id": "9"
+    },
+    {
+      "stt": 10,
+      "cameraName": "camera 10",
+      "status": "Online",
+      "cameraStorage": "On",
+      "message": "Camera on",
+      "id": "10"
+    },
+    {
+      "stt": 11,
+      "cameraName": "camera 11",
+      "status": "Online",
+      "cameraStorage": "On",
+      "message": "Camera on",
+      "id": "11"
+    },
+    {
+      "stt": 12,
+      "cameraName": "camera 12",
+      "status": "Online",
+      "cameraStorage": "On",
+      "message": "Camera on",
+      "id": "12"
+    },
+    {
+      "stt": 13,
+      "cameraName": "camera 13",
+      "status": "Online",
+      "cameraStorage": "On",
+      "message": "Camera on",
+      "id": "13"
     }
   ]
 }

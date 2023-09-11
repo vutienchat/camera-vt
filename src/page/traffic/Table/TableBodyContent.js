@@ -22,7 +22,6 @@ const TableBodyContent = () => {
     checkedAble,
   } = useContext(TableCommonContext);
   const classes = useTableBodyStyle();
-
   const handleCheckItem = (event) => {
     const val = JSON.parse(event.target.value);
 
@@ -91,7 +90,6 @@ const TableBodyContent = () => {
             )}
             {tableHeader.map((head) => {
               const { field, component, customStyles, width } = head;
-
               return (
                 <TableCell
                   key={field}

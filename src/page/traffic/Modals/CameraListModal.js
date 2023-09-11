@@ -1,19 +1,20 @@
 import { Box, Grid, makeStyles } from "@material-ui/core";
-
-import BaseFormGroup from "../component/BaseFormGroup";
-import SelectForm from "../../../component/SelectForm";
-import { active, cameraStorageData, serverArr } from "../../../utils/traffic";
+import { cameraStorageData, serverArr } from "../../../utils/traffic";
 import { FormProvider, useForm } from "react-hook-form";
 import BaseSearchForm from "../component/BaseSearchForm";
 import BaseButton from "../component/BaseButton";
 import SelectMultiple from "../../../component/SelectMultiple";
 import TableContent from "../Table/TableContent";
-import { useState } from "react";
-import useTrafficData from "../../../hooks/api/useTrafficData";
+import { useContext, useState } from "react";
+import useCameraData from "../../../hooks/api/useCameraData";
+import  { TrafficContext } from "../TrafficContent";
+import { useMemo } from "react";
 
 const CameraListModal = () => {
   const methods = useForm({});
-  // const { data: cameraList } = useTrafficData();
+  const { data: cameraList } = useCameraData();
+  const [checkedItemList, setCheckedItemList] = useState([]);
+
   const {
     register,
     control,
@@ -24,6 +25,22 @@ const CameraListModal = () => {
     rowPerPage: 9,
     length: 0,
   });
+  const handleChangePagination = (pag) => {
+    setPagination({
+      page: pag.page,
+      rowPerPage: pag.rowPerPage,
+    });
+  };
+
+  const cameraDataShow = useMemo(()=>{
+    if(!cameraList) return [];
+    return {
+      data: cameraList.slice(
+        pagination.page * (pagination.rowPerPage + 1),
+        pagination.page * (pagination.rowPerPage + 1) + pagination.rowPerPage
+      ),
+    }
+  }, [cameraList,  pagination])
   const classes = style();
   return (
     <Box className={classes.root}>
@@ -54,9 +71,11 @@ const CameraListModal = () => {
             pagination={{
               page: pagination.page,
               rowPerPage: pagination.rowPerPage,
-              length: 10,
+              length: cameraList ? cameraList.length : 0,
             }}
-            // tableData={cameraList}
+            tableData={cameraDataShow.data}
+            checkedItems={checkedItemList}
+            handleChangePagination={handleChangePagination}
           />
         </Box>
       </FormProvider>

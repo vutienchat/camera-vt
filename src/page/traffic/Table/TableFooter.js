@@ -28,12 +28,12 @@ const TableFooterContent = () => {
     });
   };
 
-  // console.log("count", pagination.length, pagination.rowPerPage);
+  const count = Number(pagination.length) / Number(pagination.rowPerPage + 1);
   return (
     <TableFooter>
       <TableRow>
         <TableCell
-          colSpan={4}
+          colSpan={6}
           style={{ borderBottom: "none", paddingRight: 0, paddingLeft: 0 }}
         >
           <div className={classes.root}>
@@ -50,17 +50,22 @@ const TableFooterContent = () => {
                   <option value={50}>50</option>
                 </NativeSelect>
               </FormControl>{" "}
-              <span>trong số {pagination.length > 0 ? pagination.length : 0} kết quả</span>
+              <span>
+                trong số {pagination.length > 0 ? pagination.length : 0} kết quả
+              </span>
             </div>
             <Pagination
+              // count={
+              //   Math.round(
+              //     Number(pagination.length) / Number(pagination.rowPerPage + 1)
+              //   ) + 1
+              // }
               count={
-                Math.round(
-                  Number(pagination.length) / Number(pagination.rowPerPage + 1)
-                ) + 1
+                count <= 0.9 ? Math.floor(count) + 1 : Math.round(count) + 1
               }
               page={pagination.page + 1}
               onChange={handleChangePage}
-              className={classes.paginationCustom}  
+              className={classes.paginationCustom}
             />
           </div>
         </TableCell>
@@ -70,7 +75,11 @@ const TableFooterContent = () => {
 };
 
 const useTableFooterStyle = makeStyles({
-  root: { display: "flex" },
+  root: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
   leftContent: {
     marginRight: "auto",
     color: "#8d8e91",

@@ -1,5 +1,8 @@
 import ViolationInfo from "../page/traffic/component/ItemTable/ViolationInfo";
 import ViolationImageInfo from "../page/traffic/component/ItemTable/ViolationImageInfo";
+import CameraStatus from "../page/traffic/component/ItemTable/CameraStatus";
+import CameraStorage from "../page/traffic/component/ItemTable/CameraStorage";
+import CameraAction from "../page/traffic/component/ItemTable/CameraAction";
 export const SPECIAL_CHARACTER_TEXT = /[-!$%^&*()_+|~=`{}\[\]:\/;<>?,.@#0-9]/;
 export const SPECIAL_CHARACTER_NUMBER =
   /[-!$%^&*()_+|~=`{}\[\]:\/;<>?@#a-zA-ZÀ-ỹ\s]/;
@@ -54,6 +57,71 @@ export const settingArr = [
     label: "Email",
     key: "email",
     type: "text",
+  },
+];
+
+export const editServerArr = [
+  {
+    label: "Server Name",
+    key: "serverName",
+    type: "text",
+    maxLength: 50,
+    specialCharater: SPECIAL_CHARACTER_TEXT,
+  },
+  {
+    label: "Mac Address",
+    key: "macAddress",
+    type: "text",
+  },
+  {
+    label: "ID Address",
+    key: "idAddress",
+    type: "text",
+  },
+  {
+    label: "Public Adress",
+    key: "publicAddress",
+    type: "text",
+  },
+  {
+    label: "Server Location",
+    key: "serverLocation",
+    type: "text",
+  },
+  {
+    label: "CPU cores",
+    key: "cpu",
+    type: "text",
+    pattern: /\d+/,
+    checkSpecialCharater: SPECIAL_CHARACTER_NUMBER,
+  },
+  {
+    label: "RAM ",
+    key: "ram",
+    type: "text",
+    pattern: /\d+/,
+    checkSpecialCharater: SPECIAL_CHARACTER_NUMBER,
+  },
+  {
+    label: "HDD",
+    key: "hdd",
+    type: "text",
+    pattern: /\d+/,
+    checkSpecialCharater: SPECIAL_CHARACTER_NUMBER,
+  },
+  {
+    label: "Camera",
+    key: "camera",
+    type: "text",
+    pattern: /\d+/,
+    checkSpecialCharater: SPECIAL_CHARACTER_NUMBER,
+  },
+  {
+    label: "Camera Limited",
+    key: "cameraLimited",
+    type: "text",
+    pattern: /\d+/,
+    checkSpecialCharater: SPECIAL_CHARACTER_NUMBER,
   },
 ];
 
@@ -245,29 +313,38 @@ export const columnsTrafficData = [
 export const cameraStorageData = [
   {
     field: "stt",
-    name: "#"
+    name: "No.",
   },
   {
-    field: "camera name",
-    name: "Camera Name"
+    field: "cameraName",
+    name: "Camera name",
   },
   {
     field: "status",
-    name: "Status"
+    name: "Status",
+    component: (data) => {
+      return <CameraStatus data={data} />;
+    },
   },
   {
-    field: "camera",
-    name: "Camera Storage"
+    field: "cameraStorage",
+    name: "Camera Storage",
+    component: (data) => {
+      return <CameraStorage data={data} />;
+    },
   },
   {
     field: "message",
-    name: "Camera Error Message"
+    name: "Camera Error Message",
   },
   {
     field: "action",
-    name: "Action"
+    name: "Action",
+    component: () => {
+      return <CameraAction />;
+    },
   },
-]
+];
 
 export const typeErrEvent = {
   1: "Không chấp hành hiệu lệnh của tin hiệu giao thông",

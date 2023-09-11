@@ -2,10 +2,8 @@ import React, { useContext, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { Box, InputAdornment, TextField, makeStyles } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
 
 import { SettingIcon } from "../Icons";
-import SettingModal from "../Modals/SettingModal";
 import { TrafficContext } from "../TrafficContent";
 import {
   UnViolationPendingApproval,
@@ -14,24 +12,16 @@ import {
 import NotificationShowing from "./TabPaneFilter/NotificationShowing";
 
 import { QUERY_KEYS } from "../../../utils/keys";
-import CustomModal from "../component/CustomModal";
-import { SearchIcon } from "../../../common/icons/SearchIcon";
 import { ReloadIcon } from "../../../common/icons/ReloadIcon";
 import BaseButton from "../component/BaseButton";
 import BaseSearchForm from "../component/BaseSearchForm";
-import { Cloud } from "@material-ui/icons";
-import CameraListModal from "../Modals/CameraListModal";
+import { Cloud, Edit } from "@material-ui/icons";
 
 const TableFilter = () => {
   const queryClient = useQueryClient();
   const classes = useTableFilterStyle();
-  const {
-    selectTabPane,
-    isOpenSettingModal,
-    setIsOpenSettingModal,
-    isOpenServerModal,
-    setIsOpentServerModal,
-  } = useContext(TrafficContext);
+  const { selectTabPane, setIsOpenSettingModal, setIsOpentCameraModal, setIsOpenEditModal } =
+    useContext(TrafficContext);
 
   const handleReloadDataTable = () => {
     queryClient.invalidateQueries([QUERY_KEYS.TRAFFIC_LIST]);
@@ -56,28 +46,12 @@ const TableFilter = () => {
       <Box className={classes.icon} onClick={() => setIsOpenSettingModal(true)}>
         <SettingIcon width={24} height={24} color="#858585" />
       </Box>
-      <Box className={classes.icon} onClick={() => setIsOpentServerModal(true)}>
+      <Box className={classes.icon} onClick={() => setIsOpentCameraModal(true)}>
         <Cloud width={24} height={24} color="#858585" />
       </Box>
-      {isOpenSettingModal && (
-        <CustomModal
-          isOpen={isOpenSettingModal}
-          handleClose={() => setIsOpenSettingModal(false)}
-          title="Thông tin tuỳ chỉnh"
-        >
-          <SettingModal handleCancel={() => setIsOpenSettingModal(false)} />
-        </CustomModal>
-      )}
-      {isOpenServerModal && (
-        <CustomModal
-        isOpen={isOpenServerModal}
-        handleClose={() => setIsOpentServerModal(false)}
-        title="Server 001"
-        >
-          <CameraListModal handleClose={() => setIsOpentServerModal(false)}/>
-        </CustomModal>
-      )
-      }
+      <Box className={classes.icon} onClick={() => setIsOpenEditModal(true)}>
+        <Edit width={24} height={24} color="#858585" />
+      </Box>
     </Box>
   );
 };
