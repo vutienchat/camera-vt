@@ -1,13 +1,13 @@
 import { Box, Grid, makeStyles } from "@material-ui/core";
 import { cameraStorageData, serverArr } from "../../../utils/traffic";
 import { FormProvider, useForm } from "react-hook-form";
-import BaseSearchForm from "../component/BaseSearchForm";
-import BaseButton from "../component/BaseButton";
+import BaseSearchForm from "../../traffic/component/BaseSearchForm";
+import BaseButton from "../../traffic/component/BaseButton";
 import SelectMultiple from "../../../component/SelectMultiple";
-import TableContent from "../Table/TableContent";
+import TableContent from "../../traffic/Table/TableContent";
 import { useContext, useState } from "react";
 import useCameraData from "../../../hooks/api/useCameraData";
-import  { TrafficContext } from "../TrafficContent";
+import  { TrafficContext } from "../../traffic/TrafficContent";
 import { useMemo } from "react";
 
 const CameraListModal = () => {

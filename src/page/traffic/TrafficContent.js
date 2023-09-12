@@ -34,9 +34,6 @@ import DispatchNote from "./PrintFiles/DispatchNotePdf/DispatchNotePdf";
 import ViolationNotificationPdf from "./PrintFiles/ViolationNotificationPdf/ViolationNotificationPdf";
 import VehicleImagePdf from "./PrintFiles/VehicleImagePdf";
 import useRefPrint from "./hooks/useRefPrints";
-import CameraListModal from "./Modals/CameraListModal";
-import EditServerRecordModal from "./Modals/EditServerRecordModal";
-
 export const TrafficContext = createContext({});
 
 const TrafficContent = () => {
@@ -183,8 +180,6 @@ const TrafficContent = () => {
   };
   const [selectTabPane, setSelectTabPane] = useState(status[0].value);
   const [isOpenSettingModal, setIsOpenSettingModal] = useState(false);
-  const [isOpenCameraModal, setIsOpentCameraModal] = useState(false);
-  const [isOpenEditModal, setIsOpenEditModal] = useState(false);
 
   const [pagination, setPagination] = useState({
     page: 0,
@@ -208,8 +203,7 @@ const TrafficContent = () => {
     modelSetting,
     selectTabPane,
     isOpenSettingModal,
-    isOpenCameraModal,
-    isOpenEditModal,
+   
 
     setParamTrafficSearch,
     setCheckedItemList,
@@ -219,8 +213,7 @@ const TrafficContent = () => {
     handleUpdateDateTraffic,
     handleSetOpenOpenModalWarningSetting,
     setIsOpenSettingModal,
-    setIsOpentCameraModal,
-    setIsOpenEditModal,
+
 
     handlePrintDispatch,
     handlePrintNoti,
@@ -386,26 +379,6 @@ const TrafficContent = () => {
             title="Thông tin tuỳ chỉnh"
           >
             <SettingModal handleCancel={() => setIsOpenSettingModal(false)} />
-          </CustomModal>
-        )}
-        {isOpenCameraModal && (
-          <CustomModal
-            isOpen={isOpenCameraModal}
-            handleClose={() => setIsOpentCameraModal(false)}
-            title="Server 001"
-          >
-            <CameraListModal handleClose={() => setIsOpentCameraModal(false)} />
-          </CustomModal>
-        )}
-        {isOpenEditModal && (
-          <CustomModal
-            isOpen={isOpenEditModal}
-            handleClose={() => setIsOpenEditModal(false)}
-            title="Edit Recording Server"
-          >
-            <EditServerRecordModal
-              handleClose={() => setIsOpenEditModal(false)}
-            />
           </CustomModal>
         )}
         <div style={{ display: "none" }}>
