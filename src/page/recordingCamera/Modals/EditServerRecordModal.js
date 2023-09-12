@@ -1,10 +1,10 @@
 import { Box, Divider, Grid, Typography, makeStyles } from "@material-ui/core";
-import BaseButton from "../component/BaseButton";
+import BaseButton from "../../traffic/component/BaseButton";
 import { editServerArr } from "../../../utils/traffic";
 import { FormProvider, useForm } from "react-hook-form";
-import BaseInputForm from "../component/BaseInputForm";
-import BaseFormGroup from "../component/BaseFormGroup";
-import yup from "../javacript/yupGlobal";
+import BaseInputForm from "../../traffic/component/BaseInputForm";
+import BaseFormGroup from "../../traffic/component/BaseFormGroup";
+import yup from "../../traffic/javacript/yupGlobal";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 const schema = yup.object().shape({
@@ -33,10 +33,11 @@ const EditServerRecordModal = () => {
     <Box className={classes.root}>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit()}>
-          <Grid style={{marginTop: 5, marginBottom: 5}} container spacing={6}>
+          <Grid style={{ marginTop: 5, marginBottom: 5 }} container spacing={6}>
             <Grid item md={6}>
               {editServerArr.slice(0, 5).map((item) => (
                 <BaseFormGroup
+                  isEditRecordModal={true}
                   label={item.label}
                   isRequired={true}
                   error={errors[item.key]}
@@ -62,9 +63,9 @@ const EditServerRecordModal = () => {
                 if (item.key === "ram" || item.key === "hdd") {
                   return (
                     <BaseFormGroup
+                      showErrorMessage
+                      isEditRecordModal={true}
                       label={item.label}
-                      isRequired={true}
-                      error={errors[item.key]}
                       key={item.key}
                       widthCustom="auto"
                       component={
@@ -80,10 +81,10 @@ const EditServerRecordModal = () => {
                 } else {
                   return (
                     <BaseFormGroup
+                      showErrorMessage
+                      isEditRecordModal={true}
                       key={item.key}
                       label={item.label}
-                      isRequired={true}
-                      error={errors[item.key]}
                       widthCustom="auto"
                       component={
                         <BaseInputForm
@@ -127,7 +128,7 @@ const EditServerRecordModal = () => {
 
 const styles = makeStyles({
   root: {
-    minWidth: 800,
+    width: 800,
   },
   label: { marginRight: 24 },
   columnWrapper: {

@@ -6,6 +6,7 @@ import { Role } from "../page/mangament/Role";
 import { User } from "../page/mangament/User";
 import MasterMap from "../page/masterMap/MasterMap";
 import TrafficContent from "../page/traffic/TrafficContent";
+import RecordingCamera from "../page/recordingCamera";
 
 export const routes = [
   { path: "/customer", element: Customer },
@@ -17,4 +18,5 @@ export const routes = [
   { path: "/masterMap", element: MasterMap },
   { path: "/traffic", element: TrafficContent },
   { path: "/pdf", element: FilePdf },
+  { path: "/recording-camera", element: RecordingCamera },
 ];

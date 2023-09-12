@@ -10,6 +10,7 @@ const BaseFormGroup = ({
   showErrorMessage,
   widthCustom,
   customStyle,
+  isEditRecordModal
 }) => {
   return (
     <Grid
@@ -50,9 +51,9 @@ const BaseFormGroup = ({
       </Box>
       <React.Fragment>
         <Box style={{ width: "100%" }}>
-          <Box style={{ width: widthCustom || "500px", marginLeft: "auto" }}>
-            <Typography color="error" style={{ marginTop: "5px" }}>
-              {showErrorMessage && error ? error.message : ""}
+          <Box style={{ width: widthCustom || "500px", marginLeft: isEditRecordModal? 153: "auto" }}>
+            <Typography color="error" style={{ marginTop: "5px", fontSize: 14 }}>
+              {showErrorMessage && error ? error.message : " "}
             </Typography>
           </Box>
         </Box>

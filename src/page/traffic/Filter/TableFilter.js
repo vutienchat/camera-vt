@@ -1,7 +1,7 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 
-import { Box, InputAdornment, TextField, makeStyles } from "@material-ui/core";
+import { Box, makeStyles } from "@material-ui/core";
 
 import { SettingIcon } from "../Icons";
 import { TrafficContext } from "../TrafficContent";
@@ -15,13 +15,11 @@ import { QUERY_KEYS } from "../../../utils/keys";
 import { ReloadIcon } from "../../../common/icons/ReloadIcon";
 import BaseButton from "../component/BaseButton";
 import BaseSearchForm from "../component/BaseSearchForm";
-import { Cloud, Edit } from "@material-ui/icons";
 
 const TableFilter = () => {
   const queryClient = useQueryClient();
   const classes = useTableFilterStyle();
-  const { selectTabPane, setIsOpenSettingModal, setIsOpentCameraModal, setIsOpenEditModal } =
-    useContext(TrafficContext);
+  const { selectTabPane, setIsOpenSettingModal } = useContext(TrafficContext);
 
   const handleReloadDataTable = () => {
     queryClient.invalidateQueries([QUERY_KEYS.TRAFFIC_LIST]);
@@ -45,12 +43,6 @@ const TableFilter = () => {
       </Box>
       <Box className={classes.icon} onClick={() => setIsOpenSettingModal(true)}>
         <SettingIcon width={24} height={24} color="#858585" />
-      </Box>
-      <Box className={classes.icon} onClick={() => setIsOpentCameraModal(true)}>
-        <Cloud width={24} height={24} color="#858585" />
-      </Box>
-      <Box className={classes.icon} onClick={() => setIsOpenEditModal(true)}>
-        <Edit width={24} height={24} color="#858585" />
       </Box>
     </Box>
   );
