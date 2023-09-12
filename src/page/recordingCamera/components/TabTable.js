@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Box, Typography } from "@material-ui/core";
 import { dataHead, typeState } from "../@type";
@@ -45,19 +45,13 @@ const useStyles = makeStyles({
   },
 });
 
-const data = Array.from(Array(10)).map((_, index) => ({
-  id: index + 1,
-  name: "service 1",
-  state: index % 2 !== 0 ? "Normal" : "Error",
-  camera: "100/200",
-  on: Math.floor(Math.random() * 10) + 200,
-  off: Math.floor(Math.random() * 5) + 30,
-  error: Math.floor(Math.random() * 5),
-  errorMes: "hjagsdfkgasdfhasdlfsadlkl;fl;aksd",
-}));
-
-export default function TabTable() {
+export default function TabTable({ data }) {
   const classes = useStyles();
+  const [optionPage, setOptionPage] = useState({
+    page: 1,
+    size: 10,
+    total: data.length,
+  });
 
   const handleCopy = (text) => {
     navigator.clipboard.writeText(text);
@@ -76,76 +70,87 @@ export default function TabTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((row, index) => (
-            <TableRow key={index}>
-              <TableCell component="th" scope="row" size="small" align="left">
-                {row.id}
-              </TableCell>
-              <TableCell
-                component="th"
-                scope="row"
-                align="left"
-                size="medium"
-                // padding="none"
-              >
-                {row.name}
-              </TableCell>
-              <TableCell align="left" size="small">
-                <Box className={classes.Cell}>
-                  <Box
-                    style={{
-                      width: 12,
-                      height: 12,
-                      borderRadius: "50%",
-                      backgroundColor: typeState[row.state].color,
-                      marginRight: 8,
-                    }}
-                  ></Box>
-                  <Typography
-                    style={{
-                      width: 55,
-                    }}
-                  >
-                    {row.state}
-                  </Typography>
-                </Box>
-              </TableCell>
-              <TableCell align="left">{row.camera}</TableCell>
-              <TableCell align="left">
-                <Box className={classes.Cell}>
-                  <Box
-                    className={classes.boxState}
-                    style={{ background: typeState["On"].color }}
-                  >
-                    {row.on}
+          {data
+            .slice(
+              (optionPage.page - 1) * optionPage.size,
+              optionPage.page * optionPage.size
+            )
+            .map((row, index) => (
+              <TableRow key={index}>
+                <TableCell component="th" scope="row" size="small" align="left">
+                  {row.id}
+                </TableCell>
+                <TableCell
+                  component="th"
+                  scope="row"
+                  align="left"
+                  size="medium"
+                  // padding="none"
+                >
+                  {row.name}
+                </TableCell>
+                <TableCell align="left" size="small">
+                  <Box className={classes.Cell}>
+                    <Box
+                      style={{
+                        width: 12,
+                        height: 12,
+                        borderRadius: "50%",
+                        backgroundColor: typeState[row.state].color,
+                        marginRight: 8,
+                      }}
+                    ></Box>
+                    <Typography
+                      style={{
+                        width: 55,
+                      }}
+                    >
+                      {row.state}
+                    </Typography>
                   </Box>
-                  <Box
-                    className={classes.boxState}
-                    style={{ background: typeState["Error"].color }}
-                  >
-                    {row.error}
+                </TableCell>
+                <TableCell align="left">{row.camera}</TableCell>
+                <TableCell align="left">
+                  <Box className={classes.Cell}>
+                    <Box
+                      className={classes.boxState}
+                      style={{
+                        background: typeState["On"].color,
+                        color: "#fff",
+                      }}
+                    >
+                      {row.on}
+                    </Box>
+                    <Box
+                      className={classes.boxState}
+                      style={{
+                        background: typeState["Error"].color,
+                        color: "#fff",
+                      }}
+                    >
+                      {row.error}
+                    </Box>
+                    <Box
+                      className={classes.boxState}
+                      style={{ background: typeState["Off"].color }}
+                    >
+                      {row.off}
+                    </Box>
                   </Box>
-                  <Box
-                    className={classes.boxState}
-                    style={{ background: typeState["Off"].color }}
-                  >
-                    {row.off}
+                </TableCell>
+                <TableCell align="left">{row.errorMes}</TableCell>
+                <TableCell align="left" style={{ width: 100 }}>
+                  <Box className={classes.Cell}>
+                    <FileCopyIcon
+                      onClick={() => handleCopy(row.errorMes || "")}
+                      className={classes.Icon}
+                    />
+                    <InfoIcon className={classes.Icon} />
+                    <EditIcon className={classes.Icon} />
                   </Box>
-                </Box>
-              </TableCell>
-              <TableCell align="left">{row.errorMes}</TableCell>
-              <TableCell align="left" style={{ width: 100 }}>
-                <Box className={classes.Cell}>
-                  <FileCopyIcon
-                    onClick={() => handleCopy(row.errorMes || "")}
-                    className={classes.Icon}
-                  />
-                  <InfoIcon className={classes.Icon} />
-                  <EditIcon className={classes.Icon} />
-                </Box>
-              </TableCell>
-            </TableRow>
-          ))}
+                </TableCell>
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
     </TableContainer>

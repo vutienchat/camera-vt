@@ -1,34 +1,3 @@
-export const dataBarCam = {
-  On: {
-    key: "On",
-    color: "#4e8ff7",
-    active: true,
-  },
-  Error: {
-    key: "Error",
-    color: "#f19d6c",
-    active: true,
-  },
-  Off: {
-    key: "Off",
-    color: "#d3d3d3",
-    active: true,
-  },
-};
-
-export const dataBar = {
-  Normal: {
-    key: "Normal",
-    color: "#4e8ff7",
-    active: true,
-  },
-  Error: {
-    key: "Error",
-    color: "#d3d3d3",
-    active: true,
-  },
-};
-
 export const dataRecordState = [
   { name: "Normal", value: 29 },
   { name: "Error", value: 1 },
@@ -70,5 +39,23 @@ export const typeState = {
   Off: {
     label: "Off",
     color: "#d3d3d3",
+  },
+};
+
+export const dataBarCam = {
+  on: {
+    key: "on",
+    color: "#4e8ff7",
+    active: true,
+  },
+  error: {
+    key: "error",
+    color: "#f19d6c",
+    active: true,
+  },
+  off: {
+    key: "off",
+    color: "#d3d3d3",
+    active: true,
   },
 };

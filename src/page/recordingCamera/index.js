@@ -22,17 +22,15 @@ import {
 import SearchIcon from "@material-ui/icons/Search";
 import _ from "lodash";
 
-// const dataRecording = Array.from(Array(15)).map((_, idx) => ({
-//   name: `Service ${idx}`,
-//   Normal: Math.floor(Math.random() * 5000) + 1000,
-//   Error: Math.floor(Math.random() * 5000) + 1000,
-// }));
-
-const dataCam = Array.from(Array(15)).map((_, idx) => ({
-  name: `Service ${idx}`,
-  On: Math.floor(Math.random() * 5000) + 1000,
-  Error: Math.floor(Math.random() * 5000) + 1000,
-  Off: Math.floor(Math.random() * 5000) + 1000,
+const data = Array.from(Array(14)).map((_, index) => ({
+  id: index + 1,
+  name: `service ${index}`,
+  state: index % 2 !== 0 ? "Normal" : "Error",
+  camera: "100/200",
+  on: Math.floor(Math.random() * 10) + 200,
+  off: Math.floor(Math.random() * 5) + 30,
+  error: Math.floor(Math.random() * 300),
+  errorMes: "hjagsdfkgasdfhasdlfsadlkl;fl;aksd",
 }));
 
 const RecordingCamera = () => {
@@ -128,13 +126,13 @@ const RecordingCamera = () => {
             {!isViewTable ? (
               <>
                 <StackedBarChartCustom
-                  data={dataCam}
+                  data={data}
                   listBar={Object.values(camDataBar).reverse()}
                   handleHideData={handleHideData}
                 />
               </>
             ) : (
-              <TabTable />
+              <TabTable data={data} />
             )}
           </Paper>
         </Box>

@@ -29,6 +29,7 @@ const LegendContent = ({ data, handleHideData }) => {
             marginRight: 80,
             cursor: "pointer",
             textDecoration: item.active ? "" : "line-through",
+            textTransform: "capitalize",
           }}
           onClick={() => handleHideData(item.key)}
           key={item.key}
