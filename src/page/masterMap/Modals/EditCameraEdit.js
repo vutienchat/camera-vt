@@ -17,6 +17,7 @@ import { SearchIcon } from "../../../common/icons/SearchIcon";
 import useDebounce from "../../../hooks/useDebounce";
 import { MasterMapContext } from "../MasterMap";
 import { editMarker } from "../../../utils/api/map";
+import { useRef } from "react";
 
 const VIET_NAM_BOUNDS = {
   north: 26.625282609530778,
@@ -38,6 +39,8 @@ const EditCameraMapModal = ({ place, handleClose, isOpenEditModal }) => {
   const { setPlaces, markerList } = useContext(MasterMapContext);
 
   const classes = useStylesTableBodyGroup();
+
+  const mapRef = useRef();
 
   const [isPopupOpen, setIsPopupOpen] = useState(true);
   const [searchValue, setSearchValue] = useState("");
@@ -182,7 +185,8 @@ const EditCameraMapModal = ({ place, handleClose, isOpenEditModal }) => {
           Edit Location
         </Typography>
         <Typography style={{ fontWeight: 600 }}>{place.camName}</Typography>
-        <Box style={{ width: "100%", height: 200 }}>
+
+        <div ref={mapRef} style={{ width: "100%", height: 200 }}>
           <GoogleMap
             zoom={defaultProps.zoom}
             center={{
@@ -228,7 +232,7 @@ const EditCameraMapModal = ({ place, handleClose, isOpenEditModal }) => {
               </InfoWindow>
             </Marker>
           </GoogleMap>
-        </Box>
+        </div>
         <Box mt="20px">
           <TextField
             id="input-with-icon-textfield"

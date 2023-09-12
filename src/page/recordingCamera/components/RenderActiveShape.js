@@ -14,6 +14,8 @@ const RenderActiveShape = (props) => {
     payload,
     percent,
     value,
+    total,
+    type,
   } = props;
   const sin = Math.sin(-RADIAN * midAngle);
   const cos = Math.cos(-RADIAN * midAngle);
@@ -27,8 +29,29 @@ const RenderActiveShape = (props) => {
 
   return (
     <g style={{ zIndex: 1 }}>
-      <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
-        {payload.name}
+      <text
+        x={cx}
+        y={cy - 20}
+        dy={8}
+        textAnchor="middle"
+        style={{
+          fontSize: 16,
+          fontWeight: "bold",
+        }}
+      >
+        {type || ""}
+      </text>
+      <text
+        x={cx}
+        y={cy + 15}
+        dy={8}
+        textAnchor="middle"
+        style={{
+          fontSize: 32,
+          fontWeight: "bold",
+        }}
+      >
+        {total || ""}
       </text>
       <Sector
         cx={cx}

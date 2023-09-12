@@ -30,7 +30,7 @@ const data = Array.from(Array(14)).map((_, index) => ({
   on: Math.floor(Math.random() * 10) + 200,
   off: Math.floor(Math.random() * 5) + 30,
   error: Math.floor(Math.random() * 300),
-  errorMes: "hjagsdfkgasdfhasdlfsadlkl;fl;aksd",
+  errorMes: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed …",
 }));
 
 const RecordingCamera = () => {
@@ -65,11 +65,15 @@ const RecordingCamera = () => {
             label={"Service Recording State"}
             data={dataRecordState}
             COLORS={colorsRecordState}
+            type={" Service"}
+            total={data.length}
           />
           <BoxCircleChar
             label={"Camera Storage"}
             data={dataCameraStorage}
             COLORS={colorsCameraStorage}
+            type={"Cameras"}
+            total={data.length}
           />
         </Box>
         <Box sx={{ display: "flex", justifyContent: "center" }}>

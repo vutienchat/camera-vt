@@ -1,3 +1,5 @@
+
+
 export const initalColumns = [
   { key: "id", label: "Id", maxWidth: 100, minWidth: 100, textAlign: "center" },
   {
@@ -296,3 +298,5 @@ export const handleZoomVideo = (e) => {
 export const handleCloseZoom = () => {
   exitFullscreen();
 };
+
+

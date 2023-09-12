@@ -24,9 +24,10 @@ const MarkerItem = ({ place, handleOpenEditModal }) => {
           lng: place.lng,
         }}
         icon={{
-          url: require(place.status === "ONLINE"
-            ? "../../../asset/camera-online.png"
-            : "../../../asset/camera-offline.png"),
+          url:
+            place.status === "ONLINE"
+              ? "/camera-online.png"
+              : "/camera-offline.png",
         }}
         onClick={handleOnClick}
       >

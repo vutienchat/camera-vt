@@ -11,7 +11,7 @@ import PopperAddress from "../../group/PopperAddress";
 import { OpenDropIcon } from "../../../common/icons/OpenDropIcon";
 import { DropdownIcon } from "../../../common/icons/DropdownIcon";
 
-export const AddressSelectTab = () => {
+export const AddressSelectTab = ({ disabled }) => {
   const classes = useStylesAddressTab();
   const [openPopper, setOpenPopper] = useState(false);
   const [textSearch, setTextSearch] = useState("");
@@ -57,7 +57,7 @@ export const AddressSelectTab = () => {
         setTextSearch("");
       }}
     >
-      <Box style={{ position: "relative" }}>
+      <Box style={{ position: "relative", width: "100%" }}>
         <Button
           onClick={handleClick}
           className={classes.btnDropdown}
@@ -68,8 +68,14 @@ export const AddressSelectTab = () => {
               <DropdownIcon color="#939393" />
             )
           }
+          disabled={disabled}
+          style={{
+            width: "100%",
+            padding: "8px",
+            background: disabled ? "#ebebeb" : "transparent",
+          }}
         >
-          <Typography>
+          <Typography style={{ color: disabled ? "#939393" : "#000" }}>
             {!(citySelected && districtSelected && wardSelected) ? (
               "Address"
             ) : (
@@ -120,7 +126,7 @@ export const useStylesAddressTab = makeStyles({
     background: "#fff",
     border: "1px solid #939393",
     display: "flex",
-    height: "40px",
+    height: "35px",
     justifyContent: "space-between",
     alignItems: "center",
     borderRadius: "4px",

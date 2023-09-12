@@ -18,14 +18,10 @@ const useStyles = makeStyles({
   },
 });
 
-const BoxCircleChar = ({ label, data, COLORS }) => {
+const BoxCircleChar = ({ label, data, COLORS, total, type }) => {
   const classesPaper = useStylesPaper();
   const classes = useStyles();
-  const [activeIndex, setActiveIndex] = useState(0);
 
-  const onPieEnter = (_, index) => {
-    setActiveIndex(index);
-  };
   return (
     <Box className={classesPaper.boxContainer}>
       <Paper style={{ height: "100%" }}>
@@ -35,8 +31,8 @@ const BoxCircleChar = ({ label, data, COLORS }) => {
             <ResponsiveContainer width="100%" height="100%">
               <PieChart width={400} height={400}>
                 <Pie
-                  activeIndex={activeIndex}
-                  activeShape={<RenderActiveShape />}
+                  activeIndex={data.map((_, index) => index)}
+                  activeShape={<RenderActiveShape total={total} type={type} />}
                   data={data}
                   cx="50%"
                   cy="50%"
@@ -44,7 +40,6 @@ const BoxCircleChar = ({ label, data, COLORS }) => {
                   outerRadius={90}
                   fill="#8884d8"
                   dataKey="value"
-                  onMouseEnter={onPieEnter}
                 >
                   {data.map((entry, index) => (
                     <Cell

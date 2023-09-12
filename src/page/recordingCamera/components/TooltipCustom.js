@@ -59,7 +59,9 @@ const TooltipCustom = ({ label, des, active, payload }) => {
                 className={classes.fillColor}
                 style={{ background: item.fill }}
               ></Box>
-              <Typography>{item.dataKey}: </Typography>
+              <Typography style={{ textTransform: "capitalize" }}>
+                {item.dataKey}:{" "}
+              </Typography>
               <Typography> {item.value}</Typography>
             </Box>
           </Box>

@@ -2,4 +2,6 @@ export const QUERY_KEYS = {
   GROUP_LIST: "group_list",
   GROUP_TYPES_LIST: "group_types_list",
   MARKERS_LIST: "markers_list",
+  TRAFFIC_LIST: "traffic_list",
+  CAMERA_LIST: "camera_list",
 };
