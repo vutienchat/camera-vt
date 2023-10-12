@@ -1,3 +1,8 @@
+const dataLabel = Array.from(Array(50)).map((it, idx) => `aa/${idx}`);
+const dataValue = Array.from(Array(50)).map((it, idx) =>
+  Math.floor(Math.random() * 500)
+);
+
 export const heatmapInsights = {
   id: "Code id Site",
   nameSite: "380 Lạc Long Quân",
@@ -7,32 +12,40 @@ export const heatmapInsights = {
       deviceName: "Tên camera",
       zoneName: "Zone 1",
       totalVisitor: 700, // Tổng số sự kiện của Device
-      data: [300, 400, 102, 300, 540, 123, 112],
+      data: [300, 400, 102, 300, 540, 123, 112].concat(dataValue),
     },
     {
       deviceId: "Code id 2",
       deviceName: "Tên camera 2",
       zoneName: "Zone 2",
       totalVisitor: 300, // Tổng số sự kiện của Device
-      data: [500, 600, 300, 400, 440, 103, 112],
+      data: [500, 600, 300, 400, 440, 103, 112].concat(dataValue),
     },
     {
       deviceId: "Code id 2",
       deviceName: "Tên camera 2",
       zoneName: "Zone 3",
       totalVisitor: 350, // Tổng số sự kiện của Device
-      data: [300, 150, 240, 360, 409, 203, 330],
+      data: [300, 150, 240, 360, 409, 203, 330].concat(dataValue),
     },
     {
       deviceId: "Code id 2",
       deviceName: "Tên camera 2",
       zoneName: "Zone 4",
       totalVisitor: 210, // Tổng số sự kiện của Device
-      data: [220, 335, 451, 111, 333, 114, 231],
+      data: [220, 335, 451, 111, 333, 114, 231].concat(dataValue),
     },
   ],
   totalSize: 1000,
-  labelTime: ["01/07", "02/07", "03/07", "04/07", "05/07", "06/07", "07/07"],
+  labelTime: [
+    "01/07",
+    "02/07",
+    "03/07",
+    "04/07",
+    "05/07",
+    "06/07",
+    "07/07",
+  ].concat(dataLabel),
 };
 
 export const heatmapInsightsAllSite = {

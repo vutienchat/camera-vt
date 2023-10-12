@@ -1,4 +1,4 @@
-import { Box, Typography } from "@material-ui/core";
+import { Box, Typography, makeStyles } from "@material-ui/core";
 import React from "react";
 import {
   BarChart,
@@ -10,6 +10,16 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { TooltipCustom } from "./";
+
+const useStyles = makeStyles({
+  root: {
+    "& .recharts-tooltip-cursor": {
+      display: "none",
+    },
+  },
+});
+
+// "recharts-rectangle "
 
 const LegendContent = ({ data, handleHideData }) => {
   return (
@@ -50,6 +60,8 @@ const LegendContent = ({ data, handleHideData }) => {
 };
 
 const StackedBarChartCustom = ({ data, listBar, handleHideData }) => {
+  const classes = useStyles();
+
   return (
     <Box>
       <ResponsiveContainer width={"99%"} height={400}>
@@ -61,8 +73,22 @@ const StackedBarChartCustom = ({ data, listBar, handleHideData }) => {
             left: 20,
             bottom: 5,
           }}
+          className={classes.root}
         >
-          <XAxis dataKey="name" tickMargin={15} tickLine={false} />
+          <XAxis
+            dataKey="name"
+            tickMargin={15}
+            tickLine={false}
+            allowDataOverflow={false}
+            textAnchor="end"
+            sclaeToFit="true"
+            verticalAnchor="start"
+            interval={0}
+            angle="-40"
+            stroke="#8884d8"
+            overflow={"hidden"}
+            width={20}
+          />
           <YAxis
             label={{ value: "Camera", position: "top", fill: "#000000" }}
             padding={{ top: 30 }}
@@ -71,7 +97,7 @@ const StackedBarChartCustom = ({ data, listBar, handleHideData }) => {
           />
           <Tooltip content={<TooltipCustom des="Camera limited: 50/300" />} />
           <Legend
-            margin={{ right: "40px" }}
+            margin={{ right: "40px", top: 60 }}
             content={
               <LegendContent data={listBar} handleHideData={handleHideData} />
             }

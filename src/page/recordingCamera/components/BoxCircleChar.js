@@ -28,7 +28,7 @@ const BoxCircleChar = ({ label, data, COLORS, total, type }) => {
         <Typography className={classes.label}>{label || ""}</Typography>
         <Box className={classesPaper.boxContent} style={{ paddingTop: 10 }}>
           <Box style={{ width: "100%", height: "220px" }}>
-            <ResponsiveContainer width="100%" height="100%">
+            <ResponsiveContainer width="100%" height="100%" minWidth={450}>
               <PieChart width={400} height={400}>
                 <Pie
                   activeIndex={data.map((_, index) => index)}

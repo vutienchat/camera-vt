@@ -2,7 +2,6 @@ import { Box, Paper, Typography } from "@material-ui/core";
 import PieChartCustom from "./components/PieChart/PieChartCustom";
 import { heatmapInsights, randomBgColor } from "./data";
 import TreeMapChart from "./components/treeMapChart/TreeMapChart";
-import { colorsRecordState } from "../recordingCamera/@type";
 import { useMemo, useState } from "react";
 import _ from "lodash";
 import LineCharCustom from "./components/LineChart/LineCharCustom";
@@ -110,22 +109,33 @@ const HeatmapInsights = () => {
                 dataActive={dataActive}
               />
             </Box>
-            <Box style={{ width: "100%", height: "100%" }}>
-              <LineCharCustom
-                data={dataLineChart}
-                dataKeys={dataHeatmapInsight.dataZone}
-                dataActive={dataHeatmapInsight.dataZone.filter(
-                  (it) => it.active
-                )}
-              />
+
+            <Box style={{ position: "relative", width: "100%" }}>
+              <Box
+                style={{
+                  position: "absolute",
+
+                  width: "100%",
+                  height: "max-content",
+                  top: 0,
+                  right: 0,
+                  bottom: 0,
+                  left: 0,
+                }}
+              >
+                <LineCharCustom
+                  data={dataLineChart}
+                  dataKeys={dataHeatmapInsight.dataZone}
+                  dataActive={dataHeatmapInsight.dataZone.filter(
+                    (it) => it.active
+                  )}
+                />
+                <LegendContent
+                  payload={dataHeatmapInsight.dataZone}
+                  handleHideData={handleHideDataPie}
+                />
+              </Box>
             </Box>
-          </Box>
-          <Box>
-            <LegendContent
-              payload={dataHeatmapInsight.dataZone}
-              colors={colorsRecordState}
-              handleHideData={handleHideDataPie}
-            />
           </Box>
         </Paper>
         <Paper

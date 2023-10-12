@@ -14,6 +14,7 @@ import InfoIcon from "@material-ui/icons/Info";
 import EditIcon from "@material-ui/icons/Edit";
 import { useContext } from "react";
 import RecordingCamera, { RecordingCameraContext } from "..";
+import MaskGroup from "./MaskGroup";
 
 const useStyles = makeStyles({
   table: {
@@ -48,8 +49,9 @@ const useStyles = makeStyles({
 });
 
 export default function TabTable({ data }) {
-  const { setIsOpentCameraModal, setIsOpenEditModal } =
-  useContext(RecordingCameraContext);
+  const { setIsOpentCameraModal, setIsOpenEditModal } = useContext(
+    RecordingCameraContext
+  );
   const classes = useStyles();
   const [optionPage, setOptionPage] = useState({
     page: 1,
@@ -63,6 +65,7 @@ export default function TabTable({ data }) {
 
   return (
     <TableContainer component={Paper}>
+      <MaskGroup />
       <Table className={classes.table} aria-label="simple table">
         <TableHead className={classes.tHead}>
           <TableRow>
@@ -144,20 +147,20 @@ export default function TabTable({ data }) {
                 </TableCell>
                 <TableCell align="left">{row.errorMes}</TableCell>
                 <TableCell align="left" style={{ width: 100 }}>
-                <Box className={classes.Cell}>
-                  <FileCopyIcon
-                    onClick={() => handleCopy(row.errorMes || "")}
-                    className={classes.Icon}
-                  />
-                  <InfoIcon
-                    className={classes.Icon}
-                    onClick={() => setIsOpentCameraModal(true)}
-                  />
-                  <EditIcon
-                    className={classes.Icon}
-                    onClick={() => setIsOpenEditModal(true)}
-                  />
-                </Box>
+                  <Box className={classes.Cell}>
+                    <FileCopyIcon
+                      onClick={() => handleCopy(row.errorMes || "")}
+                      className={classes.Icon}
+                    />
+                    <InfoIcon
+                      className={classes.Icon}
+                      onClick={() => setIsOpentCameraModal(true)}
+                    />
+                    <EditIcon
+                      className={classes.Icon}
+                      onClick={() => setIsOpenEditModal(true)}
+                    />
+                  </Box>
                 </TableCell>
               </TableRow>
             ))}

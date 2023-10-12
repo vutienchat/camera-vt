@@ -32,7 +32,7 @@ const LineCharCustom = ({ data, dataKeys, dataActive }) => {
         />
         <Tooltip content={<TooltipLineChar />} />
         {/* <Legend cursor={"pointer"} style={{ cursor: "pointer" }} /> */}
-        {dataKeys.map((it, idx) => {
+        {data.map((it, idx) => {
           return (
             <Line
               key={idx}

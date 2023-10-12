@@ -51,7 +51,7 @@ const RenderActiveShape = (props) => {
           fontWeight: "bold",
         }}
       >
-        {total || ""}
+        {total}
       </text>
       <Sector
         cx={cx}
@@ -66,6 +66,8 @@ const RenderActiveShape = (props) => {
         d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`}
         stroke={fill}
         fill="none"
+        z={100}
+        style={{ zIndex: 100 }}
       />
       <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
       <text

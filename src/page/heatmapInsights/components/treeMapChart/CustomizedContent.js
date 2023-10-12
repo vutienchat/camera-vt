@@ -1,17 +1,5 @@
 const CustomizedContent = (props) => {
-  const {
-    root,
-    depth,
-    x,
-    y,
-    width,
-    height,
-    index,
-    payload,
-    colors,
-    rank,
-    name,
-  } = props;
+  const { root, depth, x, y, width, height, index, colors, name } = props;
 
   return (
     <g>
@@ -25,7 +13,6 @@ const CustomizedContent = (props) => {
             depth < 2
               ? colors[Math.floor((index / root.children.length) * 6)]
               : "#ffffff00",
-          stroke: "#fff",
           strokeWidth: 2 / (depth + 1e-10),
           strokeOpacity: 1 / (depth + 1e-10),
         }}
@@ -36,13 +23,21 @@ const CustomizedContent = (props) => {
           x={x + width / 2}
           y={y + height / 2}
           textAnchor="middle"
-          fill="#fff"
+          fill="#000"
           fontSize={14}
         >
           {name}
         </text>
       ) : (
-        <text x={x + 4} y={y + 18} fill="#fff" fontSize={16} fillOpacity={0.9}>
+        <text
+          x={x + 4}
+          y={y + 18}
+          fill="#000"
+          fontSize={16}
+          fillOpacity={0.9}
+          style={{ color: "#000" }}
+          color="#000"
+        >
           {name}
         </text>
       )}

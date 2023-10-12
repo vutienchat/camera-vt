@@ -4,6 +4,7 @@ import {
   Paper,
   Switch,
   TextField,
+  Typography,
 } from "@material-ui/core";
 import React, { useState } from "react";
 import {
@@ -12,23 +13,20 @@ import {
   StackedBarChartCustom,
   TabTable,
 } from "./components";
-import {
-  colorsCameraStorage,
-  colorsRecordState,
-  dataBarCam,
-  dataCameraStorage,
-  dataRecordState,
-} from "./@type";
+import { dataBarCam, dataRecord, dataStorage } from "./@type";
 import SearchIcon from "@material-ui/icons/Search";
 import _ from "lodash";
 import { createContext } from "react";
 import CustomModal from "../traffic/component/CustomModal";
 import CameraListModal from "./Modals/CameraListModal";
 import EditServerRecordModal from "./Modals/EditServerRecordModal";
+import PopupCustom from "./components/PopupCustom";
+import { DropdownIcon } from "../../common/icons/DropdownIcon";
+import CroppedImage from "./components/CutImgae";
 
-export const dataCam = Array.from(Array(14)).map((_, index) => ({
+export const dataCam = Array.from(Array(17)).map((_, index) => ({
   id: index + 1,
-  name: `service ${index}`,
+  name: `service ${index} kakjkkkkkkhsjadfkljasdfkjasldkfjaskldfjkls`,
   state: index % 2 !== 0 ? "Normal" : "Error",
   camera: "100/200",
   on: (Math.floor(Math.random() * 500) / 1000) * 100,
@@ -43,6 +41,7 @@ const RecordingCamera = () => {
   const [camDataBar, setCamDataBar] = useState({ ...dataBarCam });
   const [isOpenCameraModal, setIsOpentCameraModal] = useState(false);
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
+  const [isOpenStatus, setIsOpenStatus] = useState(false);
 
   const handleHideData = (key) => {
     const dataChange = { ...camDataBar[key], active: !camDataBar[key].active };
@@ -62,6 +61,7 @@ const RecordingCamera = () => {
   return (
     <RecordingCameraContext.Provider value={data}>
       <React.Fragment>
+        <CroppedImage />
         <Box
           sx={{
             display: "flex",
@@ -78,15 +78,15 @@ const RecordingCamera = () => {
             <StreamServer />
             <BoxCircleChar
               label={"Service Recording State"}
-              data={dataRecordState}
-              COLORS={colorsRecordState}
+              data={Object.values(dataRecord)}
+              COLORS={Object.values(dataRecord).map((it) => it.color)}
               type={" Service"}
               total={dataCam.length}
             />
             <BoxCircleChar
               label={"Camera Storage"}
-              data={dataCameraStorage}
-              COLORS={colorsCameraStorage}
+              data={Object.values(dataStorage)}
+              COLORS={Object.values(dataStorage).map((it) => it.color)}
               type={"Cameras"}
               total={dataCam.length}
             />
@@ -121,10 +121,31 @@ const RecordingCamera = () => {
                         ),
                       }}
                     />
-                    <TextField
-                      variant="outlined"
-                      style={{ width: 250, marginInline: 20 }}
-                    />
+                    <Box style={{ position: "relative", marginLeft: 10 }}>
+                      <Box
+                        style={{
+                          width: 250,
+                          height: 48,
+                          border: "1px solid #d3d3d3",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          padding: "0 8px 0 24px",
+                          boxSizing: "border-box",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => setIsOpenStatus((prev) => !prev)}
+                      >
+                        <Typography>state</Typography>
+                        <DropdownIcon />
+                      </Box>
+                      {isOpenStatus && (
+                        <PopupCustom
+                          width={250}
+                          listOption={Object.values(dataRecord)}
+                        />
+                      )}
+                    </Box>
                   </Box>
                 )}
                 <Box

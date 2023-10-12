@@ -8,6 +8,7 @@ import MasterMap from "../page/masterMap/MasterMap";
 import TrafficContent from "../page/traffic/TrafficContent";
 import RecordingCamera from "../page/recordingCamera";
 import HeatmapInsights from "../page/heatmapInsights";
+import HistoryEvent from "../page/historyEvent";
 
 export const routes = [
   { path: "/customer", element: Customer },
@@ -21,4 +22,5 @@ export const routes = [
   { path: "/pdf", element: FilePdf },
   { path: "/recording-camera", element: RecordingCamera },
   { path: "/heatmap-insights", element: HeatmapInsights },
+  { path: "/history-event", element: HistoryEvent },
 ];

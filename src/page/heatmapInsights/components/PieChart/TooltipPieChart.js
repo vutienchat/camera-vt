@@ -66,7 +66,7 @@ const TooltipPieChart = ({ payload, COLORS, title, data }) => {
                 {item.name}:
               </Typography>
               <Typography>
-                {(item.value / totalData) * 100}% ~ {item.value}
+                {Math.floor((item.value / totalData) * 100)}% ~ {item.value}
               </Typography>
             </Box>
           </Box>

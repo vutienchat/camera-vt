@@ -1,17 +1,33 @@
-export const dataRecordState = [
-  { name: "Normal", value: 29 },
-  { name: "Error", value: 1 },
-];
+export const dataRecord = {
+  Error: {
+    name: "Error",
+    value: 100,
+    color: "#f19d6c",
+  },
+  Normal: {
+    name: "Normal",
+    value: 110,
+    color: "#4e8ff7",
+  },
+};
 
-export const colorsRecordState = ["#4e8ff7", "#f19d6c"];
-
-export const dataCameraStorage = [
-  { name: "On", value: 40 },
-  { name: "Error", value: 10 },
-  { name: "Off", value: 5 },
-];
-
-export const colorsCameraStorage = ["#4e8ff7", "#f19d6c", "#d3d3d3"];
+export const dataStorage = {
+  on: {
+    name: "On",
+    color: "#4e8ff7",
+    value: 30,
+  },
+  error: {
+    name: "Error",
+    color: "#f19d6c",
+    value: 60,
+  },
+  off: {
+    name: "Off",
+    color: "#d3d3d3",
+    value: 80,
+  },
+};
 
 export const dataHead = [
   "#",
