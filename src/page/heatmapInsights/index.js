@@ -20,7 +20,7 @@ const HeatmapInsights = () => {
     })),
   });
 
-  const handleHideDataPie = (key) => {
+  const handleHideData = (key) => {
     const tempDataZone = [...dataHeatmapInsight.dataZone];
     const dataIndex = tempDataZone.findIndex((it) => it.zoneName === key);
     if (dataIndex === -1) return;
@@ -104,7 +104,7 @@ const HeatmapInsights = () => {
                 paddingAngle={1}
                 isTooltip={true}
                 title={"ZONE"}
-                handleHideData={handleHideDataPie}
+                handleHideData={handleHideData}
                 // isLegend={true}
                 dataActive={dataActive}
               />
@@ -132,7 +132,7 @@ const HeatmapInsights = () => {
                 />
                 <LegendContent
                   payload={dataHeatmapInsight.dataZone}
-                  handleHideData={handleHideDataPie}
+                  handleHideData={handleHideData}
                 />
               </Box>
             </Box>
