@@ -180,6 +180,30 @@ const flattenTreeNode = (root, keyWord) => {
   }, []);
 };
 
+const defaultData = []
+  .concat(
+    ...Array.from({ length: 10 }, (_, x) => {
+      return Array.from({ length: 10 }, (_, y) => {
+        return {
+          x: x,
+          y: y,
+          w: 1,
+          h: 1,
+          size: 1,
+          merge: [],
+          screenDetail: [],
+        };
+      });
+    })
+  )
+  .map((wall, index) => ({
+    ...wall,
+    key: index + 1,
+    i: String(index + 1),
+    resizeHandles: ["se"],
+    isResizable: true,
+  }));
+
 const LiveView = memo(() => {
   const [planLiveDetail, setPlanLiveDetail] = useState({
     id: "string",
@@ -229,21 +253,7 @@ const LiveView = memo(() => {
     groupId: "a57w4867s5ad75sa76as4d",
     userId: "2654s7awd654214e65wa4d",
     no: 3,
-    grid: []
-      .concat(
-        ...Array.from({ length: sizeDefault }, (_, x) => {
-          return Array.from({ length: sizeDefault }, (_, y) => {
-            return {
-              x: x + 1,
-              y: y + 1,
-              size: 1,
-              merge: [],
-              screenDetail: [],
-            };
-          });
-        })
-      )
-      .map((wall, index) => ({ ...wall, key: index + 1 })),
+    grid: defaultData,
     lastModified: new Date(),
     createDate: new Date(),
   });
@@ -368,6 +378,7 @@ const LiveView = memo(() => {
             taskLive={taskLive}
             isFullScreen={isFullScreen}
             isSideBar={isSideBar}
+            setTaskLive={setTaskLive}
           />
           <Box style={{ display: "flex", marginLeft: "16px" }}>
             <NavBar

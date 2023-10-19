@@ -23,9 +23,23 @@ export const getDataGridBySize = (sizeGrid) => {
     .concat(
       ...Array.from({ length: sizeGrid }, (_, x) => {
         return Array.from({ length: sizeGrid }, (_, y) => {
-          return { x: x + 1, y: y + 1, size: 1, merge: [], screenDetail: [] };
+          return {
+            x: x,
+            y: y,
+            size: 1,
+            merge: [],
+            screenDetail: [],
+          };
         });
       })
     )
-    .map((wall, index) => ({ ...wall, key: index + 1 }));
+    .map((wall, index) => ({
+      ...wall,
+      key: index + 1,
+      i: String(index + 1),
+      resizeHandles: ["se"],
+      isResizable: true,
+      w: index == 2 ? 2 : 1,
+      h: index == 2 ? 2 : 1,
+    }));
 };

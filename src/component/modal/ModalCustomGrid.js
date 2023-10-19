@@ -74,8 +74,9 @@ const ModalCustomGrid = ({ handleClose, dataGrid, sizeGrid, handleSubmit }) => {
 
   const handleMergeGrid = () => {
     const keyMergeList = listMerge.map((itemMerge) => itemMerge.key);
-    const countSize = listMerge.filter((grid) => grid.x === listMerge[0].x)
-      .length;
+    const countSize = listMerge.filter(
+      (grid) => grid.x === listMerge[0].x
+    ).length;
 
     setGridTMP((gridTMPPrev) => {
       return gridTMPPrev.reduce((dataTMP, gridItem) => {
@@ -227,15 +228,21 @@ const ModalCustomGrid = ({ handleClose, dataGrid, sizeGrid, handleSubmit }) => {
                       ...Array.from({ length: sizeGrid }, (_, x) => {
                         return Array.from({ length: sizeGrid }, (_, y) => {
                           return {
-                            x: x + 1,
-                            y: y + 1,
+                            x: x,
+                            y: y,
                             size: 1,
                             merge: [],
+                            w: 1,
+                            h: 1,
                           };
                         });
                       })
                     )
-                    .map((wall, index) => ({ ...wall, key: index + 1 }))
+                    .map((wall, index) => ({
+                      ...wall,
+                      key: index + 1,
+                      i: index + 1,
+                    }))
                 );
               }}
               typeOption={"model"}

@@ -9,6 +9,7 @@ import TrafficContent from "../page/traffic/TrafficContent";
 import RecordingCamera from "../page/recordingCamera";
 import HeatmapInsights from "../page/heatmapInsights";
 import HistoryEvent from "../page/historyEvent";
+import LiveView2 from "../page/liveView2";
 
 export const routes = [
   { path: "/customer", element: Customer },
@@ -23,4 +24,5 @@ export const routes = [
   { path: "/recording-camera", element: RecordingCamera },
   { path: "/heatmap-insights", element: HeatmapInsights },
   { path: "/history-event", element: HistoryEvent },
+  { path: "/live-view2", element: LiveView2 },
 ];
