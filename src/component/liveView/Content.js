@@ -6,7 +6,7 @@ import React, {
   useEffect,
   useCallback,
 } from "react";
-import { Box } from "@material-ui/core";
+import { Box, Typography } from "@material-ui/core";
 import { ScreenTask } from ".";
 import GridLayout from "react-grid-layout";
 import { Responsive, WidthProvider } from "react-grid-layout";
@@ -16,11 +16,16 @@ import "/node_modules/react-resizable/css/styles.css";
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
+const cols = 10;
+const aspectRatio = 16 / 9;
 const ContentLiveView = memo((props) => {
   const { taskLive, isFullScreen, isSideBar, setTaskLive } = props;
   const refContentLiveView = useRef(null);
   const [heightScreen, setHeightScreen] = useState(220);
   const [screenRecording, setScreenRecording] = useState("");
+  const [lastColUse, setLastColUse] = useState(1);
+  const [widthItem, setWidthItem] = useState(1);
+  const [disableResize, setDisabledResize] = useState(true);
 
   useEffect(() => setScreenRecording(""), [taskLive]);
 
@@ -32,73 +37,146 @@ const ContentLiveView = memo((props) => {
             taskLive.size
         );
       } else {
-        setHeightScreen(
-          ((refContentLiveView.current.offsetWidth / taskLive.size) * 22) / 38
-        );
+        const itemWidth = refContentLiveView.current.offsetWidth / lastColUse; // Chiều rộng của mỗi item
+        const itemHeight = itemWidth / aspectRatio;
+        setHeightScreen(itemHeight);
+        setWidthItem(itemWidth);
       }
     };
 
     window.addEventListener("resize", updateSize);
     taskLive.size !== 0 && updateSize();
     return () => window.removeEventListener("resize", updateSize);
-  }, [taskLive.size, isFullScreen, isSideBar]);
-
-  const widthSize = React.useMemo(() => {
-    if (!taskLive || !taskLive.grid || !taskLive.grid.length) return 1;
-    // return Math.ceil(Math.sqrt(taskLive.grid.length));
-    const maxX = Math.max(...taskLive.grid.map((item) => item.x + item.w));
-
-    // Tìm vị trí cuối cùng có item
-    let lastUsedPosition = 0;
-    for (let i = maxX; i >= 0; i--) {
-      if (taskLive.grid.some((item) => item.x <= i && item.x + item.w > i)) {
-        lastUsedPosition = i;
-        break;
-      }
-    }
-
-    // Cập nhật số cột dựa trên vị trí cuối cùng có item
-    return lastUsedPosition + 1;
-  }, [taskLive, taskLive.grid]);
-
-  console.log(widthSize);
-  const onResize = (layout, oldItem, newItem, placeholder, e, element) => {
-    // Xử lý logic khi kích thước của item thay đổi
-    const tempNewItem = { ...newItem };
-    if (oldItem.w !== tempNewItem.w) {
-      // Nếu chiều rộng (w) của obj2 thay đổi, cập nhật chiều cao (h) của obj2
-      tempNewItem.h = tempNewItem.w;
-    } else if (oldItem.h !== tempNewItem.h) {
-      // Nếu chiều cao (h) của obj2 thay đổi, cập nhật chiều rộng (w) của obj2
-      tempNewItem.w = tempNewItem.h;
-    }
-
-    const tempGrid = [...taskLive.grid];
-    const gridIndx = tempGrid.findIndex((it) => it.i === tempNewItem.i);
-    if (gridIndx === -1) return;
-    tempGrid[gridIndx] = { ...tempGrid[gridIndx], ...tempNewItem };
-    setTaskLive((prev) => ({
-      ...prev,
-      grid: tempGrid,
-    }));
-  };
-
-  const onDrop = (elemParams) => {};
+  }, [taskLive.size, isFullScreen, isSideBar, lastColUse]);
 
   const onLayoutChange = (currentLayout, prevLayout) => {
-    const newUpdateGrid = currentLayout.map((it1) => {
-      const gridIdx = prevLayout.find((it) => it.i === it1.i);
+    //update auto change w or h when one of two changes
+    let newUpdateGrid = prevLayout.map((it1) => {
+      const gridIdx = currentLayout.find((it) => it.i === it1.i);
       if (!gridIdx) return { ...it1 };
       const tempNewGrid = { ...gridIdx };
+      if (
+        currentLayout.map((it) => it.w).reduce((prev, cur) => prev + cur, 0) >
+          100 &&
+        currentLayout.some((item) => item.w !== 1)
+      ) {
+        return { ...tempNewGrid, ...it1, w: 1 };
+      }
+      // update when change size x or y will change both of them
       if (it1.w !== tempNewGrid.w) {
+        console.log("zoo");
         tempNewGrid.h = tempNewGrid.w;
       } else if (it1.h !== tempNewGrid.h) {
+        console.log("zoo2");
         tempNewGrid.w = tempNewGrid.h;
       }
       return { ...it1, ...tempNewGrid };
     });
-    setTaskLive((prev) => ({ ...prev, grid: newUpdateGrid }));
+
+    // if (
+    //   currentLayout.map((it) => it.w).reduce((prev, cur) => prev + cur, 0) > 100
+    // ) {
+    //   setTaskLive((prev) => ({ ...prev, grid: [...newUpdateGrid] }));
+    //   return;
+    // }
+
+    // find last location of item if it over 10 => plus x, update grid
+    let lastX = getLastLocation("x", "w", newUpdateGrid);
+    const lastY = getLastLocation("y", "h", newUpdateGrid);
+
+    if (lastY >= 11) lastX = lastX + 1;
+    if (lastX >= 11) lastX = cols;
+    const overItemYIdx = newUpdateGrid.findIndex((it) => it.y >= cols);
+    console.log("overItemYIdx", overItemYIdx);
+
+    if (overItemYIdx !== -1) {
+      newUpdateGrid[overItemYIdx].y = 9;
+      newUpdateGrid[overItemYIdx].x = newUpdateGrid[overItemYIdx].x + 1;
+    }
+
+    //find item have location over 10 update to empty location
+    const overItemXIdx = newUpdateGrid.findIndex((it) => it.x >= cols);
+    console.log("overItemXIdx", overItemXIdx);
+    if (overItemXIdx !== -1) {
+      const count = {};
+
+      // count number time loop of x
+      newUpdateGrid.forEach(function (obj) {
+        count[obj.x] = (count[obj.x] || 0) + 1;
+      });
+
+      const indexGrid = newUpdateGrid.find((it) => count[it.x] < 10);
+      newUpdateGrid[overItemXIdx] = {
+        ...newUpdateGrid[overItemXIdx],
+        x: indexGrid.x,
+      };
+    }
+
+    setLastColUse(lastX);
+    setTaskLive((prev) => ({ ...prev, grid: [...newUpdateGrid] }));
   };
+
+  console.log("tera", taskLive.grid);
+  const getLastLocation = (type, size, arr) => {
+    if (!type || !size || !arr || !arr.length) return 1;
+    // find max of x or y
+    const max = Math.max(...arr.map((item) => item[type] + item[size]));
+    console.log("max", max);
+    let lastUsedPosition = 0;
+    for (let i = max; i >= 0; i--) {
+      if (arr.some((item) => item[type] <= i && item[type] + item[size] > i)) {
+        lastUsedPosition = i;
+        break;
+      }
+    }
+    return lastUsedPosition + 1;
+  };
+
+  const handleDelete = (id) => {
+    if (!id) return;
+    setTaskLive((prev) => {
+      console.log("prev", prev);
+      return {
+        ...prev,
+        grid: [...prev.grid].filter((it) => it.key !== id),
+      };
+    });
+  };
+
+  const onDrop = (value, pay) => {
+    if (value.length > 100) return;
+    const randomKey = Math.random() * 10;
+    setTaskLive((prev) => ({
+      ...prev,
+      grid: [
+        ...prev.grid,
+        {
+          ...pay,
+          merge: [],
+          screenDetail: [],
+          key: randomKey,
+          i: String(randomKey),
+          // resizeHandles: ["se"],
+          y: pay.y - 1 >= 0 ? pay.y - 1 : 0,
+        },
+      ],
+    }));
+  };
+
+  // const handleResize = (payload, oldItem, newItem) => {
+  //   const totalWidth = [...payload].reduce((total, item) => total + item.w, 0);
+  //   if (totalWidth > 100 && payload.some((item) => item.w !== 1)) {
+  //     const updatedLayout = payload.map((item) => ({
+  //       ...item,
+  //       w: item.w > 1 ? 1 : item.w,
+  //     }));
+  //     console.log("updatedLayout", updatedLayout);
+  //     setTaskLive((prev) => ({
+  //       ...prev,
+  //       grid: [...updatedLayout],
+  //     }));
+  //   }
+  // };
 
   return (
     <Box
@@ -106,76 +184,77 @@ const ContentLiveView = memo((props) => {
       style={{
         display: "flex",
         height: isFullScreen ? "100vh" : "auto",
+        width: "100%",
+        overflowX: "scroll",
       }}
       ref={refContentLiveView}
     >
-      <div
-        className="droppable-element"
-        draggable={true}
-        unselectable="on"
-        // this is a hack for firefox
-        // Firefox requires some kind of initialization
-        // which we can do by adding this attribute
-        // @see https://bugzilla.mozilla.org/show_bug.cgi?id=568313
-        onDragStart={(e) => e.dataTransfer.setData("text/plain", "")}
-      >
-        test
-      </div>
       <GridLayout
         className="layout"
         layout={taskLive.grid}
         rowHeight={heightScreen}
-        cols={widthSize}
-        width={
-          (refContentLiveView.current &&
-            refContentLiveView.current.offsetWidth) ||
-          1800
-        }
+        cols={cols}
+        maxRows={cols}
+        width={cols * widthItem}
         onLayoutChange={(layout) => {
           onLayoutChange(layout, taskLive.grid || []);
         }}
-        isResizable={true}
+        isResizable={disableResize}
         isDraggable={true}
         isDroppable={true}
-        // onResize={}
-        onResize={onResize}
-        droppingItem={{ i: "xx", h: 1, w: 1 }}
-        // resizeHandles={"se"}
+        // onResizeStop={handleResize}
+        resizeHandles={["se"]}
+        // onResizeStart={handleResize}
+        // droppingItem={{ h: 1, w: 1 }}
+        onDrop={onDrop}
       >
         {taskLive.grid.map((gridItem) => {
-          if (gridItem.merge.length) {
-            return (
-              <Box
-                key={gridItem.key}
-                // style={{
-                //   gridColumnStart: gridItem.y,
-                //   gridColumnEnd: gridItem.y + gridItem.size,
-                //   gridRowStart: gridItem.x,
-                //   gridRowEnd: gridItem.x + gridItem.size,
-                // }}
-              >
-                <ScreenTask
-                  screenDetail={gridItem}
-                  isSideBar={isSideBar}
-                  screenRecording={screenRecording}
-                  setScreenRecording={setScreenRecording}
-                />
-              </Box>
-            );
-          }
+          // if (gridItem.merge.length) {
+          //   return (
+          //     <Box
+          //       key={gridItem.key}
+          //       // style={{
+          //       //   gridColumnStart: gridItem.y,
+          //       //   gridColumnEnd: gridItem.y + gridItem.size,
+          //       //   gridRowStart: gridItem.x,
+          //       //   gridRowEnd: gridItem.x + gridItem.size,
+          //       // }}
+          //     >
+          //       <ScreenTask
+          //         screenDetail={gridItem}
+          //         isSideBar={isSideBar}
+          //         screenRecording={screenRecording}
+          //         setScreenRecording={setScreenRecording}
+          //       />
+          //     </Box>
+          //   );
+          // }
 
           return (
             <Box
               key={gridItem.key}
-              style={{ height: "100%" }}
+              style={{ width: `${widthItem}px !important`, background: "gray" }}
               // dataGrid={{ ...gridItem }}
             >
-              <ScreenTask
+              {/* <ScreenTask
                 screenDetail={gridItem}
                 isSideBar={isSideBar}
                 screenRecording={screenRecording}
                 setScreenRecording={setScreenRecording}
-              />
+              /> */}
+              {gridItem.key}
+              <Typography
+                style={{
+                  width: "100%",
+                  textAlign: "center",
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  handleDelete(gridItem.key);
+                }}
+              >
+                X
+              </Typography>
             </Box>
           );
         })}
