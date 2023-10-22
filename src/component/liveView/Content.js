@@ -56,29 +56,29 @@ const ContentLiveView = memo((props) => {
       if (!gridIdx) return { ...it1 };
       const tempNewGrid = { ...gridIdx };
       if (
-        currentLayout.map((it) => it.w).reduce((prev, cur) => prev + cur, 0) >
+        (currentLayout.map((it) => it.w).reduce((prev, cur) => prev + cur, 0) >
           100 &&
-        currentLayout.some((item) => item.w !== 1)
+          currentLayout.some((item) => item.w !== 1)) ||
+        currentLayout.reduce((prev, cur) => prev + cur.h, 0) > 100
       ) {
-        return { ...tempNewGrid, ...it1, w: 1 };
+        return { ...tempNewGrid, ...it1, w: 1, h: 1 };
       }
       // update when change size x or y will change both of them
       if (it1.w !== tempNewGrid.w) {
-        console.log("zoo");
         tempNewGrid.h = tempNewGrid.w;
       } else if (it1.h !== tempNewGrid.h) {
-        console.log("zoo2");
         tempNewGrid.w = tempNewGrid.h;
       }
       return { ...it1, ...tempNewGrid };
     });
 
-    // if (
-    //   currentLayout.map((it) => it.w).reduce((prev, cur) => prev + cur, 0) > 100
-    // ) {
-    //   setTaskLive((prev) => ({ ...prev, grid: [...newUpdateGrid] }));
-    //   return;
-    // }
+    if (
+      currentLayout.reduce((prev, cur) => prev + cur.w, 0) > 100 ||
+      currentLayout.reduce((prev, cur) => prev + cur.h, 0) > 100
+    ) {
+      setTaskLive((prev) => ({ ...prev, grid: [...newUpdateGrid] }));
+      return;
+    }
 
     // find last location of item if it over 10 => plus x, update grid
     let lastX = getLastLocation("x", "w", newUpdateGrid);
@@ -87,7 +87,6 @@ const ContentLiveView = memo((props) => {
     if (lastY >= 11) lastX = lastX + 1;
     if (lastX >= 11) lastX = cols;
     const overItemYIdx = newUpdateGrid.findIndex((it) => it.y >= cols);
-    console.log("overItemYIdx", overItemYIdx);
 
     if (overItemYIdx !== -1) {
       newUpdateGrid[overItemYIdx].y = 9;
@@ -96,7 +95,6 @@ const ContentLiveView = memo((props) => {
 
     //find item have location over 10 update to empty location
     const overItemXIdx = newUpdateGrid.findIndex((it) => it.x >= cols);
-    console.log("overItemXIdx", overItemXIdx);
     if (overItemXIdx !== -1) {
       const count = {};
 
@@ -113,6 +111,7 @@ const ContentLiveView = memo((props) => {
     }
 
     setLastColUse(lastX);
+    console.log("newUpdateGrid", newUpdateGrid);
     setTaskLive((prev) => ({ ...prev, grid: [...newUpdateGrid] }));
   };
 
@@ -121,7 +120,6 @@ const ContentLiveView = memo((props) => {
     if (!type || !size || !arr || !arr.length) return 1;
     // find max of x or y
     const max = Math.max(...arr.map((item) => item[type] + item[size]));
-    console.log("max", max);
     let lastUsedPosition = 0;
     for (let i = max; i >= 0; i--) {
       if (arr.some((item) => item[type] <= i && item[type] + item[size] > i)) {
@@ -135,7 +133,6 @@ const ContentLiveView = memo((props) => {
   const handleDelete = (id) => {
     if (!id) return;
     setTaskLive((prev) => {
-      console.log("prev", prev);
       return {
         ...prev,
         grid: [...prev.grid].filter((it) => it.key !== id),
@@ -197,7 +194,19 @@ const ContentLiveView = memo((props) => {
         maxRows={cols}
         width={cols * widthItem}
         onLayoutChange={(layout) => {
-          onLayoutChange(layout, taskLive.grid || []);
+          console.log("layout", layout);
+          if (
+            (layout.reduce((prev, cur) => prev + cur.w, 0) > 100 &&
+              layout.some((item) => item.w !== 1)) ||
+            layout.reduce((prev, cur) => prev + cur.h, 0) > 100
+          ) {
+            console.log("Ooooo");
+            const newLayOut = layout.map((it) => ({ ...it, w: 1, h: 1 }));
+            setTaskLive((prev) => ({ ...prev, grid: newLayOut }));
+            // return;
+          } else {
+            onLayoutChange(layout, taskLive.grid || []);
+          }
         }}
         isResizable={disableResize}
         isDraggable={true}
@@ -232,7 +241,7 @@ const ContentLiveView = memo((props) => {
 
           return (
             <Box
-              key={gridItem.key}
+              key={gridItem.i}
               style={{ width: `${widthItem}px !important`, background: "gray" }}
               // dataGrid={{ ...gridItem }}
             >
@@ -242,7 +251,7 @@ const ContentLiveView = memo((props) => {
                 screenRecording={screenRecording}
                 setScreenRecording={setScreenRecording}
               /> */}
-              {gridItem.key}
+              {gridItem.i}
               <Typography
                 style={{
                   width: "100%",
@@ -250,7 +259,7 @@ const ContentLiveView = memo((props) => {
                   cursor: "pointer",
                 }}
                 onClick={() => {
-                  handleDelete(gridItem.key);
+                  handleDelete(gridItem.i);
                 }}
               >
                 X
