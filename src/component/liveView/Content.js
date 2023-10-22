@@ -135,7 +135,7 @@ const ContentLiveView = memo((props) => {
     setTaskLive((prev) => {
       return {
         ...prev,
-        grid: [...prev.grid].filter((it) => it.key !== id),
+        grid: [...prev.grid].filter((it) => it.i !== id),
       };
     });
   };
