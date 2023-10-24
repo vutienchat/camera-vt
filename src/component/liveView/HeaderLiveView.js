@@ -340,35 +340,6 @@ const HeaderLiveView = (props) => {
             alignItems: "center",
           }}
         >
-          <Box className="sidebar-resources-categories">Live View</Box>
-          <ClickAwayListener
-            onClickAway={() => {
-              setIsShowPopupSearch(false);
-            }}
-          >
-            <Box
-              style={{
-                marginRight: 16,
-                width: 280,
-              }}
-            >
-              <Box sx={{ width: 280, position: "relative" }}>
-                <Box
-                  className={classes.contentSearch}
-                  onClick={handleOpenPopupSearch}
-                >
-                  <span>Owner Organization</span>
-                  <ArrowDropDownIcon />
-                </Box>
-              </Box>
-              {isShowPopupSearch && (
-                <HeaderPopup
-                  listData={groupDeviceList || []}
-                  textSearch="search"
-                />
-              )}
-            </Box>
-          </ClickAwayListener>
           <Box style={{ display: "flex" }}>
             {data.slice(dataIndex, dataIndex + size).map((item) => {
               return (
