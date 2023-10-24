@@ -189,7 +189,7 @@ const defaultData = []
           y: y,
           w: 1,
           h: 1,
-          size: 1,
+          size: 3,
           merge: [],
           screenDetail: [],
         };
@@ -200,8 +200,8 @@ const defaultData = []
     ...wall,
     key: index + 1,
     i: String(index + 1),
-    resizeHandles: ["se"],
-    isResizable: true,
+    // resizeHandles: ["se"],
+    // isResizable: true,
   }));
 
 const LiveView = memo(() => {
@@ -247,7 +247,7 @@ const LiveView = memo(() => {
 
   const [taskLive, setTaskLive] = useState({
     id: "id Task 3",
-    size: sizeDefault,
+    size: 3,
     name: "Name Task",
     active: true,
     groupId: "a57w4867s5ad75sa76as4d",

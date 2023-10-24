@@ -38,8 +38,8 @@ export const getDataGridBySize = (sizeGrid) => {
       key: index + 1,
       i: String(index + 1),
       resizeHandles: ["se"],
-      isResizable: true,
-      w: index == 2 ? 2 : 1,
-      h: index == 2 ? 2 : 1,
+      // isResizable: true,
+      w: 1,
+      h: 1,
     }));
 };
