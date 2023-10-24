@@ -25,7 +25,7 @@ const ContentLiveView = memo((props) => {
   const [screenRecording, setScreenRecording] = useState("");
   const [lastColUse, setLastColUse] = useState(1);
   const [widthItem, setWidthItem] = useState(1);
-  const [disableResize, setDisabledResize] = useState(true);
+  const [newUpdateGrid, setNewUpdateGrid] = useState([]);
 
   useEffect(() => setScreenRecording(""), [taskLive]);
 
@@ -52,70 +52,81 @@ const ContentLiveView = memo((props) => {
   const onLayoutChange = (currentLayout, prevLayout) => {
     //update auto change w or h when one of two changes
     let newUpdateGrid = prevLayout.map((it1) => {
-      const gridIdx = currentLayout.find((it) => it.i === it1.i);
-      if (!gridIdx) return { ...it1 };
-      const tempNewGrid = { ...gridIdx };
-      if (
-        (currentLayout.map((it) => it.w).reduce((prev, cur) => prev + cur, 0) >
-          100 &&
-          currentLayout.some((item) => item.w !== 1)) ||
-        currentLayout.reduce((prev, cur) => prev + cur.h, 0) > 100
-      ) {
-        return { ...tempNewGrid, ...it1, w: 1, h: 1 };
-      }
+      const gridIdx = currentLayout.findIndex((it) => it.i === it1.i);
+      if (gridIdx === -1) return { ...it1 };
+      const tempNewGrid = { ...currentLayout[gridIdx] };
+
       // update when change size x or y will change both of them
       if (it1.w !== tempNewGrid.w) {
         tempNewGrid.h = tempNewGrid.w;
       } else if (it1.h !== tempNewGrid.h) {
         tempNewGrid.w = tempNewGrid.h;
       }
+      // reset when resize over 100
+      if (getTotal(currentLayout, gridIdx, tempNewGrid) > 100) {
+        if (it1.w !== tempNewGrid.w || it1.h !== tempNewGrid.h) {
+          return { ...it1 };
+        }
+      }
       return { ...it1, ...tempNewGrid };
     });
 
-    if (
-      currentLayout.reduce((prev, cur) => prev + cur.w, 0) > 100 ||
-      currentLayout.reduce((prev, cur) => prev + cur.h, 0) > 100
-    ) {
-      setTaskLive((prev) => ({ ...prev, grid: [...newUpdateGrid] }));
-      return;
-    }
-
-    // find last location of item if it over 10 => plus x, update grid
+    // find last location y of item if it over 10 => plus x, update grid
     let lastX = getLastLocation("x", "w", newUpdateGrid);
     const lastY = getLastLocation("y", "h", newUpdateGrid);
-
-    if (lastY >= 11) lastX = lastX + 1;
+    if (lastY >= 11 && lastX < 10) lastX = lastX + 1;
     if (lastX >= 11) lastX = cols;
-    const overItemYIdx = newUpdateGrid.findIndex((it) => it.y >= cols);
 
-    if (overItemYIdx !== -1) {
-      newUpdateGrid[overItemYIdx].y = 9;
-      newUpdateGrid[overItemYIdx].x = newUpdateGrid[overItemYIdx].x + 1;
+    const itemsAboveY10 = newUpdateGrid.filter((item) => item.y >= 10);
+
+    const grid = Array.from({ length: cols }, () => Array(cols).fill(0));
+    newUpdateGrid.forEach((item) => {
+      for (let i = item.x; i < item.x + item.w; i++) {
+        for (let j = item.y; j < item.y + item.h; j++) {
+          grid[i][j] = 1;
+        }
+      }
+    });
+
+    const emptyPositions = [];
+    //find list position don't have item
+    for (let i = 0; i < cols; i++) {
+      for (let j = 0; j < cols; j++) {
+        if (grid[i][j] === 0) {
+          emptyPositions.push({ x: i, y: j });
+        }
+      }
     }
 
-    //find item have location over 10 update to empty location
-    const overItemXIdx = newUpdateGrid.findIndex((it) => it.x >= cols);
-    if (overItemXIdx !== -1) {
-      const count = {};
-
-      // count number time loop of x
-      newUpdateGrid.forEach(function (obj) {
-        count[obj.x] = (count[obj.x] || 0) + 1;
+    if (itemsAboveY10.length > 0 && emptyPositions.length > 0) {
+      const newUpdateGridCopy = [...newUpdateGrid];
+      itemsAboveY10.forEach((item) => {
+        if (emptyPositions.length > 0) {
+          //get a position
+          const emptyPosition = emptyPositions.shift();
+          const itemIndex = newUpdateGridCopy.findIndex((i) => i.i === item.i);
+          //update new position
+          if (itemIndex !== -1) {
+            newUpdateGridCopy[itemIndex].x = emptyPosition.x;
+            newUpdateGridCopy[itemIndex].y = emptyPosition.y;
+          }
+        }
       });
-
-      const indexGrid = newUpdateGrid.find((it) => count[it.x] < 10);
-      newUpdateGrid[overItemXIdx] = {
-        ...newUpdateGrid[overItemXIdx],
-        x: indexGrid.x,
-      };
+      handleUpdateGrid(lastX, [...newUpdateGridCopy]);
     }
-
-    setLastColUse(lastX);
-    console.log("newUpdateGrid", newUpdateGrid);
-    setTaskLive((prev) => ({ ...prev, grid: [...newUpdateGrid] }));
+    handleUpdateGrid(lastX, [...newUpdateGrid]);
   };
 
-  console.log("tera", taskLive.grid);
+  const handleUpdateGrid = (lastX, arrUpdate) => {
+    setLastColUse(lastX);
+    setNewUpdateGrid([...arrUpdate]);
+    return;
+  };
+
+  useEffect(() => {
+    setTaskLive((prev) => ({ ...prev, grid: [...newUpdateGrid] }));
+  }, [newUpdateGrid]);
+
   const getLastLocation = (type, size, arr) => {
     if (!type || !size || !arr || !arr.length) return 1;
     // find max of x or y
@@ -128,6 +139,17 @@ const ContentLiveView = memo((props) => {
       }
     }
     return lastUsedPosition + 1;
+  };
+
+  const getTotal = (arr, index, newDataIdx) => {
+    if (!arr) return 1;
+    let totalArea = 0;
+    const tempArr = [...arr];
+    if (index && newDataIdx) tempArr[index] = newDataIdx;
+    for (let i = 0; i < tempArr.length; i++) {
+      totalArea += tempArr[i].w * tempArr[i].h;
+    }
+    return totalArea;
   };
 
   const handleDelete = (id) => {
@@ -153,27 +175,11 @@ const ContentLiveView = memo((props) => {
           screenDetail: [],
           key: randomKey,
           i: String(randomKey),
-          // resizeHandles: ["se"],
           y: pay.y - 1 >= 0 ? pay.y - 1 : 0,
         },
       ],
     }));
   };
-
-  // const handleResize = (payload, oldItem, newItem) => {
-  //   const totalWidth = [...payload].reduce((total, item) => total + item.w, 0);
-  //   if (totalWidth > 100 && payload.some((item) => item.w !== 1)) {
-  //     const updatedLayout = payload.map((item) => ({
-  //       ...item,
-  //       w: item.w > 1 ? 1 : item.w,
-  //     }));
-  //     console.log("updatedLayout", updatedLayout);
-  //     setTaskLive((prev) => ({
-  //       ...prev,
-  //       grid: [...updatedLayout],
-  //     }));
-  //   }
-  // };
 
   return (
     <Box
@@ -194,23 +200,15 @@ const ContentLiveView = memo((props) => {
         maxRows={cols}
         width={cols * widthItem}
         onLayoutChange={(layout) => {
-          console.log("layout", layout);
-          if (
-            (layout.reduce((prev, cur) => prev + cur.w, 0) > 100 &&
-              layout.some((item) => item.w !== 1)) ||
-            layout.reduce((prev, cur) => prev + cur.h, 0) > 100
-          ) {
-            console.log("Ooooo");
-            const newLayOut = layout.map((it) => ({ ...it, w: 1, h: 1 }));
-            setTaskLive((prev) => ({ ...prev, grid: newLayOut }));
-            // return;
-          } else {
-            onLayoutChange(layout, taskLive.grid || []);
-          }
+          onLayoutChange(layout, taskLive.grid || []);
         }}
-        isResizable={disableResize}
+        isResizable={taskLive.grid.length < 100}
         isDraggable={true}
-        isDroppable={true}
+        isDroppable={
+          taskLive.grid.length >= 100 || getTotal(taskLive.grid) >= 100
+            ? false
+            : true
+        }
         // onResizeStop={handleResize}
         resizeHandles={["se"]}
         // onResizeStart={handleResize}
