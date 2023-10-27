@@ -49,7 +49,7 @@ import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import PopupLayout from "./PopupLayout";
 const dataHeader = [
   {
-    id: 1,
+    id: 0,
     label: "New Layout",
     duplicate: 0,
     default: 1,
@@ -176,9 +176,8 @@ const HeaderLiveView = (props) => {
   const [isChooseItem, setIsChooseItem] = useState(null);
   const [isActive, setIsActive] = useState(null);
   const [isOpenShareModal, setIsOpenShareModal] = useState(false);
-  const [lengthChange, setLengthChange] = useState(dataHeader.length);
+  const [lengthChange, setLengthChange] = useState(0);
 
-  console.log("data", data);
   const handleAddNewTask = () => {
     console.log("is call");
     const temp = [...data];
@@ -189,8 +188,8 @@ const HeaderLiveView = (props) => {
     };
 
     temp.push({
-      id: data.length + 1,
-      label: `New Layout ${data.length + 1}`,
+      id: lengthChange + 1,
+      label: `New Layout ${lengthChange + 1}`,
       isNew: true,
       duplicate: 0,
       default: 1,
@@ -212,19 +211,17 @@ const HeaderLiveView = (props) => {
       if (prev + size >= data.length + 1) return prev;
       return prev + size;
     });
+    setLengthChange((prev) => prev + 1);
   };
 
   const handleChangePage = (type) => {
     if (type === "next") {
       setDataIndex((prev) => {
-        
-      console.log("prev", prev);
         if (prev + size >= data.length) return prev;
         return prev + size;
       });
     } else {
       setDataIndex((prev) => {
-        console.log("prev1", prev);
         if (prev <= 0) {
           return 0;
         } else {
@@ -269,8 +266,12 @@ const HeaderLiveView = (props) => {
 
   const handleDelete = (id) => {
     const temp = [...data].filter((item) => item.id !== id);
+    if (temp.length % 5 === 0) {
+      setDataIndex((prev) => prev - 5);
+    }
     setData(temp);
   };
+
   const handleRename = (id) => {
     const tempData = [...data];
     const taskIndx = tempData.findIndex((item) => item.id === id);
@@ -278,6 +279,7 @@ const HeaderLiveView = (props) => {
     tempData[taskIndx] = { ...taskIndex };
     setData([...tempData]);
   };
+
   const handleCloseTask = (id) => {
     console.log("4");
     const tempData = [...data];
@@ -350,6 +352,8 @@ const HeaderLiveView = (props) => {
     setDataGroup([...parseData]);
   }, [data, dataInitTask]);
 
+  console.log("tas", taskIndex);
+
   const dataContext = {
     isShowPopUpSelect,
     anchorEl,
@@ -413,7 +417,7 @@ const HeaderLiveView = (props) => {
                 marginLeft: 10,
               }}
             >
-              {data.length >5 && (
+              {data.length > 5 && (
                 <Box
                   style={{
                     display: "flex",

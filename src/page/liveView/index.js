@@ -190,46 +190,6 @@ const flattenTreeNode = (root, keyWord) => {
 };
 
 const LiveView = memo(() => {
-  const [planLiveDetail, setPlanLiveDetail] = useState({
-    id: "string",
-    idOrganization: "string123sad",
-    name: "Name Task",
-    type: "SCHEDULE",
-    apply: "true",
-    userId: "string user id",
-    active: true,
-    description: "",
-    idTaskRemain: "string",
-    planVideoDetails: [
-      {
-        idTask: "id Task 1",
-        startTime: { h: 10, m: 0, s: 0 },
-        endTime: { h: 12, m: 0, s: 0 },
-        stayTime: { h: 0, m: 1, s: 0 },
-        no: 1,
-        type: "SHARE",
-      },
-      {
-        idTask: "id Task 2",
-        startTime: { h: 10, m: 0, s: 0 },
-        endTime: { h: 12, m: 0, s: 0 },
-        stayTime: { h: 0, m: 1, s: 0 },
-        no: 1,
-        type: "PERSON",
-      },
-      {
-        idTask: "id Task 3",
-        startTime: { h: 10, m: 0, s: 0 },
-        endTime: { h: 12, m: 0, s: 0 },
-        stayTime: { h: 0, m: 1, s: 0 },
-        no: 1,
-        type: "PERSON",
-      },
-    ],
-    createDate: new Date(),
-    lastModified: new Date(),
-  });
-
   const [taskLive, setTaskLive] = useState({
     id: "id Task 3",
     size: 3,
