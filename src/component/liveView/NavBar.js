@@ -68,7 +68,7 @@ const NavBar = ({ handleOpenSideBar, typeDisplaySide }) => {
             View
           </Typography>
         </Box>
-        <Box
+        {/* <Box
           className={`${classes.itemNav} ${
             typeDisplaySide === "Plan" ? classes.itemActive : ""
           }`}
@@ -77,6 +77,17 @@ const NavBar = ({ handleOpenSideBar, typeDisplaySide }) => {
           <img src={Plan} />
           <Typography style={{ fontSize: "14px", paddingTop: "8px" }}>
             Plan
+          </Typography>
+        </Box> */}
+        <Box
+          className={`${classes.itemNav} ${
+            typeDisplaySide === "layout" ? classes.itemActive : ""
+          }`}
+          onClick={() => handleOpenSideBar("layout")}
+        >
+          <img src={Plan} />
+          <Typography style={{ fontSize: "14px", paddingTop: "8px" }}>
+            Layout
           </Typography>
         </Box>
       </Box>

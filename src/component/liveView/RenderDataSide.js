@@ -1,7 +1,8 @@
 import { Box, InputAdornment, TextField, Typography } from "@material-ui/core";
-import React from "react";
+import React, { useContext } from "react";
 import SearchIcon from "@material-ui/icons/Search";
 import LocationOnOutlinedIcon from "@material-ui/icons/LocationOnOutlined";
+import { LiveViewContext } from "../../page/liveView";
 
 const RenderDataSide = ({
   renderData,
@@ -15,6 +16,8 @@ const RenderDataSide = ({
   isMulti,
   handleMultiSelect,
 }) => {
+  const { listAdd, handleItemClick, handleMouseDown } =
+    useContext(LiveViewContext);
   return (
     <>
       {isCamera && (
@@ -67,14 +70,17 @@ const RenderDataSide = ({
           />
         </Box>
       )}
-      
+
       {renderData(
         data,
         classes,
         handleShowPopupSelect,
         false,
         isMulti,
-        handleMultiSelect
+        handleMultiSelect,
+        listAdd,
+        handleItemClick,
+        handleMouseDown
       )}
     </>
   );

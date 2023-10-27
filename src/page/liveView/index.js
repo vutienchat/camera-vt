@@ -1,13 +1,22 @@
 import { Box } from "@material-ui/core";
-import React, { memo, useCallback, useEffect, useState } from "react";
+import React, {
+  createContext,
+  memo,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import {
   Content,
   HeaderLiveView,
   NavBar,
   SideBar,
 } from "../../component/liveView";
-import { dataInit } from "../../component/liveView/dataSideBar";
+import { dataInit, dataInitTask } from "../../component/liveView/dataSideBar";
+import { defaultData } from "../../component/liveView/@type";
 const sizeDefault = 2;
+
+export const LiveViewContext = createContext();
 
 const nodeListWithoutDevices = [
   {
@@ -180,30 +189,6 @@ const flattenTreeNode = (root, keyWord) => {
   }, []);
 };
 
-const defaultData = []
-  .concat(
-    ...Array.from({ length: 10 }, (_, x) => {
-      return Array.from({ length: 10 }, (_, y) => {
-        return {
-          x: x,
-          y: y,
-          w: 1,
-          h: 1,
-          size: 3,
-          merge: [],
-          screenDetail: [],
-        };
-      });
-    })
-  )
-  .map((wall, index) => ({
-    ...wall,
-    key: index + 1,
-    i: String(index + 1),
-    // resizeHandles: ["se"],
-    // isResizable: true,
-  }));
-
 const LiveView = memo(() => {
   const [planLiveDetail, setPlanLiveDetail] = useState({
     id: "string",
@@ -263,6 +248,8 @@ const LiveView = memo(() => {
   const [dataSideGroup, setDataSideGroup] = useState([...dataInit]);
   const [groupDeviceList, setGroupDeviceList] = useState();
   const [listPlan, setListPlan] = useState([]);
+  const [listAdd, setListAdd] = useState([]);
+  const [listTask, setListTask] = useState([...dataInitTask]);
 
   const escFunction = useCallback(
     (event) => {
@@ -349,55 +336,116 @@ const LiveView = memo(() => {
     });
   };
 
-  // useEffect(() => {
-  //   const arr = [[1], [2], [3], [4]];
+  const handleItemClick = (item, event) => {
+    const tempData = [...listTask];
+    if (event.shiftKey) return;
+    if (event.ctrlKey) {
+      const itemIdx = tempData.findIndex((it) => it.id === item.id);
+      if (itemIdx !== -1) {
+        tempData[itemIdx] = {
+          ...tempData[itemIdx],
+          selected: !tempData[itemIdx].selected,
+        };
+      }
+      handleChangeListAdd(tempData);
+    } else {
+      const newData = tempData.map((it) => ({
+        ...it,
+        selected: it.id === item.id,
+      }));
+      handleChangeListAdd(newData);
+    }
+  };
 
-  //   arr.forEach((it) => {});
-  // }, []);
+  const handleChangeListAdd = (listData) => {
+    setListAdd(listData.filter((it) => it.selected));
+    setListTask(listData);
+    return;
+  };
+
+  const [startIdx, setStartIdx] = useState(null);
+
+  const handleMouseDown = (index, event, listData) => {
+    if (!listData) return;
+    const tempData = [...listData];
+    if (event.ctrlKey) return;
+    if (event.shiftKey) {
+      if (startIdx === null) {
+        // If Shift is held and this is the first mouse click, set the first item selected
+
+        if (index === -1) return;
+        tempData[index] = { ...tempData[index], selected: true };
+        setListAdd(tempData.filter((it) => it.selected));
+        setStartIdx(index);
+      } else {
+        // If there is already a first item selected, selects all items from the first to the last item
+
+        const listSelect = tempData
+          .slice(startIdx, index + 1)
+          .map((it) => ({ ...it, selected: true }));
+
+        setListAdd(listSelect);
+        setStartIdx(null); // Resets the first selected item after selection is complete
+      }
+    }
+  };
+
+  const dataContext = {
+    handleItemClick,
+    listAdd,
+    handleMouseDown,
+    setTaskLive,
+  };
 
   return (
-    <React.Fragment>
-      <Box>
-        <HeaderLiveView
-          setIsFullScreen={() => setIsFullScreen(true)}
-          taskLive={taskLive}
-          onUpdateGridData={handleUpdateGridData}
-          handleCleanTask={handleCleanTask}
-          dataSideGroup={dataSideGroup}
-          groupDeviceList={groupDeviceList}
-        />
-        <Box
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            marginBlock: 24,
-            //minHeight: "808px",
-          }}
-        >
-          <Content
+    <LiveViewContext.Provider value={dataContext}>
+      <React.Fragment>
+        <Box>
+          <HeaderLiveView
+            setIsFullScreen={() => setIsFullScreen(true)}
             taskLive={taskLive}
-            isFullScreen={isFullScreen}
-            isSideBar={isSideBar}
-            setTaskLive={setTaskLive}
+            onUpdateGridData={handleUpdateGridData}
+            handleCleanTask={handleCleanTask}
+            dataSideGroup={dataSideGroup}
+            groupDeviceList={groupDeviceList}
           />
-          <Box style={{ display: "flex", marginLeft: "16px" }}>
-            <NavBar
-              handleOpenSideBar={handleOpenSideBar}
-              typeDisplaySide={typeDisplaySide}
+          <Box
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginBlock: 24,
+              //minHeight: "808px",
+            }}
+          >
+            <Content
+              taskLive={taskLive}
+              isFullScreen={isFullScreen}
+              isSideBar={isSideBar}
+              setTaskLive={setTaskLive}
+              listAdd={listAdd}
             />
-            {isSideBar && (
-              <SideBar
+            <Box style={{ display: "flex", marginLeft: "16px" }}>
+              <NavBar
+                handleOpenSideBar={handleOpenSideBar}
                 typeDisplaySide={typeDisplaySide}
-                data={dataSideGroup}
-                setData={setDataSideGroup}
-                listPlan={listPlan}
-                setListPlan={setListPlan}
               />
-            )}
+              {isSideBar && (
+                <SideBar
+                  typeDisplaySide={typeDisplaySide}
+                  data={dataSideGroup}
+                  setData={setDataSideGroup}
+                  listPlan={listPlan}
+                  setListPlan={setListPlan}
+                  listAdd={listAdd}
+                  setListAdd={setListAdd}
+                  handleItemClick={handleItemClick}
+                />
+              )}
+            </Box>
           </Box>
         </Box>
-      </Box>
-    </React.Fragment>
+      </React.Fragment>
+    </LiveViewContext.Provider>
   );
 });
 

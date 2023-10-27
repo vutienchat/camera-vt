@@ -19,7 +19,14 @@ const ResponsiveReactGridLayout = WidthProvider(Responsive);
 const cols = 10;
 const aspectRatio = 16 / 9;
 const ContentLiveView = memo((props) => {
-  const { taskLive, isFullScreen, isSideBar, setTaskLive } = props;
+  const {
+    taskLive,
+    isFullScreen,
+    isSideBar,
+    setTaskLive,
+    setListAdd,
+    listAdd,
+  } = props;
   const refContentLiveView = useRef(null);
   const [heightScreen, setHeightScreen] = useState(220);
   const [screenRecording, setScreenRecording] = useState("");
@@ -127,7 +134,13 @@ const ContentLiveView = memo((props) => {
       handleUpdateGrid(lastX, [...newUpdateGridCopy]);
     }
     //auto change when the last item have x > emptyPosition item c(y = 0)
-    if (lastItem && lastItem.x > emptyPosition.x && lastItem.x < 10) {
+
+    if (
+      lastItem &&
+      lastItem.x > emptyPosition.x &&
+      lastItem.x < 10 &&
+      lastItem.y === 0
+    ) {
       const itemIdx = currentLayout.findIndex((it) => it.i === lastItem.i);
       currentLayout[itemIdx] = {
         ...currentLayout[itemIdx],
@@ -141,6 +154,7 @@ const ContentLiveView = memo((props) => {
   const handleUpdateGrid = (lastX, arrUpdate) => {
     setLastColUse(lastX);
     setNewUpdateGrid([...arrUpdate]);
+
     return;
   };
 
@@ -183,9 +197,26 @@ const ContentLiveView = memo((props) => {
     });
   };
 
+  const randomKey = Math.random() * 10;
   const onDrop = (value, pay) => {
     if (value.length > 100) return;
-    const randomKey = Math.random() * 10;
+    if (listAdd && listAdd.length) {
+      const newListAdd = [...listAdd].map((item) => ({
+        x: pay.x,
+        y: pay.y - 1,
+        w: 1,
+        h: 1,
+        size: 3,
+        merge: [],
+        screenDetail: [],
+        i: item.label,
+      }));
+      setTaskLive((prev) => ({
+        ...prev,
+        grid: [...prev.grid].concat(newListAdd),
+      }));
+      return;
+    }
     setTaskLive((prev) => ({
       ...prev,
       grid: [
