@@ -158,7 +158,7 @@ const HeaderLiveView = (props) => {
   // useOutsideAlerter(wrapperRef);
   const [data, setData] = useState([...dataHeader]);
   const [dataIndex, setDataIndex] = useState(0);
-  const [size, setSize] = useState(5);
+  const [size, setSize] = useState(6);
   const [taskIndex, setTaskIndex] = useState();
   const [skipClose, setSkipClose] = useState(false);
   const [isModalClose, setIsModalClose] = useState(false);
@@ -177,6 +177,20 @@ const HeaderLiveView = (props) => {
   const [isActive, setIsActive] = useState(null);
   const [isOpenShareModal, setIsOpenShareModal] = useState(false);
   const [lengthChange, setLengthChange] = useState(0);
+
+  const handleResize = () => {
+    if (window.innerWidth < 720) {
+      setSize(1);
+    } else if (window.innerWidth < 1023) {
+      setSize(3);
+    } else {
+      setSize(6);
+    }
+  };
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleAddNewTask = () => {
     console.log("is call");
@@ -266,8 +280,8 @@ const HeaderLiveView = (props) => {
 
   const handleDelete = (id) => {
     const temp = [...data].filter((item) => item.id !== id);
-    if (temp.length % 5 === 0) {
-      setDataIndex((prev) => prev - 5);
+    if (temp.length % size === 0) {
+      setDataIndex((prev) => prev - size);
     }
     setData(temp);
   };
@@ -352,8 +366,6 @@ const HeaderLiveView = (props) => {
     setDataGroup([...parseData]);
   }, [data, dataInitTask]);
 
-  console.log("tas", taskIndex);
-
   const dataContext = {
     isShowPopUpSelect,
     anchorEl,
@@ -417,7 +429,7 @@ const HeaderLiveView = (props) => {
                 marginLeft: 10,
               }}
             >
-              {data.length > 5 && (
+              {data.length > size && (
                 <Box
                   style={{
                     display: "flex",
