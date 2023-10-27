@@ -47,7 +47,7 @@ import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import Checkbox from "@material-ui/core/Checkbox";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import PopupLayout from "./PopupLayout";
-const dataHeader = [
+export const dataHeader = [
   {
     id: 0,
     label: "New Layout",
@@ -179,7 +179,6 @@ const HeaderLiveView = (props) => {
   const [lengthChange, setLengthChange] = useState(0);
 
   const handleAddNewTask = () => {
-    console.log("is call");
     const temp = [...data];
     const indexTaskActive = temp.findIndex((item) => item.default);
     temp[indexTaskActive] = {
@@ -281,7 +280,6 @@ const HeaderLiveView = (props) => {
   };
 
   const handleCloseTask = (id) => {
-    console.log("4");
     const tempData = [...data];
     const taskIndx = tempData.findIndex((item) => item.id === id);
     if (taskIndx === -1) return;
@@ -351,8 +349,6 @@ const HeaderLiveView = (props) => {
       }, []);
     setDataGroup([...parseData]);
   }, [data, dataInitTask]);
-
-  console.log("tas", taskIndex);
 
   const dataContext = {
     isShowPopUpSelect,
