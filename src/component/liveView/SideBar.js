@@ -1,5 +1,5 @@
 import { Box, Checkbox, makeStyles, Typography } from "@material-ui/core";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import TreeView from "@material-ui/lab/TreeView";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowRightIcon from "@material-ui/icons/ArrowRight";
@@ -21,6 +21,8 @@ import { dataInitTask } from "./dataSideBar";
 import ModalAddPlanSchedule from "../modal/ModalAddPlanSchedule";
 import ModalPlayTask from "../modal/ModalPlayTask";
 import ViewSideEvent from "./ViewSideEvent";
+import { LiveViewContext } from "../../page/liveView";
+import ViewLayout from "./ViewLayout";
 
 const useStyles = makeStyles({
   Sub: {
@@ -110,7 +112,10 @@ export const renderData = (
   handleShowPopupSelect,
   isNoIcon,
   isMulti,
-  handleMultiSelect
+  handleMultiSelect,
+  listAdd,
+  handleItemClick,
+  handleMouseDown
 ) => {
   return (
     <TreeView
@@ -121,7 +126,12 @@ export const renderData = (
       {data &&
         data.map((item, index) => {
           return (
-            <Box key={index} style={{ marginLeft: 20 }}>
+            <Box
+              key={index}
+              style={{
+                marginLeft: 20,
+              }}
+            >
               <TreeItem
                 onLabelClick={(e) => e.preventDefault()}
                 key={item.id}
@@ -133,16 +143,6 @@ export const renderData = (
                       width: "100%",
                       alignItems: "center",
                     }}
-                    className="droppable-element"
-                    draggable={true}
-                    unselectable="on"
-                    // this is a hack for firefox
-                    // Firefox requires some kind of initialization
-                    // which we can do by adding this attribute
-                    // @see https://bugzilla.mozilla.org/show_bug.cgi?id=568313
-                    onDragStart={(e) =>
-                      e.dataTransfer.setData("text/plain", "")
-                    }
                   >
                     <Typography>{item.label}</Typography>
                     {!isNoIcon && (
@@ -179,7 +179,10 @@ export const renderData = (
                         handleShowPopupSelect,
                         isNoIcon,
                         isMulti,
-                        handleMultiSelect
+                        handleMultiSelect,
+                        listAdd,
+                        handleItemClick,
+                        handleMouseDown
                       )
                     : null}
                   {item.listTask && item.listTask.length
@@ -197,7 +200,31 @@ export const renderData = (
                                   justifyContent: "space-between",
                                   width: "100%",
                                   alignItems: "center",
+                                  background:
+                                    listAdd &&
+                                    listAdd.length &&
+                                    listAdd
+                                      .map((it) => it.label)
+                                      .includes(child.label)
+                                      ? "#666"
+                                      : "",
                                 }}
+                                className="droppable-element"
+                                draggable={true}
+                                unselectable="on"
+                                // this is a hack for firefox
+                                // Firefox requires some kind of initialization
+                                // which we can do by adding this attribute
+                                // @see https://bugzilla.mozilla.org/show_bug.cgi?id=568313
+                                onDragStart={(e) =>
+                                  e.dataTransfer.setData("text/plain", "")
+                                }
+                                onClick={(e) => {
+                                  handleItemClick(child, e);
+                                }}
+                                onMouseDown={(e) =>
+                                  handleMouseDown(index, e, item.listTask)
+                                }
                               >
                                 <Typography>{child.label}</Typography>
                                 {isMulti ? (
@@ -228,7 +255,15 @@ export const renderData = (
   );
 };
 
-const SideBar = ({ typeDisplaySide, data, setData, setListPlan, listPlan }) => {
+const SideBar = ({
+  typeDisplaySide,
+  data,
+  setData,
+  setListPlan,
+  listPlan,
+  handleItemClick,
+  setListAdd,
+}) => {
   const classes = useStyles();
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef);
@@ -374,6 +409,8 @@ const SideBar = ({ typeDisplaySide, data, setData, setListPlan, listPlan }) => {
             dataGroup={dataGroup}
             isMulti={isMulti}
             handleMultiSelect={handleMultiSelect}
+            setListAdd={setListAdd}
+            handleItemClick={handleItemClick}
           />
         );
         break;
@@ -387,6 +424,9 @@ const SideBar = ({ typeDisplaySide, data, setData, setListPlan, listPlan }) => {
             }
           />
         );
+        break;
+      case "layout":
+        view = <ViewLayout />;
         break;
       default:
         view = <ViewSideDevice classes={classes} />;

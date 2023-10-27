@@ -102,17 +102,32 @@ export const dataPTZ = [
 ];
 
 export const dataInitTask = [
-  { id: "6", label: "task 1", groupId: "2" },
-  { id: "7", label: "task 2", groupId: "3" },
-  { id: "8", label: "task 3", groupId: "2" },
+  { id: "6", label: "task 1", groupId: "2", selected: false },
+  { id: "7", label: "task 2", groupId: "3", selected: false },
+  { id: "8", label: "task 3", groupId: "2", selected: false },
+  { id: "238", label: "task 56", groupId: "2", selected: false },
+  { id: "3248", label: "task 465", groupId: "2", selected: false },
+  { id: "234128", label: "task 3234", groupId: "2", selected: false },
 ];
 
 export const dataInit = [
   { id: "1", label: "Group 1", parentId: "", asserts: [] },
   { id: "2", label: "Group 2", parentId: "1", asserts: ["1"] },
   { id: "3", label: "Group 3", parentId: "1", asserts: ["1"] },
-  { id: "4", label: "Group 4", parentId: "3", asserts: ["1", "3"] },
-  { id: "5", label: "Group 5", parentId: "2", asserts: ["1", "2"] },
+  {
+    id: "4",
+    label: "Group 4",
+    parentId: "3",
+    asserts: ["1", "3"],
+    selected: false,
+  },
+  {
+    id: "5",
+    label: "Group 5",
+    parentId: "2",
+    asserts: ["1", "2"],
+    selected: false,
+  },
 ];
 
 export const dataGridCustomX4_1 = [

@@ -19,7 +19,14 @@ const ResponsiveReactGridLayout = WidthProvider(Responsive);
 const cols = 10;
 const aspectRatio = 16 / 9;
 const ContentLiveView = memo((props) => {
-  const { taskLive, isFullScreen, isSideBar, setTaskLive } = props;
+  const {
+    taskLive,
+    isFullScreen,
+    isSideBar,
+    setTaskLive,
+    setListAdd,
+    listAdd,
+  } = props;
   const refContentLiveView = useRef(null);
   const [heightScreen, setHeightScreen] = useState(220);
   const [screenRecording, setScreenRecording] = useState("");
@@ -50,24 +57,32 @@ const ContentLiveView = memo((props) => {
   }, [taskLive.size, isFullScreen, isSideBar, lastColUse]);
 
   const onLayoutChange = (currentLayout, prevLayout) => {
-    //update auto change w or h when one of two changes
+    const emptyPosition = findEmptySlot(currentLayout);
+    const lastItem = findLastElement(currentLayout);
+
     let newUpdateGrid = prevLayout.map((it1) => {
       const gridIdx = currentLayout.findIndex((it) => it.i === it1.i);
       if (gridIdx === -1) return { ...it1 };
       const tempNewGrid = { ...currentLayout[gridIdx] };
 
-      // update when change size x or y will change both of them
+      // update when change size x or y will change both of them (w:h =  16:9)
       if (it1.w !== tempNewGrid.w) {
         tempNewGrid.h = tempNewGrid.w;
       } else if (it1.h !== tempNewGrid.h) {
         tempNewGrid.w = tempNewGrid.h;
       }
+
       // reset when resize over 100
       if (getTotal(currentLayout, gridIdx, tempNewGrid) > 100) {
         if (it1.w !== tempNewGrid.w || it1.h !== tempNewGrid.h) {
           return { ...it1 };
         }
       }
+      //change when have empty item in the first row (y = 0)
+      if (emptyPosition.x < 10 && tempNewGrid.x > emptyPosition.x) {
+        tempNewGrid.x = emptyPosition.x;
+      }
+
       return { ...it1, ...tempNewGrid };
     });
 
@@ -77,8 +92,8 @@ const ContentLiveView = memo((props) => {
     if (lastY >= 11 && lastX < 10) lastX = lastX + 1;
     if (lastX >= 11) lastX = cols;
 
+    // find all item have y > 10
     const itemsAboveY10 = newUpdateGrid.filter((item) => item.y >= 10);
-
     const grid = Array.from({ length: cols }, () => Array(cols).fill(0));
     newUpdateGrid.forEach((item) => {
       for (let i = item.x; i < item.x + item.w; i++) {
@@ -87,7 +102,6 @@ const ContentLiveView = memo((props) => {
         }
       }
     });
-
     const emptyPositions = [];
     //find list position don't have item
     for (let i = 0; i < cols; i++) {
@@ -98,7 +112,12 @@ const ContentLiveView = memo((props) => {
       }
     }
 
-    if (itemsAboveY10.length > 0 && emptyPositions.length > 0) {
+    //auto fill into position empty when have y of item > 10
+    if (
+      itemsAboveY10.length > 0 &&
+      emptyPositions.length > 0 &&
+      emptyPositions.y !== 0
+    ) {
       const newUpdateGridCopy = [...newUpdateGrid];
       itemsAboveY10.forEach((item) => {
         if (emptyPositions.length > 0) {
@@ -114,12 +133,28 @@ const ContentLiveView = memo((props) => {
       });
       handleUpdateGrid(lastX, [...newUpdateGridCopy]);
     }
+    //auto change when the last item have x > emptyPosition item c(y = 0)
+
+    if (
+      lastItem &&
+      lastItem.x > emptyPosition.x &&
+      lastItem.x < 10 &&
+      lastItem.y === 0
+    ) {
+      const itemIdx = currentLayout.findIndex((it) => it.i === lastItem.i);
+      currentLayout[itemIdx] = {
+        ...currentLayout[itemIdx],
+        x: emptyPosition.x,
+      };
+    }
+
     handleUpdateGrid(lastX, [...newUpdateGrid]);
   };
 
   const handleUpdateGrid = (lastX, arrUpdate) => {
     setLastColUse(lastX);
     setNewUpdateGrid([...arrUpdate]);
+
     return;
   };
 
@@ -162,9 +197,26 @@ const ContentLiveView = memo((props) => {
     });
   };
 
+  const randomKey = Math.random() * 10;
   const onDrop = (value, pay) => {
     if (value.length > 100) return;
-    const randomKey = Math.random() * 10;
+    if (listAdd && listAdd.length) {
+      const newListAdd = [...listAdd].map((item) => ({
+        x: pay.x,
+        y: pay.y - 1,
+        w: 1,
+        h: 1,
+        size: 3,
+        merge: [],
+        screenDetail: [],
+        i: item.label,
+      }));
+      setTaskLive((prev) => ({
+        ...prev,
+        grid: [...prev.grid].concat(newListAdd),
+      }));
+      return;
+    }
     setTaskLive((prev) => ({
       ...prev,
       grid: [
@@ -175,10 +227,33 @@ const ContentLiveView = memo((props) => {
           screenDetail: [],
           key: randomKey,
           i: String(randomKey),
-          y: pay.y - 1 >= 0 ? pay.y - 1 : 0,
+          y: pay.y - 1,
         },
       ],
     }));
+  };
+
+  function findEmptySlot(layout) {
+    const usedX = layout.map((item) => item.x);
+
+    // find value of x smallest not use on the fist row (y = 0)
+    let emptyX = 0;
+    while (usedX.includes(emptyX)) {
+      emptyX++;
+    }
+    return { x: emptyX, y: 0 };
+  }
+
+  const findLastElement = (layout) => {
+    let lastElement = null;
+    layout.forEach((it) => {
+      if (it.y === 0) {
+        if (!lastElement || it.x > lastElement.x) {
+          lastElement = it;
+        }
+      }
+    });
+    return lastElement;
   };
 
   return (
@@ -194,6 +269,10 @@ const ContentLiveView = memo((props) => {
     >
       <GridLayout
         className="layout"
+        style={{
+          minHeight: taskLive.grid.length > 0 ? "auto" : 220,
+          minWidth: 1000,
+        }}
         layout={taskLive.grid}
         rowHeight={heightScreen}
         cols={cols}
@@ -209,9 +288,9 @@ const ContentLiveView = memo((props) => {
             ? false
             : true
         }
-        // onResizeStop={handleResize}
         resizeHandles={["se"]}
         // onResizeStart={handleResize}
+        // onDragStop={onDragStop}
         // droppingItem={{ h: 1, w: 1 }}
         onDrop={onDrop}
       >

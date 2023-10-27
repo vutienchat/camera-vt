@@ -36,6 +36,7 @@ const ViewSideTaskWall = ({
   dataGroup,
   isMulti,
   handleMultiSelect,
+  handleItemClick,
 }) => {
   const classView = useStyles();
   const [selectType, setSelectType] = useState("siteGroup");
@@ -118,6 +119,7 @@ const ViewSideTaskWall = ({
             handleShowPopupSelect={handleShowPopupSelect}
             isMulti={isMulti}
             handleMultiSelect={handleMultiSelect}
+            handleItemClick={handleItemClick}
           />
         </TreeItem>
         <TreeItem
