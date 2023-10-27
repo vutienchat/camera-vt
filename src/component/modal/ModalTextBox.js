@@ -8,7 +8,7 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
-import React from "react";
+import React, { useMemo } from "react";
 const useStyles = makeStyles({
   modal: {
     "& .MuiPaper-rounded": {
@@ -19,15 +19,17 @@ const useStyles = makeStyles({
   },
 });
 
-const ModalRenameTask = ({
+const ModalTextBox = ({
   open,
   handleClose,
   setTaskIndex,
   taskIndex,
-  handleRename,
-  type,
+  handleChangeText,
+  title,
   isDisabled,
   messageErr,
+  field,
+  nameButton,
 }) => {
   const classes = useStyles();
   return (
@@ -50,7 +52,7 @@ const ModalRenameTask = ({
           <Typography
             style={{ fontWeight: 800, textAlign: "center", fontSize: "21px" }}
           >
-            {type === "task" ? " Rename Task View" : "Rename"}
+            {title}
           </Typography>
         </Box>
         <DialogContent style={{ display: "flex", alignItems: "center" }}>
@@ -63,7 +65,7 @@ const ModalRenameTask = ({
               marginBottom: 0,
             }}
           >
-            {type === "task" ? " Task View Name" : " Task View Group Name"}
+            {field}
           </DialogContentText>
           <TextField
             style={{ width: 300 }}
@@ -71,9 +73,9 @@ const ModalRenameTask = ({
             variant="outlined"
             size="small"
             error={isDisabled}
-            value={taskIndex.label || ""}
+            value={nameButton === "RENAME" ? taskIndex.label : ""}
             onChange={(e) => {
-              if (e.target.value !== " ")
+              if (e.target.value !== " " && nameButton === "RENAME")
                 setTaskIndex({
                   ...taskIndex,
                   label: e.target.value.substring(0, 32),
@@ -108,7 +110,7 @@ const ModalRenameTask = ({
           </Button>
           <Button
             onClick={() => {
-              handleRename(taskIndex.id || "");
+              handleChangeText(taskIndex.id || "");
               handleClose();
             }}
             disabled={taskIndex.label === ""}
@@ -122,7 +124,7 @@ const ModalRenameTask = ({
               marginLeft: 16,
             }}
           >
-            Save
+            {nameButton}
           </Button>
         </Box>
       </Box>
@@ -130,4 +132,4 @@ const ModalRenameTask = ({
   );
 };
 
-export default React.memo(ModalRenameTask);
+export default React.memo(ModalTextBox);

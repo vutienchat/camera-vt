@@ -1,4 +1,11 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, {
+  createContext,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   Box,
   Button,
@@ -6,6 +13,7 @@ import {
   Select,
   Typography,
   ClickAwayListener,
+  IconButton,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
@@ -15,7 +23,7 @@ import FullscreenIcon from "@material-ui/icons/Fullscreen";
 import PopupOption from "./PopupOption";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ModalRenameTask from "../modal/ModalRenameTask";
+import ModalTextBox from "../modal/ModalTextBox";
 import ModalDeleteTask from "../modal/ModalDeleteTask";
 import ModalCloseTask from "../modal/ModalCloseTask";
 import Clean from "../../asset/image/Mask Group 739.png";
@@ -36,12 +44,17 @@ import {
 import { getDataGridBySize, getGroupTree } from "./javascript";
 import HeaderPopup from "./HeaderPopup";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
-
+import Checkbox from "@material-ui/core/Checkbox";
+import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+import PopupLayout from "./PopupLayout";
 const dataHeader = [
-  { id: 1, label: "Task 1", duplicate: 0, default: 1 },
-  { id: 2, label: "Task 2", duplicate: 0, default: 0 },
-  { id: 3, label: "Task 3", duplicate: 0, default: 0 },
-  { id: 4, label: "Task 4", duplicate: 0, default: 0 },
+  {
+    id: 1,
+    label: "New Layout",
+    duplicate: 0,
+    default: 1,
+    isSave: false,
+  },
 ];
 
 const useStyles = makeStyles({
@@ -64,7 +77,6 @@ const useStyles = makeStyles({
     letterSpacing: "normal",
     textAlign: "center",
     color: "#000",
-    paddingLeft: "12px",
   },
   ionClose: {
     color: "rgb(147, 147, 147)",
@@ -131,7 +143,7 @@ const useStyles = makeStyles({
     alignItems: "center",
   },
 });
-
+export const HeaderLiveViewContext = createContext({});
 const HeaderLiveView = (props) => {
   const {
     setIsFullScreen,
@@ -143,7 +155,7 @@ const HeaderLiveView = (props) => {
   } = props;
   const classes = useStyles();
   const wrapperRef = useRef(null);
-  useOutsideAlerter(wrapperRef);
+  // useOutsideAlerter(wrapperRef);
   const [data, setData] = useState([...dataHeader]);
   const [dataIndex, setDataIndex] = useState(0);
   const [size, setSize] = useState(5);
@@ -155,26 +167,20 @@ const HeaderLiveView = (props) => {
   const [isShowModalDelete, setIsShowModalDelete] = useState(false);
   const [isModalSave, setIsModalSave] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorElLayout, setAnchorElLayout] = useState(null);
   const [isShowPopupCustom, setIsShowPopupCustom] = useState(false);
   const [isShowModalCustomGrid, setIsShowModalCustomGrid] = useState(false);
   const [isShowPopupSearch, setIsShowPopupSearch] = useState(false);
   const [dataGroup, setDataGroup] = useState();
+  const [isOpenPopupLayout, setIsOpenPopupLayout] = useState(false);
+  const [isChooseItem, setIsChooseItem] = useState(null);
+  const [isActive, setIsActive] = useState(null);
+  const [isOpenShareModal, setIsOpenShareModal] = useState(false);
+  const [lengthChange, setLengthChange] = useState(dataHeader.length);
 
-  function useOutsideAlerter(ref) {
-    useEffect(() => {
-      function handleClickOutside(event) {
-        if (ref.current && !ref.current.contains(event.target)) {
-          setIsShowPopupSelect(false);
-        }
-      }
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-      };
-    }, [ref]);
-  }
-
+  console.log("data", data);
   const handleAddNewTask = () => {
+    console.log("is call");
     const temp = [...data];
     const indexTaskActive = temp.findIndex((item) => item.default);
     temp[indexTaskActive] = {
@@ -184,13 +190,24 @@ const HeaderLiveView = (props) => {
 
     temp.push({
       id: data.length + 1,
-      label: `task ${data.length + 1}`,
+      label: `New Layout ${data.length + 1}`,
       isNew: true,
       duplicate: 0,
       default: 1,
+      isSave: false,
     });
+    // const taskIndx = temp.findIndex((item) => item.id === newLayout.id);
+    // if (taskIndx >= 0 ) {
+    //   const modifyLayout = {
+    //     ...newLayout,
+    //     id: temp.length + 1,
+    //     label: `${newLayout.label} (${newLayout.duplicate + 1})`,
+    //   };
+    //   temp.push(modifyLayout);
+    // } else {
+    //   temp.push(newLayout);
+    // }
     setData([...temp]);
-    console.log(dataIndex);
     setDataIndex((prev) => {
       if (prev + size >= data.length + 1) return prev;
       return prev + size;
@@ -200,11 +217,14 @@ const HeaderLiveView = (props) => {
   const handleChangePage = (type) => {
     if (type === "next") {
       setDataIndex((prev) => {
+        
+      console.log("prev", prev);
         if (prev + size >= data.length) return prev;
         return prev + size;
       });
     } else {
       setDataIndex((prev) => {
+        console.log("prev1", prev);
         if (prev <= 0) {
           return 0;
         } else {
@@ -215,6 +235,7 @@ const HeaderLiveView = (props) => {
   };
 
   const handleDuplicate = (id) => {
+    console.log("3");
     const tempData = [...data];
     const taskIndx = tempData.findIndex((item) => item.id === id);
     if (taskIndx === -1) return;
@@ -250,7 +271,6 @@ const HeaderLiveView = (props) => {
     const temp = [...data].filter((item) => item.id !== id);
     setData(temp);
   };
-
   const handleRename = (id) => {
     const tempData = [...data];
     const taskIndx = tempData.findIndex((item) => item.id === id);
@@ -258,8 +278,8 @@ const HeaderLiveView = (props) => {
     tempData[taskIndx] = { ...taskIndex };
     setData([...tempData]);
   };
-
   const handleCloseTask = (id) => {
+    console.log("4");
     const tempData = [...data];
     const taskIndx = tempData.findIndex((item) => item.id === id);
     if (taskIndx === -1) return;
@@ -271,6 +291,12 @@ const HeaderLiveView = (props) => {
     setIsModalClose(false);
   };
 
+  const handleCloseMultipleLayout = (id) => {
+    const tempData = [...data];
+    const newListLayout = tempData.filter((item) => item.id === id);
+    setData([...newListLayout]);
+  };
+
   const handleShowModalClose = (id) => {
     if (skipClose) {
       handleCloseTask(id);
@@ -279,9 +305,12 @@ const HeaderLiveView = (props) => {
     }
   };
 
+  const handleShareLayout = (id) => {};
   const handleSaveTask = (id) => setIsModalSave(true);
 
   const handleChangeTask = (id) => {
+    setIsChooseItem(id);
+    setIsActive(id);
     const tempData = [...data];
     const activeTaskIndex = tempData.findIndex((item) => item.default);
     if (activeTaskIndex === -1) return;
@@ -321,26 +350,45 @@ const HeaderLiveView = (props) => {
     setDataGroup([...parseData]);
   }, [data, dataInitTask]);
 
+  const dataContext = {
+    isShowPopUpSelect,
+    anchorEl,
+    handleAddNewTask,
+    handleDuplicate,
+    taskIndex,
+    setIsShowModalRename,
+    setTaskIndex,
+    setIsShowPopupSelect,
+    setIsShowModalDelete,
+    handleShowModalClose,
+    wrapperRef,
+    data,
+    handleChangeTask,
+    isChooseItem,
+    setIsChooseItem,
+    handleShareLayout,
+
+    anchorElLayout,
+    isOpenPopupLayout,
+    setIsOpenPopupLayout,
+    setIsOpenShareModal,
+    isOpenShareModal,
+    handleCloseMultipleLayout,
+  };
   return (
-    <React.Fragment>
-      <Box
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          borderBottom: "2px solid #e5e5e5",
-          paddingBottom: 10,
-          boxSizing: "border-box",
-        }}
-      >
+    <HeaderLiveViewContext.Provider value={dataContext}>
+      <React.Fragment>
         <Box
           style={{
             display: "flex",
-            justifyContent: "flex-start",
+            justifyContent: "space-between",
             alignItems: "center",
+            borderBottom: "2px solid #e5e5e5",
+            paddingBottom: 10,
+            boxSizing: "border-box",
           }}
         >
-          <Box style={{ display: "flex" }}>
+          <Box style={{ display: "flex", alignItem: "center" }}>
             {data.slice(dataIndex, dataIndex + size).map((item) => {
               return (
                 <Task
@@ -350,241 +398,202 @@ const HeaderLiveView = (props) => {
                   setTaskIndex={setTaskIndex}
                   setIsShowPopupSelect={setIsShowPopupSelect}
                   setAnchorEl={setAnchorEl}
-                  activeTask={item.default ? true : false}
                   handleChangeTask={handleChangeTask}
+                  setIsActive={setIsActive}
+                  isActive={isActive}
                 />
               );
             })}
-            <Box className={classes.addNewBtn} onClick={handleAddNewTask}>
-              <Box
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginLeft: 40,
-                }}
-              >
-                <AddIcon />
-              </Box>
-              <Typography
-                className={classes.labelTask}
-                style={{ color: "#dd3d4b", paddingLeft: 8 }}
-              >
-                Add new
-              </Typography>
-            </Box>
-          </Box>
-        </Box>
-        <Box
-          style={{
-            display: "flex",
-            justifyContent: "inherit",
-            alignItems: "center",
-            width: 500,
-          }}
-        >
-          {data.length > 5 && (
+
             <Box
               style={{
                 display: "flex",
-                justifyContent: "space-around",
-                width: "80px",
-                borderRight: "1px solid rgb(112, 112, 112)",
-                paddingRight: 15,
+                alignItems: "center",
+                justifyContent: "space-between",
+                marginLeft: 10,
               }}
             >
-              <Box
-                onClick={() => handleChangePage("prev")}
+              {data.length >5 && (
+                <Box
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    width: "50px",
+                  }}
+                >
+                  <Box
+                    onClick={() => handleChangePage("prev")}
+                    style={{
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <ChevronLeftIcon />
+                  </Box>
+                  <Box>
+                    <ChevronRightIcon
+                      onClick={() => handleChangePage("next")}
+                      style={{
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    />
+                  </Box>
+                </Box>
+              )}
+              <Button
+                onClick={handleAddNewTask}
                 style={{
-                  cursor: "pointer",
                   display: "flex",
                   alignItems: "center",
-                  border: "solid 1px #939393",
+                  cursor: "pointer",
+                  width: 30,
+                  minWidth: 30,
                 }}
               >
-                <ChevronLeftIcon />
-              </Box>
-              <Box>
-                <ChevronRightIcon
-                  onClick={() => handleChangePage("next")}
-                  style={{
-                    cursor: "pointer",
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    border: "solid 1px #939393",
-                  }}
-                />
-              </Box>
+                <AddIcon style={{ color: "black" }} />
+              </Button>
+              <Button
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  cursor: "pointer",
+                  width: 30,
+                  minWidth: 30,
+                }}
+                onClick={(e) => {
+                  setIsOpenPopupLayout(!isOpenPopupLayout);
+                  setAnchorElLayout(e.currentTarget);
+                }}
+              >
+                <MoreVertIcon />
+              </Button>
             </Box>
-          )}
-          <Box
-            className="flex-col-center"
-            style={{ cursor: "pointer" }}
-            onClick={() => setIsModalSave(true)}
-          >
-            <SaveIcon style={{ fontSize: 32, paddingTop: 10 }} />
-            <Typography style={{ fontSize: 9 }}>Save</Typography>
-          </Box>
-          <Box className="flex-col-center">
-            <img
-              src={SaveAs}
-              alt="save as"
-              style={{ paddingTop: 13, width: 24 }}
-            />
-            <Typography style={{ fontSize: 9, whiteSpace: "nowrap" }}>
-              Save As
-            </Typography>
           </Box>
           <Box
             style={{
-              width: 40,
-              borderLeft: "solid 1px #707070",
-              borderRight: "solid 1px #707070",
-              textAlign: "center",
+              display: "flex",
+              justifyContent: "space-evenly",
+              alignItems: "center",
+              width: 500,
             }}
           >
-            <img src={Clean} onClick={handleCleanTask} />
-          </Box>
-          <OptionGridTask
-            onClickCustomSize={(sizeGrid) =>
-              onUpdateGridData(getDataGridBySize(sizeGrid), sizeGrid)
-            }
-          />
-
-          <ClickAwayListener onClickAway={() => setIsShowPopupCustom(false)}>
-            <Box style={{ position: "relative" }}>
-              <img
-                src={CustomGrid}
-                alt="customGrid"
-                style={{ width: 24, cursor: "pointer" }}
-                onClick={() => setIsShowPopupCustom(true)}
-              />
-              {isShowPopupCustom ? (
-                <Box className={classes.popUpCustomGrid}>
-                  <Box style={{ display: "flex" }}>
-                    <OptionGridTask
-                      onClickCustomSize={(sizeGrid) =>
-                        onUpdateGridData(getDataGridBySize(sizeGrid), sizeGrid)
-                      }
-                    />
-                    <DashboardIcon
-                      style={{ cursor: "pointer" }}
-                      onClick={() => onUpdateGridData(dataGridCustomX4_1, 4)}
-                    />
-                    <ViewQuiltIcon
-                      style={{ cursor: "pointer" }}
-                      onClick={() => onUpdateGridData(dataGridCustomX4_2, 4)}
-                    />
-                  </Box>
-                  <Box style={{ display: "flex" }}>
-                    <span
-                      className={classes.numberGrid}
-                      onClick={() => onUpdateGridData(getDataGridBySize(5), 5)}
-                    >
-                      25
-                    </span>
-                    <span
-                      className={classes.numberGrid}
-                      onClick={() => onUpdateGridData(getDataGridBySize(6), 6)}
-                    >
-                      36
-                    </span>
-                  </Box>
-                  <hr />
-                  <Box
-                    className={classes.buttonCustomGrid}
-                    onClick={() => setIsShowModalCustomGrid(true)}
-                  >
-                    <BorderColorIcon />
-                  </Box>
-                </Box>
-              ) : null}
+            <Box
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Checkbox />
+              <Typography>Drag Items</Typography>
             </Box>
-          </ClickAwayListener>
-
-          <Box
-            style={{ marginLeft: 10, cursor: "pointer" }}
-            onClick={setIsFullScreen}
-          >
-            <FullscreenIcon fontSize="medium" style={{ fontSize: 32 }} />
+            <Box
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Checkbox />
+              <Typography>Resize Items</Typography>
+            </Box>
+            <Box
+              style={{
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+              onClick={setIsFullScreen}
+            >
+              <FullscreenIcon style={{ fontSize: 32, color: "#f50057" }} />
+              <Typography>Full screen</Typography>
+            </Box>
           </Box>
         </Box>
-      </Box>
-      {isShowModalCustomGrid && (
-        <ModalCustomGrid
-          handleClose={() => setIsShowModalCustomGrid(false)}
-          handleSubmit={(dataGrid, sizeGrid) => {
-            onUpdateGridData(dataGrid, sizeGrid);
-            setIsShowModalCustomGrid(false);
-          }}
-          dataGrid={taskLive.grid}
-          sizeGrid={taskLive.size}
-        />
-      )}
+        {isShowModalCustomGrid && (
+          <ModalCustomGrid
+            handleClose={() => setIsShowModalCustomGrid(false)}
+            handleSubmit={(dataGrid, sizeGrid) => {
+              onUpdateGridData(dataGrid, sizeGrid);
+              setIsShowModalCustomGrid(false);
+            }}
+            dataGrid={taskLive.grid}
+            sizeGrid={taskLive.size}
+          />
+        )}
+        {isOpenPopupLayout && <PopupLayout />}
 
-      {isShowPopUpSelect && (
-        <PopupOption
-          open={isShowPopUpSelect}
-          anchorEl={anchorEl}
-          handleAddNewTask={handleAddNewTask}
-          handleDuplicate={handleDuplicate}
-          setIsShowModalRename={setIsShowModalRename}
-          setIsShowPopupSelect={setIsShowPopupSelect}
-          setIsShowModalDelete={setIsShowModalDelete}
-          handleShowModalClose={handleShowModalClose}
-          setTaskIndex={setTaskIndex}
-          data={taskIndex}
-          wrapperRef={wrapperRef}
-        />
-      )}
+        {isShowPopUpSelect && <PopupOption />}
+        {isOpenShareModal && (
+          <ModalTextBox
+            open={isOpenShareModal}
+            handleClose={() => {
+              setIsOpenShareModal(false);
+            }}
+            handleChangeText={handleShareLayout}
+            taskIndex={taskIndex}
+            setTaskIndex={setTaskIndex}
+            title={"Share Layout"}
+            field={"Username"}
+            nameButton={"SHARE"}
+          />
+        )}
 
-      {isShowModalRename && (
-        <ModalRenameTask
-          open={isShowModalRename}
-          handleClose={() => {
-            setIsShowModalRename(false);
-          }}
-          handleRename={handleRename}
-          taskIndex={taskIndex}
-          setTaskIndex={setTaskIndex}
-          type={"task"}
-        />
-      )}
-      {isShowModalDelete && (
-        <ModalDeleteTask
-          open={isShowModalDelete}
-          handleClose={() => {
-            setIsShowModalDelete(false);
-          }}
-          handleDelete={handleDelete}
-          taskIndex={taskIndex}
-        />
-      )}
-      {isModalClose && (
-        <ModalCloseTask
-          open={isModalClose}
-          handleClose={() => {
-            setIsModalClose(false);
-          }}
-          taskIndex={taskIndex}
-          handleCloseTask={handleCloseTask}
-          skipClose={skipClose}
-          setSkipClose={setSkipClose}
-        />
-      )}
-      {isModalSave && (
-        <ModalSaveTaskView
-          open={isModalSave}
-          handleClose={() => {
-            setIsModalSave(false);
-          }}
-          taskIndex={taskIndex}
-          setTaskIndex={setTaskIndex}
-          handleSaveTask={handleSaveTask}
-          dataGroup={dataGroup}
-        />
-      )}
-    </React.Fragment>
+        {isShowModalRename && (
+          <ModalTextBox
+            open={isShowModalRename}
+            handleClose={() => {
+              setIsShowModalRename(false);
+            }}
+            handleChangeText={handleRename}
+            taskIndex={taskIndex}
+            setTaskIndex={setTaskIndex}
+            title={"Rename Layout"}
+            field={"Rename Layout"}
+            nameButton={"RENAME"}
+          />
+        )}
+        {isShowModalDelete && (
+          <ModalDeleteTask
+            open={isShowModalDelete}
+            handleClose={() => {
+              setIsShowModalDelete(false);
+            }}
+            handleDelete={handleDelete}
+            taskIndex={taskIndex}
+          />
+        )}
+        {isModalClose && (
+          <ModalCloseTask
+            open={isModalClose}
+            handleClose={() => {
+              setIsModalClose(false);
+            }}
+            taskIndex={taskIndex}
+            handleCloseTask={handleCloseTask}
+            skipClose={skipClose}
+            setSkipClose={setSkipClose}
+          />
+        )}
+        {isModalSave && (
+          <ModalSaveTaskView
+            open={isModalSave}
+            handleClose={() => {
+              setIsModalSave(false);
+            }}
+            taskIndex={taskIndex}
+            setTaskIndex={setTaskIndex}
+            handleSaveTask={handleSaveTask}
+            dataGroup={dataGroup}
+          />
+        )}
+      </React.Fragment>
+    </HeaderLiveViewContext.Provider>
   );
 };
 export default React.memo(HeaderLiveView);
@@ -594,8 +603,9 @@ const Task = ({
   setTaskIndex,
   setIsShowPopupSelect,
   setAnchorEl,
-  activeTask,
   handleChangeTask,
+  setIsActive,
+  isActive,
 }) => {
   const classes = useStyles();
 
@@ -608,24 +618,65 @@ const Task = ({
   return (
     <Box
       key={item.id}
-      className={`${classes.task} ${activeTask ? classes.activeTask : ""}`}
-      onClick={() => handleChangeTask(item.id)}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: isActive === item.id ? "#dd3d4b" : "#ffffff",
+        border: isActive !== item.id && "1px solid #dd3d4b",
+        cursor: "pointer",
+        width: 140,
+      }}
+      onClick={() => {
+        handleChangeTask(item.id);
+      }}
     >
-      <Typography className={classes.labelTask}>{item.label}</Typography>
-      <Button
+      <Box
         style={{
           display: "flex",
           alignItems: "center",
-          cursor: "pointer",
-          width: 30,
-          minWidth: 30,
-        }}
-        onClick={(e) => {
-          handleShow(e);
+          justifyContent: "center",
+          color: isActive === item.id ? "#ffffff" : "#0f0f0f",
+          marginLeft: 5,
         }}
       >
-        <MoreVertIcon />
-      </Button>
+        <Typography
+          style={{
+            color: isActive === item.id ? "#ffffff" : "#0f0f0f",
+            maxWidth: 97,
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            fontSize: 15,
+          }}
+          className={classes.labelTask}
+        >
+          {item.label}
+        </Typography>
+        {!item.isSave && (
+          <span style={{ fontWeight: 600, fontSize: 18, marginLeft: 5 }}>
+            *
+          </span>
+        )}
+      </Box>
+      {isActive === item.id && (
+        <Button
+          style={{
+            display: "flex",
+            alignItems: "center",
+            cursor: "pointer",
+            width: 30,
+            minWidth: 30,
+          }}
+          onClick={(e) => {
+            handleShow(e);
+          }}
+        >
+          <KeyboardArrowDownIcon
+            style={{ color: isActive === item.id ? "#ffffff" : "#0f0f0f" }}
+          />
+        </Button>
+      )}
     </Box>
   );
 };
