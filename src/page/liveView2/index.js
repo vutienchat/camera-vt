@@ -20,23 +20,12 @@ import {
 } from "../../component/liveView2/utils";
 import { nodeListWithoutDevices } from "../../component/liveView2/utils/data";
 import useListLayout from "../../component/liveView2/hook/useListLayout";
+import { dataHeader } from "../../component/liveView/HeaderLiveView";
 
 export const LiveView2Context = createContext();
 
 const LiveView = memo(() => {
-  const {} = useListLayout();
-  const [taskLive, setTaskLive] = useState({
-    id: "id Task 3",
-    size: 3,
-    name: "Name Task",
-    active: true,
-    groupId: "a57w4867s5ad75sa76as4d",
-    userId: "2654s7awd654214e65wa4d",
-    no: 3,
-    grid: defaultData,
-    lastModified: new Date(),
-    createDate: new Date(),
-  });
+  const [layoutActive, setLayoutActive] = useState(dataHeader[0]);
   const [isSideBar, setIsSideBar] = useState(false);
   const [typeDisplaySide, setTypeDisplaySide] = useState();
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -44,7 +33,8 @@ const LiveView = memo(() => {
   const [groupDeviceList, setGroupDeviceList] = useState();
   const [listPlan, setListPlan] = useState([]);
   const [listAdd, setListAdd] = useState([]);
-  const [listTask, setListTask] = useState([...dataInitTask]);
+  const [listLayout, setListLayout] = useState([...dataInitTask]);
+  const [listLayoutActive, setListLayoutActive] = useState([...dataHeader]);
 
   const escFunction = useCallback(
     (event) => {
@@ -92,7 +82,7 @@ const LiveView = memo(() => {
   };
 
   const handleUpdateGridData = (gridData, sizeGrid) => {
-    setTaskLive((taskLivePrev) => {
+    setLayoutActive((taskLivePrev) => {
       return {
         ...taskLivePrev,
         size: sizeGrid,
@@ -111,7 +101,7 @@ const LiveView = memo(() => {
   };
 
   const handleCleanTask = () => {
-    setTaskLive((taskLivePrev) => {
+    setLayoutActive((taskLivePrev) => {
       return {
         ...taskLivePrev,
         grid: taskLivePrev.grid.map((gridScreenItem) => {
@@ -122,7 +112,7 @@ const LiveView = memo(() => {
   };
 
   const handleItemClick = (item, event) => {
-    const tempData = [...listTask];
+    const tempData = [...listLayout];
     if (event.shiftKey) return;
     if (event.ctrlKey) {
       const itemIdx = tempData.findIndex((it) => it.id === item.id);
@@ -144,7 +134,7 @@ const LiveView = memo(() => {
 
   const handleChangeListAdd = (listData) => {
     setListAdd(listData.filter((it) => it.selected));
-    setListTask(listData);
+    setListLayout(listData);
     return;
   };
 
@@ -179,7 +169,10 @@ const LiveView = memo(() => {
     handleItemClick,
     listAdd,
     handleMouseDown,
-    setTaskLive,
+    setLayoutActive,
+
+    listLayoutActive,
+    setListLayoutActive,
   };
 
   return (
@@ -188,11 +181,14 @@ const LiveView = memo(() => {
         <Box>
           <HeaderLiveView
             setIsFullScreen={() => setIsFullScreen(true)}
-            taskLive={taskLive}
+            layoutActive={layoutActive}
             onUpdateGridData={handleUpdateGridData}
             handleCleanTask={handleCleanTask}
             dataSideGroup={dataSideGroup}
             groupDeviceList={groupDeviceList}
+            setLayoutActive={setLayoutActive}
+            listLayoutActive={listLayoutActive}
+            setListLayoutActive={setListLayoutActive}
           />
           <Box
             style={{
@@ -203,10 +199,10 @@ const LiveView = memo(() => {
             }}
           >
             <Content
-              taskLive={taskLive}
+              layoutActive={layoutActive}
               isFullScreen={isFullScreen}
               isSideBar={isSideBar}
-              setTaskLive={setTaskLive}
+              setLayoutActive={setLayoutActive}
               listAdd={listAdd}
             />
             <Box style={{ display: "flex", marginLeft: "16px" }}>

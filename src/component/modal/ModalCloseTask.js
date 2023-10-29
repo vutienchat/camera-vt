@@ -14,7 +14,7 @@ const ModalCloseTask = ({
   open,
   handleClose,
   handleCloseTask,
-  taskIndex,
+  layoutActive,
   skipClose,
   setSkipClose,
 }) => {
@@ -79,7 +79,7 @@ const ModalCloseTask = ({
           <Button
             autoFocus
             onClick={() => {
-              handleCloseTask(taskIndex.id);
+              handleCloseTask(layoutActive.id);
             }}
             style={{
               width: "120px",

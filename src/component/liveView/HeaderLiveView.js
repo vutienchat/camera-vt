@@ -35,18 +35,14 @@ import { ModalCustomGrid } from "../modal";
 import BorderColorIcon from "@material-ui/icons/BorderColor";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import ViewQuiltIcon from "@material-ui/icons/ViewQuilt";
-import {
-  dataGridCustomX4_1,
-  dataGridCustomX4_2,
-  dataInit,
-  dataInitTask,
-} from "./dataSideBar";
+import { dataInitTask } from "./dataSideBar";
 import { getDataGridBySize, getGroupTree } from "./javascript";
 import HeaderPopup from "./HeaderPopup";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import Checkbox from "@material-ui/core/Checkbox";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import PopupLayout from "./PopupLayout";
+import { defaultData } from "./@type";
 export const dataHeader = [
   {
     id: 0,
@@ -54,6 +50,7 @@ export const dataHeader = [
     duplicate: 0,
     default: 1,
     isSave: false,
+    grid: defaultData,
   },
 ];
 
@@ -147,19 +144,20 @@ export const HeaderLiveViewContext = createContext({});
 const HeaderLiveView = (props) => {
   const {
     setIsFullScreen,
-    taskLive,
+    layoutActive,
     onUpdateGridData,
     handleCleanTask,
     dataSideGroup,
     groupDeviceList,
+    setLayoutActive,
+    listLayoutActive,
+    setListLayoutActive,
   } = props;
   const classes = useStyles();
   const wrapperRef = useRef(null);
   // useOutsideAlerter(wrapperRef);
-  const [data, setData] = useState([...dataHeader]);
   const [dataIndex, setDataIndex] = useState(0);
   const [size, setSize] = useState(6);
-  const [taskIndex, setTaskIndex] = useState();
   const [skipClose, setSkipClose] = useState(false);
   const [isModalClose, setIsModalClose] = useState(false);
   const [isShowPopUpSelect, setIsShowPopupSelect] = useState(false);
@@ -168,7 +166,6 @@ const HeaderLiveView = (props) => {
   const [isModalSave, setIsModalSave] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorElLayout, setAnchorElLayout] = useState(null);
-  const [isShowPopupCustom, setIsShowPopupCustom] = useState(false);
   const [isShowModalCustomGrid, setIsShowModalCustomGrid] = useState(false);
   const [isShowPopupSearch, setIsShowPopupSearch] = useState(false);
   const [dataGroup, setDataGroup] = useState();
@@ -192,8 +189,10 @@ const HeaderLiveView = (props) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  console.log("listLayoutActive.slice(", listLayoutActive);
+
   const handleAddNewTask = () => {
-    const temp = [...data];
+    const temp = [...listLayoutActive];
     const indexTaskActive = temp.findIndex((item) => item.default);
     temp[indexTaskActive] = {
       ...temp[indexTaskActive],
@@ -207,6 +206,7 @@ const HeaderLiveView = (props) => {
       duplicate: 0,
       default: 1,
       isSave: false,
+      grid: defaultData,
     });
     // const taskIndx = temp.findIndex((item) => item.id === newLayout.id);
     // if (taskIndx >= 0 ) {
@@ -219,9 +219,9 @@ const HeaderLiveView = (props) => {
     // } else {
     //   temp.push(newLayout);
     // }
-    setData([...temp]);
+    setListLayoutActive([...temp]);
     setDataIndex((prev) => {
-      if (prev + size >= data.length + 1) return prev;
+      if (prev + size >= listLayoutActive.length + 1) return prev;
       return prev + size;
     });
     setLengthChange((prev) => prev + 1);
@@ -230,7 +230,7 @@ const HeaderLiveView = (props) => {
   const handleChangePage = (type) => {
     if (type === "next") {
       setDataIndex((prev) => {
-        if (prev + size >= data.length) return prev;
+        if (prev + size >= listLayoutActive.length) return prev;
         return prev + size;
       });
     } else {
@@ -245,8 +245,7 @@ const HeaderLiveView = (props) => {
   };
 
   const handleDuplicate = (id) => {
-    console.log("3");
-    const tempData = [...data];
+    const tempData = [...listLayoutActive];
     const taskIndx = tempData.findIndex((item) => item.id === id);
     if (taskIndx === -1) return;
     tempData.push({
@@ -257,58 +256,52 @@ const HeaderLiveView = (props) => {
       })`,
       duplicate: 0,
       isNew: true,
+      grid: defaultData,
     });
-
-    const activeTaskIndex = tempData.findIndex((item) => item.default);
-    if (activeTaskIndex === -1) return;
-    tempData[activeTaskIndex] = {
-      ...tempData[activeTaskIndex],
-      default: 0,
-    };
 
     tempData[taskIndx] = {
       ...tempData[taskIndx],
       duplicate: tempData[taskIndx].duplicate + 1,
     };
-    setData([...tempData]);
+    setListLayoutActive([...tempData]);
     setDataIndex((prev) => {
-      if (prev + size >= data.length + 1) return prev;
+      if (prev + size >= listLayoutActive.length + 1) return prev;
       return prev + size;
     });
   };
 
   const handleDelete = (id) => {
-    const temp = [...data].filter((item) => item.id !== id);
+    const temp = [...listLayoutActive].filter((item) => item.id !== id);
     if (temp.length % size === 0) {
       setDataIndex((prev) => prev - size);
     }
-    setData(temp);
+    setListLayoutActive(temp);
   };
 
   const handleRename = (id) => {
-    const tempData = [...data];
+    const tempData = [...listLayoutActive];
     const taskIndx = tempData.findIndex((item) => item.id === id);
     if (taskIndx === -1) return;
-    tempData[taskIndx] = { ...taskIndex };
-    setData([...tempData]);
+    tempData[taskIndx] = { ...layoutActive };
+    setListLayoutActive([...tempData]);
   };
 
   const handleCloseTask = (id) => {
-    const tempData = [...data];
+    const tempData = [...listLayoutActive];
     const taskIndx = tempData.findIndex((item) => item.id === id);
     if (taskIndx === -1) return;
     if (!tempData[taskIndx].isNew) return;
     const newTemp = tempData.filter(
       (item) => item.id !== tempData[taskIndx].id
     );
-    setData([...newTemp]);
+    setListLayoutActive([...newTemp]);
     setIsModalClose(false);
   };
 
   const handleCloseMultipleLayout = (id) => {
-    const tempData = [...data];
+    const tempData = [...listLayoutActive];
     const newListLayout = tempData.filter((item) => item.id === id);
-    setData([...newListLayout]);
+    setListLayoutActive([...newListLayout]);
   };
 
   const handleShowModalClose = (id) => {
@@ -325,32 +318,12 @@ const HeaderLiveView = (props) => {
   const handleChangeTask = (id) => {
     setIsChooseItem(id);
     setIsActive(id);
-    const tempData = [...data];
-    const activeTaskIndex = tempData.findIndex((item) => item.default);
-    if (activeTaskIndex === -1) return;
-    tempData[activeTaskIndex] = {
-      ...tempData[activeTaskIndex],
-      default: 0,
-    };
-
-    const newActive = tempData.findIndex((item) => item.id === id);
-    if (newActive === -1) return;
-    tempData[newActive] = {
-      ...tempData[newActive],
-      default: 1,
-    };
-
-    setData([...tempData]);
+    const tempData = [...listLayoutActive];
   };
 
   const handleOpenPopupSearch = () => {
     setIsShowPopupSearch((prev) => !prev);
   };
-
-  useEffect(() => {
-    const taskActive = data.find((item) => item.default);
-    setTaskIndex({ ...taskActive });
-  }, [data]);
 
   useEffect(() => {
     const parseData =
@@ -362,26 +335,25 @@ const HeaderLiveView = (props) => {
         return [...abc];
       }, []);
     setDataGroup([...parseData]);
-  }, [data, dataInitTask]);
+  }, [listLayoutActive, dataInitTask]);
 
   const dataContext = {
     isShowPopUpSelect,
     anchorEl,
     handleAddNewTask,
     handleDuplicate,
-    taskIndex,
+    layoutActive,
     setIsShowModalRename,
-    setTaskIndex,
+    setLayoutActive,
     setIsShowPopupSelect,
     setIsShowModalDelete,
     handleShowModalClose,
     wrapperRef,
-    data,
+    listLayoutActive,
     handleChangeTask,
     isChooseItem,
     setIsChooseItem,
     handleShareLayout,
-
     anchorElLayout,
     isOpenPopupLayout,
     setIsOpenPopupLayout,
@@ -403,13 +375,13 @@ const HeaderLiveView = (props) => {
           }}
         >
           <Box style={{ display: "flex", alignItem: "center" }}>
-            {data.slice(dataIndex, dataIndex + size).map((item) => {
+            {listLayoutActive.slice(dataIndex, dataIndex + size).map((item) => {
               return (
                 <Task
                   key={item.id}
                   item={item}
-                  taskIndex={taskIndex}
-                  setTaskIndex={setTaskIndex}
+                  layoutActive={layoutActive}
+                  setLayoutActive={setLayoutActive}
                   setIsShowPopupSelect={setIsShowPopupSelect}
                   setAnchorEl={setAnchorEl}
                   handleChangeTask={handleChangeTask}
@@ -427,7 +399,7 @@ const HeaderLiveView = (props) => {
                 marginLeft: 10,
               }}
             >
-              {data.length > size && (
+              {listLayoutActive.length > size && (
                 <Box
                   style={{
                     display: "flex",
@@ -536,8 +508,8 @@ const HeaderLiveView = (props) => {
               onUpdateGridData(dataGrid, sizeGrid);
               setIsShowModalCustomGrid(false);
             }}
-            dataGrid={taskLive.grid}
-            sizeGrid={taskLive.size}
+            dataGrid={layoutActive.grid}
+            sizeGrid={layoutActive.size}
           />
         )}
         {isOpenPopupLayout && <PopupLayout />}
@@ -550,8 +522,8 @@ const HeaderLiveView = (props) => {
               setIsOpenShareModal(false);
             }}
             handleChangeText={handleShareLayout}
-            taskIndex={taskIndex}
-            setTaskIndex={setTaskIndex}
+            layoutActive={layoutActive}
+            setLayoutActive={setLayoutActive}
             title={"Share Layout"}
             field={"Username"}
             nameButton={"SHARE"}
@@ -565,8 +537,8 @@ const HeaderLiveView = (props) => {
               setIsShowModalRename(false);
             }}
             handleChangeText={handleRename}
-            taskIndex={taskIndex}
-            setTaskIndex={setTaskIndex}
+            layoutActive={layoutActive}
+            setLayoutActive={setLayoutActive}
             title={"Rename Layout"}
             field={"Rename Layout"}
             nameButton={"RENAME"}
@@ -579,7 +551,7 @@ const HeaderLiveView = (props) => {
               setIsShowModalDelete(false);
             }}
             handleDelete={handleDelete}
-            taskIndex={taskIndex}
+            layoutActive={layoutActive}
           />
         )}
         {isModalClose && (
@@ -588,7 +560,7 @@ const HeaderLiveView = (props) => {
             handleClose={() => {
               setIsModalClose(false);
             }}
-            taskIndex={taskIndex}
+            layoutActive={layoutActive}
             handleCloseTask={handleCloseTask}
             skipClose={skipClose}
             setSkipClose={setSkipClose}
@@ -600,8 +572,8 @@ const HeaderLiveView = (props) => {
             handleClose={() => {
               setIsModalSave(false);
             }}
-            taskIndex={taskIndex}
-            setTaskIndex={setTaskIndex}
+            layoutActive={layoutActive}
+            setLayoutActive={setLayoutActive}
             handleSaveTask={handleSaveTask}
             dataGroup={dataGroup}
           />
@@ -614,7 +586,7 @@ export default React.memo(HeaderLiveView);
 
 const Task = ({
   item,
-  setTaskIndex,
+  setLayoutActive,
   setIsShowPopupSelect,
   setAnchorEl,
   handleChangeTask,
@@ -626,7 +598,7 @@ const Task = ({
   const handleShow = (e) => {
     setIsShowPopupSelect((prev) => !prev);
     setAnchorEl(e.currentTarget);
-    setTaskIndex({ ...item });
+    setLayoutActive({ ...item });
   };
 
   return (

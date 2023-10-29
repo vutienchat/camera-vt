@@ -481,7 +481,7 @@ const ModalAddPlanSchedule = ({
           open={taskViewDelete !== null}
           handleClose={() => setTaskViewDelete(null)}
           handleDelete={handleDeleteTask}
-          taskIndex={taskViewDelete}
+          layoutActive={taskViewDelete}
         />
       )}
     </React.Fragment>

@@ -10,7 +10,7 @@ import React from "react";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 
 const ModalDeleteTask = React.memo(
-  ({ open, handleClose, handleDelete, taskIndex, idName }) => {
+  ({ open, handleClose, handleDelete, layoutActive, idName }) => {
     return (
       <Dialog
         open={open}
@@ -77,7 +77,7 @@ const ModalDeleteTask = React.memo(
             <Button
               autoFocus
               onClick={() => {
-                handleDelete(taskIndex[idName] || taskIndex.id);
+                handleDelete(layoutActive[idName] || layoutActive.id);
                 handleClose();
               }}
               style={{

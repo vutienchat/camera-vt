@@ -190,7 +190,7 @@ const flattenTreeNode = (root, keyWord) => {
 };
 
 const LiveView = memo(() => {
-  const [taskLive, setTaskLive] = useState({
+  const [layoutActive, setLayoutActive] = useState({
     id: "id Task 3",
     size: 3,
     name: "Name Task",
@@ -267,7 +267,7 @@ const LiveView = memo(() => {
   };
 
   const handleUpdateGridData = (gridData, sizeGrid) => {
-    setTaskLive((taskLivePrev) => {
+    setLayoutActive((taskLivePrev) => {
       return {
         ...taskLivePrev,
         size: sizeGrid,
@@ -286,7 +286,7 @@ const LiveView = memo(() => {
   };
 
   const handleCleanTask = () => {
-    setTaskLive((taskLivePrev) => {
+    setLayoutActive((taskLivePrev) => {
       return {
         ...taskLivePrev,
         grid: taskLivePrev.grid.map((gridScreenItem) => {
@@ -354,7 +354,7 @@ const LiveView = memo(() => {
     handleItemClick,
     listAdd,
     handleMouseDown,
-    setTaskLive,
+    setLayoutActive,
   };
 
   return (
@@ -363,7 +363,7 @@ const LiveView = memo(() => {
         <Box>
           <HeaderLiveView
             setIsFullScreen={() => setIsFullScreen(true)}
-            taskLive={taskLive}
+            layoutActive={layoutActive}
             onUpdateGridData={handleUpdateGridData}
             handleCleanTask={handleCleanTask}
             dataSideGroup={dataSideGroup}
@@ -378,10 +378,10 @@ const LiveView = memo(() => {
             }}
           >
             <Content
-              taskLive={taskLive}
+              layoutActive={layoutActive}
               isFullScreen={isFullScreen}
               isSideBar={isSideBar}
-              setTaskLive={setTaskLive}
+              setLayoutActive={setLayoutActive}
               listAdd={listAdd}
             />
             <Box style={{ display: "flex", marginLeft: "16px" }}>

@@ -442,20 +442,25 @@ const SideBar = ({
     const listPlanIds = [...listPlans].map((item) => item.id);
     if (data && data.listTask && data.listTask.length) {
       data.listTask.forEach((group) => {
-        const taskIndex = dataInitTask.findIndex(
+        const layoutActive = dataInitTask.findIndex(
           (task) => task.id === group.id
         );
         if (
-          taskIndex !== -1 &&
-          !listPlanIds.includes(dataInitTask[taskIndex].id)
+          layoutActive !== -1 &&
+          !listPlanIds.includes(dataInitTask[layoutActive].id)
         )
-          listPlans.push({ ...dataInitTask[taskIndex] });
+          listPlans.push({ ...dataInitTask[layoutActive] });
       });
     }
     if (data && typeDisplay === "task") {
-      const taskIndex = dataInitTask.findIndex((task) => task.id === data.id);
-      if (taskIndex !== -1 && !listPlanIds.includes(dataInitTask[taskIndex].id))
-        listPlans.push({ ...dataInitTask[taskIndex] });
+      const layoutActive = dataInitTask.findIndex(
+        (task) => task.id === data.id
+      );
+      if (
+        layoutActive !== -1 &&
+        !listPlanIds.includes(dataInitTask[layoutActive].id)
+      )
+        listPlans.push({ ...dataInitTask[layoutActive] });
     }
     if (data && data.nodeChildren && data.nodeChildren.length) {
       data.nodeChildren.forEach((item) => {
@@ -622,8 +627,8 @@ const SideBar = ({
             setIsShowModalRename(false);
           }}
           handleRename={handleRename}
-          taskIndex={indexGroup}
-          setTaskIndex={setIndexGroup}
+          layoutActive={indexGroup}
+          setLayoutActive={setIndexGroup}
           type={typeDisplay}
           isDisabled={isDisabled}
           messageErr={messageErr}
@@ -632,7 +637,7 @@ const SideBar = ({
       <ModalDeleteTask
         open={isModalDeleteGroup}
         handleClose={() => setIsModalDeleteGroup(false)}
-        taskIndex={indexGroup}
+        layoutActive={indexGroup}
         handleDelete={handleDeleteGroup}
       />
     </React.Fragment>

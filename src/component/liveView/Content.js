@@ -20,10 +20,10 @@ const cols = 10;
 const aspectRatio = 16 / 9;
 const ContentLiveView = memo((props) => {
   const {
-    taskLive,
+    layoutActive,
     isFullScreen,
     isSideBar,
-    setTaskLive,
+    setLayoutActive,
     setListAdd,
     listAdd,
   } = props;
@@ -34,14 +34,16 @@ const ContentLiveView = memo((props) => {
   const [widthItem, setWidthItem] = useState(1);
   const [newUpdateGrid, setNewUpdateGrid] = useState([]);
 
-  useEffect(() => setScreenRecording(""), [taskLive]);
+  useEffect(() => setScreenRecording(""), [layoutActive]);
 
   useLayoutEffect(() => {
     const updateSize = () => {
       if (isFullScreen) {
         setHeightScreen(
-          (refContentLiveView.current.offsetHeight - (taskLive.size - 1) * 8) /
-            taskLive.size
+          ((refContentLiveView.current.offsetHeight -
+            (layoutActive.x * layoutActive.y - 1) * 8) /
+            layoutActive.x) *
+            layoutActive.y
         );
       } else {
         const itemWidth = refContentLiveView.current.offsetWidth / lastColUse; // Chiều rộng của mỗi item
@@ -52,9 +54,9 @@ const ContentLiveView = memo((props) => {
     };
 
     window.addEventListener("resize", updateSize);
-    taskLive.size !== 0 && updateSize();
+    layoutActive.x * layoutActive.y !== 0 && updateSize();
     return () => window.removeEventListener("resize", updateSize);
-  }, [taskLive.size, isFullScreen, isSideBar, lastColUse]);
+  }, [layoutActive, isFullScreen, isSideBar, lastColUse]);
 
   const onLayoutChange = (currentLayout, prevLayout) => {
     const emptyPosition = findEmptySlot(currentLayout);
@@ -159,7 +161,7 @@ const ContentLiveView = memo((props) => {
   };
 
   useEffect(() => {
-    setTaskLive((prev) => ({ ...prev, grid: [...newUpdateGrid] }));
+    setLayoutActive((prev) => ({ ...prev, grid: [...newUpdateGrid] }));
   }, [newUpdateGrid]);
 
   const getLastLocation = (type, size, arr) => {
@@ -189,7 +191,7 @@ const ContentLiveView = memo((props) => {
 
   const handleDelete = (id) => {
     if (!id) return;
-    setTaskLive((prev) => {
+    setLayoutActive((prev) => {
       return {
         ...prev,
         grid: [...prev.grid].filter((it) => it.i !== id),
@@ -211,13 +213,13 @@ const ContentLiveView = memo((props) => {
         screenDetail: [],
         i: item.label,
       }));
-      setTaskLive((prev) => ({
+      setLayoutActive((prev) => ({
         ...prev,
         grid: [...prev.grid].concat(newListAdd),
       }));
       return;
     }
-    setTaskLive((prev) => ({
+    setLayoutActive((prev) => ({
       ...prev,
       grid: [
         ...prev.grid,
@@ -270,21 +272,22 @@ const ContentLiveView = memo((props) => {
       <GridLayout
         className="layout"
         style={{
-          minHeight: taskLive.grid.length > 0 ? "auto" : 220,
+          minHeight:
+            layoutActive.grid && layoutActive.grid.length > 0 ? "auto" : 220,
           minWidth: 1000,
         }}
-        layout={taskLive.grid}
+        layout={layoutActive.grid}
         rowHeight={heightScreen}
         cols={cols}
         maxRows={cols}
         width={cols * widthItem}
         onLayoutChange={(layout) => {
-          onLayoutChange(layout, taskLive.grid || []);
+          onLayoutChange(layout, layoutActive.grid || []);
         }}
-        isResizable={taskLive.grid.length < 100}
+        isResizable={layoutActive.grid.length < 100}
         isDraggable={true}
         isDroppable={
-          taskLive.grid.length >= 100 || getTotal(taskLive.grid) >= 100
+          layoutActive.grid.length >= 100 || getTotal(layoutActive.grid) >= 100
             ? false
             : true
         }
@@ -294,7 +297,7 @@ const ContentLiveView = memo((props) => {
         // droppingItem={{ h: 1, w: 1 }}
         onDrop={onDrop}
       >
-        {taskLive.grid.map((gridItem) => {
+        {layoutActive.grid.map((gridItem) => {
           // if (gridItem.merge.length) {
           //   return (
           //     <Box

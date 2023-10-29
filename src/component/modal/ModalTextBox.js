@@ -22,8 +22,8 @@ const useStyles = makeStyles({
 const ModalTextBox = ({
   open,
   handleClose,
-  setTaskIndex,
-  taskIndex,
+  setLayoutActive,
+  layoutActive,
   handleChangeText,
   title,
   isDisabled,
@@ -73,11 +73,11 @@ const ModalTextBox = ({
             variant="outlined"
             size="small"
             error={isDisabled}
-            value={nameButton === "RENAME" ? taskIndex.label : ""}
+            value={nameButton === "RENAME" ? layoutActive.label : ""}
             onChange={(e) => {
               if (e.target.value !== " " && nameButton === "RENAME")
-                setTaskIndex({
-                  ...taskIndex,
+                setLayoutActive({
+                  ...layoutActive,
                   label: e.target.value.substring(0, 32),
                 });
             }}
@@ -110,10 +110,10 @@ const ModalTextBox = ({
           </Button>
           <Button
             onClick={() => {
-              handleChangeText(taskIndex.id || "");
+              handleChangeText(layoutActive.id || "");
               handleClose();
             }}
-            disabled={taskIndex.label === ""}
+            disabled={layoutActive.label === ""}
             style={{
               width: "150px",
               height: "48px",

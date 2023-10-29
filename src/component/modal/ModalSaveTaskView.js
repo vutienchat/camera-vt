@@ -42,8 +42,8 @@ const useStyles = makeStyles({
 const ModalSaveTaskView = ({
   open,
   handleClose,
-  setTaskIndex,
-  taskIndex,
+  setLayoutActive,
+  layoutActive,
   handleSaveTask,
   dataGroup,
 }) => {
@@ -92,10 +92,10 @@ const ModalSaveTaskView = ({
               variant="outlined"
               size="small"
               style={{ width: 300 }}
-              value={taskIndex.label || ""}
+              value={layoutActive.label || ""}
               onChange={(e) => {
                 if (e.target.value !== " ")
-                  setTaskIndex({ ...taskIndex, label: e.target.value });
+                  setLayoutActive({ ...layoutActive, label: e.target.value });
               }}
             />
           </Box>
@@ -166,7 +166,7 @@ const ModalSaveTaskView = ({
               handleSaveTask();
               handleClose();
             }}
-            disabled={taskIndex.label === ""}
+            disabled={layoutActive.label === ""}
             style={{
               width: "150px",
               height: "48px",

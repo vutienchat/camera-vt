@@ -52,7 +52,7 @@ const ViewLayout = React.memo(() => {
 });
 
 const ItemLayout = ({ layout }) => {
-  const { setTaskLive } = useContext(LiveViewContext);
+  const { setLayoutActive } = useContext(LiveViewContext);
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -61,7 +61,7 @@ const ItemLayout = ({ layout }) => {
   };
 
   const handleDoubleClick = (layoutLive) => {
-    setTaskLive(layoutLive);
+    setLayoutActive(layoutLive);
   };
   return (
     <React.Fragment>

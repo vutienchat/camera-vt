@@ -44,9 +44,9 @@ const PopUpOption = () => {
     setIsShowPopupSelect,
     setIsShowModalDelete,
     handleShowModalClose,
-    taskIndex,
+    layoutActive,
     wrapperRef,
-    data,
+    listLayoutActive,
     handleChangeTask,
     setIsChooseItem,
     isChooseItem,
@@ -122,7 +122,7 @@ const PopUpOption = () => {
                         left: 184,
                       }}
                     >
-                      {data.map((item) => {
+                      {listLayoutActive.map((item) => {
                         return (
                           <Box
                             style={{
@@ -161,7 +161,7 @@ const PopUpOption = () => {
                 <Typography
                   className={classes.optionTask}
                   onClick={() => {
-                    handleDuplicate(taskIndex.id);
+                    handleDuplicate(layoutActive.id);
                     setIsShowPopupSelect(false);
                   }}
                 >
@@ -231,10 +231,10 @@ const PopUpOption = () => {
                   }}
                   className={classes.optionTask}
                   onClick={() => {
-                    handleShowModalClose(taskIndex.id);
+                    handleShowModalClose(layoutActive.id);
                     setIsShowPopupSelect(false);
                   }}
-                  disabled={taskIndex.isNew ? false : true}
+                  disabled={layoutActive.isNew ? false : true}
                 >
                   <Typography style={{ fontSize: 14, paddingLeft: 8 }}>
                     Close
@@ -251,10 +251,10 @@ const PopUpOption = () => {
                   }}
                   className={classes.optionTask}
                   onClick={() => {
-                    handleCloseMultipleLayout(taskIndex.id);
+                    handleCloseMultipleLayout(layoutActive.id);
                     setIsShowPopupSelect(false);
                   }}
-                  disabled={taskIndex.isNew ? false : true}
+                  disabled={layoutActive.isNew ? false : true}
                 >
                   <Typography style={{ fontSize: 14, paddingLeft: 8 }}>
                     Close All But This

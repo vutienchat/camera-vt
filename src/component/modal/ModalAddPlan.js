@@ -214,7 +214,7 @@ const ModalAddPlan = ({
               handleClose();
               handleSavePlan();
             }}
-            // disabled={taskIndex.label === ""}
+            // disabled={layoutActive.label === ""}
             style={{
               width: "120px",
               height: "35px",
