@@ -170,9 +170,9 @@ const LiveView = memo(() => {
     listAdd,
     handleMouseDown,
     setLayoutActive,
-
     listLayoutActive,
     setListLayoutActive,
+    layoutActive,
   };
 
   return (

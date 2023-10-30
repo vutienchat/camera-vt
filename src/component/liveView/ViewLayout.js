@@ -14,7 +14,7 @@ import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import ViewComfyIcon from "@material-ui/icons/ViewComfy";
 import VideocamIcon from "@material-ui/icons/Videocam";
 import { defaultData } from "./@type";
-import { LiveViewContext } from "../../page/liveView";
+import { LiveView2Context } from "../../page/liveView2";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -27,16 +27,17 @@ const useStyles = makeStyles(() => ({
 }));
 
 const listLayout = Array.from(Array(4)).map((_, idx) => ({
-  id: idx,
+  id: `${idx}_new`,
   name: `layout ${idx}`,
   userId: "user id người tạo",
   userNameShare: "tên người chia sẻ",
-  gird: defaultData,
+  grid: defaultData,
   countDuplicate: 0,
   idLayoutShare: "id layout Share",
   idLayoutDuplicate: "id layout Duplicate",
   createAt: "date",
   lastModified: "date",
+  label: `layout ${idx}`,
 }));
 
 const ViewLayout = React.memo(() => {
@@ -52,7 +53,7 @@ const ViewLayout = React.memo(() => {
 });
 
 const ItemLayout = ({ layout }) => {
-  const { setLayoutActive } = useContext(LiveViewContext);
+  const { setLayoutActive, setListLayoutActive } = useContext(LiveView2Context);
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -62,6 +63,15 @@ const ItemLayout = ({ layout }) => {
 
   const handleDoubleClick = (layoutLive) => {
     setLayoutActive(layoutLive);
+    setListLayoutActive((prev) => {
+      const tempData = [...prev];
+      const layoutActive = tempData.findIndex((it) => it.id === layoutLive.id);
+
+      if (layoutActive === -1) {
+        tempData.push({ ...layoutLive });
+      }
+      return tempData;
+    });
   };
   return (
     <React.Fragment>
@@ -125,14 +135,14 @@ const ItemLayout = ({ layout }) => {
               color: "#777",
             }}
           >
-            {layout.gird.length} cameras
+            {layout.grid.length} cameras
           </Typography>
         </Box>
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          {layout.gird &&
-            layout.gird.map((grid) => (
+          {layout.grid &&
+            layout.grid.map((grid) => (
               <React.Fragment key={grid.i}>
                 <ListItem button className={classes.nested}>
                   <ListItemIcon style={{ minWidth: 30 }}>

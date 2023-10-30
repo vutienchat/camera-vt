@@ -234,7 +234,7 @@ const PopUpOption = () => {
                     handleShowModalClose(layoutActive.id);
                     setIsShowPopupSelect(false);
                   }}
-                  disabled={layoutActive.isNew ? false : true}
+                  disabled={layoutActive && layoutActive.isNew ? false : true}
                 >
                   <Typography style={{ fontSize: 14, paddingLeft: 8 }}>
                     Close
@@ -254,7 +254,7 @@ const PopUpOption = () => {
                     handleCloseMultipleLayout(layoutActive.id);
                     setIsShowPopupSelect(false);
                   }}
-                  disabled={layoutActive.isNew ? false : true}
+                  disabled={layoutActive && layoutActive.isNew ? false : true}
                 >
                   <Typography style={{ fontSize: 14, paddingLeft: 8 }}>
                     Close All But This

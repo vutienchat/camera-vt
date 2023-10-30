@@ -1,5 +1,6 @@
 import React, {
   createContext,
+  useContext,
   useEffect,
   useLayoutEffect,
   useMemo,
@@ -43,6 +44,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import PopupLayout from "./PopupLayout";
 import { defaultData } from "./@type";
+import { LiveView2Context } from "../../page/liveView2";
 export const dataHeader = [
   {
     id: 0,
@@ -51,6 +53,7 @@ export const dataHeader = [
     default: 1,
     isSave: false,
     grid: defaultData,
+    isNew: false,
   },
 ];
 
@@ -189,8 +192,6 @@ const HeaderLiveView = (props) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  console.log("listLayoutActive.slice(", listLayoutActive);
-
   const handleAddNewTask = () => {
     const temp = [...listLayoutActive];
     const indexTaskActive = temp.findIndex((item) => item.default);
@@ -319,6 +320,10 @@ const HeaderLiveView = (props) => {
     setIsChooseItem(id);
     setIsActive(id);
     const tempData = [...listLayoutActive];
+    const layoutIndex = tempData.find((it) => it.id === id);
+    if (layoutIndex) {
+      setLayoutActive(layoutIndex);
+    }
   };
 
   const handleOpenPopupSearch = () => {
@@ -342,7 +347,6 @@ const HeaderLiveView = (props) => {
     anchorEl,
     handleAddNewTask,
     handleDuplicate,
-    layoutActive,
     setIsShowModalRename,
     setLayoutActive,
     setIsShowPopupSelect,
@@ -380,7 +384,6 @@ const HeaderLiveView = (props) => {
                 <Task
                   key={item.id}
                   item={item}
-                  layoutActive={layoutActive}
                   setLayoutActive={setLayoutActive}
                   setIsShowPopupSelect={setIsShowPopupSelect}
                   setAnchorEl={setAnchorEl}
@@ -590,15 +593,14 @@ const Task = ({
   setIsShowPopupSelect,
   setAnchorEl,
   handleChangeTask,
-  setIsActive,
-  isActive,
 }) => {
   const classes = useStyles();
+  const { layoutActive } = useContext(LiveView2Context);
 
   const handleShow = (e) => {
     setIsShowPopupSelect((prev) => !prev);
     setAnchorEl(e.currentTarget);
-    setLayoutActive({ ...item });
+    // setLayoutActive({ ...item });
   };
 
   return (
@@ -608,8 +610,12 @@ const Task = ({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: isActive === item.id ? "#dd3d4b" : "#ffffff",
-        border: isActive !== item.id && "1px solid #dd3d4b",
+        backgroundColor:
+          layoutActive && layoutActive.id === item.id ? "#dd3d4b" : "#ffffff",
+        border:
+          layoutActive && layoutActive.id !== item.id
+            ? "1px solid #dd3d4b"
+            : "",
         cursor: "pointer",
         width: 140,
       }}
@@ -622,13 +628,17 @@ const Task = ({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          color: isActive === item.id ? "#ffffff" : "#0f0f0f",
+          color:
+            layoutActive && layoutActive.id === item.id ? "#ffffff" : "#0f0f0f",
           marginLeft: 5,
         }}
       >
         <Typography
           style={{
-            color: isActive === item.id ? "#ffffff" : "#0f0f0f",
+            color:
+              layoutActive && layoutActive.id === item.id
+                ? "#ffffff"
+                : "#0f0f0f",
             maxWidth: 97,
             whiteSpace: "nowrap",
             overflow: "hidden",
@@ -645,7 +655,7 @@ const Task = ({
           </span>
         )}
       </Box>
-      {isActive === item.id && (
+      {layoutActive && layoutActive.id === item.id && (
         <Button
           style={{
             display: "flex",
@@ -659,7 +669,12 @@ const Task = ({
           }}
         >
           <KeyboardArrowDownIcon
-            style={{ color: isActive === item.id ? "#ffffff" : "#0f0f0f" }}
+            style={{
+              color:
+                layoutActive && layoutActive.id === item.id
+                  ? "#ffffff"
+                  : "#0f0f0f",
+            }}
           />
         </Button>
       )}
