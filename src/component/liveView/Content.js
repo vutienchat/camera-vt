@@ -26,6 +26,7 @@ const ContentLiveView = memo((props) => {
     setLayoutActive,
     setListAdd,
     listAdd,
+    isResizeItem,
   } = props;
   const refContentLiveView = useRef(null);
   const [heightScreen, setHeightScreen] = useState(220);
@@ -211,28 +212,29 @@ const ContentLiveView = memo((props) => {
         size: 3,
         merge: [],
         screenDetail: [],
-        i: item.label,
+        i: item.i ? item.i : item.label,
       }));
       setLayoutActive((prev) => ({
         ...prev,
         grid: [...prev.grid].concat(newListAdd),
       }));
+      setListAdd([]);
       return;
     }
-    setLayoutActive((prev) => ({
-      ...prev,
-      grid: [
-        ...prev.grid,
-        {
-          ...pay,
-          merge: [],
-          screenDetail: [],
-          key: randomKey,
-          i: String(randomKey),
-          y: pay.y - 1,
-        },
-      ],
-    }));
+    // setLayoutActive((prev) => ({
+    //   ...prev,
+    //   grid: [
+    //     ...prev.grid,
+    //     {
+    //       ...pay,
+    //       merge: [],
+    //       screenDetail: [],
+    //       key: randomKey,
+    //       i: String(randomKey),
+    //       y: pay.y - 1,
+    //     },
+    //   ],
+    // }));
   };
 
   function findEmptySlot(layout) {
@@ -284,7 +286,7 @@ const ContentLiveView = memo((props) => {
         onLayoutChange={(layout) => {
           onLayoutChange(layout, layoutActive.grid || []);
         }}
-        isResizable={layoutActive.grid.length < 100}
+        isResizable={isResizeItem && layoutActive.grid.length < 100}
         isDraggable={true}
         isDroppable={
           layoutActive.grid.length >= 100 || getTotal(layoutActive.grid) >= 100

@@ -22,7 +22,7 @@ import ModalAddPlanSchedule from "../modal/ModalAddPlanSchedule";
 import ModalPlayTask from "../modal/ModalPlayTask";
 import ViewSideEvent from "./ViewSideEvent";
 import { LiveViewContext } from "../../page/liveView";
-import ViewLayout from "./ViewLayout";
+import ViewLayout from "../../page/liveView2/components/ViewLayout";
 
 const useStyles = makeStyles({
   Sub: {
@@ -206,7 +206,7 @@ export const renderData = (
                                     listAdd
                                       .map((it) => it.label)
                                       .includes(child.label)
-                                      ? "#666"
+                                      ? "#f6f4f4"
                                       : "",
                                 }}
                                 className="droppable-element"

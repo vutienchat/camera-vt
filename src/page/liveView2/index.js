@@ -41,6 +41,9 @@ const LiveView = memo(() => {
     shareUsernameEmpty: false,
   });
   const [shareUserName, setShareUserName] = useState("fff")
+  const [startIdx, setStartIdx] = useState(null);
+  const [isDragItem, setIsDragItem] = useState(true);
+  const [isResizeItem, setIsResizeItem] = useState(true);
 
   const escFunction = useCallback(
     (event) => {
@@ -144,8 +147,6 @@ const LiveView = memo(() => {
     return;
   };
 
-  const [startIdx, setStartIdx] = useState(null);
-
   const handleMouseDown = (index, event, listData) => {
     if (!listData) return;
     const tempData = [...listData];
@@ -181,6 +182,9 @@ const LiveView = memo(() => {
     layoutActive,
     setIsErrors,
     isErrors,
+    setListAdd,
+    isResizeItem,
+    isDragItem,
   };
 
   return (
@@ -190,10 +194,8 @@ const LiveView = memo(() => {
           <HeaderLiveView
             setIsFullScreen={() => setIsFullScreen(true)}
             layoutActive={layoutActive}
-            onUpdateGridData={handleUpdateGridData}
             handleCleanTask={handleCleanTask}
             dataSideGroup={dataSideGroup}
-            groupDeviceList={groupDeviceList}
             setLayoutActive={setLayoutActive}
             listLayoutActive={listLayoutActive}
             setListLayoutActive={setListLayoutActive}
@@ -201,6 +203,10 @@ const LiveView = memo(() => {
             isErrors={isErrors}
             shareUserName={shareUserName}
             setShareUserName={setShareUserName}
+            isDragItem={isDragItem}
+            setIsDragItem={setIsDragItem}
+            isResizeItem={isResizeItem}
+            setIsResizeItem={setIsResizeItem}
           />
           <Box
             style={{
@@ -216,6 +222,8 @@ const LiveView = memo(() => {
               isSideBar={isSideBar}
               setLayoutActive={setLayoutActive}
               listAdd={listAdd}
+              setListAdd={setListAdd}
+              isResizeItem={isResizeItem}
             />
             <Box style={{ display: "flex", marginLeft: "16px" }}>
               <NavBar
