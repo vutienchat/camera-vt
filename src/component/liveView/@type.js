@@ -18,6 +18,7 @@ export const defaultData = []
     ...wall,
     key: index + 1,
     i: `Cam ${String(index + 1)}`,
+    selected: false,
     // resizeHandles: ["se"],
     // isResizable: true,
   }));

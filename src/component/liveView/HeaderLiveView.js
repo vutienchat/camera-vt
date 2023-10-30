@@ -148,13 +148,14 @@ const HeaderLiveView = (props) => {
   const {
     setIsFullScreen,
     layoutActive,
-    onUpdateGridData,
-    handleCleanTask,
     dataSideGroup,
-    groupDeviceList,
     setLayoutActive,
     listLayoutActive,
     setListLayoutActive,
+    isDragItem,
+    setIsDragItem,
+    isResizeItem,
+    setIsResizeItem,
   } = props;
   const classes = useStyles();
   const wrapperRef = useRef(null);
@@ -169,7 +170,6 @@ const HeaderLiveView = (props) => {
   const [isModalSave, setIsModalSave] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorElLayout, setAnchorElLayout] = useState(null);
-  const [isShowModalCustomGrid, setIsShowModalCustomGrid] = useState(false);
   const [isShowPopupSearch, setIsShowPopupSearch] = useState(false);
   const [dataGroup, setDataGroup] = useState();
   const [isOpenPopupLayout, setIsOpenPopupLayout] = useState(false);
@@ -477,7 +477,10 @@ const HeaderLiveView = (props) => {
                 justifyContent: "space-between",
               }}
             >
-              <Checkbox />
+              <Checkbox
+                checked={isDragItem}
+                onChange={(e) => setIsDragItem(e.target.checked)}
+              />
               <Typography>Drag Items</Typography>
             </Box>
             <Box
@@ -487,7 +490,10 @@ const HeaderLiveView = (props) => {
                 justifyContent: "space-between",
               }}
             >
-              <Checkbox />
+              <Checkbox
+                checked={isResizeItem}
+                onChange={(e) => setIsResizeItem(e.target.checked)}
+              />
               <Typography>Resize Items</Typography>
             </Box>
             <Box
@@ -504,7 +510,7 @@ const HeaderLiveView = (props) => {
             </Box>
           </Box>
         </Box>
-        {isShowModalCustomGrid && (
+        {/* {isShowModalCustomGrid && (
           <ModalCustomGrid
             handleClose={() => setIsShowModalCustomGrid(false)}
             handleSubmit={(dataGrid, sizeGrid) => {
@@ -514,7 +520,7 @@ const HeaderLiveView = (props) => {
             dataGrid={layoutActive.grid}
             sizeGrid={layoutActive.size}
           />
-        )}
+        )} */}
         {isOpenPopupLayout && <PopupLayout />}
 
         {isShowPopUpSelect && <PopupOption />}

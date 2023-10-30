@@ -35,6 +35,9 @@ const LiveView = memo(() => {
   const [listAdd, setListAdd] = useState([]);
   const [listLayout, setListLayout] = useState([...dataInitTask]);
   const [listLayoutActive, setListLayoutActive] = useState([...dataHeader]);
+  const [startIdx, setStartIdx] = useState(null);
+  const [isDragItem, setIsDragItem] = useState(true);
+  const [isResizeItem, setIsResizeItem] = useState(true);
 
   const escFunction = useCallback(
     (event) => {
@@ -138,8 +141,6 @@ const LiveView = memo(() => {
     return;
   };
 
-  const [startIdx, setStartIdx] = useState(null);
-
   const handleMouseDown = (index, event, listData) => {
     if (!listData) return;
     const tempData = [...listData];
@@ -173,6 +174,9 @@ const LiveView = memo(() => {
     listLayoutActive,
     setListLayoutActive,
     layoutActive,
+    setListAdd,
+    isResizeItem,
+    isDragItem,
   };
 
   return (
@@ -182,13 +186,15 @@ const LiveView = memo(() => {
           <HeaderLiveView
             setIsFullScreen={() => setIsFullScreen(true)}
             layoutActive={layoutActive}
-            onUpdateGridData={handleUpdateGridData}
             handleCleanTask={handleCleanTask}
             dataSideGroup={dataSideGroup}
-            groupDeviceList={groupDeviceList}
             setLayoutActive={setLayoutActive}
             listLayoutActive={listLayoutActive}
             setListLayoutActive={setListLayoutActive}
+            isDragItem={isDragItem}
+            setIsDragItem={setIsDragItem}
+            isResizeItem={isResizeItem}
+            setIsResizeItem={setIsResizeItem}
           />
           <Box
             style={{
@@ -204,6 +210,8 @@ const LiveView = memo(() => {
               isSideBar={isSideBar}
               setLayoutActive={setLayoutActive}
               listAdd={listAdd}
+              setListAdd={setListAdd}
+              isResizeItem={isResizeItem}
             />
             <Box style={{ display: "flex", marginLeft: "16px" }}>
               <NavBar
