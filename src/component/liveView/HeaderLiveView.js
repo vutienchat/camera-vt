@@ -155,6 +155,10 @@ const HeaderLiveView = (props) => {
     setLayoutActive,
     listLayoutActive,
     setListLayoutActive,
+    setIsErrors,
+    isErrors,
+    shareUserName,
+    setShareUserName,
   } = props;
   const classes = useStyles();
   const wrapperRef = useRef(null);
@@ -209,17 +213,6 @@ const HeaderLiveView = (props) => {
       isSave: false,
       grid: defaultData,
     });
-    // const taskIndx = temp.findIndex((item) => item.id === newLayout.id);
-    // if (taskIndx >= 0 ) {
-    //   const modifyLayout = {
-    //     ...newLayout,
-    //     id: temp.length + 1,
-    //     label: `${newLayout.label} (${newLayout.duplicate + 1})`,
-    //   };
-    //   temp.push(modifyLayout);
-    // } else {
-    //   temp.push(newLayout);
-    // }
     setListLayoutActive([...temp]);
     setDataIndex((prev) => {
       if (prev + size >= listLayoutActive.length + 1) return prev;
@@ -282,9 +275,18 @@ const HeaderLiveView = (props) => {
   const handleRename = (id) => {
     const tempData = [...listLayoutActive];
     const taskIndx = tempData.findIndex((item) => item.id === id);
+    const newListLayout = tempData.filter((item) => item.id !== id);
+    const isLayoutNameExist = newListLayout.some(
+      (item) => item.label === layoutActive.label.trim()
+    );
+    if (isLayoutNameExist) {
+      setIsErrors({ ...isErrors, renameExist: true });
+      return;
+    }
     if (taskIndx === -1) return;
     tempData[taskIndx] = { ...layoutActive };
     setListLayoutActive([...tempData]);
+    setIsShowModalRename(false);
   };
 
   const handleCloseTask = (id) => {
@@ -313,7 +315,10 @@ const HeaderLiveView = (props) => {
     }
   };
 
-  const handleShareLayout = (id) => {};
+  const handleShareLayout = (prop) => {
+    console.log("username", prop);
+    setIsOpenShareModal(false)
+  };
   const handleSaveTask = (id) => setIsModalSave(true);
 
   const handleChangeTask = (id) => {
@@ -364,6 +369,7 @@ const HeaderLiveView = (props) => {
     setIsOpenShareModal,
     isOpenShareModal,
     handleCloseMultipleLayout,
+    layoutActive,
   };
   return (
     <HeaderLiveViewContext.Provider value={dataContext}>
@@ -523,13 +529,20 @@ const HeaderLiveView = (props) => {
             open={isOpenShareModal}
             handleClose={() => {
               setIsOpenShareModal(false);
+              setIsErrors({
+                renameEmpty: false,
+                shareUsernameEmpty: false,
+                renameExist: false,
+              });
             }}
             handleChangeText={handleShareLayout}
-            layoutActive={layoutActive}
-            setLayoutActive={setLayoutActive}
+            shareUserName={shareUserName}
+            setShareUserName={setShareUserName}
             title={"Share Layout"}
             field={"Username"}
             nameButton={"SHARE"}
+            messageErr={isErrors}
+            setIsErrors={setIsErrors}
           />
         )}
 
@@ -538,6 +551,11 @@ const HeaderLiveView = (props) => {
             open={isShowModalRename}
             handleClose={() => {
               setIsShowModalRename(false);
+              setIsErrors({
+                renameEmpty: false,
+                shareUsernameEmpty: false,
+                renameExist: false,
+              });
             }}
             handleChangeText={handleRename}
             layoutActive={layoutActive}
@@ -545,6 +563,8 @@ const HeaderLiveView = (props) => {
             title={"Rename Layout"}
             field={"Rename Layout"}
             nameButton={"RENAME"}
+            messageErr={isErrors}
+            setIsErrors={setIsErrors}
           />
         )}
         {isShowModalDelete && (

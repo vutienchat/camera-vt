@@ -35,6 +35,12 @@ const LiveView = memo(() => {
   const [listAdd, setListAdd] = useState([]);
   const [listLayout, setListLayout] = useState([...dataInitTask]);
   const [listLayoutActive, setListLayoutActive] = useState([...dataHeader]);
+  const [isErrors, setIsErrors] = useState({
+    renameEmpty: false,
+    renameExist: false,
+    shareUsernameEmpty: false,
+  });
+  const [shareUserName, setShareUserName] = useState("fff")
 
   const escFunction = useCallback(
     (event) => {
@@ -173,6 +179,8 @@ const LiveView = memo(() => {
     listLayoutActive,
     setListLayoutActive,
     layoutActive,
+    setIsErrors,
+    isErrors,
   };
 
   return (
@@ -189,6 +197,10 @@ const LiveView = memo(() => {
             setLayoutActive={setLayoutActive}
             listLayoutActive={listLayoutActive}
             setListLayoutActive={setListLayoutActive}
+            setIsErrors={setIsErrors}
+            isErrors={isErrors}
+            shareUserName={shareUserName}
+            setShareUserName={setShareUserName}
           />
           <Box
             style={{

@@ -33,7 +33,7 @@ const PopupLayout = () => {
     isOpenPopupLayout,
     handleChangeTask,
     setIsOpenPopupLayout,
-    data,
+    listLayoutActive,
     setIsChooseItem,
     isChooseItem,
   } = useContext(HeaderLiveViewContext);
@@ -61,7 +61,7 @@ const PopupLayout = () => {
                 background: "#fff",
               }}
             >
-              {data.map((item) => {
+              {listLayoutActive.map((item) => {
                 return (
                   <Box
                     style={{
@@ -70,19 +70,17 @@ const PopupLayout = () => {
                       backgroundColor: isChooseItem === item.id && "#fff1f2",
                     }}
                     className={classes.optionTask}
+                    onClick={() => {
+                      handleChangeTask(item.id);
+                      setIsChooseItem(item.id);
+                    }}
                   >
                     {isChooseItem === item.id && (
                       <CheckOutlinedIcon
                         style={{ width: 20, height: 20, paddingLeft: 5 }}
                       />
                     )}
-                    <Typography
-                      onClick={() => {
-                        handleChangeTask(item.id);
-                        setIsChooseItem(item.id);
-                      }}
-                      style={{ flex: 1, fontSize: 14 }}
-                    >
+                    <Typography style={{ flex: 1, fontSize: 14 }}>
                       {item.label}
                     </Typography>
                   </Box>
