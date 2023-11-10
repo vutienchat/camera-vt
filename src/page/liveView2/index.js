@@ -40,7 +40,7 @@ const LiveView = memo(() => {
     renameExist: false,
     shareUsernameEmpty: false,
   });
-  const [shareUserName, setShareUserName] = useState("fff")
+  const [shareUserName, setShareUserName] = useState("fff");
   const [startIdx, setStartIdx] = useState(null);
   const [isDragItem, setIsDragItem] = useState(true);
   const [isResizeItem, setIsResizeItem] = useState(true);
@@ -87,25 +87,6 @@ const LiveView = memo(() => {
         setTypeDisplaySide(type);
         return true;
       }
-    });
-  };
-
-  const handleUpdateGridData = (gridData, sizeGrid) => {
-    setLayoutActive((taskLivePrev) => {
-      return {
-        ...taskLivePrev,
-        size: sizeGrid,
-        grid: gridData.map((gridScreenItem) => {
-          const deviceDetail = taskLivePrev.grid.find(
-            (gridOldItem) => gridOldItem.key === gridScreenItem.key
-          );
-
-          return {
-            ...gridScreenItem,
-            screenDetail: deviceDetail ? deviceDetail.screenDetail : [],
-          };
-        }),
-      };
     });
   };
 

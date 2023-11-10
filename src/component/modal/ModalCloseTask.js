@@ -77,7 +77,6 @@ const ModalCloseTask = ({
           }}
         >
           <Button
-            autoFocus
             onClick={() => {
               handleCloseTask(layoutActive.id);
             }}

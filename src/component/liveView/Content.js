@@ -32,6 +32,7 @@ const ContentLiveView = memo((props) => {
   const [heightScreen, setHeightScreen] = useState(220);
   const [screenRecording, setScreenRecording] = useState("");
   const [lastColUse, setLastColUse] = useState(1);
+  const [lastRowUse, setLastRowUse] = useState(1);
   const [widthItem, setWidthItem] = useState(1);
   const [newUpdateGrid, setNewUpdateGrid] = useState([]);
 
@@ -47,9 +48,14 @@ const ContentLiveView = memo((props) => {
             layoutActive.y
         );
       } else {
+        const aspectRatio = 16 / 9;
         const itemWidth = refContentLiveView.current.offsetWidth / lastColUse; // Chiều rộng của mỗi item
+        const maxHeightItem =
+          refContentLiveView.current.offsetHeight / lastRowUse;
+        console.log("maxHeightItem", maxHeightItem);
         const itemHeight = itemWidth / aspectRatio;
-        setHeightScreen(itemHeight);
+        console.log(itemHeight);
+        setHeightScreen(maxHeightItem);
         setWidthItem(itemWidth);
       }
     };
@@ -134,7 +140,7 @@ const ContentLiveView = memo((props) => {
           }
         }
       });
-      handleUpdateGrid(lastX, [...newUpdateGridCopy]);
+      handleUpdateGrid(lastX, lastY, [...newUpdateGridCopy]);
     }
     //auto change when the last item have x > emptyPosition item c(y = 0)
 
@@ -151,11 +157,12 @@ const ContentLiveView = memo((props) => {
       };
     }
 
-    handleUpdateGrid(lastX, [...newUpdateGrid]);
+    handleUpdateGrid(lastX, lastY, [...newUpdateGrid]);
   };
 
-  const handleUpdateGrid = (lastX, arrUpdate) => {
+  const handleUpdateGrid = (lastX, lastY, arrUpdate) => {
     setLastColUse(lastX);
+    setLastRowUse(lastY);
     setNewUpdateGrid([...arrUpdate]);
 
     return;
@@ -265,7 +272,7 @@ const ContentLiveView = memo((props) => {
       component={"main"}
       style={{
         display: "flex",
-        height: isFullScreen ? "100vh" : "auto",
+        height: isFullScreen ? "100vh" : "100%",
         width: "100%",
         overflowX: "scroll",
       }}
@@ -277,6 +284,7 @@ const ContentLiveView = memo((props) => {
           minHeight:
             layoutActive.grid && layoutActive.grid.length > 0 ? "auto" : 220,
           minWidth: 1000,
+          maxHeight: "100%",
         }}
         layout={layoutActive.grid}
         rowHeight={heightScreen}
@@ -364,6 +372,8 @@ const Content = (props) => {
           width: "-webkit-fill-available",
           background: "#f9fafc",
           position: isFullScreen ? "absolute" : "unset",
+          height: "100vh",
+          maxHeight: "100vh",
           inset: 0,
         }}
       >

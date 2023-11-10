@@ -6,6 +6,8 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  MenuItem,
+  TextField,
   Typography,
   makeStyles,
 } from "@material-ui/core";
@@ -18,6 +20,7 @@ import { LiveView2Context } from "..";
 import ModalTextBox from "../../../component/modal/ModalTextBox";
 import { ModalDeleteTask } from "../../../component/modal";
 import BasePopper from "./BasePopper";
+import MultiSelect from "./MuiltiSelect";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -34,7 +37,7 @@ const listLayout = Array.from(Array(4)).map((_, idx) => ({
   name: `layout ${idx}`,
   userId: "user id người tạo",
   userNameShare: "tên người chia sẻ",
-  grid: defaultData.map((it) => ({ ...it, i: `${it.i}_1` })),
+  grid: defaultData.map((it) => ({ ...it, i: `${it.i}_${idx}` })),
   countDuplicate: 0,
   idLayoutShare: "id layout Share",
   idLayoutDuplicate: "id layout Duplicate",
@@ -56,6 +59,37 @@ const ViewLayout = React.memo(() => {
   const [startIdx, setStartIdx] = useState(null);
   const openListOption = Boolean(anchorEl);
   const isOpenOptionCam = Boolean(anchorElCam);
+
+  function searchLayoutByNameOrI(listLayout, search) {
+    const searchLowerCase = search.toLowerCase();
+
+    const filteredLayouts = listLayout.map((layout) => {
+      const isNameMatch = layout.name.toLowerCase().includes(searchLowerCase);
+      const matchedGridItems = layout.grid.filter((gridItem) =>
+        gridItem.i.toLowerCase().includes(searchLowerCase)
+      );
+      const filteredGrid = isNameMatch ? layout.grid : matchedGridItems;
+
+      return {
+        ...layout,
+        grid: filteredGrid,
+      };
+    });
+
+    const finalFilteredLayouts = filteredLayouts.filter(
+      (layout) =>
+        layout.name.toLowerCase().includes(searchLowerCase) ||
+        layout.grid.length > 0
+    );
+
+    return finalFilteredLayouts;
+  }
+
+  // Ví dụ sử dụng hàm searchLayoutByNameOrI
+  const searchValue = "Cam 1"; // Giá trị cần tìm kiếm (có thể là name hoặc i)
+  const searchResults = searchLayoutByNameOrI(listLayout, searchValue);
+
+  console.log("Kết quả tìm kiếm:", searchResults);
 
   const handleRightClick = (event, layoutIndex) => {
     event.preventDefault();
@@ -204,6 +238,7 @@ const ViewLayout = React.memo(() => {
 
   return (
     <React.Fragment>
+      <MultiSelect />
       <List>
         {dataListLayout.map((it) => (
           <ItemLayout

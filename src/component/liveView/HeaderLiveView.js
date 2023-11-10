@@ -2,20 +2,10 @@ import React, {
   createContext,
   useContext,
   useEffect,
-  useLayoutEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
-import {
-  Box,
-  Button,
-  FormControl,
-  Select,
-  Typography,
-  ClickAwayListener,
-  IconButton,
-} from "@material-ui/core";
+import { Box, Button, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import AddIcon from "@material-ui/icons/Add";
@@ -27,19 +17,9 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ModalTextBox from "../modal/ModalTextBox";
 import ModalDeleteTask from "../modal/ModalDeleteTask";
 import ModalCloseTask from "../modal/ModalCloseTask";
-import Clean from "../../asset/image/Mask Group 739.png";
-import SaveAs from "../../asset/image/Group 8862.png";
 import ModalSaveTaskView from "../modal/ModalSaveTaskView";
-import CustomGrid from "../../asset/image/Mask_Group_728.png";
-import { OptionGridTask } from ".";
-import { ModalCustomGrid } from "../modal";
-import BorderColorIcon from "@material-ui/icons/BorderColor";
-import DashboardIcon from "@material-ui/icons/Dashboard";
-import ViewQuiltIcon from "@material-ui/icons/ViewQuilt";
 import { dataInitTask } from "./dataSideBar";
 import { getDataGridBySize, getGroupTree } from "./javascript";
-import HeaderPopup from "./HeaderPopup";
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import Checkbox from "@material-ui/core/Checkbox";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import PopupLayout from "./PopupLayout";
@@ -317,7 +297,7 @@ const HeaderLiveView = (props) => {
 
   const handleShareLayout = (prop) => {
     console.log("username", prop);
-    setIsOpenShareModal(false)
+    setIsOpenShareModal(false);
   };
   const handleSaveTask = (id) => setIsModalSave(true);
 
@@ -516,17 +496,6 @@ const HeaderLiveView = (props) => {
             </Box>
           </Box>
         </Box>
-        {/* {isShowModalCustomGrid && (
-          <ModalCustomGrid
-            handleClose={() => setIsShowModalCustomGrid(false)}
-            handleSubmit={(dataGrid, sizeGrid) => {
-              onUpdateGridData(dataGrid, sizeGrid);
-              setIsShowModalCustomGrid(false);
-            }}
-            dataGrid={layoutActive.grid}
-            sizeGrid={layoutActive.size}
-          />
-        )} */}
         {isOpenPopupLayout && <PopupLayout />}
 
         {isShowPopUpSelect && <PopupOption />}
@@ -615,7 +584,6 @@ export default React.memo(HeaderLiveView);
 
 const Task = ({
   item,
-  setLayoutActive,
   setIsShowPopupSelect,
   setAnchorEl,
   handleChangeTask,

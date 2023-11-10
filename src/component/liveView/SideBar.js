@@ -392,6 +392,8 @@ const SideBar = ({
     });
   };
 
+  console.log("daaa", dataGroup);
+
   const renderSideBar = (type) => {
     let view;
     switch (type) {
