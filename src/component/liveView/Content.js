@@ -48,15 +48,29 @@ const ContentLiveView = memo((props) => {
             layoutActive.y
         );
       } else {
-        const aspectRatio = 16 / 9;
-        const itemWidth = refContentLiveView.current.offsetWidth / lastColUse; // Chiều rộng của mỗi item
+        const maxWidth = refContentLiveView.current.offsetWidth;
+        const maxHeight = refContentLiveView.current.offsetHeight;
+        let wItem = 1;
+        let hItem = 1;
+
+        if (lastColUse >= lastRowUse) {
+          wItem = maxWidth / lastColUse;
+          hItem = wItem / aspectRatio;
+        } else {
+          hItem = maxHeight / lastRowUse;
+          wItem = hItem * aspectRatio;
+        }
+
+        const itemWidth =
+          (refContentLiveView.current.offsetWidth +
+            refContentLiveView.current.offsetHeight) /
+          (lastColUse * lastRowUse); // Chiều rộng của mỗi item
         const maxHeightItem =
           refContentLiveView.current.offsetHeight / lastRowUse;
-        console.log("maxHeightItem", maxHeightItem);
         const itemHeight = itemWidth / aspectRatio;
-        console.log(itemHeight);
-        setHeightScreen(maxHeightItem);
-        setWidthItem(itemWidth);
+        console.log("itemWidth", itemWidth);
+        setHeightScreen(hItem - 20);
+        setWidthItem(wItem - 20);
       }
     };
 
@@ -281,10 +295,11 @@ const ContentLiveView = memo((props) => {
       <GridLayout
         className="layout"
         style={{
-          minHeight:
-            layoutActive.grid && layoutActive.grid.length > 0 ? "auto" : 220,
+          // minHeight:
+          //   layoutActive.grid && layoutActive.grid.length > 0 ? "auto" : 220,
           minWidth: 1000,
-          maxHeight: "100%",
+          // maxHeight: "100%",
+          maxHeight: cols * heightScreen,
         }}
         layout={layoutActive.grid}
         rowHeight={heightScreen}
