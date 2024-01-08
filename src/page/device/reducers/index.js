@@ -1,8 +1,9 @@
-import { useReducer } from "react";
+import React, { useReducer } from "react";
+import * as type from "./type";
 
-const initState = { a: 1 };
+const initState = {};
 
-const reducer = (state, action) => {
+const reducer = (state = initState, action) => {
   switch (action.type) {
   }
   throw Error("Unknown action: " + action.type);
