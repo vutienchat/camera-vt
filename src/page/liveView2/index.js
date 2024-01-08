@@ -101,9 +101,8 @@ const LiveView = memo(() => {
     });
   };
 
-  const handleItemClick = (item, event) => {
+  const handleItemClick = (item, event, indx, listData) => {
     const tempData = [...listLayout];
-    if (event.shiftKey) return;
     if (event.ctrlKey) {
       const itemIdx = tempData.findIndex((it) => it.id === item.id);
       if (itemIdx !== -1) {
@@ -113,6 +112,24 @@ const LiveView = memo(() => {
         };
       }
       handleChangeListAdd(tempData);
+    } else if (event.shiftKey) {
+      const tempData = [...listData];
+
+      let newSelectedItems;
+
+      if (event.shiftKey && lastSelectedItem !== null) {
+        const startIndex = Math.min(lastSelectedItem, indx);
+        const endIndex = Math.max(lastSelectedItem, indx);
+        console.log("lastSelectedItem", lastSelectedItem);
+        newSelectedItems = tempData
+          .filter((item, index) => index >= startIndex && index <= endIndex)
+          .map((item) => item);
+      } else {
+        setLastSelectedItem(indx);
+        newSelectedItems = [tempData[indx]];
+      }
+
+      setListAdd(newSelectedItems);
     } else {
       const newData = tempData.map((it) => ({
         ...it,
@@ -128,29 +145,159 @@ const LiveView = memo(() => {
     return;
   };
 
-  const handleMouseDown = (index, event, listData) => {
+  const [lastSelectedItem, setLastSelectedItem] = useState(null);
+
+  const handleMouseDown = (itemId, event, listData) => {
     if (!listData) return;
     const tempData = [...listData];
     if (event.ctrlKey) return;
-    if (event.shiftKey) {
-      if (startIdx === null) {
-        // If Shift is held and this is the first mouse click, set the first item selected
+    // if (event.shiftKey) {
+    //   // if (startIdx === null) {
+    //   //   // If Shift is held and this is the first mouse click, set the first item selected
 
-        if (index === -1) return;
-        tempData[index] = { ...tempData[index], selected: true };
-        setListAdd(tempData.filter((it) => it.selected));
-        setStartIdx(index);
+    //   //   if (index === -1) return;
+    //   //   tempData[index] = { ...tempData[index], selected: true };
+    //   //   setListAdd(tempData.filter((it) => it.selected));
+    //   //   setStartIdx(index);
+    //   // } else {
+    //   //   // If there is already a first item selected, selects all items from the first to the last item
+
+    //   //   const listSelect = tempData
+    //   //     .slice(startIdx, index + 1)
+    //   //     .map((it) => ({ ...it, selected: true }));
+
+    //   //   setListAdd(listSelect);
+    //   //   setStartIdx(null); // Resets the first selected item after selection is complete
+    //   // }
+    //   let newSelectedItems;
+    //   if (lastSelectedItem !== null) {
+    //     const startIndex = Math.min(lastSelectedItem, itemId);
+    //     const endIndex = Math.max(lastSelectedItem, itemId);
+
+    //     newSelectedItems = tempData
+    //       .filter((item) => item.id >= startIndex && item.id <= endIndex)
+    //       .map((item) => item.id);
+    //   } else {
+    //     newSelectedItems = [itemId];
+    //   }
+
+    //   setSelectedItems(newSelectedItems);
+    //   setLastSelectedItem(itemId);
+    // }
+  };
+
+  const handleDoubleClickCam = (id) => {
+    if (layoutActive.grid.length >= 100 || getTotal(layoutActive.grid) >= 100)
+      return;
+    const emptyXPositions = findEmptyPositionWithRectangularPriority(
+      layoutActive.grid
+    );
+    let newItem = { w: 1, h: 1, i: id };
+    if (emptyXPositions) {
+      newItem = { id: id + 1, ...emptyXPositions, w: 1, h: 1, i: id };
+      // Thêm item mới vào grid currentLayout
+    } else {
+      const lastX = getLastLocation("x", "w", layoutActive.grid);
+      const lastY = getLastLocation("y", "h", layoutActive.grid);
+
+      if (lastX < 10 && lastX <= lastY) {
+        newItem = { ...newItem, x: lastX, y: 0 };
       } else {
-        // If there is already a first item selected, selects all items from the first to the last item
-
-        const listSelect = tempData
-          .slice(startIdx, index + 1)
-          .map((it) => ({ ...it, selected: true }));
-
-        setListAdd(listSelect);
-        setStartIdx(null); // Resets the first selected item after selection is complete
+        newItem = { ...newItem, x: 0, y: lastY };
       }
     }
+
+    setLayoutActive((prev) => ({
+      ...prev,
+      grid: [
+        ...prev.grid,
+        {
+          ...newItem,
+        },
+      ],
+    }));
+  };
+
+  const getLastLocation = (type, size, arr) => {
+    if (!type || !size || !arr || !arr.length) return 1;
+    // find max of x or y
+    const max = Math.max(...arr.map((item) => item[type] + item[size]));
+    let lastUsedPosition = 0;
+    for (let i = max; i >= 0; i--) {
+      if (arr.some((item) => item[type] <= i && item[type] + item[size] > i)) {
+        lastUsedPosition = i;
+        break;
+      }
+    }
+    return lastUsedPosition + 1;
+  };
+
+  const findEmptyPositionWithRectangularPriority = (currentLayout) => {
+    const totalCols = getLastLocation("x", "w", currentLayout); // Số cột trong grid currentLayout
+    const totalRows = getLastLocation("y", "h", currentLayout); // Số hàng trong grid layout
+
+    const usedPositions = new Set();
+
+    currentLayout.forEach((item) => {
+      for (let i = item.x; i < item.x + item.w; i++) {
+        for (let j = item.y; j < item.y + item.h; j++) {
+          usedPositions.add(`${i}-${j}`);
+        }
+      }
+    });
+
+    // Tìm vị trí còn trống theo từng hàng và tăng x theo quy tắc
+    let lastX = 0;
+    let lastY = 0;
+
+    for (let j = 0; j < totalRows; j++) {
+      for (let i = 0; i < totalCols; i++) {
+        const positionKey = `${i}-${j}`;
+
+        if (!usedPositions.has(positionKey)) {
+          lastX = i;
+          lastY = j;
+          return { x: lastX, y: lastY, w: 1, h: 1 };
+        }
+      }
+    }
+
+    // Nếu không tìm thấy vị trí trống, trả về x + 1
+    return null;
+  };
+
+  const getTotal = (arr, index, newDataIdx) => {
+    if (!arr) return 1;
+    let totalArea = 0;
+    const tempArr = [...arr];
+    if (index && newDataIdx) tempArr[index] = newDataIdx;
+    for (let i = 0; i < tempArr.length; i++) {
+      totalArea += tempArr[i].w * tempArr[i].h;
+    }
+    return totalArea;
+  };
+
+  const handleMultiDrop = (id) => {
+    if (layoutActive.grid.length >= 100 || getTotal(layoutActive.grid) >= 100)
+      return;
+    const emptyXPositions = findEmptyPositionWithRectangularPriority(
+      layoutActive.grid
+    );
+    let newItem = { w: 1, h: 1, i: id };
+    if (emptyXPositions) {
+      newItem = { id: id + 1, ...emptyXPositions, w: 1, h: 1, i: id };
+      // Thêm item mới vào grid currentLayout
+    } else {
+      const lastX = getLastLocation("x", "w", layoutActive.grid);
+      const lastY = getLastLocation("y", "h", layoutActive.grid);
+
+      if (lastX < 10 && lastX <= lastY) {
+        newItem = { ...newItem, x: lastX, y: 0 };
+      } else {
+        newItem = { ...newItem, x: 0, y: lastY };
+      }
+    }
+    return newItem;
   };
 
   const dataContext = {
@@ -166,6 +313,7 @@ const LiveView = memo(() => {
     setListAdd,
     isResizeItem,
     isDragItem,
+    handleDoubleClickCam,
   };
 
   return (
@@ -205,6 +353,8 @@ const LiveView = memo(() => {
               listAdd={listAdd}
               setListAdd={setListAdd}
               isResizeItem={isResizeItem}
+              handleDoubleClickCam={handleDoubleClickCam}
+              handleMultiDrop={handleMultiDrop}
             />
             <Box style={{ display: "flex", marginLeft: "16px" }}>
               <NavBar

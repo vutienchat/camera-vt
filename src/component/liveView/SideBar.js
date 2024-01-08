@@ -1,4 +1,11 @@
-import { Box, Checkbox, makeStyles, Typography } from "@material-ui/core";
+import {
+  Box,
+  Checkbox,
+  makeStyles,
+  Typography,
+  Drawer,
+  Hidden,
+} from "@material-ui/core";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import TreeView from "@material-ui/lab/TreeView";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
@@ -24,7 +31,8 @@ import ViewSideEvent from "./ViewSideEvent";
 import { LiveViewContext } from "../../page/liveView";
 import ViewLayout from "../../page/liveView2/components/ViewLayout";
 
-const useStyles = makeStyles({
+const drawerWidth = 344;
+const useStyles = makeStyles((theme) => ({
   Sub: {
     borderBottom: "solid 1px #e5e5e5",
     "& .MuiTreeItem-content": {
@@ -88,7 +96,6 @@ const useStyles = makeStyles({
     zIndex: 1,
   },
   sideBar: {
-    width: 344,
     border: "solid 1px #e5e5e5",
     maxHeight: 975,
     overflowY: "auto",
@@ -104,7 +111,17 @@ const useStyles = makeStyles({
     height: 40,
     border: "solid 1px #ebebeb ",
   },
-});
+
+  drawer: {
+    [theme.breakpoints.up("sm")]: {
+      width: drawerWidth,
+      flexShrink: 0,
+    },
+  },
+  drawerPaper: {
+    width: drawerWidth,
+  },
+}));
 
 export const renderData = (
   data,
@@ -255,6 +272,20 @@ export const renderData = (
   );
 };
 
+const data = [{
+  name:"test",
+  total: 1
+},{
+  name:"test",
+  total: 2
+},{
+  name:"test",
+  total: 3
+},{
+  name:"test",
+  total: 4
+}]
+
 const SideBar = ({
   typeDisplaySide,
   data,
@@ -391,9 +422,6 @@ const SideBar = ({
       ];
     });
   };
-
-  console.log("daaa", dataGroup);
-
   const renderSideBar = (type) => {
     let view;
     switch (type) {

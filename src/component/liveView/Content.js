@@ -27,6 +27,8 @@ const ContentLiveView = memo((props) => {
     setListAdd,
     listAdd,
     isResizeItem,
+    handleDoubleClickCam,
+    handleMultiDrop,
   } = props;
   const refContentLiveView = useRef(null);
   const [heightScreen, setHeightScreen] = useState(220);
@@ -52,6 +54,7 @@ const ContentLiveView = memo((props) => {
         const maxHeight = refContentLiveView.current.offsetHeight;
         let wItem = 1;
         let hItem = 1;
+        const padding = 22;
 
         if (lastColUse >= lastRowUse) {
           wItem = maxWidth / lastColUse;
@@ -60,17 +63,8 @@ const ContentLiveView = memo((props) => {
           hItem = maxHeight / lastRowUse;
           wItem = hItem * aspectRatio;
         }
-
-        const itemWidth =
-          (refContentLiveView.current.offsetWidth +
-            refContentLiveView.current.offsetHeight) /
-          (lastColUse * lastRowUse); // Chiều rộng của mỗi item
-        const maxHeightItem =
-          refContentLiveView.current.offsetHeight / lastRowUse;
-        const itemHeight = itemWidth / aspectRatio;
-        console.log("itemWidth", itemWidth);
-        setHeightScreen(hItem - 20);
-        setWidthItem(wItem - 20);
+        setHeightScreen(hItem - padding);
+        setWidthItem(wItem);
       }
     };
 
@@ -221,41 +215,59 @@ const ContentLiveView = memo((props) => {
     });
   };
 
-  const randomKey = Math.random() * 10;
   const onDrop = (value, pay) => {
-    if (value.length > 100) return;
-    if (listAdd && listAdd.length) {
+    if (value.length > 100 && listAdd.length === 0) return;
+    if (listAdd.length === 1) {
       const newListAdd = [...listAdd].map((item) => ({
         x: pay.x,
-        y: pay.y - 1,
+        y: pay.y - 1 < 0 ? 0 : pay.y - 1,
         w: 1,
         h: 1,
-        size: 3,
-        merge: [],
-        screenDetail: [],
         i: item.i ? item.i : item.label,
       }));
       setLayoutActive((prev) => ({
         ...prev,
         grid: [...prev.grid].concat(newListAdd),
       }));
-      setListAdd([]);
-      return;
+    } else {
+      const tempListAdd = [...listAdd];
+      const numberOfRow = Math.floor(Math.sqrt(listAdd.length));
+
+      const listData = [].concat(
+        ...Array.from({ length: numberOfRow }, (_, x) => {
+          return Array.from({ length: numberOfRow }, (_, y) => {
+            return {
+              x: x,
+              y: y - 1 < 0 ? 0 : y - 1,
+              w: 1,
+              h: 1,
+            };
+          });
+        })
+      );
+
+      setLayoutActive((prev) => {
+        let lastX = getLastLocation("x", "w", [...listData, ...prev.grid]);
+        const restOfListAdd = tempListAdd
+          .slice(Math.pow(numberOfRow, 2), tempListAdd.length)
+          .map((it, index) => ({
+            ...it,
+            x: lastX + index > 10 ? 10 : lastX + index,
+            y: 0,
+          }));
+        console.log(lastX);
+        return {
+          ...prev,
+          grid: [...listData, ...prev.grid]
+            .concat(restOfListAdd)
+            .map((it, indx) => ({
+              ...it,
+              i: listAdd[indx].i || listAdd[indx].label,
+            })),
+        };
+      });
     }
-    // setLayoutActive((prev) => ({
-    //   ...prev,
-    //   grid: [
-    //     ...prev.grid,
-    //     {
-    //       ...pay,
-    //       merge: [],
-    //       screenDetail: [],
-    //       key: randomKey,
-    //       i: String(randomKey),
-    //       y: pay.y - 1,
-    //     },
-    //   ],
-    // }));
+    setListAdd([]);
   };
 
   function findEmptySlot(layout) {
@@ -281,6 +293,7 @@ const ContentLiveView = memo((props) => {
     return lastElement;
   };
 
+  // Hàm tìm vị trí còn trống và ưu tiên vị trí để sắp xếp thành hình chữ nhậ
   return (
     <Box
       component={"main"}
@@ -288,7 +301,6 @@ const ContentLiveView = memo((props) => {
         display: "flex",
         height: isFullScreen ? "100vh" : "100%",
         width: "100%",
-        overflowX: "scroll",
       }}
       ref={refContentLiveView}
     >

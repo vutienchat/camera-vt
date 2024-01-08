@@ -1,7 +1,7 @@
 export const defaultData = []
   .concat(
-    ...Array.from({ length: 2 }, (_, x) => {
-      return Array.from({ length: 2 }, (_, y) => {
+    ...Array.from({ length: 5 }, (_, x) => {
+      return Array.from({ length: 5 }, (_, y) => {
         return {
           x: x,
           y: y,

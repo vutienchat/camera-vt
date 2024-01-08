@@ -89,8 +89,6 @@ const ViewLayout = React.memo(() => {
   const searchValue = "Cam 1"; // Giá trị cần tìm kiếm (có thể là name hoặc i)
   const searchResults = searchLayoutByNameOrI(listLayout, searchValue);
 
-  console.log("Kết quả tìm kiếm:", searchResults);
-
   const handleRightClick = (event, layoutIndex) => {
     event.preventDefault();
     setLayoutIndex(layoutIndex);
@@ -138,11 +136,12 @@ const ViewLayout = React.memo(() => {
     setDataListLayout([...tempData]);
   };
 
-  const handleShareLayout = (id) => {};
+  const handleShareLayout = () => {};
 
-  const handleItemClick = (item, event) => {
+  const [lastSelectedItem, setsLastSelectedItem] = useState(null);
+
+  const handleItemClick = (item, event, indx, listData) => {
     let listDataSelect = [...listAdd];
-    if (event.shiftKey) return;
     if (event.ctrlKey) {
       if (listDataSelect.map((it) => it.i).includes(item.i)) {
         listDataSelect = listDataSelect.filter((it) => it.i !== item.i);
@@ -151,7 +150,27 @@ const ViewLayout = React.memo(() => {
       }
 
       handleChangeListAdd(listDataSelect);
+    } else if (event.shiftKey) {
+      const tempData = [...listData];
+
+      let newSelectedItems;
+
+      if (lastSelectedItem !== null) {
+        const startIndex = Math.min(lastSelectedItem, indx);
+        const endIndex = Math.max(lastSelectedItem, indx);
+        console.log("lastSelectedItem", lastSelectedItem);
+        newSelectedItems = tempData
+          .filter((item, index) => index >= startIndex && index <= endIndex)
+          .map((item) => item);
+      } else {
+        newSelectedItems = [tempData[indx]];
+        setsLastSelectedItem(indx);
+      }
+
+      setListAdd(newSelectedItems);
     } else {
+      setsLastSelectedItem(indx);
+
       handleChangeListAdd([item]);
     }
   };
@@ -320,7 +339,7 @@ const ItemLayout = ({
   layout,
   handleRightClick,
   handleItemClick,
-  handleMouseDown,
+  // handleMouseDown,
   handleRightClickCam,
   setLayoutIndex,
 }) => {
@@ -329,8 +348,9 @@ const ItemLayout = ({
     setListLayoutActive,
     listAdd,
     layoutActive,
-    // handleMouseDown,
+    handleMouseDown,
     isDragItem,
+    handleDoubleClickCam,
   } = useContext(LiveView2Context);
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
@@ -460,7 +480,8 @@ const ItemLayout = ({
                       layoutActive.grid.map((it) => it.i).includes(grid.i)
                     )
                       return;
-                    handleItemClick(grid, e);
+                    handleItemClick(grid, e, index, layout.grid);
+                    // handleMouseDown(index, e, layout.grid);
                   }}
                   onMouseDown={(e) => {
                     if (
@@ -468,8 +489,8 @@ const ItemLayout = ({
                       layoutActive.grid.map((it) => it.i).includes(grid.i)
                     )
                       return;
-                    handleMouseDown(index, e, layout.grid);
                   }}
+                  onDoubleClick={() => handleDoubleClickCam(grid.i)}
                 >
                   <ListItemIcon style={{ minWidth: 30 }}>
                     <VideocamIcon />
