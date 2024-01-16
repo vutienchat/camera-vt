@@ -3,13 +3,23 @@ import * as type from "./type";
 
 const initState = {
   deviceNameKey: "",
+  openModal: {
+    openModalDelete: false,
+  },
 };
 
 const reducer = (state = initState, action) => {
   switch (action.type) {
     case "SEARCH_DEVICE_NAME": {
       return {
-       deviceNameKey: action.deviceNameKey,
+        ...state,
+        deviceNameKey: action.deviceNameKey,
+      };
+    }
+    case "OPEN_MODAL": {
+      return {
+        ...state,
+        openModal: action.openModal,
       };
     }
     default:
@@ -19,7 +29,6 @@ const reducer = (state = initState, action) => {
 
 const Reducer = () => {
   const [state, dispatch] = useReducer(reducer, initState);
-
   return {
     state,
     dispatch,
