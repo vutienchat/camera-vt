@@ -1,0 +1,1 @@
+export const SELECT_DEVICE = "SELECT_DEVICE";
