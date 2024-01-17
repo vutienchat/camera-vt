@@ -1,5 +1,6 @@
 import React, { useContext, useMemo } from "react";
 import { Box } from "@mui/material";
+import ModalAddDevice from "./modals/ModalAddDevice";
 import Header from "./Header";
 import FilterBar from "./FilterTable";
 import TableContent from "../Table/TableContent";
