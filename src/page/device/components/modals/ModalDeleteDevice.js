@@ -6,8 +6,8 @@ import {
   Typography,
 } from "@material-ui/core";
 import React, { useContext } from "react";
-import BaseButton from "../components/BaseButton";
-import { DeviceContext } from "../components/DeviceProvider";
+import BaseButton from "../BaseButton";
+import { DeviceContext } from "../DeviceProvider";
 import CloseIcon from "@material-ui/icons/Close";
 
 const ModalDeleteDevice = React.memo(() => {

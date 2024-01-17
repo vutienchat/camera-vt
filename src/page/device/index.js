@@ -2,8 +2,8 @@ import React from "react";
 import DeviceContainer from "./components/DeviceContainer";
 import DeviceProvider from "./components/DeviceProvider";
 import Reducer from "./reducers";
-import ModalDeleteDevice from "./modal/ModalDeleteDevice";
-import ModalImport from "./modal/ModalImport";
+import ModalDeleteDevice from "./components/modals/ModalDeleteDevice";
+import ModalImport from "./components/modals/ModalImport";
 
 const Device = () => {
   const { state, dispatch } = Reducer();

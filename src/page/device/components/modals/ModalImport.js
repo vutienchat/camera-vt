@@ -1,10 +1,10 @@
 import React from "react";
 import { Box, Dialog, Typography, makeStyles } from "@material-ui/core";
 import { useContext } from "react";
-import TrashIconImportModal from "../Icon/TrashIconImportModal";
-import UploadIcon from "../Icon/UploadIcon";
-import { DeviceContext } from "../components/DeviceProvider";
-import BaseButton from "../components/BaseButton";
+import TrashIconImportModal from "../../Icon/TrashIconImportModal";
+import UploadIcon from "../../Icon/UploadIcon";
+import { DeviceContext } from "../DeviceProvider";
+import BaseButton from "../BaseButton";
 const ModalImport = () => {
   const classes = useSettingStyle();
   const { state, dispatch } = useContext(DeviceContext);
