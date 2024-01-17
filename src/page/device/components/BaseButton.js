@@ -2,7 +2,7 @@ import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/styles";
 import React from "react";
 
-const BaseButton = ({ label, type, component, onClick }) => {
+const BaseButton = ({ label, type, component, onClick, width }) => {
   const classes = useStyles();
   let styleButton;
   if (type === "redBackground") {
@@ -13,10 +13,10 @@ const BaseButton = ({ label, type, component, onClick }) => {
   return (
     <Button
       style={{
-        width: 125,
+        width: width ? width : 125,
         height: 40,
         borderRadius: 4,
-        textTransform: "none",
+        textTransform: label !== "Import" && "none",
         fontWeight: 700,
         boxShadow: "none",
       }}

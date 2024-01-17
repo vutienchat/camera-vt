@@ -7,13 +7,21 @@ import TrashIcon from "../Icon/TrashIcon";
 
 const FilterBar = () => {
   const classes = useStyles();
-  const { dispatch } = useContext(DeviceContext);
+  const { state, dispatch } = useContext(DeviceContext);
   const handleOpenDeleteModal = () => {
     dispatch({
       type: "OPEN_MODAL",
       openModal: { openModalDelete: true },
     });
   };
+  const handleOpenImportModal = () => {
+    dispatch({
+      type: "OPEN_MODAL",
+      openModal: { openModalImport: true },
+    });
+  };
+  console.log("ff", state.openModal.openModalImport);
+
   return (
     <Box
       style={{
@@ -36,14 +44,22 @@ const FilterBar = () => {
         </Box>
         <Box
           className={classes.text}
-          style={{ color: "rgba(221, 61, 75, 1)", fontWeight: 500 }}
+          style={{
+            color: "rgba(221, 61, 75, 1)",
+            fontWeight: 500,
+            cursor: "pointer",
+          }}
         >
           <span>Selected all</span> <span>34</span> <span>devices</span>
         </Box>
       </Box>
       <Box style={{ display: "flex", gap: 25 }}>
         <BaseButton label={"+ Add Device"} type={"redBackground"} />
-        <BaseButton label={"Import Data"} type={"normal"} />
+        <BaseButton
+          label={"Import Data"}
+          type={"normal"}
+          onClick={handleOpenImportModal}
+        />
         <BaseButton label={"Export Data"} type={"normal"} />
         <BaseButton
           label={"Delete"}

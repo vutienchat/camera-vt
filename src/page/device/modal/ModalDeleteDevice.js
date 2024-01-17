@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Dialog,
   DialogContent,
   DialogContentText,
@@ -48,7 +47,7 @@ const ModalDeleteDevice = React.memo(() => {
             Delete Device
           </Typography>
           <CloseIcon
-            style={{ width: 25, height: 25 }}
+            style={{ width: 25, height: 25, cursor: "pointer" }}
             onClick={handleCloseModalDelete}
           />
         </Box>

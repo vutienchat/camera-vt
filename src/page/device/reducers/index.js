@@ -5,7 +5,15 @@ const initState = {
   deviceNameKey: "",
   openModal: {
     openModalDelete: false,
+    openModalImport: false,
   },
+  pagination:{
+    page:0,
+    rowPerPage: 10,
+    length: 0,
+  },
+  checkedItemList: []
+  
 };
 
 const reducer = (state = initState, action) => {
@@ -21,6 +29,18 @@ const reducer = (state = initState, action) => {
         ...state,
         openModal: action.openModal,
       };
+    }
+    case "PAGINATION": {
+      return {
+        ...state,
+        pagination: action.pagination
+      }
+    }
+    case "CHECKED_ITEM_LIST": {
+      return {
+        ...state,
+        checkedItemList: action.pagination
+      }
     }
     default:
   }
