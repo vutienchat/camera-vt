@@ -14,6 +14,12 @@ const FilterBar = () => {
       openModal: { openModalDelete: true },
     });
   };
+  const handleOpenAddModal = () => {
+    dispatch({
+      type: "OPEN_MODAL",
+      openModal: { openModalAdd: true },
+    });
+  };
   return (
     <Box
       style={{
@@ -42,7 +48,11 @@ const FilterBar = () => {
         </Box>
       </Box>
       <Box style={{ display: "flex", gap: 25 }}>
-        <BaseButton label={"+ Add Device"} type={"redBackground"} />
+        <BaseButton
+          label={"+ Add Device"}
+          type={"redBackground"}
+          onClick={handleOpenAddModal}
+        />
         <BaseButton label={"Import Data"} type={"normal"} />
         <BaseButton label={"Export Data"} type={"normal"} />
         <BaseButton

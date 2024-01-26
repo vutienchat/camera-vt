@@ -17,11 +17,11 @@ const TabsContainer = React.memo(({ tabs }) => {
         className={classes.root}
       >
         {(tabs || []).map((tab, index) => (
-          <Tab label={tab.label} key={tab.key} />
+          <Tab label={tab.label} key={index} />
         ))}
       </Tabs>
       {(tabs || []).map((tab, index) => (
-        <TabPanel value={value} index={index} key={tab.key}>
+        <TabPanel value={value} index={index} key={`${tab.label} - ${index}`}>
           {tab.children}
         </TabPanel>
       ))}

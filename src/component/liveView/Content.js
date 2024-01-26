@@ -362,13 +362,13 @@ const ContentLiveView = memo((props) => {
               style={{ width: `${widthItem}px !important`, background: "gray" }}
               // dataGrid={{ ...gridItem }}
             >
-              {/* <ScreenTask
+              <ScreenTask
                 screenDetail={gridItem}
                 isSideBar={isSideBar}
                 screenRecording={screenRecording}
                 setScreenRecording={setScreenRecording}
-              /> */}
-              {gridItem.i}
+              />
+              {/* {gridItem.i}
               <Typography
                 style={{
                   width: "100%",
@@ -380,7 +380,7 @@ const ContentLiveView = memo((props) => {
                 }}
               >
                 X
-              </Typography>
+              </Typography> */}
             </Box>
           );
         })}

@@ -9,5 +9,4 @@ const TreeGroupList = () => {
   );
 };
 
-
 export default TreeGroupList;

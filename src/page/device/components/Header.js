@@ -3,10 +3,9 @@ import { Box, makeStyles } from "@material-ui/core";
 import { DeviceContext } from "./DeviceProvider";
 import SelectMultiple from "./SelectMultiple";
 import { headerDeviceFilterArr } from "../utils";
-import { ReloadIcon } from "../Icon/ReloadIcon";
-import SettingIcon from "../Icon/SettingIcon";
 import Select from "./Select";
 import SearchBar from "./CommonSearchBar";
+import { ReloadIcon, SettingIcon } from "../Icon";
 
 const Header = () => {
   const { state, dispatch } = useContext(DeviceContext);

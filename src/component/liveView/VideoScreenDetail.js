@@ -211,7 +211,7 @@ const VideoScreenDetail = memo((props) => {
   const [transformScale, setTransformScale] = useState({ x: 0, y: 0 });
   const [isSnapshot, setIsSnapshot] = useState(false);
   const [isShowOption, setIsShowOption] = useState(false);
-
+  const [isStartVideo, setIsStartVideo] = useState(false);
   const escFunction = useCallback(
     (event) => {
       if (event.key === "Escape" && isFullScreen) {
@@ -456,7 +456,15 @@ const VideoScreenDetail = memo((props) => {
   };
 
   const onChangeZoomLevelSlider = (value) => setScaleZoom(value);
-
+  const handleTimeUpdate = () => {
+    if (!videoRef.current || isStartVideo) return;
+    const currentTime = videoRef.current.currentTime;
+    if (currentTime && currentTime.toFixed() > 0) {
+      setIsStartVideo(currentTime);
+    }
+    console.log("Current Time:", currentTime);
+  };
+  console.log(isStartVideo);
   return (
     <>
       <Box
@@ -494,6 +502,7 @@ const VideoScreenDetail = memo((props) => {
               controls={false}
               muted={isMuted}
               autoPlay
+              onTimeUpdate={handleTimeUpdate}
             >
               <source src={deviceLive.url} type="video/mp4" />
             </video>

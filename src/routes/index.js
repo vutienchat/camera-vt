@@ -26,4 +26,5 @@ export const routes = [
   { path: "/heatmap-insights", element: HeatmapInsights },
   { path: "/history-event", element: HistoryEvent },
   { path: "/live-view2", element: LiveView2 },
+  { path: "/live-view1", element: LiveView },
 ];

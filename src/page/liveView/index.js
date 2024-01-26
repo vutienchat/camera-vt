@@ -361,14 +361,14 @@ const LiveView = memo(() => {
     <LiveViewContext.Provider value={dataContext}>
       <React.Fragment>
         <Box>
-          <HeaderLiveView
+          {/* <HeaderLiveView
             setIsFullScreen={() => setIsFullScreen(true)}
             layoutActive={layoutActive}
             onUpdateGridData={handleUpdateGridData}
             handleCleanTask={handleCleanTask}
             dataSideGroup={dataSideGroup}
             groupDeviceList={groupDeviceList}
-          />
+          /> */}
           <Box
             style={{
               display: "flex",

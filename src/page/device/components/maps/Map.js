@@ -3,7 +3,7 @@ import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 
 const containerStyle = {
   width: "395px",
-  height: "210px",
+  height: "140px",
 };
 
 const center = {
@@ -11,7 +11,7 @@ const center = {
   lng: 105.785733,
 };
 
-function Map() {
+function MapCustom() {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: "AIzaSyB9DY4IW1r8VFoSxM-RglsTLUwjRVCGBfo",
@@ -53,4 +53,4 @@ function Map() {
   );
 }
 
-export default React.memo(Map);
+export default React.memo(MapCustom);

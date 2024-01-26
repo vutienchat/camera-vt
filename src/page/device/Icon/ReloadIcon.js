@@ -1,5 +1,5 @@
 import React from "react";
-export const ReloadIcon = ({ width, height, color }) => {
+const ReloadIcon = ({ width, height, color }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -17,3 +17,5 @@ export const ReloadIcon = ({ width, height, color }) => {
     </svg>
   );
 };
+
+export default ReloadIcon;

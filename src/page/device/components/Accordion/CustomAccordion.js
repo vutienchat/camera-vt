@@ -3,15 +3,18 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
+  Grid,
   Typography,
   makeStyles,
+  Checkbox,
 } from "@material-ui/core";
 import Accordion from "@material-ui/core/Accordion";
 import React from "react";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import { a } from "../../utils";
+import IconAccordion from "../../Icon/IconAccordion";
+// import { CheckBox } from "@material-ui/icons";
 
-const AccordionContent = React.memo(({ label, children }) => {
+const CustomAccordion = React.memo(({ label, children }) => {
   const classes = AccordionStyle();
   const [expanded, setExpanded] = React.useState("1");
 
@@ -29,14 +32,37 @@ const AccordionContent = React.memo(({ label, children }) => {
         <AccordionSummary
           aria-controls="panel1d-content"
           id="panel1d-header"
-          expandIcon={<ExpandMoreIcon />}
           aria-label="Expand"
+          IconButtonProps={{ edge: "start", children: <ExpandMoreIcon /> }}
         >
-          <Typography style={{ fontWeight: 600, paddingLeft: 5 }}>
-            {label}
-          </Typography>
+          <Box
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            <Box style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <IconAccordion />
+              <ExpandMoreIcon />
+              <Typography style={{ fontSize: 16, fontWeight: "bold" }}>
+                {label}
+              </Typography>
+            </Box>
+
+            <Box
+              style={{ display: "flex", alignItems: "center", gap: 15 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Checkbox style={{ padding: 0 }} />
+              Camera Stream
+            </Box>
+          </Box>
         </AccordionSummary>
-        <Box style={{ paddingBlock: "12px" }}>{children}</Box>
+        <Box className="" style={{ gap: 20, padding: 10 }}>
+          {children}
+        </Box>
       </Accordion>
     </Box>
   );
@@ -44,11 +70,8 @@ const AccordionContent = React.memo(({ label, children }) => {
 
 const AccordionStyle = makeStyles({
   root: {
-    border: "1px solid rgba(0, 0, 0, .125)",
     boxShadow: "none",
-    // height: 32,
     minHeight: 32,
-    background: "rgba(243, 244, 246, 1)",
     borderRadius: "4px",
 
     "&.Mui-expanded": {
@@ -59,6 +82,7 @@ const AccordionStyle = makeStyles({
       height: 32,
       minHeight: 32,
       borderTop: 0,
+      borderBottom: "1px solid rgba(0, 0, 0, .125)",
     },
 
     "& .MuiCollapse-root": {
@@ -72,8 +96,9 @@ const AccordionStyle = makeStyles({
     "& .MuiCollapse-root": {
       backgroundColor: "#fff",
       paddingInline: 15,
+      paddingLeft: 45,
     },
   },
 });
 
-export default AccordionContent;
+export default CustomAccordion;

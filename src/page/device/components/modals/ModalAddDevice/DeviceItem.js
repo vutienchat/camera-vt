@@ -1,17 +1,18 @@
 import { makeStyles, Box } from "@material-ui/core";
 import React, { useContext } from "react";
 import { DeviceContext } from "../../DeviceProvider";
+import AddedIcon from "../../../Icon/AddedIcon";
 // import "./style.css";
 
 export const DeviceItem = React.memo(({ data, handleSelectDevice }) => {
   const { state } = useContext(DeviceContext);
-  const isActive = state.listDeviceSelected.includes(data);
+  const isActive = state.listDeviceSelected.includes(data.id);
   const classes = DeviceStyle();
 
   return (
     <Box
       className={`${classes.button} ${classes.button2} ${classes.root}`}
-      onClick={() => handleSelectDevice(data)}
+      onClick={() => handleSelectDevice(data.id)}
     >
       <Box
         className={`${classes.frame2}`}
@@ -19,6 +20,7 @@ export const DeviceItem = React.memo(({ data, handleSelectDevice }) => {
       >
         <Box className={classes.textWrapper}>
           <Box className={classes.text}>Device model</Box>
+          {data.added && <Box className={classes.text2}>Added</Box>}
         </Box>
         <Box className={classes.frame3}>
           <Box className={classes.frame4}>
@@ -26,7 +28,7 @@ export const DeviceItem = React.memo(({ data, handleSelectDevice }) => {
               <Box className={classes.text2}>Firmware</Box>
             </Box>
             <Box className={classes.frame5}>
-              <Box className={classes.text2}>1.2.3</Box>
+              <Box className={classes.text2}>{data.firmware}</Box>
             </Box>
           </Box>
           <Box className={classes.frame4}>
@@ -34,7 +36,7 @@ export const DeviceItem = React.memo(({ data, handleSelectDevice }) => {
               <Box className={classes.text2}>IP Address</Box>
             </Box>
             <Box className={classes.frame5}>
-              <Box className={classes.text2}>179.229.40.98</Box>
+              <Box className={classes.text2}>{data.ip}</Box>
             </Box>
           </Box>
           <Box className={classes.frame4}>
@@ -42,15 +44,7 @@ export const DeviceItem = React.memo(({ data, handleSelectDevice }) => {
               <Box className={classes.text2}>Vendor</Box>
             </Box>
             <Box className={classes.frame5}>
-              <Box className={classes.text2}>AXIS</Box>
-            </Box>
-          </Box>
-          <Box className={classes.frame4}>
-            <Box className={classes.divWrapper}>
-              <Box className={classes.text2}>Added</Box>
-            </Box>
-            <Box className={classes.frame5}>
-              <Box className={classes.text2}>-</Box>
+              <Box className={classes.text2}>{data.vendor}</Box>
             </Box>
           </Box>
         </Box>
@@ -101,6 +95,7 @@ const DeviceStyle = makeStyles({
     flex: " 0 0 auto",
     gap: " 8px",
     width: " 100%",
+    justifyContent: "space-between",
   },
   text: {
     color: " #4b5563",

@@ -6,6 +6,7 @@ const initState = {
   deviceNameKey: "",
   openModal: {
     openModalDelete: false,
+    openModalAdd: false,
   },
 };
 

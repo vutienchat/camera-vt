@@ -3,7 +3,6 @@ import OfflineIcon from "../Icon/OfflineIcon";
 import OnlineIcon from "../Icon/OnlineIcon";
 import Recording from "../Icon/Recording";
 import NoRecording from "../Icon/NoRecording";
-import TrashIcon from "../Icon/TrashIcon";
 
 export const Status = {
   1: {
@@ -118,7 +117,18 @@ export const headerDeviceFilterArr = [
   },
 ];
 
-
 export const lowerCaseStringCustom = (numberChecked, originalString) => {
   return `${numberChecked ? numberChecked : "All"} ${originalString}`;
 };
+
+export const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+export const hours = Array.from(Array(25)).map((_, indx) => indx);
+
+export const listDevice = Array.from(Array(10)).map((_, indx) => ({
+  label: `test ${indx}`,
+  id: indx,
+  ip: "179.229.40.98",
+  vendor: "AXIS",
+  added: indx % 2 === 0,
+  firmware: "1.2.3",
+}));

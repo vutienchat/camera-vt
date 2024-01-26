@@ -6,25 +6,55 @@ import {
   Dialog,
   DialogTitle,
   Grid,
-  FormControlLabel,
-  FormControl,
-  RadioGroup,
-  Radio,
   TextField,
   InputAdornment,
 } from "@material-ui/core";
 import { DeviceItem } from "./DeviceItem";
-import TabsContainer from "../../Tabs";
-import BoxContent from "../../BoxContent";
 import FormData from "./formData";
 import { DeviceContext } from "../../DeviceProvider";
 import * as type from "../../../reducers/type";
-import { ReactComponent as ReloadIcon } from "../../../icons/reload.svg";
 import { SearchIcon } from "../../../../../common/icons/SearchIcon";
+import { listDevice } from "../../../utils";
+import { FormProvider, useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { IP_REGEX } from "../../../utils/regex";
+import { ReloadIcon } from "../../../Icon";
+import BoxContent from "../../BoxContent";
+import BaseButton from "../../BaseButton";
+
+const schema = yup.object().shape({
+  address: yup
+    .string()
+    .required("Address là trường bắt buộc")
+    .matches(IP_REGEX, "FASDF")
+    .length(5)
+    .max(5),
+  // address: yup.string().required("Tên server là trường bắt buộc"),
+  username: yup.string().required("username là trường bắt buộc"),
+  password: yup.string().required("password là trường bắt buộc"),
+  port: yup.number().max(5),
+});
 
 const ModalAddDevice = React.memo(({ open = true, handleClose }) => {
   const classes = ModalAddDeviceStyle();
   const { dispatch } = useContext(DeviceContext);
+  const methods = useForm({
+    defaultValues: {
+      AddingMode: "KnowAddress",
+      address: "",
+      deviceType: "IPC",
+      username: "",
+      password: "",
+      VisionMode: "DayCamera",
+      isDefaultPort: true,
+      port: "",
+      startIP: "192.168.0.1",
+      endIP: "192.168.0.255",
+    },
+    resolver: yupResolver(schema),
+    reValidateMode: "onChange",
+  });
 
   const handleSelectDevice = (data) => {
     dispatch({
@@ -33,23 +63,7 @@ const ModalAddDevice = React.memo(({ open = true, handleClose }) => {
     });
   };
 
-  const tabsStreams = [
-    {
-      label: "Public Stream",
-      children: <FormData key={1} />,
-      key: 1,
-    },
-    {
-      label: "LAN Stream",
-      children: <FormData key={2} />,
-      key: 2,
-    },
-    {
-      label: "LAN Stream",
-      children: <FormData key={3} />,
-      key: 3,
-    },
-  ];
+  const onSubmit = (data) => console.log(data);
 
   return (
     <Dialog
@@ -61,113 +75,108 @@ const ModalAddDevice = React.memo(({ open = true, handleClose }) => {
       fullWidth
       className={classes.root}
     >
-      <Box
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          minHeight: 800,
-          overflow: "unset",
-        }}
-      >
-        <DialogTitle id="simple-dialog-title">
-          <Box className={classes.frame}>
-            <Box className={classes.textWrapper}>Add Device</Box>
-            <CloseIcon style={{ color: "#222222" }} />
-          </Box>
-        </DialogTitle>
-        <Grid
-          container
-          spacing={4}
-          alignItems="center"
-          style={{ paddingInline: 20 }}
-        >
-          <Grid item style={{ fontWeight: 600, fontSize: 16 }}>
-            Adding Mode
-          </Grid>
-          <Grid item>
-            <FormControl component="fieldset">
-              <RadioGroup
-                aria-label="gender"
-                name="gender1"
-                // value={value}
-                // onChange={handleChange}
-                row
-                style={{ fontSize: 14 }}
-              >
-                <FormControlLabel value="LAN" control={<Radio />} label="LAN" />
-                <FormControlLabel
-                  value="Know Address"
-                  control={<Radio />}
-                  label="Know Address"
+      <FormProvider {...methods} trigger={"onChange"}>
+        <form onSubmit={methods.handleSubmit(onSubmit)}>
+          <Box
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              minHeight: 800,
+              overflow: "unset",
+            }}
+          >
+            <DialogTitle id="simple-dialog-title">
+              <Box className={classes.frame}>
+                <Box className={classes.textWrapper}>Add Device</Box>
+                <CloseIcon
+                  style={{ color: "#222222", cursor: "pointer" }}
+                  onClick={handleClose}
                 />
-                <FormControlLabel
-                  value="Subnet Scan"
-                  control={<Radio />}
-                  label="Subnet Scan"
-                />
-              </RadioGroup>
-            </FormControl>
-          </Grid>
-        </Grid>
-        <Box style={{ padding: 20, display: "flex" }}>
-          <BoxContent title={"Device List"}>
-            <Box>
-              <Grid
-                item
-                container
-                spacing={2}
-                alignItems="center"
-                wrap="nowrap"
-                style={{ paddingBottom: 10 }}
-              >
-                <Grid item>
-                  <TextField
-                    fullWidth
-                    variant="outlined"
-                    size="small"
-                    placeholder="Search ..."
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <SearchIcon width={20} height={20} color="#EC1B2E" />
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Grid>
-                <Grid item>
-                  <ReloadIcon />
-                </Grid>
-              </Grid>
-              <Grid
-                item
-                container
-                spacing={1}
-                wrap="nowrap"
-                direction="column"
-                style={{
-                  overflowY: "scroll",
-                  maxHeight: "800px",
-                  overflowX: "hidden",
-                }}
-              >
-                {Array.from(Array(10)).map((_, indx) => (
-                  <Grid item key={indx}>
-                    <DeviceItem
-                      key={indx}
-                      handleSelectDevice={handleSelectDevice}
-                      data={indx}
-                    />
+              </Box>
+            </DialogTitle>
+            <Box style={{ padding: 20, display: "flex", gap: 15 }}>
+              <BoxContent title={"Device List"}>
+                <Box>
+                  <Grid
+                    item
+                    container
+                    spacing={2}
+                    alignItems="center"
+                    wrap="nowrap"
+                    style={{ paddingBottom: 10 }}
+                  >
+                    <Grid item>
+                      <TextField
+                        fullWidth
+                        variant="outlined"
+                        size="small"
+                        placeholder="Search ..."
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <SearchIcon
+                                width={20}
+                                height={20}
+                                color="#EC1B2E"
+                              />
+                            </InputAdornment>
+                          ),
+                        }}
+                      />
+                    </Grid>
+                    <Grid item style={{ cursor: "pointer" }}>
+                      <ReloadIcon width={20} height={20} color="#939393" />
+                    </Grid>
                   </Grid>
-                ))}
-              </Grid>
+                  <Grid
+                    item
+                    container
+                    spacing={1}
+                    wrap="nowrap"
+                    direction="column"
+                    style={{
+                      overflowY: "scroll",
+                      maxHeight: "800px",
+                      overflowX: "hidden",
+                    }}
+                  >
+                    {listDevice.map((device, indx) => (
+                      <Grid item key={indx}>
+                        <DeviceItem
+                          key={indx}
+                          handleSelectDevice={handleSelectDevice}
+                          data={device}
+                        />
+                      </Grid>
+                    ))}
+                  </Grid>
+                </Box>
+              </BoxContent>
+              <FormData />
             </Box>
-          </BoxContent>
-          <Box style={{ width: "100%", marginLeft: 20 }}>
-            <TabsContainer tabs={tabsStreams} />
+            <Box
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                padding: "20px 0 40px 0",
+                gap: "50px",
+              }}
+            >
+              <BaseButton
+                label={"Cancel"}
+                type={"normal"}
+                // onClick={handleCloseModalDelete}
+              />
+              <BaseButton
+                label={"Confirm"}
+                type={"redBackground"}
+                onClick={methods.handleSubmit(onSubmit)}
+              />
+            </Box>
           </Box>
-        </Box>
-      </Box>
+        </form>
+      </FormProvider>
     </Dialog>
   );
 });
