@@ -1,9 +1,6 @@
 import {
   FormControl,
   NativeSelect,
-  TableCell,
-  TableFooter,
-  TableRow,
   makeStyles,
 } from "@material-ui/core";
 import React, { useContext } from "react";
@@ -28,8 +25,7 @@ const TableFooterContent = () => {
     });
   };
 
-  const count = Number(pagination.length) / Number(pagination.rowPerPage + 1);
-  console.log("count",count, Math.ceil(count));
+  const count = Number(pagination.length) / Number(pagination.rowPerPage);
   return (
     <div className={classes.root}>
       <div className={classes.leftContent}>
@@ -50,10 +46,7 @@ const TableFooterContent = () => {
         </span>
       </div>
       <Pagination
-        count={Math.ceil(
-          Number(pagination.length) / Number(pagination.rowPerPage + 1) + 1
-        )}
-        // count={Math.ceil(count)}
+        count={Math.ceil(count) > 0 ? Math.ceil(count) : 1}
         page={pagination.page + 1}
         onChange={handleChangePage}
         className={classes.paginationCustom}

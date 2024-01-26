@@ -3,14 +3,80 @@ import OfflineIcon from "../Icon/OfflineIcon";
 import OnlineIcon from "../Icon/OnlineIcon";
 import Recording from "../Icon/Recording";
 import NoRecording from "../Icon/NoRecording";
+import FeatureAi from "../components/FeatureAi";
+import DeviceStatus from "../components/DeviceStatus";
+import DurationIcon from "../Icon/DurationIcon";
+import Thumbnail from "../components/Thumbnail";
+
+export const Feature = {
+  "Smart Record": {
+    label: "Smart Record",
+    value: "Smart Record",
+  },
+  HeatMap: {
+    label: "HeatMap",
+    value: "HeatMap",
+  },
+  "Smart Search": {
+    label: "Smart Search",
+    value: "Smart Search",
+  },
+  "Parking Count": {
+    label: "Parking Count",
+    value: "Parking Count",
+  },
+  "Human Instruction": {
+    label: "Human Instruction",
+    value: "Human Instruction",
+  },
+  "Face Recognition": {
+    label: "Face Recognition",
+    value: "Face Recognition",
+  },
+};
+
+export const Status = {
+  1: {
+    label: "Online",
+    shortWord: "ON",
+    value: 1,
+    component: () => {
+      return <OnlineIcon />;
+    },
+  },
+  0: {
+    label: "Offline",
+    shortWord: "OFF",
+    value: 0,
+    component: () => {
+      return <OfflineIcon />;
+    },
+  },
+};
+export const RecordStatus = {
+  1: {
+    label: "Record",
+    value: 1,
+    component: () => {
+      return <Recording />;
+    },
+  },
+  0: {
+    label: "Do Not Record",
+    value: 0,
+    component: () => {
+      return <NoRecording />;
+    },
+  },
+};
 
 export const TableHeader = [
   {
     field: "stt",
     name: "#",
     customStyles: {
-      minWidth: "40px",
-      maxWidth: "40px",
+      minWidth: "60px",
+      maxWidth: "60px",
       padding: 10,
       textAlign: "left",
       whiteSpace: "nowrap",
@@ -20,19 +86,22 @@ export const TableHeader = [
     field: "thumbnail",
     name: "Thumbnail",
     customStyles: {
-      minWidth: "150px",
-      maxWidth: "150px",  
+      minWidth: "130px",
+      maxWidth: "130px",
       padding: 10,
       textAlign: "left",
       whiteSpace: "nowrap",
+    },
+    component: (data) => {
+      <Thumbnail data={data} />;
     },
   },
   {
     field: "deviceName",
     name: "Device Name",
     customStyles: {
-      minWidth: "150px",
-      maxWidth: "200px",
+      minWidth: "130px",
+      maxWidth: "130px",
       padding: 10,
       textAlign: "left",
       whiteSpace: "nowrap",
@@ -43,7 +112,7 @@ export const TableHeader = [
     name: "Device Type",
     customStyles: {
       minWidth: "100px",
-      maxWidth: "200px",
+      maxWidth: "100px",
       padding: 10,
       textAlign: "left",
       whiteSpace: "nowrap",
@@ -54,7 +123,7 @@ export const TableHeader = [
     name: "Group",
     customStyles: {
       minWidth: "150px",
-      maxWidth: "200px",
+      maxWidth: "150px",
       padding: 10,
       textAlign: "left",
       whiteSpace: "nowrap",
@@ -70,6 +139,9 @@ export const TableHeader = [
       textAlign: "left",
       whiteSpace: "nowrap",
     },
+    component: (data) => {
+      return <DeviceStatus data={data} />;
+    },
   },
   {
     field: "recording",
@@ -80,6 +152,21 @@ export const TableHeader = [
       padding: 10,
       textAlign: "left",
       whiteSpace: "nowrap",
+    },
+    component: (data) => {
+      const selectRecording = RecordStatus[data.recording];
+      return (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+          }}
+        >
+          <selectRecording.component />
+          {/* <p>{selectRecording.label}</p> */}
+        </div>
+      );
     },
   },
   {
@@ -114,20 +201,92 @@ export const TableHeader = [
       textAlign: "left",
       whiteSpace: "nowrap",
     },
+    component: (data) => {
+      const arrayFeature = data.aiFeature.split(",");
+      const arrayOfValue = arrayFeature.map((item) => Feature[item]);
+      return <FeatureAi arrayOfValue={arrayOfValue} />;
+    },
+  },
+];
+
+export const headerDeviceStatus = [
+  {
+    field: "stt",
+    name: "#",
+    customStyles: {
+      minWidth: "40px",
+      maxWidth: "60px",
+      padding: 10,
+      textAlign: "left",
+      whiteSpace: "nowrap",
+    },
+  },
+  {
+    field: "group",
+    name: "Group",
+    customStyles: {
+      minWidth: "120px",
+      maxWidth: "120px",
+      padding: 10,
+      textAlign: "left",
+      whiteSpace: "nowrap",
+    },
+  },
+  {
+    field: "offTime",
+    name: "Off Time",
+    customStyles: {
+      minWidth: "90px",
+      maxWidth: "200px",
+      padding: 10,
+      textAlign: "left",
+      whiteSpace: "nowrap",
+    },
+    component: (data) => {
+      return <p>{data.offTime}</p>;
+    },
+  },
+  {
+    field: "duration",
+    name: "Off Time Duration",
+    customStyles: {
+      minWidth: "90px",
+      maxWidth: "200px",
+      padding: 10,
+      textAlign: "left",
+      whiteSpace: "nowrap",
+    },
+    component: (data) => {
+      return (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "row",
+            gap: 10,
+          }}
+        >
+          <DurationIcon />
+          <p>{data.duration}</p>
+        </div>
+      );
+    },
   },
 ];
 export const tableData = [
   {
     id: 1,
     thumbnail: null,
-    deviceName: "Camera- 80",
+    deviceName: "Camera-4",
     deviceType: "IPC",
     group: "LLQ_Building",
     status: 1,
     recording: 0,
-    location: "116 Eryn Forges",
+    location: "116 Eryn Forges43434343434343434",
     lastModify: "12/27/2023 08:26:25",
     aiFeature: "Parking Count,HeatMap,Face Recognition",
+    duration: "2h 34m 56s",
+    offTime: "12/27/2023 08:26:25",
   },
   {
     id: 2,
@@ -136,10 +295,12 @@ export const tableData = [
     deviceType: "IPC",
     group: "LLQ_Building",
     status: 1,
-    recording: 0,
+    recording: 1,
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
     aiFeature: "Parking Count,HeatMap,Face Recognition",
+    duration: "2h 34m 56s",
+    offTime: "12/27/2023 08:26:25",
   },
   {
     id: 3,
@@ -147,11 +308,13 @@ export const tableData = [
     deviceName: "Camera- 80",
     deviceType: "IPC",
     group: "LLQ_Building",
-    status: 1,
+    status: 0,
     recording: 0,
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
     aiFeature: "Parking Count,HeatMap,Face Recognition",
+    duration: "2h 34m 56s",
+    offTime: "12/27/2023 08:26:25",
   },
   {
     id: 4,
@@ -164,6 +327,8 @@ export const tableData = [
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
     aiFeature: "Parking Count,HeatMap,Face Recognition",
+    duration: "2h 34m 56s",
+    offTime: "12/27/2023 08:26:25",
   },
   {
     id: 5,
@@ -171,11 +336,12 @@ export const tableData = [
     deviceName: "Camera- 80",
     deviceType: "IPC",
     group: "LLQ_Building",
-    status: 1,
-    recording: 0,
+    status: 0,
+    recording: 1,
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
-    aiFeature: "Parking Count,HeatMap,Face Recognition",
+    aiFeature:
+      "Parking Count,HeatMap,Face Recognition,Human Instruction,Smart Search,Smart Record",
   },
   {
     id: 6,
@@ -188,9 +354,11 @@ export const tableData = [
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
     aiFeature: "Parking Count,HeatMap,Face Recognition",
+    duration: "2h 34m 56s",
+    offTime: "12/27/2023 08:26:25",
   },
   {
-    id:7,
+    id: 7,
     thumbnail: null,
     deviceName: "Camera- 80",
     deviceType: "IPC",
@@ -200,6 +368,8 @@ export const tableData = [
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
     aiFeature: "Parking Count,HeatMap,Face Recognition",
+    duration: "2h 34m 56s",
+    offTime: "12/27/2023 08:26:25",
   },
   {
     id: 8,
@@ -212,6 +382,8 @@ export const tableData = [
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
     aiFeature: "Parking Count,HeatMap,Face Recognition",
+    duration: "2h 34m 56s",
+    offTime: "12/27/2023 08:26:25",
   },
   {
     id: 9,
@@ -224,6 +396,8 @@ export const tableData = [
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
     aiFeature: "Parking Count,HeatMap,Face Recognition",
+    duration: "2h 34m 56s",
+    offTime: "12/27/2023 08:26:25",
   },
   {
     id: 10,
@@ -236,6 +410,8 @@ export const tableData = [
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
     aiFeature: "Parking Count,HeatMap,Face Recognition",
+    duration: "2h 34m 56s",
+    offTime: "12/27/2023 08:26:25",
   },
   {
     id: 11,
@@ -248,6 +424,8 @@ export const tableData = [
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
     aiFeature: "Parking Count,HeatMap,Face Recognition",
+    duration: "2h 34m 56s",
+    offTime: "12/27/2023 08:26:25",
   },
   {
     id: 12,
@@ -260,6 +438,8 @@ export const tableData = [
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
     aiFeature: "Parking Count,HeatMap,Face Recognition",
+    duration: "2h 34m 56s",
+    offTime: "12/27/2023 08:26:25",
   },
   {
     id: 13,
@@ -272,6 +452,8 @@ export const tableData = [
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
     aiFeature: "Parking Count,HeatMap,Face Recognition",
+    duration: "2h 34m 56s",
+    offTime: "12/27/2023 08:26:25",
   },
   {
     id: 14,
@@ -284,6 +466,8 @@ export const tableData = [
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
     aiFeature: "Parking Count,HeatMap,Face Recognition",
+    duration: "2h 34m 56s",
+    offTime: "12/27/2023 08:26:25",
   },
   {
     id: 15,
@@ -296,6 +480,8 @@ export const tableData = [
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
     aiFeature: "Parking Count,HeatMap,Face Recognition",
+    duration: "2h 34m 56s",
+    offTime: "12/27/2023 08:26:25",
   },
   {
     id: 16,
@@ -308,6 +494,8 @@ export const tableData = [
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
     aiFeature: "Parking Count,HeatMap,Face Recognition",
+    duration: "2h 34m 56s",
+    offTime: "12/27/2023 08:26:25",
   },
   {
     id: 17,
@@ -320,6 +508,8 @@ export const tableData = [
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
     aiFeature: "Parking Count,HeatMap,Face Recognition",
+    duration: "2h 34m 56s",
+    offTime: "12/27/2023 08:26:25",
   },
   {
     id: 18,
@@ -332,6 +522,8 @@ export const tableData = [
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
     aiFeature: "Parking Count,HeatMap,Face Recognition",
+    duration: "2h 34m 56s",
+    offTime: "12/27/2023 08:26:25",
   },
   {
     id: 19,
@@ -344,6 +536,8 @@ export const tableData = [
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
     aiFeature: "Parking Count,HeatMap,Face Recognition",
+    duration: "2h 34m 56s",
+    offTime: "12/27/2023 08:26:25",
   },
   {
     id: 20,
@@ -356,6 +550,8 @@ export const tableData = [
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
     aiFeature: "Parking Count,HeatMap,Face Recognition",
+    duration: "2h 34m 56s",
+    offTime: "12/27/2023 08:26:25",
   },
   {
     id: 21,
@@ -368,6 +564,8 @@ export const tableData = [
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
     aiFeature: "Parking Count,HeatMap,Face Recognition",
+    duration: "2h 34m 56s",
+    offTime: "12/27/2023 08:26:25",
   },
   {
     id: 22,
@@ -380,6 +578,8 @@ export const tableData = [
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
     aiFeature: "Parking Count,HeatMap,Face Recognition",
+    duration: "2h 34m 56s",
+    offTime: "12/27/2023 08:26:25",
   },
   {
     id: 23,
@@ -392,26 +592,10 @@ export const tableData = [
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
     aiFeature: "Parking Count,HeatMap,Face Recognition",
+    duration: "2h 34m 56s",
+    offTime: "12/27/2023 08:26:25",
   },
-  
-  
 ];
-export const Status = {
-  1: {
-    label: "Online",
-    value: 1,
-    component: () => {
-      return <OnlineIcon />;
-    },
-  },
-  0: {
-    label: "Offline",
-    value: 0,
-    component: () => {
-      return <OfflineIcon />;
-    },
-  },
-};
 
 export const DeviceType = {
   IPC: {
@@ -425,50 +609,6 @@ export const DeviceType = {
   "App Screen": {
     label: "App Screen",
     value: "App Screen",
-  },
-};
-
-export const RecordStatus = {
-  1: {
-    label: "Record",
-    value: 1,
-    component: () => {
-      return <Recording />;
-    },
-  },
-  0: {
-    label: "Do Not Record",
-    value: 0,
-    component: () => {
-      return <NoRecording />;
-    },
-  },
-};
-
-export const Feature = {
-  "Smart Record": {
-    label: "Smart Record",
-    value: "Smart Record",
-  },
-  HeatMap: {
-    label: "HeatMap",
-    value: "HeatMap",
-  },
-  "Smart Search": {
-    label: "Smart Search",
-    value: "Smart Search",
-  },
-  "Parking Count": {
-    label: "Parking Count",
-    value: "Parking Count",
-  },
-  "Human Instruction": {
-    label: "Human Instruction",
-    value: "Human Instruction",
-  },
-  "Face Recognition": {
-    label: "Face Recognition",
-    value: "Face Recognition",
   },
 };
 

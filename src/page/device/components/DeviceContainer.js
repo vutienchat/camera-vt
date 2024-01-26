@@ -1,42 +1,15 @@
 import React, { useContext, useMemo } from "react";
 import { Box } from "@mui/material";
-import ModalAddDevice from "./modals/ModalAddDevice";
 import Header from "./Header";
 import FilterBar from "./FilterTable";
 import TableContent from "../Table/TableContent";
-import { TableHeader, tableData } from "../utils";
+import { TableHeader } from "../utils";
 import { DeviceContext } from "./DeviceProvider";
 
 const DeviceContainer = () => {
-  const { state, dispatch } = useContext(DeviceContext);
-  const handleCheckData = (data) => {
-    console.log("data", data);
-  };
-  const dataListShow = useMemo(() => {
-    if (!tableData) return [];
-    const trafficData = tableData.map((trafficItem, index) => ({
-      ...trafficItem,
-      stt: index + 1,
-    }));
-    return {
-      length: trafficData.length,
-      data: trafficData.slice(
-        state.pagination.page * state.pagination.rowPerPage,
-        state.pagination.page * state.pagination.rowPerPage +
-          state.pagination.rowPerPage
-      ),
-    };
-  }, [tableData, state.pagination]);
+  const { state, handleCheckData, handleChangePagination, dataListShow} =
+    useContext(DeviceContext);
 
-  const handleChangePagination = (pag) => {
-    dispatch({
-      type: "PAGINATION",
-      pagination: {
-        page: pag.page,
-        rowPerPage: pag.rowPerPage,
-      },
-    });
-  };
   return (
     <React.Fragment>
       <Box

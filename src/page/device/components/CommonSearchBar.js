@@ -5,7 +5,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import { SearchIcon } from "../../../common/icons/SearchIcon";
 
 const SEARCH_LENGTH = {
-  deviceName: 255,
+  deviceName: 50,
   addDevice: 255,
 };
 const SEARCH_PLACEHOLDER = {

@@ -16,7 +16,6 @@ const ModalImport = () => {
       },
     });
   };
-  console.log("hell", state.openModal.openModalImport);
   return (
     <Dialog
       open={state.openModal.openModalImport}

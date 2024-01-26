@@ -7,14 +7,24 @@ const initState = {
   openModal: {
     openModalDelete: false,
     openModalImport: false,
+    openModalAddVehicle: false,
+    openModaleConfiguration: false,
+    openModalDeviceStatus: false,
   },
-  pagination:{
-    page:0,
-    rowPerPage: 10,
+  pagination: {
+    page: 0,
+    rowPerPage: 9,
     length: 0,
   },
-  checkedItemList: []
-  
+  paginationDeviceStatus: {
+    page: 0,
+    rowPerPage: 9,
+    length: 0,
+  },
+  checkedItemList: [],
+  listFeatureType: [],
+  listAiFeature: [],
+  chooseDevice: {},
 };
 
 const reducer = (state = initState, action) => {
@@ -43,17 +53,41 @@ const reducer = (state = initState, action) => {
         openModal: action.openModal,
       };
     }
+    case "PAGINATION_DEVICE_STATUS": {
+      return {
+        ...state,
+        paginationDeviceStatus: action.paginationDeviceStatus,
+      };
+    }
     case "PAGINATION": {
       return {
         ...state,
-        pagination: action.pagination
-      }
+        pagination: action.pagination,
+      };
     }
     case "CHECKED_ITEM_LIST": {
       return {
         ...state,
-        checkedItemList: action.pagination
-      }
+        checkedItemList: action.checkedItemList,
+      };
+    }
+    case "FEATURE_TYPE": {
+      return {
+        ...state,
+        listFeatureType: action.listFeatureType,
+      };
+    }
+    case "AI_FEATURE": {
+      return {
+        ...state,
+        listAiFeature: action.listAiFeature,
+      };
+    }
+    case "CHOOSE_DEVICE": {
+      return {
+        ...state,
+        chooseDevice: action.chooseDevice,
+      };
     }
     default:
   }

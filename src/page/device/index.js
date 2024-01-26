@@ -1,21 +1,64 @@
-import React from "react";
+import React, { useMemo } from "react";
 import DeviceContainer from "./components/DeviceContainer";
 import DeviceProvider from "./components/DeviceProvider";
 import Reducer from "./reducers";
 import ModalDeleteDevice from "./components/modals/ModalDeleteDevice";
 import ModalImport from "./components/modals/ModalImport";
+import ModalAddDevice from "./components/modals/ModalAddDevice";
+import ModalConfiguration from "./components/modals/ModalConfiguration/ModalConfiguration";
+import ModalDeviceStatus from "./components/modals/ModalDeviceStatus";
+import { tableData } from "./utils";
 
 const Device = () => {
   const { state, dispatch } = Reducer();
+  const handleCheckData = (data) => {
+    dispatch({
+      type: "CHECKED_ITEM_LIST",
+      checkedItemList: data,
+    });
+  };
+  const handleChangePagination = (pag) => {
+    dispatch({
+      type: "PAGINATION",
+      pagination: {
+        page: pag.page,
+        rowPerPage: pag.rowPerPage,
+      },
+    });
+  };
+  
+  const dataListShow = useMemo(() => {
+    if (!tableData) return [];
+    const deviceData = tableData.map((trafficItem, index) => ({
+      ...trafficItem,
+      stt: index + 1,
+    }));
+    return {
+      length: deviceData.length,
+      data: deviceData.slice(
+        state.pagination.page * (state.pagination.rowPerPage + 1),
+        state.pagination.page * (state.pagination.rowPerPage + 1) +
+          (state.pagination.rowPerPage + 1)
+      ),
+    };
+  }, [tableData, state.pagination]);
+
   const value = {
     state,
     dispatch,
+    handleCheckData,
+    handleChangePagination,
+    dataListShow,
   };
+  
   return (
     <DeviceProvider value={value}>
       <DeviceContainer />
       {state.openModal.openModalDelete && <ModalDeleteDevice />}
-      {state.openModal.openModalImport && <ModalImport/>}
+      {state.openModal.openModalImport && <ModalImport />}
+      {state.openModal.openModalAddVehicle && <ModalAddDevice />}
+      {state.openModal.openModaleConfiguration && <ModalConfiguration />}
+      {state.openModal.openModalDeviceStatus && <ModalDeviceStatus />}
     </DeviceProvider>
   );
 };

@@ -17,6 +17,12 @@ const Header = () => {
       deviceNameKey: newValue,
     });
   };
+  const handleOpenConfigurationModal = () => {
+    dispatch({
+      type: "OPEN_MODAL",
+      openModal: { openModaleConfiguration: true },
+    });
+  };
   return (
     <Box
       style={{
@@ -63,7 +69,7 @@ const Header = () => {
         <Box className={classes.icon}>
           <ReloadIcon width={20} height={20} color="#858585" />
         </Box>
-        <Box className={classes.icon}>
+        <Box className={classes.icon} onClick={handleOpenConfigurationModal}>
           <SettingIcon width={20} height={20} color="#858585" />
         </Box>
       </Box>

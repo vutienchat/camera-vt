@@ -2,16 +2,22 @@ import {
   Box,
   Checkbox,
   CircularProgress,
+  Divider,
   Popover,
   TableBody,
   TableCell,
   TableRow,
+  Tooltip,
   Typography,
   makeStyles,
 } from "@material-ui/core";
 import { useContext, useState } from "react";
 import { TableCommonContext } from "./TableContent";
 import MenuDotIcon from "../Icon/MenuDotIcon";
+import LiveViewIcon from "../Icon/LiveViewIcon";
+import PlayBackIcon from "../Icon/PlaybackIcon";
+import ConfigIcon from "../Icon/ConfigIcon";
+import DeletePopoverIcon from "../Icon/DeletePopoverIcon";
 
 const TableBodyContent = () => {
   const {
@@ -25,6 +31,7 @@ const TableBodyContent = () => {
   } = useContext(TableCommonContext);
   const classes = useTableBodyStyle();
   const [anchorEl, setAnchorEl] = useState(null);
+  const [openedWindow, setOpenedWindow] = useState(null);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -42,6 +49,16 @@ const TableBodyContent = () => {
       handleCheckData([...checkedItems].filter((item) => item.id !== val.id));
     }
   };
+
+  const handleOpenNewTab = (url) => {
+    if (openedWindow && !openedWindow.closed) {
+      openedWindow.focus();
+    } else {
+      const newWindow = window.open(url, "_blank");
+      setOpenedWindow(newWindow);
+    }
+  };
+
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
 
@@ -69,7 +86,7 @@ const TableBodyContent = () => {
             <Typography
               style={{ textAlign: "center", padding: 20, fontSize: 21 }}
             >
-              No Data
+              No Device Found
             </Typography>
           </TableCell>
         </TableRow>
@@ -95,12 +112,12 @@ const TableBodyContent = () => {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  padding: "24px 24px",
+                  padding: "28px",
                 }}
               >
                 <Checkbox
                   value={JSON.stringify(dataBody)}
-                  checked={isChecked} 
+                  checked={isChecked}
                   onChange={handleCheckItem}
                   className={`${classes.checkBoxed} ${
                     isChecked && classes.checked
@@ -128,25 +145,29 @@ const TableBodyContent = () => {
                   {component ? (
                     component(dataBody)
                   ) : (
-                    <Typography className={classes.text} style={{ width }}>
-                      {dataBody[field]}
-                    </Typography>
+                    <Tooltip title={dataBody[field] || ""}>
+                      <Typography className={classes.text} style={{ width }}>
+                        {dataBody[field]}
+                      </Typography>
+                    </Tooltip>
                   )}
                 </TableCell>
               );
             })}
-            <TableCell
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                paddingBottom: 17,
-              }}
-            >
-              <Typography onClick={handleClick}>
-                <MenuDotIcon />
-              </Typography>
-            </TableCell>
+            {checkedAble && (
+              <TableCell
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  paddingBottom: 21,
+                }}
+              >
+                <Typography onClick={handleClick} style={{ cursor: "pointer" }}>
+                  <MenuDotIcon />
+                </Typography>
+              </TableCell>
+            )}
             <Popover
               id={id}
               open={open}
@@ -162,7 +183,30 @@ const TableBodyContent = () => {
                 horizontal: "center",
               }}
             >
-              <Typography>The content of the Popover.</Typography>
+              <Box
+                className={classes.poperItem}
+                onClick={() => {
+                  handleOpenNewTab("/traffic");
+                }}
+              >
+                <LiveViewIcon />
+                <Typography className={classes.poperText}>Liveview</Typography>
+              </Box>
+              <Divider />
+              <Box className={classes.poperItem}>
+                <PlayBackIcon />
+                <Typography className={classes.poperText}>Playback</Typography>
+              </Box>
+              <Divider />
+              <Box className={classes.poperItem}>
+                <ConfigIcon />
+                <Typography className={classes.poperText}>Config</Typography>
+              </Box>
+              <Divider />
+              <Box className={classes.poperItem}>
+                <DeletePopoverIcon />
+                <Typography className={classes.poperText}>Delete</Typography>
+              </Box>
             </Popover>
           </TableRow>
         );
@@ -176,7 +220,7 @@ const useTableBodyStyle = makeStyles({
     "& .MuiPaper-elevation8": {
       boxShadow: "0px 0px 1px 0px rgba(0, 0, 0, 0.2)",
       backgroundColor: "white",
-      width: 100,
+      minWidth: 120,
     },
   },
   text: {
@@ -185,6 +229,7 @@ const useTableBodyStyle = makeStyles({
     whiteSpace: "nowrap",
   },
   rowTrafficItem: {
+    height: 81,
     "&:hover": { backgroundColor: "#fae2e4 !important" },
   },
   tableCellCustom: { padding: "12px 24px" },
@@ -194,6 +239,19 @@ const useTableBodyStyle = makeStyles({
   },
   checked: {
     "& svg": { color: "#dd3d4b !important" },
+  },
+  poperItem: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 10,
+    padding: "5px 10px",
+    cursor: "pointer",
+    "&:hover": { backgroundColor: "#fae2e4 !important" },
+  },
+  poperText: {
+    fontSize: 15,
+    flex: 1,
   },
 });
 

@@ -24,8 +24,15 @@ import { SearchIcon } from "../../../../../common/icons/SearchIcon";
 
 const ModalAddDevice = React.memo(({ open = true, handleClose }) => {
   const classes = ModalAddDeviceStyle();
-  const { dispatch } = useContext(DeviceContext);
-
+  const { state, dispatch } = useContext(DeviceContext);
+  const handleCloseModalSelect = () => {
+    dispatch({
+      type: "OPEN_MODAL",
+      openModal: {
+        openModalAddVehicle: false,
+      },
+    });
+  };
   const handleSelectDevice = (data) => {
     dispatch({
       type: type.SELECT_DEVICE,
@@ -53,8 +60,8 @@ const ModalAddDevice = React.memo(({ open = true, handleClose }) => {
 
   return (
     <Dialog
-      open={open}
-      onClose={handleClose}
+      open={state.openModal.openModalAddVehicle}
+      onClose={handleCloseModalSelect}
       aria-labelledby="form-dialog-title"
       style={{ minWidth: 1000, minHeight: 800 }}
       maxWidth={"lg"}
@@ -72,7 +79,10 @@ const ModalAddDevice = React.memo(({ open = true, handleClose }) => {
         <DialogTitle id="simple-dialog-title">
           <Box className={classes.frame}>
             <Box className={classes.textWrapper}>Add Device</Box>
-            <CloseIcon style={{ color: "#222222" }} />
+            <CloseIcon
+              style={{ color: "#222222", cursor: "pointer" }}
+              onClose={handleCloseModalSelect}
+            />
           </Box>
         </DialogTitle>
         <Grid
@@ -136,7 +146,7 @@ const ModalAddDevice = React.memo(({ open = true, handleClose }) => {
                   />
                 </Grid>
                 <Grid item>
-                  <ReloadIcon />
+                  <ReloadIcon style={{ cursor: "pointer" }} />
                 </Grid>
               </Grid>
               <Grid
