@@ -38,7 +38,15 @@ const schema = yup.object().shape({
 
 const ModalAddDevice = React.memo(({ open = true, handleClose }) => {
   const classes = ModalAddDeviceStyle();
-  const { dispatch } = useContext(DeviceContext);
+  const { state, dispatch } = useContext(DeviceContext);
+  const handleCloseModalSelect = () => {
+    dispatch({
+      type: "OPEN_MODAL",
+      openModal: {
+        openModalAddDevice: false,
+      },
+    });
+  };
   const methods = useForm({
     defaultValues: {
       AddingMode: "KnowAddress",
@@ -67,8 +75,8 @@ const ModalAddDevice = React.memo(({ open = true, handleClose }) => {
 
   return (
     <Dialog
-      open={open}
-      onClose={handleClose}
+      open={state.openModal.openModalAddDevice}
+      onClose={handleCloseModalSelect}
       aria-labelledby="form-dialog-title"
       style={{ minWidth: 1000, minHeight: 800 }}
       maxWidth={"lg"}

@@ -1,14 +1,13 @@
 import {
   Box,
-  Button,
   Dialog,
   DialogContent,
   DialogContentText,
   Typography,
 } from "@material-ui/core";
 import React, { useContext } from "react";
-import BaseButton from "../components/BaseButton";
-import { DeviceContext } from "../components/DeviceProvider";
+import BaseButton from "../BaseButton";
+import { DeviceContext } from "../DeviceProvider";
 import CloseIcon from "@material-ui/icons/Close";
 
 const ModalDeleteDevice = React.memo(() => {
@@ -48,7 +47,7 @@ const ModalDeleteDevice = React.memo(() => {
             Delete Device
           </Typography>
           <CloseIcon
-            style={{ width: 25, height: 25 }}
+            style={{ width: 25, height: 25, cursor: "pointer" }}
             onClick={handleCloseModalDelete}
           />
         </Box>

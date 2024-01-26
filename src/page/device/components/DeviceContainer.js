@@ -1,25 +1,45 @@
-import React from "react";
+import React, { useContext, useMemo } from "react";
 import { Box } from "@mui/material";
-import ModalAddDevice from "./modals/ModalAddDevice";
 import Header from "./Header";
 import FilterBar from "./FilterTable";
+import TableContent from "../Table/TableContent";
+import { TableHeader } from "../utils";
+import { DeviceContext } from "./DeviceProvider";
 
 const DeviceContainer = () => {
+  const { state, handleCheckData, handleChangePagination, dataListShow} =
+    useContext(DeviceContext);
+
   return (
     <React.Fragment>
       <Box
         style={{
           minWidth: 1440,
+          minHeight: "calc(100vh - 60px)",
           padding: 10,
           display: "flex",
           flexDirection: "column",
-          gap: 20,
+          gap: 30,
         }}
       >
         <Header />
         <FilterBar />
+        <TableContent
+          checkedAble
+          tableData={dataListShow.data}
+          tableHeader={TableHeader}
+          handleCheckData={handleCheckData}
+          checkedItems={state.checkedItemList}
+          pagination={{
+            page: state.pagination.page,
+            rowPerPage: state.pagination.rowPerPage,
+            length: dataListShow.length,
+          }}
+          handleChangePagination={handleChangePagination}
+        />
       </Box>
     </React.Fragment>
   );
 };
+
 export default DeviceContainer;

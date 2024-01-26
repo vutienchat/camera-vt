@@ -1,7 +1,14 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
-import { Box, Button, Checkbox, Divider, Typography } from "@material-ui/core";
+import {
+  Box,
+  Button,
+  Checkbox,
+  Divider,
+  Tooltip,
+  Typography,
+} from "@material-ui/core";
 
 import UpIcon from "../Icon/UpIcon";
 import DropDownIcon from "../Icon/DropDownIcon";
@@ -248,16 +255,18 @@ export default function SelectMultiple({
                               isChecked && classes.checked
                             }`}
                           />
-                          <Typography
-                            style={{
-                              textOverflow: "ellipsis",
-                              whiteSpace: "nowrap",
-                              flex: 1,
-                              overflow: "hidden",
-                            }}
-                          >
-                            {item.label}
-                          </Typography>
+                          <Tooltip title={item.label}>
+                            <Typography
+                              style={{
+                                textOverflow: "ellipsis",
+                                whiteSpace: "nowrap",
+                                flex: 1,
+                                overflow: "hidden",
+                              }}
+                            >
+                              {item.label}
+                            </Typography>
+                          </Tooltip>
                         </label>
                         <Divider style={{ width: "100%" }} />
                       </Box>

@@ -10,7 +10,6 @@ const SelectForm = ({
   list,
   className,
   customStyle,
-  defaultValue,
 }) => {
   const classes = useStyles();
   const { control } = useFormContext();
@@ -38,14 +37,13 @@ const SelectForm = ({
         }}
         control={control}
         name={keyForm}
-        defaultValue={defaultValue}
         render={({ field }) => {
           return (
             <Select
-              placeholder="OFF"
               open={isOpen}
               onClose={handleClose}
               onOpen={handleOpen}
+              className={className || ""}
               disabled={disabled || false}
               style={customStyle}
               {...field}
@@ -54,7 +52,7 @@ const SelectForm = ({
               {list.map((item, index) => {
                 return (
                   <MenuItem value={item.value} key={`${item.value}_${index}`}>
-                    {item.shortWord ? item.shortWord : item.label}
+                    {item.label}
                   </MenuItem>
                 );
               })}
@@ -71,7 +69,9 @@ const useStyles = makeStyles((theme) => ({
     display: "block",
     marginTop: theme.spacing(2),
   },
-  formControl: {},
+  formControl: {
+    minWidth: 120,
+  },
 }));
 
 export default SelectForm;
