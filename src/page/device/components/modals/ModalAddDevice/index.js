@@ -18,7 +18,11 @@ import { listDevice } from "../../../utils";
 import { FormProvider, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { IP_REGEX } from "../../../utils/regex";
+import {
+  IP_REGEX,
+  regexWithoutSpecialChars,
+  regexAllowVietnameseNoSpecialChars,
+} from "../../../utils/regex";
 import { ReloadIcon } from "../../../Icon";
 import BoxContent from "../../BoxContent";
 import BaseButton from "../../BaseButton";
@@ -27,13 +31,17 @@ const schema = yup.object().shape({
   address: yup
     .string()
     .required("Address là trường bắt buộc")
-    .matches(IP_REGEX, "FASDF")
-    .length(5)
-    .max(5),
+    .matches(IP_REGEX, "Address không đúng định dạng "),
   // address: yup.string().required("Tên server là trường bắt buộc"),
-  username: yup.string().required("username là trường bắt buộc"),
-  password: yup.string().required("password là trường bắt buộc"),
   port: yup.number().max(5),
+  endIp: yup.number(),
+  deviceName: yup
+    .string()
+    .required("Device Name là trường bắt buộc")
+    .matches(
+      regexAllowVietnameseNoSpecialChars,
+      "Device Name không đúng định dạng "
+    ),
 });
 
 const ModalAddDevice = React.memo(({ open = true, handleClose }) => {
@@ -57,8 +65,9 @@ const ModalAddDevice = React.memo(({ open = true, handleClose }) => {
       VisionMode: "DayCamera",
       isDefaultPort: true,
       port: "",
-      startIP: "192.168.0.1",
-      endIP: "192.168.0.255",
+      startIP: 1,
+      endIP: 255,
+      ipAddress: ["192", "168", "0"],
     },
     resolver: yupResolver(schema),
     reValidateMode: "onChange",
