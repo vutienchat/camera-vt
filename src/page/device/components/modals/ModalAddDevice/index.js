@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import CloseIcon from "@material-ui/icons/Close";
 import {
   makeStyles,
@@ -8,6 +8,11 @@ import {
   Grid,
   TextField,
   InputAdornment,
+  Checkbox,
+  FormControlLabel,
+  FormControl,
+  RadioGroup,
+  Radio,
 } from "@material-ui/core";
 import { DeviceItem } from "./DeviceItem";
 import FormData from "./formData";
@@ -68,6 +73,7 @@ const ModalAddDevice = React.memo(({ open = true, handleClose }) => {
       startIP: 1,
       endIP: 255,
       ipAddress: ["192", "168", "0"],
+      location: "60 Hoang Quoc Viet",
     },
     resolver: yupResolver(schema),
     reValidateMode: "onChange",

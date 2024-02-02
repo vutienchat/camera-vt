@@ -16,6 +16,7 @@ import RecordDevice from "../record";
 import TabsContainer from "../../../Tabs";
 import GeneralTab from "../general";
 import FormIpAddress from "../../../BaseForm/FormIpAddress";
+import SimplifiedPolygon from "../../../Draw/SimplifiedPolygon";
 // var onvif = require("onvif");
 
 const addModeOption = [
@@ -59,7 +60,7 @@ const tabConfig = [
   },
   {
     label: "PTZ Control",
-    children: "asdfasdf",
+    children: <SimplifiedPolygon />,
   },
   {
     label: "Advanced",

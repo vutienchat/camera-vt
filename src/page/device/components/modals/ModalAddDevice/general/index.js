@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useState } from "react";
-import { Box, Grid } from "@material-ui/core";
+import { Box, Grid, Tooltip, Typography } from "@material-ui/core";
 import BaseFormGroup from "../../../BaseForm/BaseFormGroup";
 import BaseInputForm from "../../../BaseForm/BaseInput";
 import CustomAccordion from "../../../Accordion/CustomAccordion";
@@ -13,6 +13,7 @@ import { useFormContext } from "react-hook-form";
 import Select from "../../../Select";
 import { Feature } from "../../../../utils";
 import BaseFormSelect from "../../../BaseForm/BaseFormSelect";
+import SelectLocation from "../selectLocation";
 
 const VisionMode = [
   {
@@ -29,11 +30,20 @@ const GeneralTab = React.memo(() => {
   const { state } = useContext(DeviceContext);
   const {
     watch,
+    setValue,
     formState: { errors },
   } = useFormContext();
-  const { deviceType } = watch();
+  const { deviceType, location } = watch();
   const isSelectedOne =
     state.listDeviceSelected && state.listDeviceSelected.length === 1;
+  const [markerPosition, setMarkerPosition] = useState({
+    lat: 21.046215,
+    lng: 105.785733,
+  });
+
+  const setMarkerAddress = (text) => {
+    setValue("location", text);
+  };
 
   const [cards, setCards] = useState([
     { id: 1, text: "Private" },
@@ -65,6 +75,18 @@ const GeneralTab = React.memo(() => {
     },
     [setCards]
   );
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(anchorEl ? null : event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const openLocation = Boolean(anchorEl);
+
   return (
     <Box
       style={{
@@ -171,17 +193,33 @@ const GeneralTab = React.memo(() => {
             </Grid>
           )}
 
-          <Grid item xs={6}>
+          <Grid item xs={6} onClick={handleClick}>
             <BaseFormGroup
               label={"Location"}
               wrap={true}
               component={
-                <BaseInputForm
-                  name={"Location"}
-                  style={{ width: "100%", flex: 1 }}
-                  variant="outlined"
-                  size="small"
-                />
+                <Tooltip title={location} placement="top">
+                  <Box
+                    style={{
+                      width: "100%",
+                      border: "1px solid rgba(0, 0, 0, 0.10)",
+                      height: 40,
+                      padding: 10,
+                      boxSizing: "border-box",
+                    }}
+                  >
+                    <Typography
+                      style={{
+                        width: "100%",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        overflow: " hidden",
+                      }}
+                    >
+                      {location}
+                    </Typography>
+                  </Box>
+                </Tooltip>
               }
             />
           </Grid>
@@ -205,7 +243,7 @@ const GeneralTab = React.memo(() => {
                     <BaseFormSelect
                       key={"aiFeature"}
                       list={Object.values(Feature)}
-                      width={425}
+                      width={"100%"}
                       btnText={"AI Feature"}
                       dropdownWidth={395}
                       // titleDropdownText={item.titleDropdownText}
@@ -220,10 +258,27 @@ const GeneralTab = React.memo(() => {
           )}
 
           <Grid item xs={6} style={{ padding: 15 }}>
-            {/* <MapCustom /> */}
+            <MapCustom
+              location={location}
+              setMarkerAddress={setMarkerAddress}
+              markerPosition={markerPosition}
+              setMarkerPosition={setMarkerPosition}
+              setMaps={() => {}}
+            />
           </Grid>
         </Grid>
       </AccordionContent>
+      {openLocation && (
+        <SelectLocation
+          open={openLocation}
+          anchorEl={anchorEl}
+          handleClose={handleClose}
+          location={location}
+          setMarkerAddress={setMarkerAddress}
+          markerPosition={markerPosition}
+          setMarkerPosition={setMarkerPosition}
+        />
+      )}
     </Box>
   );
 });
