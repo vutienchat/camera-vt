@@ -5,6 +5,7 @@ import TrashIconImportModal from "../../Icon/TrashIconImportModal";
 import UploadIcon from "../../Icon/UploadIcon";
 import { DeviceContext } from "../DeviceProvider";
 import BaseButton from "../BaseButton";
+import { downloadTemplateFile } from "../../api";
 const ModalImport = () => {
   const classes = useSettingStyle();
   const { state, dispatch } = useContext(DeviceContext);
@@ -83,6 +84,9 @@ const ModalImport = () => {
                 fontWeight: 500,
                 fontSize: 12,
                 cursor: "pointer",
+              }}
+              onClick={() => {
+                downloadTemplateFile();
               }}
             >
               Import_Template.xlsx

@@ -17,9 +17,12 @@ const TableContent = ({
   checkedAble,
   handleChangePagination,
   pagination,
+  dispatch,
+  iconPagination,
 }) => {
   const data = {
     isLoading,
+    dispatch,
     checkedItems,
     tableHeader,
     tableData,
@@ -28,6 +31,7 @@ const TableContent = ({
     checkedAble,
     pagination,
     handleChangePagination,
+    iconPagination,
   };
   const classes = useStyles();
   return (
@@ -36,8 +40,8 @@ const TableContent = ({
         <Box
           className={classes.customScrollbar}
           style={{
-            maxHeight: "630px",
-            height: "630px",
+            maxHeight: "calc(-260px + 100vh)",
+            height: "calc(-260px + 100vh)",
             width: "100%",
             overflow: "auto",
           }}

@@ -11,15 +11,8 @@ import { DeviceContext } from "../DeviceProvider";
 import CloseIcon from "@material-ui/icons/Close";
 
 const ModalDeleteDevice = React.memo(() => {
-  const { state, dispatch } = useContext(DeviceContext);
-  const handleCloseModalDelete = () => {
-    dispatch({
-      type: "OPEN_MODAL",
-      openModal: {
-        openModalDelete: false,
-      },
-    });
-  };
+  const { state, handleDeleteDevice, handleCloseModalDelete } =
+    useContext(DeviceContext);
   return (
     <Dialog
       open={state.openModal.openModalDelete}
@@ -79,7 +72,11 @@ const ModalDeleteDevice = React.memo(() => {
             type={"normal"}
             onClick={handleCloseModalDelete}
           />
-          <BaseButton label={"Confirm"} type={"redBackground"} />
+          <BaseButton
+            label={"Confirm"}
+            type={"redBackground"}
+            onClick={handleDeleteDevice}
+          />
         </Box>
       </Box>
     </Dialog>

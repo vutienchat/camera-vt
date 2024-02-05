@@ -5,6 +5,7 @@ import BaseButton from "./BaseButton";
 import { DeviceContext } from "./DeviceProvider";
 import TrashIcon from "../Icon/TrashIcon";
 import { tableData } from "../utils";
+import { exportExcel } from "../api";
 
 const FilterBar = () => {
   const classes = useStyles();
@@ -60,7 +61,12 @@ const FilterBar = () => {
         }}
       >
         <Box className={classes.text} style={{ fontWeight: 400 }}>
-          <span>Selected:</span> <span>{state.checkedItemList.length}</span>{" "}
+          <span>Selected:</span>{" "}
+          <span>
+            {state.checkedItemList.length < 10
+              ? `0${state.checkedItemList.length}`
+              : state.checkedItemList.length}
+          </span>{" "}
           <span>devices</span>
         </Box>
         {state.checkedItemList.length === tableData.length ? (
@@ -101,7 +107,13 @@ const FilterBar = () => {
           type={"normal"}
           onClick={handleOpenImportModal}
         />
-        <BaseButton label={"Export Data"} type={"normal"} />
+        <BaseButton
+          label={"Export Data"}
+          type={"normal"}
+          onClick={() => {
+            exportExcel();
+          }}
+        />
         <BaseButton
           label={"Delete"}
           type={state.checkedItemList.length > 0 ? "redBackground" : "disable"}

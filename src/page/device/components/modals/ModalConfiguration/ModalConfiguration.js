@@ -32,7 +32,6 @@ const ModalConfiguration = memo(() => {
 
   const handleChangeFeatureType = (e, index, key) => {
     let modifyFeatureType = [...state.listFeatureType];
-    console.log("???", key);
     if (index !== undefined) {
       modifyFeatureType[index][key] = e;
       dispatch({
@@ -44,9 +43,6 @@ const ModalConfiguration = memo(() => {
       newFeature[key] = e;
     }
   };
-
-  console.log("??", state.listFeatureType)
-
   return (
     <Dialog
       open={state.openModal.openModaleConfiguration}

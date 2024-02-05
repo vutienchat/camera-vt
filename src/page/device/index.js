@@ -7,7 +7,8 @@ import ModalImport from "./components/modals/ModalImport";
 import ModalAddDevice from "./components/modals/ModalAddDevice";
 import ModalConfiguration from "./components/modals/ModalConfiguration/ModalConfiguration";
 import ModalDeviceStatus from "./components/modals/ModalDeviceStatus";
-import { tableData } from "./utils";
+import { Feature, tableData } from "./utils";
+
 
 const Device = () => {
   const { state, dispatch } = Reducer();
@@ -23,6 +24,22 @@ const Device = () => {
       pagination: {
         page: pag.page,
         rowPerPage: pag.rowPerPage,
+      },
+    });
+  };
+  const handleCloseModalDelete = () => {
+    dispatch({
+      type: "OPEN_MODAL",
+      openModal: {
+        openModalDelete: false,
+      },
+    });
+  };
+  const handleCloseModalDeviceStatus = () => {
+    dispatch({
+      type: "OPEN_MODAL",
+      openModal: {
+        openModalDeviceStatus: false,
       },
     });
   };
@@ -43,12 +60,21 @@ const Device = () => {
     };
   }, [tableData, state.pagination]);
 
+
+  const handleDeleteDevice = () => {
+    handleCheckData([]);
+    handleCloseModalDelete();
+  };
+
   const value = {
     state,
     dispatch,
+    dataListShow,
     handleCheckData,
     handleChangePagination,
-    dataListShow,
+    handleCloseModalDelete,
+    handleCloseModalDeviceStatus,
+    handleDeleteDevice,
   };
 
   return (
@@ -67,7 +93,6 @@ const Device = () => {
         />
       )}
       {state.openModal.openModalImport && <ModalImport />}
-      {/* {state.openModal.openModalAddDevice && <ModalAddDevice />} */}
       {state.openModal.openModaleConfiguration && <ModalConfiguration />}
       {state.openModal.openModalDeviceStatus && <ModalDeviceStatus />}
     </DeviceProvider>

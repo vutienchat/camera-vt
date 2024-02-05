@@ -119,7 +119,7 @@ export default function SelectMultiple({
   useEffect(() => {
     if (textSearch) {
       setListFilter(
-        [...list].filter((item) => item.label.includes(textSearch))
+        [...list].filter((item) => item.label.includes(textSearch.trim()))
       );
     } else {
       setListFilter(list);
@@ -230,7 +230,9 @@ export default function SelectMultiple({
                         }
                         style={{ padding: 0 }}
                       />
-                      <Typography>{titleDropdownText}</Typography>
+                      <Tooltip title={titleDropdownText}>
+                        <Typography>{titleDropdownText}</Typography>
+                      </Tooltip>
                     </label>
                     <Divider style={{ width: "100%" }} />
                   </React.Fragment>

@@ -7,7 +7,7 @@ import { TableHeader } from "../utils";
 import { DeviceContext } from "./DeviceProvider";
 
 const DeviceContainer = () => {
-  const { state, handleCheckData, handleChangePagination, dataListShow} =
+  const { state, handleCheckData, handleChangePagination, dataListShow, dispatch} =
     useContext(DeviceContext);
 
   return (
@@ -36,6 +36,8 @@ const DeviceContainer = () => {
             length: dataListShow.length,
           }}
           handleChangePagination={handleChangePagination}
+          dispatch={dispatch}
+          iconPagination={true}
         />
       </Box>
     </React.Fragment>

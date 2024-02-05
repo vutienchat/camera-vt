@@ -11,15 +11,9 @@ import { Status, headerDeviceStatus, tableData } from "../../utils";
 import TableContent from "../../Table/TableContent";
 const ModalDeviceStatus = () => {
   const classes = styles();
-  const { state, dispatch } = useContext(DeviceContext);
-  const handleCloseModalDeviceStatus = () => {
-    dispatch({
-      type: "OPEN_MODAL",
-      openModal: {
-        openModalDeviceStatus: false,
-      },
-    });
-  };
+  const { state, dispatch, handleCloseModalDeviceStatus } =
+    useContext(DeviceContext);
+
   const selectStatus = Status[state.chooseDevice.status];
 
   const handleChangePagination = (pag) => {
@@ -40,8 +34,10 @@ const ModalDeviceStatus = () => {
     return {
       length: trafficData.length,
       data: trafficData.slice(
-        state.paginationDeviceStatus.page * (state.paginationDeviceStatus.rowPerPage + 1),
-        state.paginationDeviceStatus.page * (state.paginationDeviceStatus.rowPerPage + 1) +
+        state.paginationDeviceStatus.page *
+          (state.paginationDeviceStatus.rowPerPage + 1),
+        state.paginationDeviceStatus.page *
+          (state.paginationDeviceStatus.rowPerPage + 1) +
           (state.paginationDeviceStatus.rowPerPage + 1)
       ),
     };
@@ -73,7 +69,7 @@ const ModalDeviceStatus = () => {
           >
             {state.chooseDevice.deviceName || ""}
           </Typography>
-          <Typography
+          <Box
             style={{
               display: "flex",
               alignItems: "center",
@@ -84,8 +80,8 @@ const ModalDeviceStatus = () => {
             }}
           >
             <selectStatus.component />
-            <p style={{ margin: 0 }}>{selectStatus.label}</p>
-          </Typography>
+            <Typography style={{ margin: 0 }}>{selectStatus.label}</Typography>
+          </Box>
         </Box>
         <Divider style={{ margin: "0 30px" }} />
         <Box style={{ padding: "10px 30px 19px 30px" }}>
@@ -99,6 +95,7 @@ const ModalDeviceStatus = () => {
               length: dataListShow.length,
             }}
             handleChangePagination={handleChangePagination}
+            iconPagination={false}
           />
         </Box>
       </Box>

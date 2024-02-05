@@ -134,7 +134,7 @@ export const TableHeader = [
     name: "Status",
     customStyles: {
       minWidth: "90px",
-      maxWidth: "200px",
+      maxWidth: "90px",
       padding: 10,
       textAlign: "left",
       whiteSpace: "nowrap",
@@ -148,7 +148,7 @@ export const TableHeader = [
     name: "Recording",
     customStyles: {
       minWidth: "90px",
-      maxWidth: "200px",
+      maxWidth: "90px",
       padding: 10,
       textAlign: "left",
       whiteSpace: "nowrap",
@@ -215,7 +215,7 @@ export const headerDeviceStatus = [
     name: "#",
     customStyles: {
       minWidth: "40px",
-      maxWidth: "60px",
+      maxWidth: "40px",
       padding: 10,
       textAlign: "left",
       whiteSpace: "nowrap",
@@ -237,7 +237,7 @@ export const headerDeviceStatus = [
     name: "Off Time",
     customStyles: {
       minWidth: "90px",
-      maxWidth: "200px",
+      maxWidth: "90px",
       padding: 10,
       textAlign: "left",
       whiteSpace: "nowrap",
@@ -251,7 +251,7 @@ export const headerDeviceStatus = [
     name: "Off Time Duration",
     customStyles: {
       minWidth: "90px",
-      maxWidth: "200px",
+      maxWidth: "90px",
       padding: 10,
       textAlign: "left",
       whiteSpace: "nowrap",

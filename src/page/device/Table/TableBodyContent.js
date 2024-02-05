@@ -28,6 +28,7 @@ const TableBodyContent = () => {
     handleCheckData,
     handleClickColumns,
     checkedAble,
+    dispatch,
   } = useContext(TableCommonContext);
   const classes = useTableBodyStyle();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -57,6 +58,15 @@ const TableBodyContent = () => {
       const newWindow = window.open(url, "_blank");
       setOpenedWindow(newWindow);
     }
+  };
+
+  const handleOpenDeleteModal = () => {
+    dispatch({
+      type: "OPEN_MODAL",
+      openModal: {
+        openModalDelete: true,
+      },
+    });
   };
 
   const open = Boolean(anchorEl);
@@ -193,7 +203,12 @@ const TableBodyContent = () => {
                 <Typography className={classes.poperText}>Liveview</Typography>
               </Box>
               <Divider />
-              <Box className={classes.poperItem}>
+              <Box
+                className={classes.poperItem}
+                onClick={() => {
+                  handleOpenNewTab("/traffic");
+                }}
+              >
                 <PlayBackIcon />
                 <Typography className={classes.poperText}>Playback</Typography>
               </Box>
@@ -203,7 +218,12 @@ const TableBodyContent = () => {
                 <Typography className={classes.poperText}>Config</Typography>
               </Box>
               <Divider />
-              <Box className={classes.poperItem}>
+              <Box
+                className={classes.poperItem}
+                onClick={() => {
+                  handleOpenDeleteModal();
+                }}
+              >
                 <DeletePopoverIcon />
                 <Typography className={classes.poperText}>Delete</Typography>
               </Box>

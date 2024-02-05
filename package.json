@@ -24,6 +24,8 @@
     "dayjs": "^1.11.7",
     "devextreme": "22.2.4",
     "devextreme-react": "22.2.4",
+    "exceljs": "^4.3.0",
+    "file-saver": "^2.0.5",
     "fix-webm-duration": "^1.0.5",
     "html2canvas": "^1.4.1",
     "json-server": "^0.17.3",
