@@ -29,6 +29,10 @@ const DrawingPolygon = () => {
 
     const handleMouseUp = () => {
       setIsDrawing(false);
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext("2d");
+      ctx.closePath();
+      ctx.stroke();
     };
 
     canvas.addEventListener("mousedown", handleMouseDown);
@@ -54,7 +58,6 @@ const DrawingPolygon = () => {
       ctx.beginPath();
       ctx.moveTo(simplifiedPolygon[0].x, simplifiedPolygon[0].y);
       simplifiedPolygon.forEach((point) => ctx.lineTo(point.x, point.y));
-      ctx.closePath();
       ctx.stroke();
     }
   }, [points]);
