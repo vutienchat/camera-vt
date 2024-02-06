@@ -7,8 +7,13 @@ import { TableHeader } from "../utils";
 import { DeviceContext } from "./DeviceProvider";
 
 const DeviceContainer = () => {
-  const { state, handleCheckData, handleChangePagination, dataListShow, dispatch} =
-    useContext(DeviceContext);
+  const {
+    state,
+    handleCheckData,
+    handleChangePagination,
+    dataListShow,
+    dispatch,
+  } = useContext(DeviceContext);
 
   return (
     <React.Fragment>
@@ -20,6 +25,7 @@ const DeviceContainer = () => {
           display: "flex",
           flexDirection: "column",
           gap: 30,
+          userSelect: "none",
         }}
       >
         <Header />

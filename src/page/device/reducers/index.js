@@ -26,6 +26,9 @@ const initState = {
   listFeatureType: [],
   listAiFeature: [],
   chooseDevice: {},
+  switchState:{
+    recording: false
+  }
 };
 
 const reducer = (state = initState, action) => {
@@ -88,6 +91,12 @@ const reducer = (state = initState, action) => {
       return {
         ...state,
         chooseDevice: action.chooseDevice,
+      };
+    }
+    case "SWITCH_STATE": {
+      return {
+        ...state,
+        switchState: action.switchState,
       };
     }
     default:

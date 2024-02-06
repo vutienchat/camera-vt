@@ -19,7 +19,7 @@ const ModalDeleteDevice = React.memo(() => {
       onClose={handleCloseModalDelete}
       aria-labelledby="draggable-dialog-title"
     >
-      <Box style={{ width: 480 }}>
+      <Box style={{ width: 480, userSelect: "none" }}>
         <Box
           style={{
             display: "flex",

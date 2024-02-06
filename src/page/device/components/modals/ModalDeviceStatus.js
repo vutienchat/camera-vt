@@ -105,6 +105,7 @@ const ModalDeviceStatus = () => {
 
 const styles = makeStyles({
   root: {
+    userSelect: "none",
     "& .MuiDialog-paperWidthSm": {
       maxWidth: 900,
     },
