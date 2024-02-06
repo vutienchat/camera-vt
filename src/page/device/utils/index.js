@@ -209,6 +209,53 @@ export const TableHeader = [
   },
 ];
 
+export const storagePlanHeader = [
+  {
+    field: "name",
+    name: "Name",
+    customStyles: {
+      minWidth: "100px",
+      maxWidth: "100px",
+      padding: 10,
+      textAlign: "left",
+      whiteSpace: "nowrap",
+    },
+  },
+  {
+    field: "period",
+    name: "Period",
+    customStyles: {
+      minWidth: "50px",
+      maxWidth: "50px",
+      padding: 10,
+      textAlign: "left",
+      whiteSpace: "nowrap",
+    },
+  },
+  {
+    field: "activated",
+    name: "Activated",
+    customStyles: {
+      minWidth: "60px",
+      maxWidth: "60px",
+      padding: 10,
+      textAlign: "left",
+      whiteSpace: "nowrap",
+    },
+  },
+  {
+    field: "expiration",
+    name: "Expiration",
+    customStyles: {
+      minWidth: "105px",
+      maxWidth: "105px",
+      padding: 10,
+      textAlign: "left",
+      whiteSpace: "nowrap",
+    },
+  },
+]
+
 export const headerDeviceStatus = [
   {
     field: "stt",

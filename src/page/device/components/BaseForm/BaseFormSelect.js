@@ -1,10 +1,10 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import { Box, Button, Divider, Typography } from "@material-ui/core";
-
-import UpIcon from "../Icon/UpIcon";
-import DropDownIcon from "../Icon/DropDownIcon";
+import SearchBar from "../CommonSearchBar";
+import { DropDownIcon, UpIcon } from "../../Icon";
+import { useFormContext } from "react-hook-form";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -92,7 +92,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function Select({
+export default function BaseFormSelect({
   width,
   btnText,
   titleDropdownText,
@@ -101,10 +101,26 @@ export default function Select({
   listObject,
   searchBarType,
   dropdownWidth,
+  name,
 }) {
   const classes = useStyles();
   const [isOpen, setIsOpen] = React.useState(false);
   const [selected, setSelected] = useState([]);
+  const [textSearch, setTextSearch] = useState("");
+  const [listFilter, setListFilter] = useState(list);
+  const { setValue } = useFormContext();
+
+  useEffect(() => {
+    if (textSearch) {
+      setListFilter(
+        [...list].filter((item) =>
+          item.label.toLowerCase().includes(textSearch.toLowerCase())
+        )
+      );
+    } else {
+      setListFilter(list);
+    }
+  }, [textSearch, list]);
 
   const handleClick = () => {
     setIsOpen((prev) => !prev);
@@ -128,14 +144,18 @@ export default function Select({
     let itemsArr = [];
     itemsArr.push(value);
     setSelected(itemsArr);
+    setValue(name, itemsArr[0]);
   };
   const handleChooseAll = () => {
-    let listChooseObject = list.map((item) => item.value);
+    let listChooseObject = listFilter.map((item) => item.value);
     setSelected(listChooseObject);
   };
 
   return (
-    <Box style={{ minWidth: width || "auto" }} key={searchBarType}>
+    <Box
+      style={{ minWidth: width || "auto", minHeight: 40, height: 40 }}
+      key={searchBarType}
+    >
       <ClickAwayListener onClickAway={handleClickAway}>
         <div className={classes.root}>
           <Button
@@ -158,14 +178,20 @@ export default function Select({
               className={classes.dropdown}
               style={{ [positionDropDown]: 0, width: dropdownWidth || "280px" }}
             >
+              <SearchBar
+                searchKey={textSearch}
+                searchBarType={searchBarType}
+                setSearchKey={setTextSearch}
+              />
               <Box
                 style={{
                   maxHeight: "200px",
                   overflowY: "auto",
+                  marginTop: 10,
                 }}
                 className={classes.menu}
               >
-                {titleDropdownText && list.length > 0 && (
+                {titleDropdownText && listFilter.length > 0 && (
                   <React.Fragment>
                     <label
                       className={classes.listItem}
@@ -178,8 +204,8 @@ export default function Select({
                     <Divider style={{ width: "100%" }} />
                   </React.Fragment>
                 )}
-                {list.length > 0 ? (
-                  list.map((item) => {
+                {listFilter.length > 0 ? (
+                  listFilter.map((item) => {
                     const isChecked = selected.includes(item.value);
                     return (
                       <Box key={item.value}>

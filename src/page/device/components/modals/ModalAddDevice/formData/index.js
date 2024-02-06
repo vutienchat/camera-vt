@@ -10,11 +10,14 @@ import React from "react";
 import DrawCanvas from "../../../Draw";
 import BaseFormGroup from "../../../BaseForm/BaseFormGroup";
 import BaseInputForm from "../../../BaseForm/BaseInput";
-import { Controller, useFormContext } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import BaseFormRadio from "../../../BaseForm/BaseFormRadio";
 import RecordDevice from "../record";
 import TabsContainer from "../../../Tabs";
 import GeneralTab from "../general";
+import FormIpAddress from "../../../BaseForm/FormIpAddress";
+import SimplifiedPolygon from "../../../Draw/SimplifiedPolygon";
+// var onvif = require("onvif");
 
 const addModeOption = [
   {
@@ -57,7 +60,7 @@ const tabConfig = [
   },
   {
     label: "PTZ Control",
-    children: "asdfasdf",
+    children: <SimplifiedPolygon />,
   },
   {
     label: "Advanced",
@@ -67,12 +70,26 @@ const tabConfig = [
 
 const FormData = React.memo(({ value }) => {
   const {
-    control,
     watch,
     setValue,
     formState: { errors },
   } = useFormContext();
-  const { AddingMode, isDefaultPort } = watch();
+  const { AddingMode, isDefaultPort, ipAddress } = watch();
+
+  const setIPAddress = (data) => {
+    setValue("ipAddress", data);
+  };
+
+  // const handleScan = () => {
+  //   onvif.Discovery.probe({ ip: ipAddress }, (err, devices) => {
+  //     if (err) {
+  //       console.error("Error:", err);
+  //     } else {
+  //       console.log("Discovered devices:", devices);
+  //       // Process the discovered devices as needed
+  //     }
+  //   });
+  // };
 
   return (
     <Box
@@ -138,12 +155,11 @@ const FormData = React.memo(({ value }) => {
                     width={280}
                     customStyle={{ alignItems: "flex-start" }}
                     component={
-                      <BaseInputForm
-                        name={"startIP"}
-                        variant="outlined"
-                        size="small"
-                        fullWidth
-                        placeholder="Start address"
+                      <FormIpAddress
+                        type={"startIP"}
+                        label={"Start"}
+                        ipAddress={ipAddress}
+                        setIPAddress={setIPAddress}
                       />
                     }
                   />
@@ -155,12 +171,11 @@ const FormData = React.memo(({ value }) => {
                     wrap={true}
                     width={280}
                     component={
-                      <BaseInputForm
-                        name={"endIP"}
-                        variant="outlined"
-                        size="small"
-                        fullWidth
-                        placeholder="End address"
+                      <FormIpAddress
+                        type={"endIP"}
+                        label={"End"}
+                        ipAddress={ipAddress}
+                        setIPAddress={setIPAddress}
                       />
                     }
                   />
@@ -183,6 +198,7 @@ const FormData = React.memo(({ value }) => {
                     disabled={isDefaultPort ? true : false}
                     placeholder="- - - -"
                     length={5}
+                    type={"number"}
                   />
                 }
               />
@@ -208,7 +224,6 @@ const FormData = React.memo(({ value }) => {
           <Grid item>
             <BaseFormGroup
               label={"Username"}
-              isRequired={true}
               wrap={true}
               showErrorMessage={true}
               error={errors["username"]}
@@ -220,6 +235,7 @@ const FormData = React.memo(({ value }) => {
                   variant="outlined"
                   size="small"
                   fullWidth
+                  length={255}
                 />
               }
             />
@@ -227,7 +243,6 @@ const FormData = React.memo(({ value }) => {
           <Grid item>
             <BaseFormGroup
               label={"Password"}
-              isRequired={true}
               wrap={true}
               width={280}
               showErrorMessage={true}
@@ -239,6 +254,7 @@ const FormData = React.memo(({ value }) => {
                   size="small"
                   fullWidth
                   type="password"
+                  length={255}
                 />
               }
             />
@@ -273,6 +289,18 @@ const FormData = React.memo(({ value }) => {
         options={deviceTypeOption}
       />
       <TabsContainer tabs={tabConfig} />
+      <div style={{ width: 200, position: "relative", background: "red" }}>
+        <div>
+          <div
+            style={{
+              position: "absolute",
+              left: 200,
+              background: "blue",
+              width: 200,
+            }}
+          ></div>
+        </div>
+      </div>
     </Box>
   );
 });

@@ -31,17 +31,15 @@ const BaseInputForm = ({
               type && type === "password" && !isHiddenText ? "password" : "text"
             }
             onChange={(event) => {
+              if (type === "number" && isNaN(event.target.value)) return;
               onChange(
                 event.target.value.slice(0, length || event.target.value.length)
               );
-              //   if (!regex.test(event.target.value)) {
-              //     onChange(validateText(event.target.value, isNoSpace));
-              //   }
             }}
             onKeyDown={(event) => {
-              //   if (regex.test(event.target.value)) {
-              //     event.preventDefault();
-              //   }
+              if (type === "number" && isNaN(event.target.value))
+                event.preventDefault();
+              return;
             }}
             // inputRef={ref}
             InputProps={{
