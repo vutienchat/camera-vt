@@ -1,75 +1,75 @@
-import React, { useEffect, useRef, useState } from "react";
-import simplify from "simplify-js";
+import React, { useState } from 'react';
+import { Stage, Layer, Line } from 'react-konva';
 
-const DrawingPolygon = () => {
-  const canvasRef = useRef(null);
+const DrawingComponent = () => {
+  const [lines, setLines] = useState([]);
   const [isDrawing, setIsDrawing] = useState(false);
-  const [points, setPoints] = useState([]);
+  const [selectedLine, setSelectedLine] = useState(null);
+  const [resizing, setResizing] = useState(false);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
+  const handleMouseDown = (e) => {
+    setIsDrawing(true);
+    const pos = e.target.getStage().getPointerPosition();
+    setLines([...lines, { points: [pos.x, pos.y] }]);
+  };
 
-    const handleMouseDown = (e) => {
-      setIsDrawing(true);
-      const rect = canvas.getBoundingClientRect();
-      const offsetX = e.clientX - rect.left;
-      const offsetY = e.clientY - rect.top;
-      setPoints([{ x: offsetX, y: offsetY }]);
-    };
+  const handleMouseMove = (e) => {
+    if (!isDrawing || resizing) return;
+    const stage = e.target.getStage();
+    const point = stage.getPointerPosition();
+    let lastLine = lines[lines.length - 1];
+    lastLine.points = lastLine.points.concat([point.x, point.y]);
+    lines.splice(lines.length - 1, 1, lastLine);
+    setLines([...lines]);
+  };
 
-    const handleMouseMove = (e) => {
-      if (!isDrawing) return;
-
-      const rect = canvas.getBoundingClientRect();
-      const offsetX = e.clientX - rect.left;
-      const offsetY = e.clientY - rect.top;
-      setPoints((prevPoints) => [...prevPoints, { x: offsetX, y: offsetY }]);
-    };
-
-    const handleMouseUp = () => {
-      setIsDrawing(false);
-      const canvas = canvasRef.current;
-      const ctx = canvas.getContext("2d");
-      ctx.closePath();
-      ctx.stroke();
-    };
-
-    canvas.addEventListener("mousedown", handleMouseDown);
-    canvas.addEventListener("mousemove", handleMouseMove);
-    canvas.addEventListener("mouseup", handleMouseUp);
-
-    return () => {
-      canvas.removeEventListener("mousedown", handleMouseDown);
-      canvas.removeEventListener("mousemove", handleMouseMove);
-      canvas.removeEventListener("mouseup", handleMouseUp);
-    };
-  }, [isDrawing]);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    const tolerance = 5;
-    const simplifiedPolygon = simplify(points, tolerance, true);
-    // Draw the polygon
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    if (simplifiedPolygon.length > 1) {
-      ctx.beginPath();
-      ctx.moveTo(simplifiedPolygon[0].x, simplifiedPolygon[0].y);
-      simplifiedPolygon.forEach((point) => ctx.lineTo(point.x, point.y));
-      ctx.stroke();
+  const handleMouseUp = () => {
+    setIsDrawing(false);
+    // Automatically close the last line by connecting its last point to its first point
+    if (lines.length > 0) {
+      const lastLine = lines[lines.length - 1];
+      lastLine.points = lastLine.points.concat([lastLine.points[0], lastLine.points[1]]);
+      setLines([...lines]);
     }
-  }, [points]);
+  };
+
+  const handleLineClick = (index) => {
+    setSelectedLine(index);
+  };
+
+  const handleLineDblClick = () => {
+    setResizing(true);
+  };
+
+  const handleStageMouseUp = () => {
+    setResizing(false);
+  };
 
   return (
-    <canvas
-      ref={canvasRef}
-      width="400"
-      height="400"
-      style={{ border: "1px solid #333" }}
-    />
+    <Stage
+      width={window.innerWidth}
+      height={window.innerHeight}
+      onMouseDown={handleMouseDown}
+      onMousemove={handleMouseMove}
+      onMouseup={handleMouseUp}
+      onTouchStart={handleMouseDown}
+      onTouchMove={handleMouseMove}
+      onTouchEnd={handleMouseUp}
+    >
+      <Layer>
+        {lines.map((line, i) => (
+          <Line
+            key={i}
+            points={line.points}
+            stroke="black"
+            strokeWidth={selectedLine === i ? 5 : 2}
+            onClick={() => handleLineClick(i)}
+            onDblClick={handleLineDblClick}
+          />
+        ))}
+      </Layer>
+    </Stage>
   );
 };
 
-export default DrawingPolygon;
+export default DrawingComponent;
