@@ -1,39 +1,53 @@
-import React, { useState } from 'react';
-import { Stage, Layer, Line } from 'react-konva';
+import React, { useState } from "react";
+import { Stage, Layer, Line } from "react-konva";
+import simplify from "simplify-js";
 
 const DrawingComponent = () => {
   const [lines, setLines] = useState([]);
   const [isDrawing, setIsDrawing] = useState(false);
   const [selectedLine, setSelectedLine] = useState(null);
   const [resizing, setResizing] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
-  const handleMouseDown = (e) => {
+  const handleMouseDown = (e, selectedLine) => {
+    if (selectedLine !== null && isDragging) return;
     setIsDrawing(true);
-    const pos = e.target.getStage().getPointerPosition();
-    setLines([...lines, { points: [pos.x, pos.y] }]);
+    const stage = e.target.getStage();
+    const { x, y } = stage.getPointerPosition();
+    setLines([...lines, { points: [{ x, y }] }]);
   };
 
   const handleMouseMove = (e) => {
     if (!isDrawing || resizing) return;
-    const stage = e.target.getStage();
-    const point = stage.getPointerPosition();
-    let lastLine = lines[lines.length - 1];
-    lastLine.points = lastLine.points.concat([point.x, point.y]);
-    lines.splice(lines.length - 1, 1, lastLine);
-    setLines([...lines]);
+    if (selectedLine == null && !isDragging) {
+      const stage = e.target.getStage();
+      const { x, y } = stage.getPointerPosition();
+      const temptLine = [...lines];
+      let lastLine = temptLine[temptLine.length - 1];
+      lastLine.points.push({ x, y });
+      temptLine.splice(temptLine.length - 1, 1, lastLine);
+      setLines([...temptLine]);
+    }
   };
 
   const handleMouseUp = () => {
     setIsDrawing(false);
+    setIsDragging(false);
+    setSelectedLine(null);
     // Automatically close the last line by connecting its last point to its first point
     if (lines.length > 0) {
-      const lastLine = lines[lines.length - 1];
-      lastLine.points = lastLine.points.concat([lastLine.points[0], lastLine.points[1]]);
-      setLines([...lines]);
+      const temptLine = [...lines].filter((it) => it.points.length > 1);
+      const lastLine = temptLine[temptLine.length - 1];
+      const tolerance = 5; // Tolerance for simplification
+      lastLine.points = simplify(lastLine.points, tolerance, true);
+      setLines([...temptLine]);
     }
   };
 
+  console.log("line", lines);
+
   const handleLineClick = (index) => {
+    setIsDrawing(false);
     setSelectedLine(index);
   };
 
@@ -45,14 +59,20 @@ const DrawingComponent = () => {
     setResizing(false);
   };
 
+  const handleLineDragMove = (index, pointIndex, event) => {
+    const { x, y } = event.target.position();
+    const newLines = [...lines];
+    newLines[index].points[pointIndex] = { x, y };
+    setLines(newLines);
+  };
   return (
     <Stage
       width={window.innerWidth}
       height={window.innerHeight}
-      onMouseDown={handleMouseDown}
+      onMouseDown={(e) => handleMouseDown(e, selectedLine)}
       onMousemove={handleMouseMove}
       onMouseup={handleMouseUp}
-      onTouchStart={handleMouseDown}
+      onTouchStart={(e) => handleMouseDown(e, selectedLine)}
       onTouchMove={handleMouseMove}
       onTouchEnd={handleMouseUp}
     >
@@ -60,11 +80,20 @@ const DrawingComponent = () => {
         {lines.map((line, i) => (
           <Line
             key={i}
-            points={line.points}
+            points={[...line.points].flatMap((point) => [point.x, point.y])}
             stroke="black"
-            strokeWidth={selectedLine === i ? 5 : 2}
+            strokeWidth={selectedLine === i ? 1 : 0.5}
             onClick={() => handleLineClick(i)}
             onDblClick={handleLineDblClick}
+            fill="rgba(221, 61, 75, 0.50)"
+            onMouseDown={() => handleLineClick(i)}
+            closed={!isDrawing}
+            draggable
+            onDragStart={() => {
+              setIsDrawing(false);
+              setIsDragging(true);
+            }}
+            onDragMove={(event) => handleLineDragMove(i, 0, event)}
           />
         ))}
       </Layer>

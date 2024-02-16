@@ -61,7 +61,7 @@ const DrawCanvas = ({ initialData, onChange }, ref) => {
               stroke="black"
             />
           )}
-          {filledAreaPoints.map((point, index) => (
+          {/* {filledAreaPoints.map((point, index) => (
             <Ellipse
               key={index}
               x={point.x}
@@ -70,7 +70,7 @@ const DrawCanvas = ({ initialData, onChange }, ref) => {
               radiusY={5}
               fill="red"
             />
-          ))}
+          ))} */}
         </Layer>
       </Stage>
     </div>
