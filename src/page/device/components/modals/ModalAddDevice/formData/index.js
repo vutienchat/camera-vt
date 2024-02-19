@@ -60,7 +60,11 @@ const tabConfig = [
   },
   {
     label: "PTZ Control",
-    children: <SimplifiedPolygon />,
+    children: (
+      <Box style={{ width: 905, height: 500 }}>
+        <SimplifiedPolygon />
+      </Box>
+    ),
   },
   {
     label: "Advanced",
