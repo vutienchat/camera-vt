@@ -9,4 +9,7 @@ export { default as Recording } from "./Recording";
 export { default as ReloadIcon } from "./ReloadIcon";
 export { default as SettingIcon } from "./SettingIcon";
 export { default as TrashIcon } from "./TrashIcon";
+export { default as LineIcon } from "./LineIcon";
+export { default as RefreshIcon } from "./RefreshIcon";
+export { default as ZoneIcon } from "./ZoneIcon";
 export { default as UpIcon } from "./UpIcon";

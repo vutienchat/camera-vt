@@ -7,7 +7,6 @@ import {
   Typography,
 } from "@material-ui/core";
 import React from "react";
-import DrawCanvas from "../../../Draw";
 import BaseFormGroup from "../../../BaseForm/BaseFormGroup";
 import BaseInputForm from "../../../BaseForm/BaseInput";
 import { useFormContext } from "react-hook-form";
@@ -16,7 +15,7 @@ import RecordDevice from "../record";
 import TabsContainer from "../../../Tabs";
 import GeneralTab from "../general";
 import FormIpAddress from "../../../BaseForm/FormIpAddress";
-import SimplifiedPolygon from "../../../Draw/SimplifiedPolygon";
+import DrawingComponent from "../../../Draw/SimplifiedPolygon";
 // var onvif = require("onvif");
 
 const addModeOption = [
@@ -56,15 +55,11 @@ const tabConfig = [
   },
   {
     label: "Zone / Line",
-    children: <DrawCanvas />,
+    children: <DrawingComponent />,
   },
   {
     label: "PTZ Control",
-    children: (
-      <Box style={{ width: 905, height: 500 }}>
-        <SimplifiedPolygon />
-      </Box>
-    ),
+    children: "ptz",
   },
   {
     label: "Advanced",
