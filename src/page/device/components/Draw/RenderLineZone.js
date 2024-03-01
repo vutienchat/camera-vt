@@ -1,7 +1,8 @@
 import React from "react";
 import { Line } from "react-konva";
+import { level } from "./@type";
 
-const RenderLineZOne = React.memo(
+const RenderLineZone = React.memo(
   ({
     line,
     selectedLine,
@@ -13,6 +14,7 @@ const RenderLineZOne = React.memo(
     onDragEnd,
     index,
     filledAreaPoints,
+    isDrag,
     ...props
   }) => {
     return (
@@ -20,11 +22,17 @@ const RenderLineZOne = React.memo(
         points={[...line.points].flatMap((point) => [point.x, point.y])}
         stroke="black"
         strokeWidth={selectedLine === index ? 1 : 0.5}
-        onClick={() => handleLineClick(index, "zone")}
-        fill="rgba(221, 61, 75, 0.50)"
-        onMouseDown={() => handleLineClick(index, "zone")}
-        closed={!isDrawing}
-        draggable={canDraw === 1}
+        onClick={handleLineClick}
+        fill={
+          line.level !== undefined
+            ? level[line.level].color
+            : "rgba(221, 61, 75, 0.50)"
+        }
+        onMouseDown={(e) => {
+          // e.stopPropagation();
+          handleLineClick(index, "zone", e);
+        }}
+        closed={true}
         onDragStart={(event) => onDragStart(index, event)}
         onDragMove={(event) => onDragMove(index, event)}
         onDragEnd={(e) => onDragEnd(index, e, filledAreaPoints)}
@@ -34,4 +42,4 @@ const RenderLineZOne = React.memo(
   }
 );
 
-export default RenderLineZOne;
+export default RenderLineZone;

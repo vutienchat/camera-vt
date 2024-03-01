@@ -12,25 +12,31 @@ const RenderTriangle = ({
   filledAreaPoints,
   handleLineDragMoveEnd,
   isDragging,
+  isDrag,
+  onDblClick,
   ...props
 }) => {
   return (
     <>
       <Line
         points={[...points].flatMap((point) => [point.x, point.y])}
-        stroke="#08AB49"
-        strokeWidth={4}
-        draggable={canDraw === 0}
+        stroke="#44AAFF"
+        strokeWidth={isDrag && canDraw === 0 ? 5 : 4}
+        draggable={isDrag && canDraw === 0}
         onClick={() => handleLineClick(null, "line")}
         onDragStart={(event) => handleLineDragStart(null, event)}
         onDragMove={(event) => handleLineDragMove(null, event)}
         onDragEnd={(e) => handleLineDragMoveEnd(null, e, filledAreaPoints)}
+        // dash={isDrag ? [10, 10] : []}
+        onDblClick={() => onDblClick("line")}
         {...props}
       />
       <Line
         points={[...centerLine].flatMap((point) => [point.x, point.y])}
-        stroke="#08AB49"
-        strokeWidth={2}
+        stroke="#44AAFF"
+        strokeWidth={4}
+        lineCap="round"
+        lineJoin="round"
       />
       {centerLine.length > 0 && (
         <RenderArrow p1={centerLine[0]} p2={centerLine[1]} />

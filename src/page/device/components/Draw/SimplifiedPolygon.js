@@ -9,9 +9,18 @@ import { LineIcon, RefreshIcon, ZoneIcon } from "../../Icon";
 import RenderTriangle from "./RenderTriangle";
 import RenderLineZOne from "./RenderLineZone";
 import ToolsControl from "./ToolsControl";
-import ModalAddZoneLine from "./modals/ModalAddLine";
+import ModalAddLine from "./modals/ModalAddLine";
+import { useFormContext } from "react-hook-form";
+import ModalAddZone from "./modals/ModalAddZone";
+import { typeModal } from "./@type";
 
 const DrawingComponent = () => {
+  const {
+    watch,
+    setValue,
+    getValues,
+    formState: { errors },
+  } = useFormContext();
   const imageRef = useRef(null);
   const stageRef = useRef(null);
   const [isUpdatePoint, setIsUpdatePoint] = useState(false);
@@ -25,6 +34,12 @@ const DrawingComponent = () => {
   const [canDraw, setCanDraw] = useState(null);
   const [points, setPoints] = useState([]);
   const [centerLine, setCenterLine] = useState([]);
+  const [isOpenModalLine, setIsOpenModalLine] = useState({
+    open: false,
+    type: typeModal.add,
+  });
+  const [isOpenModalZone, setIsOpenModalZone] = useState(false);
+  const [isDrag, setIsDrag] = useState(false);
 
   const handleMouseDown = (e, selectedLine) => {
     if (selectedLine !== null || isDragging || !canDraw) return;
@@ -38,12 +53,12 @@ const DrawingComponent = () => {
     const stage = e.target.getStage();
     const { x, y } = stage.getPointerPosition();
     const temptLine = _.cloneDeep(lines);
-    if (selectedLine == null && !isDragging && isDrawing && canDraw === 1) {
-      let lastLine = temptLine[temptLine.length - 1];
-      lastLine.points.push({ x, y });
-      temptLine.splice(temptLine.length - 1, 1, lastLine);
-      setLines(temptLine);
-    }
+    // if (selectedLine == null && !isDragging && isDrawing && canDraw === 1) {
+    //   let lastLine = temptLine[temptLine.length - 1];
+    //   lastLine.points.push({ x, y });
+    //   temptLine.splice(temptLine.length - 1, 1, lastLine);
+    //   setLines(temptLine);
+    // }
     if (
       isUpdatePoint &&
       pointIndex !== null &&
@@ -88,6 +103,10 @@ const DrawingComponent = () => {
         temptLine.splice(temptLine.length - 1, 1);
       }
       setLines([...temptLine]);
+      setSelectedLine(temptLine.length - 1);
+      if (isDrawing) {
+        setIsOpenModalZone(true);
+      }
     }
   };
 
@@ -96,12 +115,13 @@ const DrawingComponent = () => {
     setIsDrawing(false);
     setIsDragging(true);
     if (type === "zone" && canDraw === 1) {
-      setFilledAreaPoints([...lines[index].points]);
+      // setFilledAreaPoints([...lines[index].points]);
       setTimeout(() => {
         setSelectedLine(index);
       }, 150);
     } else if (type === "line" && canDraw === 0) {
       setFilledAreaPoints(points);
+      setIsDrag(true);
     }
   };
 
@@ -121,16 +141,20 @@ const DrawingComponent = () => {
       setIsDrawing(false);
       setIsUpdatePoint(false);
       setPointIndex(null);
+      setIsDrag(false);
+      setFilledAreaPoints([]);
+      setValue("line.points", points);
     }
     if (canDraw === 0) {
       const pointerPos = stageRef.current.getPointerPosition();
       if (points.length < 2) {
         setPoints([...points, pointerPos]);
         setFilledAreaPoints([...points, pointerPos]);
-      } else {
+      } else if (points.length === 2) {
         setPoints((prev) => [...prev, ...centerLine]);
-        setFilledAreaPoints([...points, ...centerLine]);
+        // setFilledAreaPoints([...points, ...centerLine]);
         setCenterLine([]);
+        setIsOpenModalLine({ open: true, type: typeModal.add });
       }
     }
   };
@@ -178,7 +202,7 @@ const DrawingComponent = () => {
       icon: <LineIcon />,
       action: () => {
         setCanDraw(0);
-        setFilledAreaPoints([...points]);
+        // setFilledAreaPoints([...points]);
         setSelectedLine(null);
       },
     },
@@ -192,12 +216,17 @@ const DrawingComponent = () => {
     {
       icon: <DeleteOutlineIcon />,
       action: () => {
-        setCanDraw(null);
+        if (canDraw === 0 && isDrag) {
+          setPoints([]);
+          setFilledAreaPoints([]);
+          setValue("line", {});
+        }
         if (selectedLine === null) return;
         const tempData = _.cloneDeep(lines);
         tempData.splice(selectedLine, 1);
         setLines(tempData);
         setFilledAreaPoints([]);
+        setCanDraw(null);
       },
     },
     {
@@ -207,6 +236,8 @@ const DrawingComponent = () => {
         setFilledAreaPoints([]);
         setCanDraw(null);
         setPoints([]);
+        setValue("listZone", []);
+        setValue("line", {});
       },
     },
   ];
@@ -220,6 +251,46 @@ const DrawingComponent = () => {
     e.target.getStage().container().style.cursor = "default";
   };
 
+  const handleCloseLine = () => {
+    setIsOpenModalLine((prev) => ({ ...prev, open: false }));
+    if (isOpenModalLine.type === typeModal.add) {
+      setPoints([]);
+      setFilledAreaPoints([]);
+      setValue("line.name", "");
+      setValue("line.points", []);
+    }
+  };
+
+  const handleAddLine = (data) => {
+    setValue("line.points", points);
+    setValue("line.name", data);
+    setIsOpenModalLine((prev) => ({ ...prev, open: false }));
+    setFilledAreaPoints([]);
+  };
+
+  const handleAddZone = (data) => {
+    if (selectedLine === null) return;
+    const listZone = _.cloneDeep(getValues("listZone"));
+    listZone[selectedLine] = data;
+    setValue("listZone", listZone);
+    setLines([...listZone]);
+    setIsOpenModalZone(false);
+    setSelectedLine(null);
+  };
+
+  const onDblClick = (type, index) => {
+    setIsDrag(false);
+    setIsDrawing(false);
+    setIsDragging(false);
+    if (type === "line" && canDraw === 0) {
+      const tempData = _.cloneDeep(points);
+      tempData.slice(2, 1);
+      setFilledAreaPoints(tempData);
+    } else {
+      if (!index) return;
+      setFilledAreaPoints(lines[index]);
+    }
+  };
   return (
     <Box style={{ width: "100%", height: "100%", position: "relative" }}>
       <TransformWrapper
@@ -274,7 +345,7 @@ const DrawingComponent = () => {
                     index={i}
                     line={line}
                     handleLineClick={() => handleLineClick(i, "zone")}
-                    closed={!isDrawing}
+                    closed={true}
                     draggable={canDraw === 1}
                     onDragStart={handleLineDragStart}
                     onDragMove={handleLineDragMove}
@@ -282,10 +353,37 @@ const DrawingComponent = () => {
                     filledAreaPoints={filledAreaPoints}
                     onMouseOver={canDraw === 1 && handleGroupMouseOver}
                     onMouseOut={canDraw === 1 && handleGroupMouseOut}
+                    isDrag={isDrag}
+                    onDblClick={() => onDblClick("zone", i)}
+                    onContextMenu={(e) => {
+                      e.preventDefault();
+                      setIsOpenModalZone(true);
+                    }}
                   />
                 ))}
 
-                {(selectedLine !== null || canDraw === 0) &&
+                <RenderTriangle
+                  points={points}
+                  canDraw={canDraw}
+                  centerLine={centerLine}
+                  onClickPoint={onClickPoint}
+                  handleLineClick={handleLineClick}
+                  handleLineDragMove={handleLineDragMove}
+                  handleLineDragStart={handleLineDragStart}
+                  handleLineDragMoveEnd={handleLineDragMoveEnd}
+                  filledAreaPoints={filledAreaPoints}
+                  isDragging={isDragging}
+                  onMouseOver={canDraw === 0 && handleGroupMouseOver}
+                  onMouseOut={canDraw === 0 && handleGroupMouseOut}
+                  isDrag={isDrag}
+                  onDblClick={onDblClick}
+                  onContextMenu={(e) => {
+                    setIsOpenModalLine({ open: true, type: typeModal.edit });
+                    e.preventDefault();
+                  }}
+                />
+
+                {(selectedLine !== null || (canDraw === 0 && !isDrag)) &&
                   filledAreaPoints.map((point, index) => (
                     <Ellipse
                       key={index}
@@ -299,29 +397,28 @@ const DrawingComponent = () => {
                       onMouseOut={handleGroupMouseOut}
                     />
                   ))}
-                {
-                  <RenderTriangle
-                    points={points}
-                    canDraw={canDraw}
-                    centerLine={centerLine}
-                    onClickPoint={onClickPoint}
-                    handleLineClick={handleLineClick}
-                    handleLineDragMove={handleLineDragMove}
-                    handleLineDragStart={handleLineDragStart}
-                    handleLineDragMoveEnd={handleLineDragMoveEnd}
-                    filledAreaPoints={filledAreaPoints}
-                    isDragging={isDragging}
-                    onMouseOver={canDraw === 0 && handleGroupMouseOver}
-                    onMouseOut={canDraw === 0 && handleGroupMouseOut}
-                  />
-                }
               </Layer>
             </Stage>
           </div>
         </TransformComponent>
       </TransformWrapper>
       <ToolsControl toolControl={toolControl} canDraw={canDraw} />
-      {<ModalAddZoneLine type={"New"} />}
+      {isOpenModalLine.open && (
+        <ModalAddLine
+          open={isOpenModalLine.open}
+          type={isOpenModalLine.type}
+          handleClose={handleCloseLine}
+          handleSubmit={handleAddLine}
+        />
+      )}
+      {isOpenModalZone && selectedLine !== null && (
+        <ModalAddZone
+          open={isOpenModalZone}
+          zoneIndex={lines[selectedLine]}
+          handleClose={() => setIsOpenModalZone(false)}
+          handleSubmit={handleAddZone}
+        />
+      )}
     </Box>
   );
 };

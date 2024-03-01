@@ -30,8 +30,9 @@ const RenderArrow = ({ p1, p2 }) => {
         // add fill
         context.fillStrokeShape(shape);
       }}
-      fill="#08AB49"
-      stroke="#08AB49"
+      fill="#44AAFF"
+      stroke="#44AAFF"
+      strokeWidth={3}
     />
   );
 };
