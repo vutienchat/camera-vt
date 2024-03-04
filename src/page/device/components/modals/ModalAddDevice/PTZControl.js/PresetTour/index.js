@@ -94,7 +94,9 @@ const DataBodyTable = ({ row, index }) => {
       action: () => {
         setIsEdit(true);
         setListAction([...listActionPresetEdit]);
-        inputRef.current.focus();
+        setTimeout(() => {
+          inputRef.current.focus();
+        }, 100);
       },
     },
     {
