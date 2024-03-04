@@ -10,16 +10,18 @@ import {
 } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
-import BaseFormSelect from "../../../BaseForm/BaseFormSelect";
-import { timeZone } from "../../../Draw/@type";
 import CircleWithParts from "./CircleWithParts";
+import PresetTourTable from "./PresetTour";
 
-const partOfCircle = Array.from(Array(8));
+const data = Array.from(Array(5)).map((_, idx) => ({
+  name: `test${idx}`,
+}));
 
 const PTZControl = React.memo(() => {
   const classes = styles();
+  const tabStyle = TabStyle();
   const tabsControl = [
-    { label: "Press", children: "Press" },
+    { label: "Press", children: <PresetTourTable data={data} /> },
     { label: "Tour", children: "Tour" },
   ];
   const [value, setValue] = React.useState(0);
@@ -28,16 +30,16 @@ const PTZControl = React.memo(() => {
   };
 
   return (
-    <Grid container spacing={1} direction="row" wrap="nowrap">
+    <Grid container spacing={2} direction="row" wrap="nowrap">
       <Grid
         item
         container
-        spacing={2}
+        // spacing={2}
         direction="column"
         justifyContent="center"
         alignItems="center"
       >
-        <Grid item container spacing={2}>
+        <Grid item style={{ width: "100%" }}>
           <Box
             style={{
               backgroundImage:
@@ -56,22 +58,18 @@ const PTZControl = React.memo(() => {
         <Grid
           item
           container
-          spacing={2}
+          // spacing={2}
           direction="row"
           wrap="nowrap"
           alignItems="flex-start"
           justifyContent="center"
-          style={{ border: "solid 1px rgba(34, 34, 34, 0.1)", width: "100%" }}
+          style={{
+            border: "solid 1px rgba(34, 34, 34, 0.1)",
+            width: "100%",
+            paddingBlock: 10,
+          }}
         >
           <Grid item style={{ paddingLeft: 30 }}>
-            {/* <Box style={{}} className={classes.circle}>
-              {partOfCircle.map((_, idx) => (
-                <div
-                  className={`${classes.part} ${classes[`part${idx}`]}`}
-                  key={idx}
-                ></div>
-              ))}
-            </Box> */}
             <Box
               style={{
                 display: "flex",
@@ -82,7 +80,7 @@ const PTZControl = React.memo(() => {
                 position: "relative",
               }}
             >
-            <CircleWithParts />
+              <CircleWithParts />
             </Box>
           </Grid>
           <Grid
@@ -101,9 +99,9 @@ const PTZControl = React.memo(() => {
                 background: "#EEEEEE",
                 borderRadius: "50%",
                 display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
               }}
-              justifyContent="center"
-              alignItems="center"
             >
               <AddIcon style={{ color: "#888888" }} />
             </Grid>
@@ -116,9 +114,9 @@ const PTZControl = React.memo(() => {
                 background: "#EEEEEE",
                 borderRadius: "50%",
                 display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
               }}
-              justifyContent="center"
-              alignItems="center"
             >
               <RemoveIcon style={{ color: "#888888" }} />
             </Grid>
@@ -134,10 +132,7 @@ const PTZControl = React.memo(() => {
             <Grid item>Speed</Grid>
             <Grid>
               <FormControl className={classes.selectPerPage}>
-                <NativeSelect
-                // value={pagination.rowPerPage + 1}
-                // onChange={handleChangeRow}
-                >
+                <NativeSelect>
                   <option value={10}>10</option>
                   <option value={20}>20</option>
                   <option value={30}>30</option>
@@ -148,17 +143,30 @@ const PTZControl = React.memo(() => {
           </Grid>
         </Grid>
       </Grid>
-      <Grid>
-        <Tabs onChange={handleChange} value={value}>
-          {tabsControl.map((it, idx) => (
-            <Tab key={idx} label={it.label} />
+      <Grid item>
+        <Box
+          style={{
+            border: "solid 1px  #DDDDDD",
+            borderRadius: "8px",
+            height: "auto",
+            minHeight: 445,
+          }}
+        >
+          <Tabs onChange={handleChange} value={value} className={tabStyle.root}>
+            {tabsControl.map((it, idx) => (
+              <Tab key={idx} label={it.label} />
+            ))}
+          </Tabs>
+          {tabsControl.map((tab, index) => (
+            <TabPanel
+              value={value}
+              index={index}
+              key={`${tab.label} - ${index}`}
+            >
+              {tab.children}
+            </TabPanel>
           ))}
-        </Tabs>
-        {tabsControl.map((tab, index) => (
-          <TabPanel value={value} index={index} key={`${tab.label} - ${index}`}>
-            {tab.children}
-          </TabPanel>
-        ))}
+        </Box>
       </Grid>
     </Grid>
   );
@@ -176,7 +184,7 @@ function TabPanel(props) {
       aria-labelledby={`a11y-tab-${index}`}
       className={classes.root}
       {...other}
-      style={{ paddingBottom: 10 }}
+      // style={{ paddingBottom: 10 }}
       key={index}
     >
       {value === index && <Box>{children}</Box>}
@@ -212,67 +220,30 @@ const styles = makeStyles({
     borderRadius: "50%",
     border: "solid 1px rgba(34, 34, 34, 0.1)",
   },
-  part: {
-    position: " absolute",
-    width: " 0",
-    height: " 0",
-    borderStyle: " solid",
-  },
-  part1: {
-    top: 0,
-    left: "50%",
-    borderWidth: "100px 50px 0 50px",
-    borderColor: "#ff0000 transparent transparent transparent",
-    transform: "translateX(-50%)",
-  },
-  part2: {
-    top: "50%",
-    left: "100%",
-    borderWidth: "50px 100px 50px 0",
-    borderColor: "transparent #00ff00 transparent transparent",
-    transform: "translateY(-50%)",
-  },
-  part3: {
-    bottom: 0,
-    left: "50%",
-    borderWidth: "0 50px 100px 50px",
-    borderColor: "transparent transparent #0000ff transparent",
-    transform: "translateX(-50%)",
-  },
-  part4: {
-    top: "50%",
-    left: 0,
-    borderWidth: "50px 0 50px 100px",
-    borderColor: "transparent transparent transparent #ffff00",
-    transform: "translateY(-50%)",
-  },
-  part5: {
-    top: "25%",
-    left: "75%",
-    borderWidth: "50px 25px 50px 25px",
-    borderColor: "transparent #00ffff transparent #00ffff",
-    transform: "translate(-50%, -50%) rotate(45deg)",
-  },
-  part6: {
-    bottom: "25%",
-    left: "75%",
-    borderWidth: "50px 25px 50px 25px",
-    borderColor: "#ff00ff transparent #ff00ff transparent",
-    transform: "translate(-50%, 50%) rotate(45deg)",
-  },
-  part7: {
-    bottom: "25%",
-    left: "25%",
-    borderWidth: "50px 25px 50px 25px",
-    borderColor: "#ff00ff transparent #ff00ff transparent",
-    transform: "translate(50%, 50%) rotate(45deg)",
-  },
-  part8: {
-    top: "25%",
-    left: "25%",
-    borderWidth: "50px 25px 50px 25px",
-    borderColor: "transparent #00ffff transparent #00ffff",
-    transform: "translate(50%, -50%) rotate(45deg)",
+});
+
+const TabStyle = makeStyles({
+  root: {
+    // paddingBottom: 10,
+    "& .MuiTabs-flexContainer": {
+      justifyContent: "center",
+    },
+
+    "& button": {
+      background: "#EAEAEA",
+      width: "130px",
+      height: 53,
+      borderRadius: "8px 8px 0px 0px",
+      padding: 0,
+      minWidth: 130,
+      border: "solid 1px rgba(34, 34, 34, 0.1)",
+    },
+    "& .Mui-selected": {
+      background: "#fff",
+    },
+    "& .MuiTabs-indicator": {
+      display: "none",
+    },
   },
 });
 

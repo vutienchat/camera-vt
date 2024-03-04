@@ -1,5 +1,5 @@
 import { Box, Button, makeStyles } from "@material-ui/core";
-import React from "react";
+import React, { useState } from "react";
 import { RefreshIcon } from "../../../../Icon";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 
@@ -46,19 +46,23 @@ const useStyles = makeStyles((theme) => ({
     height: " 100%",
     clipPath: " polygon(50% 50%, 100% 0, 100% 50%)",
     background: "#F6F6F6 ",
-    // border: "solid 1px #DDDDDD",
     transformOrigin: " 50% 50%",
-    // transform:" rotate(var(--rotation))",
+    cursor: "pointer",
   },
   icons: {
     position: "absolute",
     inset: "10px",
     fontSize: "2rem",
+    cursor: "default",
   },
 }));
 
 const CircleWithParts = () => {
   const classes = useStyles();
+
+  const handleIconClick = () => {};
+
+  const handleSegmentClick = () => {};
 
   return (
     <Box className={classes.circle}>
@@ -79,18 +83,28 @@ const CircleWithParts = () => {
         style={{
           inset: 0,
           position: "absolute",
+          rotate: "22.5deg",
+          background: "#F6F6F6 ",
         }}
       >
         {Array.from(Array(8)).map((_, indx) => (
           <Box
-            className={classes.segment}
+            className={classes.icons}
             style={{
-              transform: `rotate(calc(45deg * ${indx}))`,
-              //   zIndex: 10,
+              transform: `rotate(calc(45deg * ${indx} + 10deg))`,
             }}
             key={indx}
-            onClick={() => console.log(indx)}
-          ></Box>
+            onClick={(e) => {
+              e.stopPropagation();
+              handleIconClick();
+            }}
+          >
+            <ExpandLessIcon
+              style={{
+                transform: " rotate(-55deg)",
+              }}
+            />
+          </Box>
         ))}
       </Box>
       <Box
@@ -102,20 +116,16 @@ const CircleWithParts = () => {
       >
         {Array.from(Array(8)).map((_, indx) => (
           <Box
-            className={classes.icons}
+            className={classes.segment}
             style={{
-              transform: `rotate(calc(45deg * ${indx} + 10deg))`,
+              transform: `rotate(calc(45deg * ${indx} + 23deg))`,
+              opacity: 0,
             }}
             key={indx}
-            onClick={() => console.log(indx)}
-          >
-            <ExpandLessIcon
-              style={{
-                transform: " rotate(-55deg)",
-                zIndex: 1000,
-              }}
-            />
-          </Box>
+            onClick={() => {
+              handleSegmentClick();
+            }}
+          ></Box>
         ))}
       </Box>
     </Box>
