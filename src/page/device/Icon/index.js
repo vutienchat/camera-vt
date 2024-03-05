@@ -17,3 +17,5 @@ export { default as AcceptIcon } from "./AcceptIcon";
 export { default as CancelIcon } from "./CancelIcon";
 export { default as EditIcon } from "./EditIcon";
 export { default as SaveIcon } from "./SaveIcon";
+export { default as PlayIcon } from "./PlayIcon";
+export { default as ReplayIcon } from "./ReplayIcon";

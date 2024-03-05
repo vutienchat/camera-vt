@@ -12,21 +12,23 @@ import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
 import CircleWithParts from "./CircleWithParts";
 import PresetTourTable from "./PresetTour";
-
-const data = Array.from(Array(5)).map((_, idx) => ({
-  name: `test${idx}`,
-}));
+import { useFormContext } from "react-hook-form";
 
 const PTZControl = React.memo(() => {
   const classes = styles();
   const tabStyle = TabStyle();
+  const { watch } = useFormContext();
+  const { preset, tour } = watch();
   const tabsControl = [
-    { label: "Press", children: <PresetTourTable data={data} /> },
-    { label: "Tour", children: "Tour" },
+    {
+      label: "Preset",
+      children: <PresetTourTable data={preset} type="preset" />,
+    },
+    { label: "Tour", children: <PresetTourTable data={tour} type="tour" /> },
   ];
-  const [value, setValue] = React.useState(0);
+  const [valueTab, setValueTabs] = React.useState(0);
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    setValueTabs(newValue);
   };
 
   return (
@@ -152,14 +154,18 @@ const PTZControl = React.memo(() => {
             minHeight: 445,
           }}
         >
-          <Tabs onChange={handleChange} value={value} className={tabStyle.root}>
+          <Tabs
+            onChange={handleChange}
+            value={valueTab}
+            className={tabStyle.root}
+          >
             {tabsControl.map((it, idx) => (
               <Tab key={idx} label={it.label} />
             ))}
           </Tabs>
           {tabsControl.map((tab, index) => (
             <TabPanel
-              value={value}
+              value={valueTab}
               index={index}
               key={`${tab.label} - ${index}`}
             >

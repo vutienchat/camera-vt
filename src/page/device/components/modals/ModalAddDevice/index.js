@@ -53,7 +53,7 @@ const ModalAddDevice = React.memo(({ open = true, handleClose }) => {
   return (
     <Dialog
       open={state.openModal.openModalAddDevice}
-      onClose={handleCloseModalSelect}
+      // onClose={handleCloseModalSelect}
       aria-labelledby="form-dialog-title"
       style={{ minWidth: 1000, minHeight: 800 }}
       maxWidth={"lg"}

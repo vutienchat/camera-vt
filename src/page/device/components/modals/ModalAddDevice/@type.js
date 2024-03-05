@@ -4,6 +4,11 @@ import {
   regexAllowVietnameseNoSpecialChars,
 } from "../../../utils/regex";
 
+const data = Array.from(Array(5)).map((_, idx) => ({
+  name: `test${idx}`,
+  id: idx,
+}));
+
 export const defaultFormValue = {
   addingMode: "KnowAddress",
   address: "",
@@ -22,6 +27,8 @@ export const defaultFormValue = {
     points: [],
   },
   listZone: [],
+  preset: data,
+  tour: data,
 };
 
 export const schema = yup.object().shape({
