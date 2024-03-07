@@ -20,19 +20,30 @@ import {
 } from "../../../../../Icon";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import { useFormContext } from "react-hook-form";
+import _ from "lodash";
 
 const DataBodyTable = React.memo(
-  ({ row, index, setListData, type, listData }) => {
+  ({
+    row,
+    index,
+    setListData,
+    type,
+    listData,
+    setDataIndex,
+    dataIndex,
+    handleSettingTour,
+  }) => {
     const classes = useStyles();
     const cellClass = cellStyle();
-    const [dataIndex, setDataIndex] = useState({ ...row });
     const { setValue } = useFormContext();
+
     const listActionPreset = [
       {
         icon: <EditIcon />,
-        action: () => {
+        action: (row) => {
           setIsEdit(true);
           setListAction([...listActionPresetEdit]);
+          setDataIndex({ ...row });
           setTimeout(() => {
             inputRef.current.focus();
           }, 100);
@@ -40,14 +51,14 @@ const DataBodyTable = React.memo(
       },
       {
         icon: <SaveIcon />,
-        action: (dataIndex) => {
-          handleEdit(index, dataIndex);
+        action: (row, dataIndex, listData) => {
+          handleEdit(index, dataIndex, listData);
         },
       },
       {
-        icon: <DeleteOutlineIcon />,
-        action: () => {
-          handleDelete(index);
+        icon: <DeleteOutlineIcon style={{ fontSize: 19, color: "red" }} />,
+        action: (row, dataIndex, listData) => {
+          handleDelete(row.id, listData);
         },
       },
     ];
@@ -55,8 +66,8 @@ const DataBodyTable = React.memo(
     const listActionPresetEdit = [
       {
         icon: <AcceptIcon />,
-        action: (dataIndex) => {
-          handleEdit(index, dataIndex);
+        action: (row, dataIndex, listData) => {
+          handleEdit(index, dataIndex, listData);
         },
       },
       {
@@ -80,40 +91,40 @@ const DataBodyTable = React.memo(
         icon: (
           <SettingIcon width={16} height={16} color={"rgba(68, 73, 77, 1)"} />
         ),
-        action: (dataIndex) => {},
+        action: (row) => {
+          setDataIndex(row);
+          handleSettingTour(row);
+        },
       },
       {
-        icon: <DeleteOutlineIcon />,
-        action: (dataIndex, row) => {
-          handleDelete(index);
+        icon: <DeleteOutlineIcon style={{ fontSize: 19, color: "red" }} />,
+        action: (row, dataIndex, listData) => {
+          handleDelete(row.id, listData);
         },
       },
     ];
 
-    const handleDelete = (index) => {
-      console.log(index, 123);
-      const tempData = [...listData];
-      tempData.splice(index, 1);
-      console.log("tempData", tempData);
+    const handleEdit = (index, dataIndex, listData) => {
+      if (!dataIndex || !listData || index === undefined) return;
+      const tempData = _.cloneDeep([...listData]);
+      tempData.splice(index, 1, { ...dataIndex, isNew: false });
       setListData(tempData);
       handleUpdateDataForm(type, tempData);
-      console.log("row", row);
-      handleReset(row);
+      handleReset();
+      setDataIndex(null);
     };
 
-    const handleEdit = (index, dataIndex) => {
-      setListData((prev) => {
-        const tempData = [...prev];
-        tempData.splice(index, 1, { ...dataIndex, isNew: false });
-        handleUpdateDataForm(type, tempData);
-        return tempData;
-      });
-      handleReset(dataIndex);
+    const handleDelete = (id, listData) => {
+      if (!listData) return;
+      let tempData = _.cloneDeep([...listData]).filter((it) => it.id !== id);
+      setListData(tempData);
+      handleUpdateDataForm(type, tempData);
     };
 
     const handleReset = (data) => {
       setIsEdit(false);
-      setDataIndex({ ...data, isNew: false });
+      setDataIndex(null);
+
       if (type === "tour") {
         setListAction([...listActionTour]);
       } else {
@@ -126,7 +137,15 @@ const DataBodyTable = React.memo(
     };
 
     useEffect(() => {
-      if (dataIndex.isNew) {
+      if (type === "tour") {
+        setListAction(listActionTour);
+      } else {
+        setListAction(listActionPreset);
+      }
+    }, [type]);
+
+    useEffect(() => {
+      if (dataIndex && dataIndex.isNew && dataIndex.id === row.id) {
         setIsEdit(true);
         setTimeout(() => {
           inputRef.current.focus();
@@ -135,15 +154,7 @@ const DataBodyTable = React.memo(
         newAction.shift();
         setListAction(newAction);
       }
-    }, [dataIndex]);
-
-    useEffect(() => {
-      if (type === "tour") {
-        setListAction(listActionTour);
-      } else {
-        setListAction(listActionPreset);
-      }
-    }, [type]);
+    }, [dataIndex, row]);
 
     const [isEdit, setIsEdit] = useState(false);
     const [listAction, setListAction] = useState([]);
@@ -153,8 +164,8 @@ const DataBodyTable = React.memo(
       <ClickAwayListener
         key={index}
         onClickAway={() => {
-          handleReset(row);
-          if (dataIndex.isNew) {
+          if (row && row.isNew) {
+            handleReset(row);
             setListData((prev) => [...prev].filter((it) => !it.isNew));
           }
         }}
@@ -162,7 +173,10 @@ const DataBodyTable = React.memo(
         <TableRow
           className={cellClass.root}
           style={{
-            background: isEdit || row.isNew ? "rgba(221, 61, 75, 0.15)" : "",
+            background:
+              isEdit && dataIndex && dataIndex.id === row.id
+                ? "rgba(221, 61, 75, 0.15)"
+                : "",
           }}
         >
           <TableCell component="th" scope="row" style={{ paddingRight: 0 }}>
@@ -173,27 +187,36 @@ const DataBodyTable = React.memo(
               title={<TooltipDetail />}
               disableHoverListener={type === "tour"}
               classes={{ tooltip: classes.tooltip }}
+              disableFocusListener={isEdit}
             >
               <TextField
                 size="small"
                 fullWidth
-                value={dataIndex.name}
+                value={
+                  isEdit && dataIndex && dataIndex.id === row.id
+                    ? dataIndex.name
+                    : row.name
+                }
                 variant="outlined"
                 className={classes.textFieldEdit}
                 disabled={!isEdit}
                 onKeyDown={(e) => {
+                  if (!dataIndex) return;
                   if (e.key === "Escape") {
                     if (dataIndex.isNew) {
-                      handleDelete(index, e);
+                      handleDelete(dataIndex.id, listData);
                     } else {
-                      setDataIndex({ ...row });
+                      // setDataIndex({ ...row });
                       setIsEdit(false);
                       setListAction(listActionPreset);
                     }
+                  } else if (e.key === "Enter") {
+                    handleEdit(index, dataIndex, listData);
                   }
                 }}
                 inputRef={inputRef}
                 onChange={(e) => {
+                  if (!dataIndex || dataIndex.id !== row.id) return;
                   setDataIndex((prev) => ({
                     ...prev,
                     name: e.target.value.slice(0, 50),
@@ -213,7 +236,7 @@ const DataBodyTable = React.memo(
               {listAction.map((it, idx) => (
                 <Box
                   key={idx}
-                  onClick={() => it.action(dataIndex, row)}
+                  onClick={() => it.action(row, dataIndex, listData)}
                   style={{ cursor: "pointer" }}
                 >
                   {it.icon}
