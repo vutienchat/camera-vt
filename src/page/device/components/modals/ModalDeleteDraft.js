@@ -10,7 +10,7 @@ import BaseButton from "../BaseButton";
 import { DeviceContext } from "../DeviceProvider";
 import CloseIcon from "@material-ui/icons/Close";
 
-const ModalDeleteDevice = React.memo(() => {
+const ModalDeleteDraft = React.memo(() => {
   const { state, handleDeleteDevice, handleCloseModalDelete } =
     useContext(DeviceContext);
   return (
@@ -37,7 +37,7 @@ const ModalDeleteDevice = React.memo(() => {
               textAlign: "center",
             }}
           >
-            Delete Device
+            Are you sure?
           </Typography>
           <CloseIcon
             style={{ width: 25, height: 25, cursor: "pointer" }}
@@ -55,7 +55,7 @@ const ModalDeleteDevice = React.memo(() => {
               textAlign: "center",
             }}
           >
-            Are you sure you want to delete the device?
+            This action cannot be undone. Your draft will be discarded.
           </DialogContentText>
         </DialogContent>
         <Box
@@ -83,4 +83,4 @@ const ModalDeleteDevice = React.memo(() => {
   );
 });
 
-export default ModalDeleteDevice;
+export default ModalDeleteDraft;

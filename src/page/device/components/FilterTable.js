@@ -6,6 +6,7 @@ import { DeviceContext } from "./DeviceProvider";
 import TrashIcon from "../Icon/TrashIcon";
 import { tableData } from "../utils";
 import { exportExcel } from "../api";
+import ResyncIcon from "../Icon/ResyncIcon";
 
 const FilterBar = () => {
   const classes = useStyles();
@@ -103,13 +104,19 @@ const FilterBar = () => {
           onClick={handleOpenAddVehicleModal}
         />
         <BaseButton
+          label={"Re-Sync"}
+          type={"headerButton"}
+          component={<ResyncIcon />}
+          onClick={handleOpenImportModal}
+        />
+        <BaseButton
           label={"Import Data"}
-          type={"normal"}
+          type={"headerButton"}
           onClick={handleOpenImportModal}
         />
         <BaseButton
           label={"Export Data"}
-          type={"normal"}
+          type={"headerButton"}
           onClick={() => {
             exportExcel();
           }}

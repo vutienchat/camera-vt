@@ -18,6 +18,8 @@ import LiveViewIcon from "../Icon/LiveViewIcon";
 import PlayBackIcon from "../Icon/PlaybackIcon";
 import ConfigIcon from "../Icon/ConfigIcon";
 import DeletePopoverIcon from "../Icon/DeletePopoverIcon";
+import HistoryIcon from "../Icon/HistoryIcon";
+import ResyncIcon from "../Icon/ResyncIcon";
 
 const TableBodyContent = () => {
   const {
@@ -37,9 +39,16 @@ const TableBodyContent = () => {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+  const setChooseDevice = (data) => {
+    dispatch({
+      type: "CHOOSE_DEVICE",
+      chooseDevice: data,
+    });
+  };
 
   const handleClose = () => {
     setAnchorEl(null);
+    setChooseDevice({});
   };
   const handleCheckItem = (event) => {
     const val = JSON.parse(event.target.value);
@@ -49,6 +58,15 @@ const TableBodyContent = () => {
     } else {
       handleCheckData([...checkedItems].filter((item) => item.id !== val.id));
     }
+  };
+
+  const handleOpenModalDeviceStatus = () => {
+    dispatch({
+      type: "OPEN_MODAL",
+      openModal: {
+        openModalDeviceStatus: true,
+      },
+    });
   };
 
   const handleOpenNewTab = (url) => {
@@ -169,11 +187,17 @@ const TableBodyContent = () => {
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "center",
+                  justifyContent: "end",
                   paddingBottom: 21,
                 }}
               >
-                <Typography onClick={handleClick} style={{ cursor: "pointer" }}>
+                <Typography
+                  onClick={(e) => {
+                    handleClick(e);
+                    setChooseDevice(dataBody);
+                  }}
+                  style={{ cursor: "pointer" }}
+                >
                   <MenuDotIcon />
                 </Typography>
               </TableCell>
@@ -216,6 +240,23 @@ const TableBodyContent = () => {
               <Box className={classes.poperItem}>
                 <ConfigIcon />
                 <Typography className={classes.poperText}>Config</Typography>
+              </Box>
+              <Divider />
+              <Box className={classes.poperItem}>
+                <ResyncIcon />
+                <Typography className={classes.poperText}>Re-Sync</Typography>
+              </Box>
+              <Divider />
+              <Box
+                className={classes.poperItem}
+                onClick={() => {
+                  handleOpenModalDeviceStatus();
+                }}
+              >
+                <HistoryIcon />
+                <Typography className={classes.poperText}>
+                  History Connections
+                </Typography>
               </Box>
               <Divider />
               <Box

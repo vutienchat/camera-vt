@@ -1,42 +1,50 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import { days, hours, storagePlanHeader } from "../../../../utils";
 import { Box, FormControlLabel, Typography } from "@material-ui/core";
 import CustomSwitch from "../../../Accordion/CustomSwitch";
 import BaseButton from "../../../BaseButton";
 import SelectContainTable from "../../../SelectContainTable";
+import { DeviceContext } from "../../../DeviceProvider";
+import * as type from "../../../../reducers/type";
 
 const list = [
   {
+    id: 1,
+    name: "Plan-001454544444444444",
+    period: "3 days",
+    activated: "6/10",
+    expiration: "10/12/2023",
+  },
+  {
+    id: 2,
     name: "Plan-001",
     period: "3 days",
     activated: "6/10",
     expiration: "10/12/2023",
   },
   {
+    id: 3,
+    name: "Plan-001",
+    period: "133333 days",
+    activated: "6/10",
+    expiration: "10/12/2023",
+  },
+  {
+    id: 4,
     name: "Plan-001",
     period: "3 days",
     activated: "6/10",
     expiration: "10/12/2023",
   },
   {
+    id: 5,
     name: "Plan-001",
     period: "3 days",
     activated: "6/10",
     expiration: "10/12/2023",
   },
   {
-    name: "Plan-001",
-    period: "3 days",
-    activated: "6/10",
-    expiration: "10/12/2023",
-  },
-  {
-    name: "Plan-001",
-    period: "3 days",
-    activated: "6/10",
-    expiration: "10/12/2023",
-  },
-  {
+    id: 6,
     name: "Plan-001",
     period: "3 days",
     activated: "6/10",
@@ -44,8 +52,9 @@ const list = [
   },
 ];
 const RecordDevice = () => {
+  const { state, dispatch } = useContext(DeviceContext);
   const [selectedCells, setSelectedCells] = useState({});
-  const [selectedStoragePlan, setSelectedStoragePlan] = useState("");
+  const [selectedStoragePlan, setSelectedStoragePlan] = useState({});
 
   const handleMouseDown = (event, day, hour) => {
     if (event.buttons === 1) {
@@ -67,11 +76,27 @@ const RecordDevice = () => {
   const handleMouseUp = () => {
     // setSelectedCells({});
   };
-  const handleClickColumns = useCallback((data) => {
+
+  const handleClickColumns = (data) => {
     setSelectedStoragePlan(data);
-  });
+  };
+  const handleRecoding = () => {
+    dispatch({
+      type: type.SWITCH_STATE,
+      switchState: {
+        recording: !state.switchState.recording,
+      },
+    });
+  };
+
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 20,
+      }}
+    >
       <Box style={{ display: "flex", flexDirection: "column", gap: 20 }}>
         <Box
           style={{
@@ -83,21 +108,41 @@ const RecordDevice = () => {
         >
           <Box style={{ display: "flex", gap: 24 }}>
             <FormControlLabel
-              control={<CustomSwitch name="checkedB" />}
+              control={
+                <CustomSwitch
+                  checked={state.switchState.recording}
+                  onChange={handleRecoding}
+                  name="checkedB"
+                />
+              }
               label="Recording"
             />
-            <SelectContainTable
-              width={334}
-              dropdownWidth={420}
-              searchBarType={"storagePlan"}
-              btnText={"-- Select Storage Plan --"}
-              list={list}
-              tableHeader={storagePlanHeader}
-              selectedStoragePlan={selectedStoragePlan}
-              handleClickColumns={handleClickColumns}
-            />
+            <Box
+              style={{
+                opacity: !state.switchState.recording && "0.3",
+                pointerEvents: !state.switchState.recording && "none",
+              }}
+            >
+              <SelectContainTable
+                width={334}
+                dropdownWidth={420}
+                searchBarType={"storagePlan"}
+                btnText={"-- Select Storage Plan --"}
+                list={list}
+                tableHeader={storagePlanHeader}
+                selectedStoragePlan={selectedStoragePlan}
+                handleClickColumns={handleClickColumns}
+              />
+            </Box>
           </Box>
-          <Box style={{ display: "flex", gap: 24 }}>
+          <Box
+            style={{
+              display: "flex",
+              gap: 24,
+              opacity: !state.switchState.recording && "0.3",
+              pointerEvents: !state.switchState.recording && "none",
+            }}
+          >
             <BaseButton label={"Record All"} type={"redBackground"} />
             <BaseButton
               label={"Do Not Record All"}
@@ -107,13 +152,25 @@ const RecordDevice = () => {
           </Box>
         </Box>
         <Typography
-          style={{ fontStyle: "italic", textAlign: "end", fontSize: 12 }}
+          style={{
+            fontStyle: "italic",
+            textAlign: "end",
+            fontSize: 12,
+            opacity: !state.switchState.recording && "0.3",
+            pointerEvents: !state.switchState.recording && "none",
+          }}
         >
           Hold Ctrl to select multiple. Hold Shift to select consecutive groups
           of items
         </Typography>
       </Box>
-      <table className="schedule-table">
+      <table
+        className="schedule-table"
+        style={{
+          opacity: !state.switchState.recording && "0.3",
+          pointerEvents: !state.switchState.recording && "none",
+        }}
+      >
         <thead>
           <tr>
             <th></th>
@@ -170,7 +227,10 @@ const RecordDevice = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          marginTop: 15,
           gap: 40,
+          opacity: !state.switchState.recording && "0.3",
+          pointerEvents: !state.switchState.recording && "none",
         }}
       >
         <Box

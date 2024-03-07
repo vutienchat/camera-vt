@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import {
@@ -105,7 +105,13 @@ const useStyles = makeStyles(() => ({
       borderTop: "3px solid #ffffff",
     },
   },
-  // tableCellCustom: { padding: "12px 24px" },
+  tableCellCustom: {
+    "& .MuiTypography-root": {
+      overflow: "hidden",
+      whiteSpace: "nowrap",
+      textOverflow: "ellipsis",
+    },
+  },
   checkBoxed: {
     padding: 0,
     "& svg": { color: "rgb(34,34,34)" },
@@ -130,6 +136,16 @@ const SelectContainTable = ({
   const [textSearch, setTextSearch] = useState("");
   const [listFilter, setListFilter] = useState(list);
 
+  useEffect(() => {
+    if (textSearch) {
+      setListFilter(
+        [...list].filter((item) => item.name.includes(textSearch.trim()))
+      );
+    } else {
+      setListFilter(list);
+    }
+  }, [textSearch, list]);
+
   const handleClick = () => {
     setIsOpen((prev) => !prev);
   };
@@ -137,6 +153,9 @@ const SelectContainTable = ({
   const handleClickAway = () => {
     setIsOpen(false);
   };
+
+  console.log("textSearch", textSearch);
+
   return (
     <Box style={{ minWidth: width || "auto" }} key={searchBarType}>
       <ClickAwayListener onClickAway={handleClickAway}>
@@ -154,7 +173,34 @@ const SelectContainTable = ({
               )
             }
           >
-            <Typography>{btnText}</Typography>
+            {selectedStoragePlan.name ? (
+              <Box
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: 20,
+                }}
+              >
+                <Tooltip title={selectedStoragePlan.name}>
+                  <Typography style={{ maxWidth: 78, width: 78 }}>
+                    {selectedStoragePlan.name}
+                  </Typography>
+                </Tooltip>
+                <Tooltip title={selectedStoragePlan.period}>
+                  <Typography style={{ maxWidth: 48, width: 48 }}>
+                    {selectedStoragePlan.period}
+                  </Typography>
+                </Tooltip>
+                <Tooltip title={selectedStoragePlan.expiration}>
+                  <Typography style={{ maxWidth: 108, width: 108 }}>
+                    {selectedStoragePlan.expiration}
+                  </Typography>
+                </Tooltip>
+              </Box>
+            ) : (
+              <Typography>{btnText}</Typography>
+            )}
           </Button>
           {isOpen ? (
             <Box
@@ -169,7 +215,7 @@ const SelectContainTable = ({
               <Box
                 style={{
                   marginTop: 10,
-                  maxHeight: "200px",
+                  maxHeight: "280px",
                   overflowY: "auto",
                 }}
                 className={classes.menu}
@@ -178,8 +224,8 @@ const SelectContainTable = ({
                   <Box
                     className={classes.menu}
                     style={{
-                      maxHeight: "200px",
-                      height: "200px",
+                      maxHeight: "280px",
+                      height: "280px",
                       width: "100%",
                       overflow: "auto",
                     }}
@@ -221,7 +267,8 @@ const SelectContainTable = ({
                       </TableHead>
                       <TableBody>
                         {listFilter.map((dataBody) => {
-                          const isChecked = dataBody.id;
+                          const isChecked =
+                            dataBody.id === selectedStoragePlan.id;
                           return (
                             <TableRow
                               key={dataBody.id}

@@ -1,1 +1,2 @@
 export const SELECT_DEVICE = "SELECT_DEVICE";
+export const SWITCH_STATE = "SWITCH_STATE";

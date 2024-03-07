@@ -131,6 +131,7 @@ const useSettingStyle = makeStyles({
     "& .MuiDialog-paperWidthSm": {
       width: 500,
     },
+    userSelect: "none",
   },
   root: {
     display: "flex",

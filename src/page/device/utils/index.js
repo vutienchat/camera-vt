@@ -2,11 +2,13 @@ import React from "react";
 import OfflineIcon from "../Icon/OfflineIcon";
 import OnlineIcon from "../Icon/OnlineIcon";
 import Recording from "../Icon/Recording";
-import NoRecording from "../Icon/NoRecording";
 import FeatureAi from "../components/FeatureAi";
 import DeviceStatus from "../components/DeviceStatus";
 import DurationIcon from "../Icon/DurationIcon";
 import Thumbnail from "../components/Thumbnail";
+import ErrorRecord from "../Icon/ErrorRecord";
+import NoRecord from "../Icon/NoRecord";
+import AiSync from "../components/AiSync";
 
 export const Feature = {
   "Smart Record": {
@@ -54,18 +56,25 @@ export const Status = {
   },
 };
 export const RecordStatus = {
+  2: {
+    label: "Do Not Record",
+    value: 2,
+    component: ({ width, height }) => {
+      return <NoRecord width={width} height={height} />;
+    },
+  },
   1: {
     label: "Record",
     value: 1,
-    component: () => {
-      return <Recording />;
+    component: ({ width, height }) => {
+      return <Recording width={width} height={height} />;
     },
   },
   0: {
-    label: "Do Not Record",
+    label: "Error Record",
     value: 0,
-    component: () => {
-      return <NoRecording />;
+    component: ({ width, height }) => {
+      return <ErrorRecord width={width} height={height} />;
     },
   },
 };
@@ -163,8 +172,7 @@ export const TableHeader = [
             gap: "10px",
           }}
         >
-          <selectRecording.component />
-          {/* <p>{selectRecording.label}</p> */}
+          <selectRecording.component width={20} height={20} />
         </div>
       );
     },
@@ -195,16 +203,28 @@ export const TableHeader = [
     field: "aiFeature",
     name: "Ai Feature",
     customStyles: {
-      minWidth: "350px",
-      maxWidth: "350px",
+      minWidth: "150px",
+      maxWidth: "150px",
       padding: 10,
       textAlign: "left",
       whiteSpace: "nowrap",
     },
     component: (data) => {
-      const arrayFeature = data.aiFeature.split(",");
-      const arrayOfValue = arrayFeature.map((item) => Feature[item]);
-      return <FeatureAi arrayOfValue={arrayOfValue} />;
+      return <FeatureAi data={data} />;
+    },
+  },
+  {
+    field: "aiSync",
+    name: "AI Sync",
+    customStyles: {
+      minWidth: "150px",
+      maxWidth: "150px",
+      padding: 10,
+      textAlign: "left",
+      whiteSpace: "nowrap",
+    },
+    component: (data) => {
+      return <AiSync data={data} />;
     },
   },
 ];
@@ -254,7 +274,7 @@ export const storagePlanHeader = [
       whiteSpace: "nowrap",
     },
   },
-]
+];
 
 export const headerDeviceStatus = [
   {
@@ -328,12 +348,16 @@ export const tableData = [
     deviceType: "IPC",
     group: "LLQ_Building",
     status: 1,
-    recording: 0,
+    recording: 2,
     location: "116 Eryn Forges43434343434343434",
     lastModify: "12/27/2023 08:26:25",
-    aiFeature: "Parking Count,HeatMap,Face Recognition",
+    aiFeature: "Parking Count",
     duration: "2h 34m 56s",
     offTime: "12/27/2023 08:26:25",
+    sync: true,
+    zones: 3,
+    line: 1,
+    syncStreamOut: false,
   },
   {
     id: 2,
@@ -345,50 +369,65 @@ export const tableData = [
     recording: 1,
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
-    aiFeature: "Parking Count,HeatMap,Face Recognition",
+    aiFeature: "Parking Count",
     duration: "2h 34m 56s",
     offTime: "12/27/2023 08:26:25",
+    sync: true,
+    zones: 3,
+    line: 1,
+    syncStreamOut: true,
   },
   {
     id: 3,
     thumbnail: null,
-    deviceName: "Camera- 80",
+    deviceName: "Camera- 801",
     deviceType: "IPC",
     group: "LLQ_Building",
     status: 0,
-    recording: 0,
+    recording: 2,
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
-    aiFeature: "Parking Count,HeatMap,Face Recognition",
+    aiFeature: "Parking Count",
     duration: "2h 34m 56s",
     offTime: "12/27/2023 08:26:25",
+    sync: true,
+    zones: 3,
+    line: 1,
+    syncStreamOut: true,
   },
   {
     id: 4,
     thumbnail: null,
-    deviceName: "Camera- 80",
+    deviceName: "Camera- 21",
     deviceType: "IPC",
     group: "LLQ_Building",
     status: 1,
     recording: 0,
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
-    aiFeature: "Parking Count,HeatMap,Face Recognition",
+    aiFeature: "Parking Count",
     duration: "2h 34m 56s",
     offTime: "12/27/2023 08:26:25",
+    sync: true,
+    zones: 3,
+    line: 1,
+    syncStreamOut: false,
   },
   {
     id: 5,
     thumbnail: null,
-    deviceName: "Camera- 80",
+    deviceName: "Camera- 345",
     deviceType: "IPC",
     group: "LLQ_Building",
     status: 0,
     recording: 1,
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
-    aiFeature:
-      "Parking Count,HeatMap,Face Recognition,Human Instruction,Smart Search,Smart Record",
+    sync: false,
+    zones: 3,
+    line: 1,
+    syncStreamOut: true,
+    aiFeature: "Parking Count",
   },
   {
     id: 6,
@@ -397,26 +436,31 @@ export const tableData = [
     deviceType: "IPC",
     group: "LLQ_Building",
     status: 1,
-    recording: 0,
+    recording: 2,
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
-    aiFeature: "Parking Count,HeatMap,Face Recognition",
+    aiFeature: "Parking Count",
     duration: "2h 34m 56s",
     offTime: "12/27/2023 08:26:25",
+    sync: true,
   },
   {
     id: 7,
     thumbnail: null,
-    deviceName: "Camera- 80",
+    deviceName: "Camera- 11",
     deviceType: "IPC",
     group: "LLQ_Building",
     status: 1,
     recording: 0,
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
-    aiFeature: "Parking Count,HeatMap,Face Recognition",
+    aiFeature: "Parking Count",
     duration: "2h 34m 56s",
     offTime: "12/27/2023 08:26:25",
+    sync: true,
+    zones: 3,
+    line: 1,
+    syncStreamOut: true,
   },
   {
     id: 8,
@@ -428,23 +472,28 @@ export const tableData = [
     recording: 0,
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
-    aiFeature: "Parking Count,HeatMap,Face Recognition",
+    aiFeature: "Parking Count",
     duration: "2h 34m 56s",
     offTime: "12/27/2023 08:26:25",
+    sync: false,
   },
   {
     id: 9,
     thumbnail: null,
-    deviceName: "Camera- 80",
+    deviceName: "Camera- 34",
     deviceType: "IPC",
     group: "LLQ_Building",
     status: 1,
     recording: 0,
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
-    aiFeature: "Parking Count,HeatMap,Face Recognition",
+    aiFeature: "Parking Count",
     duration: "2h 34m 56s",
     offTime: "12/27/2023 08:26:25",
+    sync: true,
+    zones: 3,
+    line: 1,
+    syncStreamOut: false,
   },
   {
     id: 10,
@@ -456,9 +505,13 @@ export const tableData = [
     recording: 0,
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
-    aiFeature: "Parking Count,HeatMap,Face Recognition",
+    aiFeature: "Parking Count",
     duration: "2h 34m 56s",
     offTime: "12/27/2023 08:26:25",
+    sync: true,
+    zones: 3,
+    line: 1,
+    syncStreamOut: true,
   },
   {
     id: 11,
@@ -470,9 +523,13 @@ export const tableData = [
     recording: 0,
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
-    aiFeature: "Parking Count,HeatMap,Face Recognition",
+    aiFeature: "Parking Count",
     duration: "2h 34m 56s",
     offTime: "12/27/2023 08:26:25",
+    sync: false,
+    zones: 3,
+    line: 1,
+    syncStreamOut: true,
   },
   {
     id: 12,
@@ -484,9 +541,10 @@ export const tableData = [
     recording: 0,
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
-    aiFeature: "Parking Count,HeatMap,Face Recognition",
+    aiFeature: "Parking Count",
     duration: "2h 34m 56s",
     offTime: "12/27/2023 08:26:25",
+    sync: true,
   },
   {
     id: 13,
@@ -498,9 +556,13 @@ export const tableData = [
     recording: 0,
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
-    aiFeature: "Parking Count,HeatMap,Face Recognition",
+    aiFeature: "Parking Count",
     duration: "2h 34m 56s",
     offTime: "12/27/2023 08:26:25",
+    sync: true,
+    zones: 3,
+    line: 1,
+    syncStreamOut: true,
   },
   {
     id: 14,
@@ -512,9 +574,13 @@ export const tableData = [
     recording: 0,
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
-    aiFeature: "Parking Count,HeatMap,Face Recognition",
+    aiFeature: "Parking Count",
     duration: "2h 34m 56s",
     offTime: "12/27/2023 08:26:25",
+    sync: true,
+    zones: 3,
+    line: 1,
+    syncStreamOut: true,
   },
   {
     id: 15,
@@ -526,9 +592,13 @@ export const tableData = [
     recording: 0,
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
-    aiFeature: "Parking Count,HeatMap,Face Recognition",
+    aiFeature: "Parking Count",
     duration: "2h 34m 56s",
     offTime: "12/27/2023 08:26:25",
+    sync: true,
+    zones: 3,
+    line: 1,
+    syncStreamOut: true,
   },
   {
     id: 16,
@@ -540,9 +610,13 @@ export const tableData = [
     recording: 0,
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
-    aiFeature: "Parking Count,HeatMap,Face Recognition",
+    aiFeature: "Parking Count",
     duration: "2h 34m 56s",
     offTime: "12/27/2023 08:26:25",
+    sync: true,
+    zones: 3,
+    line: 1,
+    syncStreamOut: true,
   },
   {
     id: 17,
@@ -554,9 +628,13 @@ export const tableData = [
     recording: 0,
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
-    aiFeature: "Parking Count,HeatMap,Face Recognition",
+    aiFeature: "Parking Count",
     duration: "2h 34m 56s",
     offTime: "12/27/2023 08:26:25",
+    sync: false,
+    zones: 3,
+    line: 1,
+    syncStreamOut: true,
   },
   {
     id: 18,
@@ -568,9 +646,13 @@ export const tableData = [
     recording: 0,
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
-    aiFeature: "Parking Count,HeatMap,Face Recognition",
+    aiFeature: "Parking Count",
     duration: "2h 34m 56s",
     offTime: "12/27/2023 08:26:25",
+    sync: true,
+    zones: 3,
+    line: 1,
+    syncStreamOut: true,
   },
   {
     id: 19,
@@ -582,9 +664,13 @@ export const tableData = [
     recording: 0,
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
-    aiFeature: "Parking Count,HeatMap,Face Recognition",
+    aiFeature: "Parking Count",
     duration: "2h 34m 56s",
     offTime: "12/27/2023 08:26:25",
+    sync: true,
+    zones: 3,
+    line: 1,
+    syncStreamOut: true,
   },
   {
     id: 20,
@@ -596,9 +682,13 @@ export const tableData = [
     recording: 0,
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
-    aiFeature: "Parking Count,HeatMap,Face Recognition",
+    aiFeature: "Parking Count",
     duration: "2h 34m 56s",
     offTime: "12/27/2023 08:26:25",
+    sync: true,
+    zones: 3,
+    line: 1,
+    syncStreamOut: false,
   },
   {
     id: 21,
@@ -610,9 +700,13 @@ export const tableData = [
     recording: 0,
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
-    aiFeature: "Parking Count,HeatMap,Face Recognition",
+    aiFeature: "Parking Count",
     duration: "2h 34m 56s",
     offTime: "12/27/2023 08:26:25",
+    sync: true,
+    zones: 3,
+    line: 1,
+    syncStreamOut: true,
   },
   {
     id: 22,
@@ -624,9 +718,13 @@ export const tableData = [
     recording: 0,
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
-    aiFeature: "Parking Count,HeatMap,Face Recognition",
+    aiFeature: "Parking Count",
     duration: "2h 34m 56s",
     offTime: "12/27/2023 08:26:25",
+    sync: true,
+    zones: 3,
+    line: 1,
+    syncStreamOut: true,
   },
   {
     id: 23,
@@ -638,9 +736,13 @@ export const tableData = [
     recording: 0,
     location: "116 Eryn Forges",
     lastModify: "12/27/2023 08:26:25",
-    aiFeature: "Parking Count,HeatMap,Face Recognition",
+    aiFeature: "Parking Count",
     duration: "2h 34m 56s",
     offTime: "12/27/2023 08:26:25",
+    sync: false,
+    zones: 3,
+    line: 1,
+    syncStreamOut: true,
   },
 ];
 
@@ -700,6 +802,113 @@ export const lowerCaseStringCustom = (numberChecked, originalString) => {
   return `${numberChecked ? numberChecked : "All"} ${originalString}`;
 };
 
+export const worksheetColumns = [
+  { header: "Group", key: "group", width: 25 },
+  { header: "Device Name", key: "deviceName", width: 25 },
+  { header: "Device Type", key: "deviceType", width: 25 },
+  { header: "Stream Type", key: "streamType", width: 25 },
+  { header: "Feature Type", key: "featureType", width: 25 },
+  { header: "Location", key: "location", width: 25 },
+  { header: "Note", key: "note", width: 25 },
+  { header: "Vision Mode", key: "visionMode", width: 25 },
+  { header: "Ai Processing Modes", key: "aiProcessingModes", width: 25 },
+  { header: "Ai Type", key: "aiType", width: 25 },
+  { header: "Ai Feature", key: "aiFeature", width: 25 },
+  { header: "Private Order", key: "privateOrder", width: 25 },
+  {
+    header: "Enable Private Camera Stream",
+    key: "enablePrivateCameraStream",
+    width: 35,
+  },
+  { header: "Private Primary Stream", key: "privatePrimaryStream", width: 35 },
+  {
+    header: "Private Secondary Stream",
+    key: "privateSecondaryStream",
+    width: 35,
+  },
+  { header: "Public Order", key: "publicOrder", width: 25 },
+  {
+    header: "Enable Public Camera Stream",
+    key: "enablePublicCameraStream",
+    width: 35,
+  },
+  { header: "Public Primary Stream", key: "publicPrimaryStream", width: 25 },
+  {
+    header: "Public Secondary Stream",
+    key: "publicSecondaryStream",
+    width: 35,
+  },
+  { header: "Visual AI Order", key: "visualAIOrder", width: 25 },
+  {
+    header: "Enable Visual AI Camera Stream",
+    key: "enableVisualAICameraStream",
+    width: 35,
+  },
+  { header: "Enable AI Streaming Out", key: "enableAIStreamingOut", width: 35 },
+  {
+    header: "Visual AI Primary Stream",
+    key: "visualAIPrimaryStream",
+    width: 35,
+  },
+  {
+    header: "Visual AI Secondary Stream",
+    key: "visialAISecondaryStream",
+    width: 35,
+  },
+  { header: "Access Key", key: "accessKey", width: 25 },
+  { header: "Secret Key", key: "secretKey", width: 25 },
+  { header: "Recording", key: "recording", width: 25 },
+  { header: "Recording Schedule", key: "recordingSchedule", width: 25 },
+  { header: "Zones", key: "zones", width: 25 },
+  { header: "Storage Plan", key: "storagePlan", width: 25 },
+  { header: "Lines", key: "lines", width: 25 },
+  { header: "Presets", key: "presets", width: 25 },
+  { header: "Tours", key: "tours", width: 25 },
+  { header: "Config Primary Stream", key: "configPrimaryStream", width: 35 },
+  {
+    header: "Config Secondary Stream",
+    key: "configSecondaryStream",
+    width: 35,
+  },
+];
+
+export const rowObject = {
+  group: "",
+  deviceName: "",
+  deviceType: "",
+  streamType: "",
+  featureType: "",
+  location: "",
+  note: "",
+  visionMode: "",
+  aiProcessingModes: "",
+  aiType: "",
+  aiFeature: "",
+  privateOrder: "",
+  enablePrivateCameraStream: "",
+  privatePrimaryStream: "",
+  privateSecondaryStream: "",
+  publicOrder: "",
+  enablePublicCameraStream: "",
+  publicPrimaryStream: "",
+  publicSecondaryStream: "",
+  visualAIOrder: "",
+  enableVisualAICameraStream: "",
+  enableAIStreamingOut: "",
+  visualAIPrimaryStream: "",
+  visialAISecondaryStream: "",
+  accessKey: "",
+  secretKey: "",
+  recording: "",
+  recordingSchedule: "",
+  zones: "",
+  storagePlan: "",
+  lines: "",
+  presets: "",
+  tours: "",
+  configPrimaryStream: "",
+  configSecondaryStream: "",
+};
 export const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 export const hours = Array.from(Array(25)).map((_, indx) => indx);
 

@@ -1,4 +1,4 @@
-import { Feature } from "../utils";
+import { Feature, rowObject, worksheetColumns } from "../utils";
 import * as ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 
@@ -35,25 +35,7 @@ const exportListDevice = [
 export const exportExcel = async () => {
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet("Sheet1");
-  worksheet.columns = [
-    { header: "Group", key: "group", width: 15 },
-    { header: "Device Name", key: "deviceName", width: 15 },
-    { header: "Device Type", key: "deviceType", width: 15 },
-    { header: "Stream Type", key: "streamType", width: 15 },
-    { header: "Feature Type", key: "featureType", width: 15 },
-    { header: "Feature List", key: "featureList", width: 15 },
-    { header: "Location", key: "location", width: 15 },
-    { header: "Note", key: "note", width: 15 },
-    { header: "Vision Mode", key: "visionMode", width: 15 },
-    { header: "Ai Type", key: "aiType", width: 15 },
-    { header: "Ai Feature", key: "aiFeature", width: 15 },
-    { header: "Primary Stream", key: "primaryStream", width: 15 },
-    { header: "Secondary Stream", key: "secondaryStream", width: 15 },
-    { header: "Access Key", key: "accessKey", width: 15 },
-    { header: "Secret Key", key: "secretKey", width: 15 },
-    { header: "Recording", key: "recording", width: 15 },
-    { header: "Storage Plan", key: "storagePlan", width: 15 },
-  ];
+  worksheet.columns = worksheetColumns;
   exportListDevice.forEach((data) => {
     worksheet.addRow(data);
   });
@@ -67,44 +49,8 @@ export const exportExcel = async () => {
 export const downloadTemplateFile = async () => {
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet("Sheet1");
-  worksheet.columns = [
-    { header: "Group", key: "group", width: 25 },
-    { header: "Device Name", key: "deviceName", width: 25 },
-    { header: "Device Type", key: "deviceType", width: 25 },
-    { header: "Stream Type", key: "streamType", width: 25 },
-    { header: "Feature Type", key: "featureType", width: 25 },
-    { header: "Feature List", key: "featureList", width: 25 },
-    { header: "Location", key: "location", width: 25 },
-    { header: "Note", key: "note", width: 25 },
-    { header: "Vision Mode", key: "visionMode", width: 25 },
-    { header: "Ai Type", key: "aiType", width: 25 },
-    { header: "Ai Feature", key: "aiFeature", width: 25 },
-    { header: "Primary Stream", key: "primaryStream", width: 25 },
-    { header: "Secondary Stream", key: "secondaryStream", width: 25 },
-    { header: "Access Key", key: "accessKey", width: 25 },
-    { header: "Secret Key", key: "secretKey", width: 25 },
-    { header: "Recording", key: "recording", width: 25 },
-    { header: "Storage Plan", key: "storagePlan", width: 25 },
-  ];
-  worksheet.addRow({
-    group: "",
-    deviceName: "",
-    deviceType: "",
-    streamType: "",
-    featureType: "",
-    featureList: "",
-    location: "",
-    note: "",
-    visionMode: "",
-    aiType: "",
-    aiFeature: "",
-    primaryStream: "",
-    secondaryStream: "",
-    accessKey: "",
-    secretKey: "",
-    recording: "",
-    storagePlan: "",
-  });
+  worksheet.columns = worksheetColumns;
+  worksheet.addRow(rowObject);
   const validateGroup = Object.values(Feature).map((item) => item.label);
   const resultString = [`"${validateGroup.join(",")}"`];
   worksheet.columns.forEach((col, index) => {

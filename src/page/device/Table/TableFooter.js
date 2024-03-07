@@ -95,6 +95,7 @@ const CustomPagination = ({ count, page, onChange }) => {
                   fontWeight: selected ? "bold" : undefined,
                   backgroundColor: selected && "rgb(236,27,46)",
                   color: selected && "white",
+                  cursor: "pointer",
                 }}
                 {...item}
                 onClick={() => {
@@ -175,6 +176,7 @@ const useTableFooterStyle = makeStyles({
     background: "none",
     fontSize: 15,
     fontWeight: 500,
+    cursor: "pointer",
   },
   paginationNumberButton: {
     height: 32,
