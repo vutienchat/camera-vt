@@ -3,7 +3,7 @@ import React from "react";
 
 const TabsContainer = React.memo(({ tabs }) => {
   const classes = TabStyle();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState(3);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };

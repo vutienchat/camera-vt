@@ -9,6 +9,12 @@ const data = Array.from(Array(5)).map((_, idx) => ({
   id: idx,
 }));
 
+const dataTour = Array.from(Array(5)).map((_, idx) => ({
+  name: `test${idx}`,
+  id: idx,
+  listPreset: [],
+}));
+
 export const defaultFormValue = {
   addingMode: "KnowAddress",
   address: "",
@@ -28,7 +34,7 @@ export const defaultFormValue = {
   },
   listZone: [],
   preset: data,
-  tour: data,
+  tour: dataTour,
 };
 
 export const schema = yup.object().shape({

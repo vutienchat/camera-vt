@@ -8,7 +8,7 @@ const initState = {
     openModalDelete: false,
     openModalAdd: false,
     openModalImport: false,
-    openModalAddDevice: false,
+    openModalAddDevice: true,
     openModaleConfiguration: false,
     openModalDeviceStatus: false,
   },
