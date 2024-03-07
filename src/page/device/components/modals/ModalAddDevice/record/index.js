@@ -1,56 +1,12 @@
-import React, { useCallback, useContext, useState } from "react";
-import { days, hours, storagePlanHeader } from "../../../../utils";
-import { Box, FormControlLabel, Typography } from "@material-ui/core";
-import CustomSwitch from "../../../Accordion/CustomSwitch";
-import BaseButton from "../../../BaseButton";
-import SelectContainTable from "../../../SelectContainTable";
+import React, { useContext, useState } from "react";
+import { days, hours, } from "../../../../utils";
+import { Box, Typography } from "@material-ui/core";
+
 import { DeviceContext } from "../../../DeviceProvider";
 import * as type from "../../../../reducers/type";
+import HeaderRecordTab from "./HeaderRecordTab";
 
-const list = [
-  {
-    id: 1,
-    name: "Plan-001454544444444444",
-    period: "3 days",
-    activated: "6/10",
-    expiration: "10/12/2023",
-  },
-  {
-    id: 2,
-    name: "Plan-001",
-    period: "3 days",
-    activated: "6/10",
-    expiration: "10/12/2023",
-  },
-  {
-    id: 3,
-    name: "Plan-001",
-    period: "133333 days",
-    activated: "6/10",
-    expiration: "10/12/2023",
-  },
-  {
-    id: 4,
-    name: "Plan-001",
-    period: "3 days",
-    activated: "6/10",
-    expiration: "10/12/2023",
-  },
-  {
-    id: 5,
-    name: "Plan-001",
-    period: "3 days",
-    activated: "6/10",
-    expiration: "10/12/2023",
-  },
-  {
-    id: 6,
-    name: "Plan-001",
-    period: "3 days",
-    activated: "6/10",
-    expiration: "10/12/2023",
-  },
-];
+
 const RecordDevice = () => {
   const { state, dispatch } = useContext(DeviceContext);
   const [selectedCells, setSelectedCells] = useState({});
@@ -98,59 +54,11 @@ const RecordDevice = () => {
       }}
     >
       <Box style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-        <Box
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: 50,
-          }}
-        >
-          <Box style={{ display: "flex", gap: 24 }}>
-            <FormControlLabel
-              control={
-                <CustomSwitch
-                  checked={state.switchState.recording}
-                  onChange={handleRecoding}
-                  name="checkedB"
-                />
-              }
-              label="Recording"
-            />
-            <Box
-              style={{
-                opacity: !state.switchState.recording && "0.3",
-                pointerEvents: !state.switchState.recording && "none",
-              }}
-            >
-              <SelectContainTable
-                width={334}
-                dropdownWidth={420}
-                searchBarType={"storagePlan"}
-                btnText={"-- Select Storage Plan --"}
-                list={list}
-                tableHeader={storagePlanHeader}
-                selectedStoragePlan={selectedStoragePlan}
-                handleClickColumns={handleClickColumns}
-              />
-            </Box>
-          </Box>
-          <Box
-            style={{
-              display: "flex",
-              gap: 24,
-              opacity: !state.switchState.recording && "0.3",
-              pointerEvents: !state.switchState.recording && "none",
-            }}
-          >
-            <BaseButton label={"Record All"} type={"redBackground"} />
-            <BaseButton
-              label={"Do Not Record All"}
-              type={"normal"}
-              width={180}
-            />
-          </Box>
-        </Box>
+         <HeaderRecordTab
+          handleRecoding={handleRecoding}
+          selectedStoragePlan={selectedStoragePlan}
+          handleClickColumns={handleClickColumns}
+          />
         <Typography
           style={{
             fontStyle: "italic",
