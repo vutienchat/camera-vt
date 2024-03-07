@@ -102,6 +102,7 @@ export default function BaseFormSelect({
   searchBarType,
   dropdownWidth,
   name,
+  isSearch = true,
 }) {
   const classes = useStyles();
   const [isOpen, setIsOpen] = React.useState(false);
@@ -178,11 +179,13 @@ export default function BaseFormSelect({
               className={classes.dropdown}
               style={{ [positionDropDown]: 0, width: dropdownWidth || "280px" }}
             >
-              <SearchBar
-                searchKey={textSearch}
-                searchBarType={searchBarType}
-                setSearchKey={setTextSearch}
-              />
+              {isSearch && (
+                <SearchBar
+                  searchKey={textSearch}
+                  searchBarType={searchBarType}
+                  setSearchKey={setTextSearch}
+                />
+              )}
               <Box
                 style={{
                   maxHeight: "200px",

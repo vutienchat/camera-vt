@@ -3,8 +3,8 @@ const ReloadIcon = ({ width, height, color }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width={width}
-      height={height}
+      width={width || 16}
+      height={height || 16}
       viewBox="0 0 16 16"
       fill={color}
     >

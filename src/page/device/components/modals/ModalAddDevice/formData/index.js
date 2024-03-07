@@ -7,7 +7,6 @@ import {
   Typography,
 } from "@material-ui/core";
 import React from "react";
-import DrawCanvas from "../../../Draw";
 import BaseFormGroup from "../../../BaseForm/BaseFormGroup";
 import BaseInputForm from "../../../BaseForm/BaseInput";
 import { useFormContext } from "react-hook-form";
@@ -16,7 +15,9 @@ import RecordDevice from "../record";
 import TabsContainer from "../../../Tabs";
 import GeneralTab from "../general";
 import FormIpAddress from "../../../BaseForm/FormIpAddress";
-import SimplifiedPolygon from "../../../Draw/SimplifiedPolygon";
+import DrawingComponent from "../../../Draw/SimplifiedPolygon";
+import FinalDraw from "../../../Draw/FinalDraw";
+import PTZControl from "../PTZControl.js";
 // var onvif = require("onvif");
 
 const addModeOption = [
@@ -56,11 +57,11 @@ const tabConfig = [
   },
   {
     label: "Zone / Line",
-    children: <DrawCanvas />,
+    children: <FinalDraw />,
   },
   {
     label: "PTZ Control",
-    children: <SimplifiedPolygon />,
+    children: <PTZControl />,
   },
   {
     label: "Advanced",
@@ -74,7 +75,8 @@ const FormData = React.memo(({ value }) => {
     setValue,
     formState: { errors },
   } = useFormContext();
-  const { AddingMode, isDefaultPort, ipAddress } = watch();
+  console.log(watch());
+  const { addingMode, isDefaultPort, ipAddress } = watch();
 
   const setIPAddress = (data) => {
     setValue("ipAddress", data);
@@ -112,13 +114,13 @@ const FormData = React.memo(({ value }) => {
       >
         <BaseFormRadio
           label={"Adding Mode"}
-          name={"AddingMode"}
+          name={"addingMode"}
           options={addModeOption}
         />
 
         <Grid container spacing={2} direction="row" wrap="nowrap">
           <Grid item xs={9}>
-            {AddingMode === "KnowAddress" ? (
+            {addingMode === "KnowAddress" ? (
               <BaseFormGroup
                 label={"Address"}
                 isRequired={true}

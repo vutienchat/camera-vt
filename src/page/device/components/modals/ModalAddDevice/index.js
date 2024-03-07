@@ -8,11 +8,6 @@ import {
   Grid,
   TextField,
   InputAdornment,
-  Checkbox,
-  FormControlLabel,
-  FormControl,
-  RadioGroup,
-  Radio,
 } from "@material-ui/core";
 import { DeviceItem } from "./DeviceItem";
 import FormData from "./formData";
@@ -21,33 +16,11 @@ import * as type from "../../../reducers/type";
 import { SearchIcon } from "../../../../../common/icons/SearchIcon";
 import { listDevice } from "../../../utils";
 import { FormProvider, useForm } from "react-hook-form";
-import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  IP_REGEX,
-  regexWithoutSpecialChars,
-  regexAllowVietnameseNoSpecialChars,
-} from "../../../utils/regex";
+import { defaultFormValue, schema } from "./@type";
 import { ReloadIcon } from "../../../Icon";
 import BoxContent from "../../BoxContent";
 import BaseButton from "../../BaseButton";
-
-const schema = yup.object().shape({
-  address: yup
-    .string()
-    .required("Address là trường bắt buộc")
-    .matches(IP_REGEX, "Address không đúng định dạng "),
-  // address: yup.string().required("Tên server là trường bắt buộc"),
-  port: yup.number().max(5),
-  endIp: yup.number(),
-  deviceName: yup
-    .string()
-    .required("Device Name là trường bắt buộc")
-    .matches(
-      regexAllowVietnameseNoSpecialChars,
-      "Device Name không đúng định dạng "
-    ),
-});
 
 const ModalAddDevice = React.memo(({ open = true, handleClose }) => {
   const classes = ModalAddDeviceStyle();
@@ -62,18 +35,7 @@ const ModalAddDevice = React.memo(({ open = true, handleClose }) => {
   };
   const methods = useForm({
     defaultValues: {
-      AddingMode: "KnowAddress",
-      address: "",
-      deviceType: "IPC",
-      username: "",
-      password: "",
-      VisionMode: "DayCamera",
-      isDefaultPort: true,
-      port: "",
-      startIP: 1,
-      endIP: 255,
-      ipAddress: ["192", "168", "0"],
-      location: "60 Hoang Quoc Viet",
+      ...defaultFormValue,
     },
     resolver: yupResolver(schema),
     reValidateMode: "onChange",
@@ -91,7 +53,7 @@ const ModalAddDevice = React.memo(({ open = true, handleClose }) => {
   return (
     <Dialog
       open={state.openModal.openModalAddDevice}
-      onClose={handleCloseModalSelect}
+      // onClose={handleCloseModalSelect}
       aria-labelledby="form-dialog-title"
       style={{ minWidth: 1000, minHeight: 800, userSelect: "none" }}
       maxWidth={"lg"}
