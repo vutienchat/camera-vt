@@ -19,8 +19,10 @@ const TableContent = ({
   pagination,
   dispatch,
   iconPagination,
+  colorHeader
 }) => {
   const data = {
+    colorHeader,
     isLoading,
     dispatch,
     checkedItems,

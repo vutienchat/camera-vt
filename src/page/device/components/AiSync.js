@@ -3,16 +3,28 @@ import React from "react";
 import SuccesSyncIcon from "../Icon/SuccesSyncIcon";
 import FailSyncIcon from "../Icon/FailSyncIcon";
 
-const FeatureAi = ({  data }) => {
+const AiSync = ({ data }) => {
   const classes = style();
   return (
     <div className={classes.root}>
-      <div className={classes.chip}>
-        <p style={{ padding: "1px 8px", fontSize: 12 }}>{data.aiFeature}</p>
-         <div style={{padding: "3px 5px 0 0"}}>
-          {data.sync ? <SuccesSyncIcon/> : <FailSyncIcon/>}
-         </div>
-      </div>
+      {data.zones ? (
+        <React.Fragment>
+          <div className={classes.chip}>
+            <div style={{ padding: "1px 8px", fontSize: 12 }}>
+              Zones {data.zones} | Line {data.line}
+            </div>
+            <div style={{ padding: "3px 5px 0 0" }}>
+              {data.sync ? <SuccesSyncIcon /> : <FailSyncIcon />}
+            </div>
+          </div>
+          <div className={classes.chip}>
+            <p style={{ padding: "1px 8px", fontSize: 12 }}>Streaming Out</p>
+            <div style={{ padding: "3px 5px 0 0" }}>
+              {data.sync ? <SuccesSyncIcon /> : <FailSyncIcon />}
+            </div>
+          </div>
+        </React.Fragment>
+      ) : null}
     </div>
   );
 };
@@ -50,4 +62,4 @@ const style = makeStyles(() => ({
     backgroundColor: "white",
   },
 }));
-export default FeatureAi;
+export default AiSync;

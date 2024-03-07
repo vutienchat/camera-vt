@@ -73,19 +73,35 @@ const ModalDeviceStatus = () => {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "10px",
-              fontWeight: 500,
-              fontSize: 16,
-              marginTop: 5,
+              justifyContent: "center",
+              gap: 30,
+              flexDirection: "row",
             }}
           >
-            <selectStatus.component />
-            <Typography style={{ margin: 0 }}>{selectStatus.label}</Typography>
+            <Typography style={{ margin: 0, fontWeight: 500 }}>
+              380 Lac Long Quan
+            </Typography>
+            <Box
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+                fontWeight: 500,
+                fontSize: 16,
+                marginTop: 5,
+              }}
+            >
+              <selectStatus.component />
+              <Typography style={{ margin: 0, fontWeight: 500 }}>
+                {selectStatus.label}
+              </Typography>
+            </Box>
           </Box>
         </Box>
         <Divider style={{ margin: "0 30px" }} />
         <Box style={{ padding: "10px 30px 19px 30px" }}>
           <TableContent
+            colorHeader
             tableData={dataListShow.data}
             tableHeader={headerDeviceStatus}
             checkedItems={state.checkedItemList}

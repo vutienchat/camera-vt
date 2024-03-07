@@ -11,6 +11,8 @@ const BaseButton = ({ label, type, component, onClick, width, submitType }) => {
     styleButton = classes.border;
   } else if (type === "disable") {
     styleButton = classes.disable;
+  }else if(type === "headerButton"){
+    styleButton = classes.headerButton;
   }
   return (
     <Button
@@ -47,6 +49,13 @@ const useStyles = makeStyles(() => ({
   border: {
     backgroundColor: "#ffffff",
     border: "1px solid",
+    "&:hover": {
+      backgroundColor: "rgb(243,244,246)",
+    },
+  },
+  headerButton:{
+    backgroundColor: "#ffffff",
+    border: "1px solid rgba(34, 34, 34, 0.1)",
     "&:hover": {
       backgroundColor: "rgb(243,244,246)",
     },

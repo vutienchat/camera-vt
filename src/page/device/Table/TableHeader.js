@@ -6,12 +6,22 @@ import {
   Typography,
   makeStyles,
 } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
 import { useContext, useMemo } from "react";
 import { TableCommonContext } from "./TableContent";
+import CircleSuccesSyncIcon from "../Icon/CircleSuccesSyncIcon";
+import CircleFailSyncIcon from "../Icon/CircleFailSyncIcon";
 
 const TableHeaderContent = () => {
-  const { checkedItems, checkedAble, tableHeader, tableData, handleCheckData } =
-    useContext(TableCommonContext);
+  const {
+    checkedItems,
+    checkedAble,
+    tableHeader,
+    tableData,
+    handleCheckData,
+    success = true,
+    colorHeader,
+  } = useContext(TableCommonContext);
 
   const classes = useTableHeaderStyle();
 
@@ -52,7 +62,7 @@ const TableHeaderContent = () => {
   return (
     <TableHead
       style={{
-        backgroundColor: "rgba(221, 61, 75, 1)",
+        backgroundColor: colorHeader && "rgba(221, 61, 75, 1)",
         height: "40px",
         texWrap: "nowrap",
       }}
@@ -61,7 +71,7 @@ const TableHeaderContent = () => {
         {checkedAble && (
           <TableCell
             className={classes.checkbox}
-            style={{ backgroundColor: "rgb(221, 61, 75)" }}
+            style={{ backgroundColor: colorHeader && "rgb(221, 61, 75)" }}
           >
             <Checkbox
               checked={isCheckedAll}
@@ -80,13 +90,13 @@ const TableHeaderContent = () => {
                 ...header.customStyles,
                 width: header.width,
                 padding: 10,
-                backgroundColor: "rgb(221, 61, 75)",
+                backgroundColor: colorHeader && "rgb(221, 61, 75)",
               }}
             >
               <Typography
                 style={{
-                  color: "#ffff",
-                  fontWeight: 500,
+                  color: colorHeader && "#ffff",
+                  fontWeight: 600,
                   fontSize: 16,
                   lineHeight: "normal",
                   letterSpacing: "normal",
@@ -99,10 +109,43 @@ const TableHeaderContent = () => {
           );
         })}
         {checkedAble && (
-          <TableCell
-            className={classes.checkbox}
-            style={{ backgroundColor: "rgb(221, 61, 75)" }}
-          ></TableCell>
+          <TableCell className={classes.sync}>
+            {success ? (
+              <Button
+                className={classes.syncButton}
+                startIcon={<CircleSuccesSyncIcon />}
+                style={{ border: "1px solid rgba(8, 171, 73, 1)" }}
+              >
+                <p
+                  style={{
+                    textTransform: "none",
+                    fontWeight: 500,
+                    fontSize: 12,
+                    color: "rgba(8, 171, 73, 1)",
+                  }}
+                >
+                  Sync Success
+                </p>
+              </Button>
+            ) : (
+              <Button
+                className={classes.syncButton}
+                startIcon={<CircleFailSyncIcon />}
+                style={{ border: "1px solid rgba(221, 61, 75, 1)" }}
+              >
+                <p
+                  style={{
+                    textTransform: "none",
+                    fontWeight: 500,
+                    fontSize: 12,
+                    color: "rgba(221, 61, 75, 1)",
+                  }}
+                >
+                  Sync Failure
+                </p>
+              </Button>
+            )}
+          </TableCell>
         )}
       </TableRow>
     </TableHead>
@@ -116,10 +159,23 @@ const useTableHeaderStyle = makeStyles({
     "& .MuiIconButton-label": { color: "#000" },
     "&.MuiTableCell-root": { padding: "0" },
   },
+  sync: {
+    textAlign: "end",
+    minWidth: "125px",
+    // backgroundColor: "rgb(221, 61, 75)",
+    "& .MuiIconButton-label": { color: "#000" },
+    "&.MuiTableCell-root": { padding: "0" },
+  },
   checkBoxed: {
     padding: 0,
-    "& svg": { color: "#ffff" },
+    "& svg": { color: "rgb(34,34,34)" },
   },
-  checked: { "& svg": { color: "#ffff !important" } },
+  checked: { "& svg": { color: "#dd3d4b !important" } },
+  syncButton: {
+    width: 125,
+    height: 28,
+    borderRadius: 2,
+    marginRight: 5,
+  },
 });
 export default TableHeaderContent;

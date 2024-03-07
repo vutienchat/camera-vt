@@ -5,6 +5,7 @@ import FilterBar from "./FilterTable";
 import TableContent from "../Table/TableContent";
 import { TableHeader } from "../utils";
 import { DeviceContext } from "./DeviceProvider";
+import { makeStyles } from "@material-ui/styles";
 
 const DeviceContainer = () => {
   const {
