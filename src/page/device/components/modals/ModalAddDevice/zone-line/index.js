@@ -3,16 +3,15 @@ import React, { useState } from "react";
 import FinalDraw from "../../../Draw/FinalDraw";
 import BoxListData from "../formData/BoxListData";
 import { useFormContext } from "react-hook-form";
-import UnAuth from "./UnAuth";
-import NoData from "./NoData";
 
 const ZoneLineController = React.memo(() => {
   const { watch } = useFormContext();
   const { line, listZone } = watch();
   const [canDraw, setCanDraw] = useState(null);
+
   const listZoneLine = React.useMemo(() => {
     let listData = [];
-    if (line.points && line.points.length && !canDraw) {
+    if (line.name && line.points && line.points.length && !canDraw) {
       listData = [{ ...line, type: "line" }];
     }
     if (canDraw === 1) {
@@ -20,8 +19,6 @@ const ZoneLineController = React.memo(() => {
     }
     return listData;
   }, [line.name, listZone, canDraw]);
-
-  console.log("listZoneLine", listZoneLine);
 
   return (
     <Box

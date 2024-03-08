@@ -1,6 +1,5 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { useFormContext } from "react-hook-form";
 import BaseFormRadio from "../../../BaseForm/BaseFormRadio";
 import RecordDevice from "../record";
 import TabsContainer from "../../../Tabs";
@@ -8,6 +7,7 @@ import GeneralTab from "../general";
 import PTZControl from "../PTZControl.js";
 import Motion from "../motion/index.js";
 import ZoneLineController from "../zone-line/index.js";
+import Advanced from "../advanced/index.js";
 // var onvif = require("onvif");
 
 const deviceTypeOption = [
@@ -48,7 +48,7 @@ const tabConfig = [
   },
   {
     label: "Advanced",
-    children: "asdfasdf",
+    children: <Advanced />,
   },
 ];
 

@@ -467,7 +467,6 @@ const FinalDraw = React.memo(({ canDraw, setCanDraw }) => {
                   }}
                 />
                 {!isDrag &&
-                  // !isDraw &&
                   filledAreaPoints.map((point, index) => (
                     <Ellipse
                       key={index}
@@ -503,6 +502,12 @@ const FinalDraw = React.memo(({ canDraw, setCanDraw }) => {
             setIsOpenModalZone({ open: false, type: typeModal.add });
             setIsDraw(true);
             setPoints([]);
+            setFilledAreaPoints([]);
+            setZones((prev) => {
+              const tempData = [...prev];
+              tempData.pop();
+              return tempData;
+            });
           }}
           handleSubmit={handleAddZone}
         />

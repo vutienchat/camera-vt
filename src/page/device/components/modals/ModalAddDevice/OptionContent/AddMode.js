@@ -146,7 +146,7 @@ const AddMode = () => {
                 background: "#fff",
                 border: "solid 1px #DD3D4B",
                 width: 135,
-                height: 40,
+                height: 34,
                 marginTop: 20,
               }}
             >

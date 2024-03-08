@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useState } from "react";
-import { Box, Grid, Tooltip, Typography } from "@material-ui/core";
+import { Box, Button, Grid, Tooltip, Typography } from "@material-ui/core";
 import BaseFormGroup from "../../../BaseForm/BaseFormGroup";
 import BaseInputForm from "../../../BaseForm/BaseInput";
 import CustomAccordion from "../../../Accordion/CustomAccordion";
@@ -97,6 +97,65 @@ const GeneralTab = React.memo(() => {
         boxSizing: "border-box",
       }}
     >
+      <AccordionContent label={"Authentication"}>
+        <Grid container spacing={2}>
+          <Grid item xs={5}>
+            <BaseFormGroup
+              label={"Username"}
+              wrap={true}
+              showErrorMessage={true}
+              error={errors["password"]}
+              component={
+                <BaseInputForm
+                  name={"username"}
+                  style={{ width: "100%", flex: 1 }}
+                  variant="outlined"
+                  size="small"
+                />
+              }
+            />
+          </Grid>
+          <Grid item xs={5}>
+            <BaseFormGroup
+              label={"Password"}
+              wrap={true}
+              showErrorMessage={true}
+              error={errors["password"]}
+              component={
+                <BaseInputForm
+                  name={"password"}
+                  style={{ width: "100%", flex: 1 }}
+                  variant="outlined"
+                  size="small"
+                  type={"password"}
+                />
+              }
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <Button
+              style={{
+                background: "#fff",
+                border: "solid 1px #DD3D4B",
+                width: 135,
+                height: 34,
+                marginTop: 25,
+              }}
+            >
+              <Typography
+                style={{
+                  fontSize: 14,
+                  fontWeight: 700,
+                  color: "#DD3D4B",
+                  textAlign: "center",
+                }}
+              >
+                Apply
+              </Typography>
+            </Button>
+          </Grid>
+        </Grid>
+      </AccordionContent>
       <DndProvider backend={HTML5Backend}>
         {isSelectedOne && (
           <AccordionContent label={"Streams"}>
