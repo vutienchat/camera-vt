@@ -1,7 +1,6 @@
 import { makeStyles, Box } from "@material-ui/core";
 import React, { useContext } from "react";
 import { DeviceContext } from "../../DeviceProvider";
-import AddedIcon from "../../../Icon/AddedIcon";
 // import "./style.css";
 
 export const DeviceItem = React.memo(({ data, handleSelectDevice }) => {

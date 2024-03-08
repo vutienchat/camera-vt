@@ -154,7 +154,6 @@ const SelectContainTable = ({
     setIsOpen(false);
   };
 
-  console.log("textSearch", textSearch);
 
   return (
     <Box style={{ minWidth: width || "auto" }} key={searchBarType}>

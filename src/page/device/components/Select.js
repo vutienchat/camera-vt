@@ -5,6 +5,8 @@ import { Box, Button, Divider, Typography } from "@material-ui/core";
 
 import UpIcon from "../Icon/UpIcon";
 import DropDownIcon from "../Icon/DropDownIcon";
+import { EditIcon } from "../Icon";
+import RedTrashIcon from "../Icon/RedTrashIcon";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -203,6 +205,17 @@ export default function Select({
                           >
                             {item.label}
                           </Typography>
+                          <Box
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                              gap: 15,  
+                            }}
+                          >
+                            <EditIcon />
+                            <RedTrashIcon />
+                          </Box>
                         </label>
                         <Divider style={{ width: "100%" }} />
                       </Box>

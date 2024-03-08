@@ -52,4 +52,5 @@ export const schema = yup.object().shape({
       regexAllowVietnameseNoSpecialChars,
       "Device Name không đúng định dạng "
     ),
+  storagePlan: yup.string().required("Storage plan là trường bắt buộc"),
 });

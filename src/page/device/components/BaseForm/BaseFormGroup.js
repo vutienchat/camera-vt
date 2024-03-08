@@ -32,7 +32,13 @@ const BaseFormGroup = ({
         spacing={0}
         style={{ ...customStyle }}
       >
-        <Box style={{ flex: "0.25", paddingBottom: wrap ? 8 : 0 }}>
+        <Box
+          style={{
+            flex: "0.25",
+            paddingBottom: wrap ? 8 : 0,
+            marginTop: wrap ? 0 : 11,
+          }}
+        >
           <Typography
             style={{
               fontSize: "0.9rem",
@@ -50,7 +56,9 @@ const BaseFormGroup = ({
             )}
           </Typography>
         </Box>
-        <Box style={{ width: widthCustom || "100%", flex: 1 }}>
+        <Box
+          style={{ width: wrap && (widthCustom || "100%"), flex: wrap && 1 }}
+        >
           <Box
             style={{
               display: "flex",
@@ -71,7 +79,14 @@ const BaseFormGroup = ({
             //   marginLeft:  "auto",
           }}
         >
-          <Typography color="error" style={{ marginTop: "5px", fontSize: 14 }}>
+          <Typography
+            color="error"
+            style={{
+              marginTop: wrap ? 5 : 20,
+              fontSize: 14,
+              marginLeft: wrap ? 0 : 110,
+            }}
+          >
             {showErrorMessage && error ? error.message : " "}
           </Typography>
         </Box>

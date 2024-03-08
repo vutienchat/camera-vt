@@ -6,6 +6,9 @@ import * as type from "../../../../reducers/type";
 import SelectContainTable from "../../../SelectContainTable";
 import { storagePlanHeader } from "../../../../utils";
 import BaseButton from "../../../BaseButton";
+import BaseFormGroup from "../../../BaseForm/BaseFormGroup";
+import { Controller, useFormContext } from "react-hook-form";
+import Select from "../../../Select";
 
 const list = [
   {
@@ -51,36 +54,68 @@ const list = [
     expiration: "10/12/2023",
   },
 ];
-const HeaderRecordTab = ({handleRecoding,selectedStoragePlan,handleClickColumns}) =>{
-  const { state } = useContext(DeviceContext);
 
-  return(
+const Schedule = [
+  {
+    label: "Schedule 001",
+    id: 0,
+  },
+];
+
+const HeaderRecordTab = ({
+  handleRecoding,
+  selectedStoragePlan,
+  handleClickColumns,
+}) => {
+  const { state } = useContext(DeviceContext);
+  const {
+    formState: { errors },
+  } = useFormContext();
+
+  return (
     <Box
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: 50,
+      }}
+    >
+      <Box style={{ display: "flex", gap: 24 }}>
+        <FormControlLabel
+          control={
+            <CustomSwitch
+              checked={state.switchState.recording}
+              onChange={handleRecoding}
+              name="checkedB"
+            />
+          }
+          label="Recording"
+        />
+        <Box
           style={{
+            opacity: !state.switchState.recording && "0.3",
+            pointerEvents: !state.switchState.recording && "none",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            gap: 50,
+            gap: 20,
           }}
         >
-          <Box style={{ display: "flex", gap: 24 }}>
-            <FormControlLabel
-              control={
-                <CustomSwitch
-                  checked={state.switchState.recording}
-                  onChange={handleRecoding}
-                  name="checkedB"
-                />
-              }
-              label="Recording"
-            />
-            <Box
-              style={{
-                opacity: !state.switchState.recording && "0.3",
-                pointerEvents: !state.switchState.recording && "none",
-              }}
-            >
-              <Typography></Typography>  
+          <BaseFormGroup
+            label={"Storage Plan"}
+            isRequired={true}
+            wrap={false}
+            width={440}
+            customStyle={{ alignItems: "flex-start" }}
+            showErrorMessage={
+              Object.keys(selectedStoragePlan).length === 0 &&
+              selectedStoragePlan.constructor === Object
+                ? true
+                : false
+            }
+            error={errors["storagePlan"]}
+            component={
               <SelectContainTable
                 width={334}
                 dropdownWidth={420}
@@ -91,10 +126,29 @@ const HeaderRecordTab = ({handleRecoding,selectedStoragePlan,handleClickColumns}
                 selectedStoragePlan={selectedStoragePlan}
                 handleClickColumns={handleClickColumns}
               />
-            </Box>
-          </Box>
+            }
+          />
+          <BaseFormGroup
+            label={"Schedule"}
+            isRequired={false}
+            wrap={false}
+            width={270}
+            customStyle={{ alignItems: "flex-start" }}
+            showErrorMessage={false}
+            component={
+              <Select
+                list={Schedule}
+                btnText={"Record All"}
+                width={200}
+                titleDropdownText={"All Feature"}
+                positionDropDown={"right"}
+              />
+            }
+          />
         </Box>
-  )
-}
+      </Box>
+    </Box>
+  );
+};
 
 export default HeaderRecordTab;
