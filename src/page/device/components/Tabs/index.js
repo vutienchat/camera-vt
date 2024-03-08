@@ -3,7 +3,7 @@ import React from "react";
 
 const TabsContainer = React.memo(({ tabs }) => {
   const classes = TabStyle();
-  const [value, setValue] = React.useState(3);
+  const [value, setValue] = React.useState(4);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -56,6 +56,9 @@ const TabStyle = makeStyles({
       backgroundColor: "rgb(221, 61, 75)",
       borderRadius: "8px 8px 0px 0px",
       height: "5px",
+    },
+    "& .MuiButtonBase-root": {
+      minWidth: 120,
     },
   },
 });

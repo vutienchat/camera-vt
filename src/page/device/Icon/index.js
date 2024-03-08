@@ -20,3 +20,4 @@ export { default as SaveIcon } from "./SaveIcon";
 export { default as PlayIcon } from "./PlayIcon";
 export { default as ReplayIcon } from "./ReplayIcon";
 export { default as MoveIcon } from "./MoveIcon";
+export { default as LockIcon } from "./LockIcon";

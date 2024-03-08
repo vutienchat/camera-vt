@@ -33,8 +33,10 @@ const FormIpAddress = React.forwardRef(
           width: "100%",
           border: "solid 1px #bdbdbd",
           height: 40,
-          padding: "5px 12px",
+          padding: "5px 8px",
           boxSizing: "border-box",
+          display: "flex",
+          borderRadius: "8px",
         }}
         onClick={() => {
           if (ipAddress.every((it) => it === "") && !valueData) {
@@ -67,7 +69,7 @@ const FormIpAddress = React.forwardRef(
                     return;
                   handleInputChange(e, index, type);
                 }}
-                style={{ border: "none", width: 35 }}
+                style={{ border: "none", width: 30, fontSize: 14 }}
                 endAdornment={
                   <InputAdornment position="end">
                     <span style={{ fontWeight: "bold" }}>.</span>
@@ -94,7 +96,7 @@ const FormIpAddress = React.forwardRef(
 
                     field.onChange(e.target.value);
                   }}
-                  style={{ border: "none", width: 35 }}
+                  style={{ border: "none", width: 30, fontSize: 14 }}
                   inputRef={field.ref}
                 />
               )}

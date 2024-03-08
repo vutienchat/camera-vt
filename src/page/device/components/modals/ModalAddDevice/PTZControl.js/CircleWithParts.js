@@ -4,9 +4,6 @@ import { RefreshIcon } from "../../../../Icon";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 
 const totalParts = 4;
-const calculateAngle = (index, totalParts) => {
-  return (360 / totalParts) * index;
-};
 
 const useStyles = makeStyles((theme) => ({
   circle: {
@@ -62,7 +59,9 @@ const CircleWithParts = () => {
 
   const handleIconClick = () => {};
 
-  const handleSegmentClick = () => {};
+  const handleSegmentClick = (index) => {
+    console.log("zooo", index);
+  };
 
   return (
     <Box className={classes.circle}>
@@ -123,7 +122,7 @@ const CircleWithParts = () => {
             }}
             key={indx}
             onClick={() => {
-              handleSegmentClick();
+              handleSegmentClick(indx);
             }}
           ></Box>
         ))}

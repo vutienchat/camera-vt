@@ -72,17 +72,9 @@ const ModalAddLine = ({ open, handleClose, type, handleSubmit }) => {
               </Box>
             </Grid>
             <Grid item>
-              {/* <BaseInputForm
-                style={{ width: 140 }}
-                placeholder="Name"
-                name={"line.name"}
-                variant="outlined"
-                size="small"
-              /> */}
               <TextField
                 style={{ width: 140 }}
                 placeholder="Name"
-                // name={"line.name"}
                 value={data}
                 onChange={(e) => {
                   setData(e.target.value);
@@ -104,7 +96,7 @@ const ModalAddLine = ({ open, handleClose, type, handleSubmit }) => {
         >
           <BaseButton
             label={"Save"}
-            type={"redBackground"}
+            type={!data && !data.length ? "disable" : "redBackground"}
             onClick={() => handleSubmit(data)}
           />
           <BaseButton label={"Cancel"} type={"normal"} onClick={handleClose} />

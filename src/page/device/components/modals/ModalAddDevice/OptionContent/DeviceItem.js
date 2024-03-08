@@ -1,10 +1,9 @@
 import { makeStyles, Box } from "@material-ui/core";
 import React, { useContext } from "react";
-import { DeviceContext } from "../../DeviceProvider";
-import AddedIcon from "../../../Icon/AddedIcon";
+import { DeviceContext } from "../../../DeviceProvider";
 // import "./style.css";
 
-export const DeviceItem = React.memo(({ data, handleSelectDevice }) => {
+const DeviceItem = React.memo(({ data, handleSelectDevice }) => {
   const { state } = useContext(DeviceContext);
   const isActive = state.listDeviceSelected.includes(data.id);
   const classes = DeviceStyle();
@@ -158,3 +157,5 @@ const DeviceStyle = makeStyles({
     flex: "0 0 auto !important",
   },
 });
+
+export default DeviceItem;

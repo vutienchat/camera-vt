@@ -4,6 +4,7 @@ import {
   Grid,
   Radio,
   RadioGroup,
+  Typography,
 } from "@material-ui/core";
 import React from "react";
 import { Controller, useFormContext } from "react-hook-form";
@@ -37,7 +38,11 @@ const BaseFormRadio = ({ name, label, options, wrap, ...props }) => {
                         value={it.value}
                         key={indx}
                         control={<Radio />}
-                        label={it.label}
+                        label={
+                          <Typography style={{ fontSize: 14 }}>
+                            {it.label}
+                          </Typography>
+                        }
                         style={{ fontSize: 14 }}
                       />
                     ))}

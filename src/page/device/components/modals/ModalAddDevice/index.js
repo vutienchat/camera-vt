@@ -1,26 +1,13 @@
 import React, { useContext, useState } from "react";
 import CloseIcon from "@material-ui/icons/Close";
-import {
-  makeStyles,
-  Box,
-  Dialog,
-  DialogTitle,
-  Grid,
-  TextField,
-  InputAdornment,
-} from "@material-ui/core";
-import { DeviceItem } from "./DeviceItem";
+import { makeStyles, Box, Dialog, DialogTitle } from "@material-ui/core";
 import FormData from "./formData";
 import { DeviceContext } from "../../DeviceProvider";
-import * as type from "../../../reducers/type";
-import { SearchIcon } from "../../../../../common/icons/SearchIcon";
-import { listDevice } from "../../../utils";
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { defaultFormValue, schema } from "./@type";
-import { ReloadIcon } from "../../../Icon";
-import BoxContent from "../../BoxContent";
 import BaseButton from "../../BaseButton";
+import OptionContent from "./OptionContent";
 
 const ModalAddDevice = React.memo(({ open = true, handleClose }) => {
   const classes = ModalAddDeviceStyle();
@@ -41,13 +28,6 @@ const ModalAddDevice = React.memo(({ open = true, handleClose }) => {
     reValidateMode: "onChange",
   });
 
-  const handleSelectDevice = (data) => {
-    dispatch({
-      type: type.SELECT_DEVICE,
-      payload: data,
-    });
-  };
-
   const onSubmit = (data) => console.log(data);
 
   return (
@@ -55,7 +35,7 @@ const ModalAddDevice = React.memo(({ open = true, handleClose }) => {
       open={state.openModal.openModalAddDevice}
       // onClose={handleCloseModalSelect}
       aria-labelledby="form-dialog-title"
-      style={{ minWidth: 1000, minHeight: 800, userSelect: "none" }}
+      style={{ minWidth: 1200, minHeight: 800, userSelect: "none" }}
       maxWidth={"lg"}
       fullWidth
       className={classes.root}
@@ -80,63 +60,7 @@ const ModalAddDevice = React.memo(({ open = true, handleClose }) => {
               </Box>
             </DialogTitle>
             <Box style={{ padding: 20, display: "flex", gap: 15 }}>
-              <BoxContent title={"Device List"}>
-                <Box>
-                  <Grid
-                    item
-                    container
-                    spacing={2}
-                    alignItems="center"
-                    wrap="nowrap"
-                    style={{ paddingBottom: 10 }}
-                  >
-                    <Grid item>
-                      <TextField
-                        fullWidth
-                        variant="outlined"
-                        size="small"
-                        placeholder="Search ..."
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <SearchIcon
-                                width={20}
-                                height={20}
-                                color="#EC1B2E"
-                              />
-                            </InputAdornment>
-                          ),
-                        }}
-                      />
-                    </Grid>
-                    <Grid item style={{ cursor: "pointer" }}>
-                      <ReloadIcon width={20} height={20} color="#939393" />
-                    </Grid>
-                  </Grid>
-                  <Grid
-                    item
-                    container
-                    spacing={1}
-                    wrap="nowrap"
-                    direction="column"
-                    style={{
-                      overflowY: "scroll",
-                      maxHeight: "800px",
-                      overflowX: "hidden",
-                    }}
-                  >
-                    {listDevice.map((device, indx) => (
-                      <Grid item key={indx}>
-                        <DeviceItem
-                          key={indx}
-                          handleSelectDevice={handleSelectDevice}
-                          data={device}
-                        />
-                      </Grid>
-                    ))}
-                  </Grid>
-                </Box>
-              </BoxContent>
+              <OptionContent />
               <FormData />
             </Box>
             <Box

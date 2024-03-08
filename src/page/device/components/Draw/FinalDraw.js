@@ -15,15 +15,10 @@ import ModalAddZone from "./modals/ModalAddZone";
 import { typeModal } from "./@type";
 import RenderLineZone from "./RenderLineZone";
 
-const FinalDraw = React.memo(() => {
+const FinalDraw = React.memo(({ canDraw, setCanDraw }) => {
   const imageRef = useRef(null);
   const stageRef = useRef(null);
-  const {
-    watch,
-    setValue,
-    getValues,
-    formState: { errors },
-  } = useFormContext();
+  const { watch, setValue, getValues } = useFormContext();
   const line = watch("line");
   const listZone = watch("listZone");
   const [points, setPoints] = useState([]);
@@ -36,7 +31,6 @@ const FinalDraw = React.memo(() => {
   const [isDragging, setIsDragging] = useState(false);
   const [isDraw, setIsDraw] = useState(false);
   const [lastDragPosition, setLastDragPosition] = useState({ x: 0, y: 0 });
-  const [canDraw, setCanDraw] = useState(null);
   const [selectedLine, setSelectedLine] = useState(null);
   const [isUpdatePoint, setIsUpdatePoint] = useState(false);
   const [isPointAdded, setIsPointAdded] = useState(false);
