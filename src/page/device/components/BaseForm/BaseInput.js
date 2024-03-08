@@ -1,4 +1,5 @@
-import { InputAdornment, TextField } from "@material-ui/core";
+import React from "react";
+import { InputAdornment, TextField, makeStyles } from "@material-ui/core";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import Eye from "../../Icon/Eye";
@@ -15,6 +16,7 @@ const BaseInputForm = ({
 }) => {
   const { control, register } = useFormContext();
   const [isHiddenText, setIsHiddenText] = useState(false);
+  const classes = TextFieldStyle();
 
   return (
     <Controller
@@ -61,6 +63,7 @@ const BaseInputForm = ({
                 autoComplete: "off",
               },
             }}
+            className={classes.root}
             {...props}
           />
         );
@@ -68,5 +71,17 @@ const BaseInputForm = ({
     />
   );
 };
+
+const TextFieldStyle = makeStyles({
+  root: {
+    height: 34,
+    borderRadius: "8px",
+
+    "& .MuiInputBase-root": {
+      height: 34,
+      borderRadius: "8px",
+    },
+  },
+});
 
 export default BaseInputForm;

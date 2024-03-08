@@ -3,17 +3,17 @@ import {
   Box,
   Dialog,
   DialogTitle,
+  FormControl,
   Grid,
+  NativeSelect,
   TextField,
   Typography,
   makeStyles,
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import BaseButton from "../../BaseButton";
-import BaseInputForm from "../../BaseForm/BaseInput";
 import { level, timeZone } from "../@type";
 import { useFormContext } from "react-hook-form";
-import BaseFormSelect from "../../BaseForm/BaseFormSelect";
 
 const ModalAddZone = ({ open, handleClose, type, handleSubmit, zoneIndex }) => {
   const classes = modalAddStyle();
@@ -148,19 +148,19 @@ const ModalAddZone = ({ open, handleClose, type, handleSubmit, zoneIndex }) => {
               </Box>
             </Grid>
             <Grid item>
-              <BaseFormSelect
-                key={"time"}
-                list={Object.values(timeZone)}
-                width={140}
-                btnText={""}
-                dropdownWidth={138}
-                // titleDropdownText={item.titleDropdownText}
-                listObject={timeZone}
-                // searchBarType={"aiFeature"}
-                name={"streamType"}
-                type="select"
-                isSearch={false}
-              />
+              <FormControl className={classes.selectPerPage}>
+                <NativeSelect
+                  style={{ width: 120, height: 34 }}
+                  // value={presetItem.presetId}
+                  onChange={(e) => {}}
+                >
+                  {Object.values(timeZone).map((it, index) => (
+                    <option key={index} value={it.id}>
+                      {index + 1}
+                    </option>
+                  ))}
+                </NativeSelect>
+              </FormControl>
             </Grid>
           </Grid>
         </Grid>
@@ -175,7 +175,7 @@ const ModalAddZone = ({ open, handleClose, type, handleSubmit, zoneIndex }) => {
         >
           <BaseButton
             label={"Save"}
-            type={"redBackground"}
+            type={!data || !data.name ? "disable" : "redBackground"}
             onClick={() => handleSubmit(data)}
           />
           <BaseButton label={"Cancel"} type={"normal"} onClick={handleClose} />
@@ -207,6 +207,23 @@ const modalAddStyle = makeStyles({
     position: "relative",
     textAlign: "center",
     fontWeight: "bold",
+  },
+  selectPerPage: {
+    "& .MuiInput-underline:before": { border: "none" },
+    "& .MuiInput-underline:after": { border: "none" },
+    "& .MuiInput-underline:hover:not(.Mui-disabled):before": {
+      border: "none !important",
+    },
+    "& select": { background: "white !important", height: 35, paddingBlock: 0 },
+    "& svg": { color: "black !important" },
+    "& MuiNativeSelect-select": {
+      height: 35,
+      paddingBlock: 0,
+    },
+    borderRadius: "4px",
+    border: "solid 1px #d3d3d3",
+    padding: "2px 10px",
+    height: 35,
   },
 });
 export default ModalAddZone;

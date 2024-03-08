@@ -7,14 +7,35 @@ export const level = {
   },
   2: {
     label: "2",
-    color: "rgba(250, 239, 155, 0.5)    ",
+    color: "rgba(250, 239, 155, 0.5)",
     border: "#FFB800",
     value: 2,
   },
   3: {
     label: "3",
-    color: "rgba(221, 61, 75, 0.5)    ",
+    color: "rgba(221, 61, 75, 0.5)",
     border: "rgba(255, 187, 169, 1)",
+    value: 3,
+  },
+};
+
+export const sensitivity = {
+  1: {
+    label: "Low",
+    color: "rgba(97, 110, 239, 0.5)",
+    border: "#3245FF",
+    value: 1,
+  },
+  2: {
+    label: "Medium",
+    color: "rgba(250, 239, 155, 0.5)",
+    border: "#FFB800",
+    value: 2,
+  },
+  3: {
+    label: "High",
+    color: "rgba(221, 61, 75, 0.5)",
+    border: "rgba(221, 61, 75, 1)",
     value: 3,
   },
 };
