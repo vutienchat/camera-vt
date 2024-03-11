@@ -2,9 +2,9 @@ import React, { useEffect, useMemo, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import { Box, Button, Divider, Typography } from "@material-ui/core";
-import SearchBar from "../CommonSearchBar";
-import { DropDownIcon, UpIcon } from "../../Icon";
 import { useFormContext } from "react-hook-form";
+import ModalCustomResolution from "./modals/ModalCustomResolution";
+import { DropDownIcon, UpIcon } from "../../../../Icon";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -92,7 +92,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function BaseFormSelect({
+export default function SelectCustom({
   width,
   btnText,
   titleDropdownText,
@@ -102,16 +102,18 @@ export default function BaseFormSelect({
   searchBarType,
   dropdownWidth,
   name,
-  isSearch = true,
   height,
   minHeight,
+  type,
 }) {
   const classes = useStyles();
   const [isOpen, setIsOpen] = React.useState(false);
   const [selected, setSelected] = useState([]);
-  const [textSearch, setTextSearch] = useState("");
-  const [listFilter, setListFilter] = useState(list);
   const { setValue, watch } = useFormContext();
+  const [openModalCustom, setOpenModalCustom] = useState({
+    type: "",
+    open: false,
+  });
 
   useEffect(() => {
     const dataSelect = watch(name);
@@ -119,18 +121,6 @@ export default function BaseFormSelect({
       setSelected([dataSelect]);
     }
   }, []);
-
-  useEffect(() => {
-    if (textSearch) {
-      setListFilter(
-        [...list].filter((item) =>
-          item.label.toLowerCase().includes(textSearch.toLowerCase())
-        )
-      );
-    } else {
-      setListFilter(list);
-    }
-  }, [textSearch, list]);
 
   const handleClick = () => {
     setIsOpen((prev) => !prev);
@@ -141,11 +131,11 @@ export default function BaseFormSelect({
   };
 
   const valueBtn = useMemo(() => {
-    if (selected.length > 1) {
-      return titleDropdownText;
-    }
     if (selected.length === 1) {
-      return listObject[selected[0]].label;
+      if (Object.keys(listObject).includes(selected[0])) {
+        return listObject[selected[0]].label;
+      }
+      return "Custom";
     }
     return btnText;
   }, [btnText, selected, listObject, titleDropdownText]);
@@ -156,9 +146,10 @@ export default function BaseFormSelect({
     setSelected(itemsArr);
     setValue(name, itemsArr[0]);
   };
-  const handleChooseAll = () => {
-    let listChooseObject = listFilter.map((item) => item.value);
-    setSelected(listChooseObject);
+
+  const handleAddCustom = (data) => {
+    console.log("data", data);
+    setValue(name, `${data.width}x${data.height}`);
   };
 
   return (
@@ -195,13 +186,6 @@ export default function BaseFormSelect({
               className={classes.dropdown}
               style={{ [positionDropDown]: 0, width: dropdownWidth || "280px" }}
             >
-              {isSearch && (
-                <SearchBar
-                  searchKey={textSearch}
-                  searchBarType={searchBarType}
-                  setSearchKey={setTextSearch}
-                />
-              )}
               <Box
                 style={{
                   maxHeight: "200px",
@@ -210,21 +194,8 @@ export default function BaseFormSelect({
                 }}
                 className={classes.menu}
               >
-                {titleDropdownText && listFilter.length > 0 && (
-                  <React.Fragment>
-                    <label
-                      className={classes.listItem}
-                      onClick={() => {
-                        handleChooseAll();
-                      }}
-                    >
-                      <Typography>{titleDropdownText}</Typography>
-                    </label>
-                    <Divider style={{ width: "100%" }} />
-                  </React.Fragment>
-                )}
-                {listFilter.length > 0 ? (
-                  listFilter.map((item) => {
+                {list.length > 0 ? (
+                  list.map((item) => {
                     const isChecked = selected.includes(item.value);
                     return (
                       <Box key={item.value}>
@@ -237,7 +208,6 @@ export default function BaseFormSelect({
                             handleChooseObject(item.value);
                           }}
                         >
-                          {item.component && <item.component />}
                           <Typography
                             style={{
                               textOverflow: "ellipsis",
@@ -260,11 +230,49 @@ export default function BaseFormSelect({
                     </Typography>
                   </Box>
                 )}
+                <Box key={"custom"}>
+                  <label
+                    key={"custom"}
+                    className={`${classes.listItem} ${
+                      selected.includes("custom") && classes.isChecked
+                    }`}
+                    onClick={() => {
+                      setOpenModalCustom((prev) => ({
+                        ...prev,
+                        open: true,
+                        type: type,
+                      }));
+                      //   handleChooseObject();
+                    }}
+                  >
+                    <Typography
+                      style={{
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        flex: 1,
+                        overflow: "hidden",
+                      }}
+                    >
+                      Custom
+                    </Typography>
+                  </label>
+                  <Divider style={{ width: "100%" }} />
+                </Box>
               </Box>
             </Box>
           ) : null}
         </div>
       </ClickAwayListener>
+      {openModalCustom.open && (
+        <ModalCustomResolution
+          open={openModalCustom.open}
+          handleClose={() => {
+            setOpenModalCustom((prev) => ({ ...prev, open: false }));
+          }}
+          type={type}
+          handleSubmit={handleAddCustom}
+        />
+      )}
     </Box>
   );
 }
