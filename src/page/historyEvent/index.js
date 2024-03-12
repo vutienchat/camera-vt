@@ -1,13 +1,11 @@
 import { Box, Button, Typography } from "@material-ui/core";
-import { listTotal } from "../../utils/keys";
-import BoxTotal from "./components/BoxTotal";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import React, { useState } from "react";
 import FilterComponent from "./components/filter";
 import _ from "lodash";
 
-const dataFiler = Array.from(Array(8)).map((_, idx) => ({
+const dataFiler = Array.from(Array(5)).map((_, idx) => ({
   type: `type${idx}`,
   listFilter: Array.from(Array(5)).map((_, indx) => ({
     label: `key${indx + 100 * idx}`,
@@ -52,16 +50,18 @@ const HistoryEvent = () => {
         filter
       </Button>
       {openFilter && (
-        <Box style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-          {dataFiler.map((it, idx) => (
-            <FilterComponent
-              label={it.type}
-              listType={it.listFilter}
-              key={idx}
-              handleSelect={handleSelect}
-            />
-          ))}
-        </Box>
+        <CategoryFilter label={"Human Event"}>
+          <Box style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+            {dataFiler.map((it, idx) => (
+              <FilterComponent
+                label={it.type}
+                listType={it.listFilter}
+                key={idx}
+                handleSelect={handleSelect}
+              />
+            ))}
+          </Box>
+        </CategoryFilter>
       )}
       {/* {Object.values(listTotal).map((it, idx) => (
         <BoxTotal value={it} key={idx} />
@@ -88,6 +88,34 @@ const HistoryEvent = () => {
           </React.Fragment>
         )}
       </Box>
+    </Box>
+  );
+};
+
+const CategoryFilter = ({ label, children }) => {
+  return (
+    <Box
+      style={{ border: "solid 1px rgba(243, 244, 246, 1)", borderRadius: 8 }}
+    >
+      <Box
+        style={{
+          height: "40px",
+          minWidth: "160px",
+          background: "rgba(243, 244, 246, 1)",
+          padding: 10,
+          boxSizing: "border-box",
+        }}
+      >
+        <Typography
+          style={{
+            fontSize: 16,
+            fontWeight: "bold",
+          }}
+        >
+          {label}
+        </Typography>
+      </Box>
+      <Box style={{ padding: 5 }}>{children}</Box>
     </Box>
   );
 };

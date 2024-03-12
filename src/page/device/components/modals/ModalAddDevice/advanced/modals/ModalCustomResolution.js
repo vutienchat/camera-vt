@@ -11,14 +11,37 @@ import {
 import CloseIcon from "@material-ui/icons/Close";
 import BaseButton from "../../../../BaseButton";
 
-const ModalCustomResolution = ({ open, handleClose, type, handleSubmit }) => {
+const ModalCustomResolution = ({
+  open,
+  handleClose,
+  type,
+  handleSubmit,
+  dataSelect,
+  isCustom,
+}) => {
   const classes = modalAddStyle();
   const [data, setData] = useState({
-    width: 0,
-    height: 0,
+    width: "",
+    height: "",
   });
 
+  useEffect(() => {
+    if (dataSelect && dataSelect.length && isCustom) {
+      const convertData = dataSelect[0].split("x");
+      if (!convertData.length) return;
+      setData({
+        width: convertData[0],
+        height: convertData[1],
+      });
+    }
+  }, [dataSelect]);
+
   const handleChange = (type, value) => {
+    if (
+      isNaN(Number(value)) ||
+      (Number(value) && (Number(value) < 1 || Number(value) > 1000000))
+    )
+      return;
     setData((prev) => ({
       ...prev,
       [type]: value,
@@ -33,7 +56,7 @@ const ModalCustomResolution = ({ open, handleClose, type, handleSubmit }) => {
     >
       <DialogTitle
         id="simple-dialog-title"
-        style={{ padding: "24px 16px 16px 24px" }}
+        style={{ padding: "24px 16px 0px 24px" }}
       >
         <Box className={classes.frame}>
           <Box className={classes.textWrapper}>
@@ -45,21 +68,50 @@ const ModalCustomResolution = ({ open, handleClose, type, handleSubmit }) => {
           />
         </Box>
       </DialogTitle>
-      <Box style={{ display: "flex", flexDirection: "column" }}>
-        <Box style={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography>Width</Typography>
+      <Box
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          padding: 24,
+          gap: 20,
+        }}
+      >
+        <Box
+          style={{
+            display: "flex",
+            justifyContent: "space-around",
+            alignItems: "center",
+            gap: 20,
+          }}
+        >
+          <Typography>
+            Width <span style={{ color: "red" }}>*</span>
+          </Typography>
           <TextField
             variant="outlined"
             size="small"
             onChange={(e) => handleChange("width", e.target.value)}
+            style={{ width: 350 }}
+            value={data.width}
           />
         </Box>
-        <Box style={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography>Height</Typography>
+        <Box
+          style={{
+            display: "flex",
+            justifyContent: "space-around",
+            alignItems: "center",
+            gap: 20,
+          }}
+        >
+          <Typography>
+            Height <span style={{ color: "red" }}>*</span>
+          </Typography>
           <TextField
             variant="outlined"
             size="small"
             onChange={(e) => handleChange("height", e.target.value)}
+            style={{ width: 350 }}
+            value={data.height}
           />
         </Box>
         <Box
@@ -73,7 +125,7 @@ const ModalCustomResolution = ({ open, handleClose, type, handleSubmit }) => {
         >
           <BaseButton
             label={"Save"}
-            type={!data && !data.length ? "disable" : "redBackground"}
+            type={!data.height || !data.width ? "disable" : "redBackground"}
             onClick={() => handleSubmit(data)}
           />
           <BaseButton label={"Cancel"} type={"normal"} onClick={handleClose} />

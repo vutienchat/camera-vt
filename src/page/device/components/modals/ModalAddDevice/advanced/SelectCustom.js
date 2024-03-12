@@ -110,10 +110,7 @@ export default function SelectCustom({
   const [isOpen, setIsOpen] = React.useState(false);
   const [selected, setSelected] = useState([]);
   const { setValue, watch } = useFormContext();
-  const [openModalCustom, setOpenModalCustom] = useState({
-    type: "",
-    open: false,
-  });
+  const [openModalCustom, setOpenModalCustom] = useState(false);
 
   useEffect(() => {
     const dataSelect = watch(name);
@@ -134,11 +131,25 @@ export default function SelectCustom({
     if (selected.length === 1) {
       if (Object.keys(listObject).includes(selected[0])) {
         return listObject[selected[0]].label;
+      } else {
+        return (
+          <Box style={{ display: "flex", flexDirection: "column" }}>
+            <Typography style={{ fontSize: 14 }}>Customize ...</Typography>
+            <Typography
+              style={{
+                fontSize: "12px",
+                color: "rgba(0, 0, 0, 0.5)",
+                textAlign: "left",
+              }}
+            >
+              ({selected[0]})
+            </Typography>
+          </Box>
+        );
       }
-      return "Custom";
     }
     return btnText;
-  }, [btnText, selected, listObject, titleDropdownText]);
+  }, [btnText, selected, listObject]);
 
   const handleChooseObject = (value) => {
     let itemsArr = [];
@@ -149,6 +160,8 @@ export default function SelectCustom({
 
   const handleAddCustom = (data) => {
     setValue(name, `${data.width}x${data.height}`);
+    setSelected([`${data.width}x${data.height}`]);
+    setOpenModalCustom(false);
   };
 
   return (
@@ -213,6 +226,7 @@ export default function SelectCustom({
                               whiteSpace: "nowrap",
                               flex: 1,
                               overflow: "hidden",
+                              fontSize: 14,
                             }}
                           >
                             {item.label}
@@ -233,27 +247,40 @@ export default function SelectCustom({
                   <label
                     key={"custom"}
                     className={`${classes.listItem} ${
-                      selected.includes("custom") && classes.isChecked
+                      selected.length &&
+                      !Object.keys(listObject).includes(selected[0]) &&
+                      classes.isChecked
                     }`}
                     onClick={() => {
-                      setOpenModalCustom((prev) => ({
-                        ...prev,
-                        open: true,
-                        type: type,
-                      }));
+                      setOpenModalCustom(true);
                       //   handleChooseObject();
                     }}
                   >
-                    <Typography
-                      style={{
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                        flex: 1,
-                        overflow: "hidden",
-                      }}
-                    >
-                      Custom
-                    </Typography>
+                    <Box style={{ display: "flex", flexDirection: "column" }}>
+                      <Typography
+                        style={{
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                          flex: 1,
+                          overflow: "hidden",
+                          fontSize: 14,
+                        }}
+                      >
+                        Customize ...
+                      </Typography>
+                      {selected.length &&
+                        !Object.keys(listObject).includes(selected[0]) && (
+                          <Typography
+                            style={{
+                              fontSize: "12px",
+                              color: "rgba(0, 0, 0, 0.5)",
+                              textAlign: "left",
+                            }}
+                          >
+                            ({selected[0]})
+                          </Typography>
+                        )}
+                    </Box>
                   </label>
                   <Divider style={{ width: "100%" }} />
                 </Box>
@@ -262,14 +289,18 @@ export default function SelectCustom({
           ) : null}
         </div>
       </ClickAwayListener>
-      {openModalCustom.open && (
+      {openModalCustom && (
         <ModalCustomResolution
-          open={openModalCustom.open}
+          open={openModalCustom}
           handleClose={() => {
-            setOpenModalCustom((prev) => ({ ...prev, open: false }));
+            setOpenModalCustom(false);
           }}
           type={type}
           handleSubmit={handleAddCustom}
+          dataSelect={selected}
+          isCustom={
+            selected.length && !Object.keys(listObject).includes(selected[0])
+          }
         />
       )}
     </Box>

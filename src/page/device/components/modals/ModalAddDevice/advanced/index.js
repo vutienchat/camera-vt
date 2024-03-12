@@ -35,6 +35,7 @@ const streamConfig = [
 
 const Advanced = () => {
   const { watch } = useFormContext();
+  console.log(watch());
 
   return (
     <AccordionContent label={"Video Stream Configuration"}>
@@ -80,23 +81,40 @@ const Advanced = () => {
           {streamConfig.map((it, indx) => (
             <React.Fragment key={indx}>
               {it.type === "select" ? (
-                <SelectCustom
-                  key={`primaryStream.${it.name}`}
-                  list={Object.values(it.listData)}
-                  width={155}
-                  // btnText={it.label}
-                  dropdownWidth={145}
-                  // titleDropdownText={item.titleDropdownText}
-                  listObject={it.listData}
-                  searchBarType={"aiFeature"}
-                  name={`primaryStream.${it.name}`}
-                  height={35}
-                  minHeight={35}
-                />
+                <React.Fragment>
+                  {it.name === "resolution" ? (
+                    <SelectCustom
+                      key={`primaryStream.${it.name}`}
+                      list={Object.values(it.listData)}
+                      width={140}
+                      dropdownWidth={150}
+                      listObject={it.listData}
+                      searchBarType={"aiFeature"}
+                      name={`primaryStream.${it.name}`}
+                      height={35}
+                      minHeight={35}
+                    />
+                  ) : (
+                    <BaseFormSelect
+                      key={`primaryStream.${it.name}`}
+                      list={Object.values(it.listData)}
+                      width={140}
+                      // btnText={it.label}
+                      dropdownWidth={150}
+                      // titleDropdownText={item.titleDropdownText}
+                      listObject={it.listData}
+                      searchBarType={"aiFeature"}
+                      name={`primaryStream.${it.name}`}
+                      height={35}
+                      minHeight={35}
+                      isSearch={false}
+                    />
+                  )}
+                </React.Fragment>
               ) : (
                 <BaseInputForm
                   name={`primaryStream.${it.name}`}
-                  style={{ width: "155px" }}
+                  style={{ width: "140px" }}
                   variant="outlined"
                   size="small"
                 />
@@ -131,9 +149,9 @@ const Advanced = () => {
                 <SelectCustom
                   key={`secondaryStream.${it.name}`}
                   list={Object.values(it.listData)}
-                  width={155}
+                  width={140}
                   btnText={it.label}
-                  dropdownWidth={155}
+                  dropdownWidth={150}
                   // titleDropdownText={item.titleDropdownText}
                   listObject={it.listData}
                   searchBarType={"aiFeature"}
@@ -145,7 +163,7 @@ const Advanced = () => {
               ) : (
                 <BaseInputForm
                   name={`secondaryStream.${it.name}`}
-                  style={{ width: "155px" }}
+                  style={{ width: "140px" }}
                   variant="outlined"
                   size="small"
                 />
