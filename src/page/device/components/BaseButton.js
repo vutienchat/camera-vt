@@ -23,8 +23,9 @@ const BaseButton = ({ label, type, component, onClick, width, submitType, colorB
         textTransform: label !== "Import" && "none",
         fontWeight: 700,
         boxShadow: "none",
-        border: colorBorder && "1px solid rgba(221, 61, 75, 1)",
-        color: colorBorder && " rgba(221, 61, 75, 1)"
+        backgroundColor: colorBorder && "#FFD8DC",
+        color: colorBorder && " rgba(221, 61, 75, 1)",
+        border: colorBorder && "none"
       }}
       className={styleButton}
       disabled={type === "disable"}

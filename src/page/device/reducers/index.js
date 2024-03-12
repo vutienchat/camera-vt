@@ -11,6 +11,7 @@ const initState = {
     openModalAddDevice: true,
     openModaleConfiguration: false,
     openModalDeviceStatus: false,
+    openModalEditSchedule: false,
   },
   pagination: {
     page: 0,
@@ -26,9 +27,10 @@ const initState = {
   listFeatureType: [],
   listAiFeature: [],
   chooseDevice: {},
-  switchState:{
-    recording: false
-  }
+  switchState: {
+    recording: false,
+  },
+  chooseSchedule: {},
 };
 
 const reducer = (state = initState, action) => {

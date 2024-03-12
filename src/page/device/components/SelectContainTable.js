@@ -178,21 +178,21 @@ const SelectContainTable = ({
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
-                  gap: 20,
+                  gap: 10,
                 }}
               >
                 <Tooltip title={selectedStoragePlan.name}>
-                  <Typography style={{ maxWidth: 78, width: 78 }}>
+                  <Typography style={{ maxWidth: 70, width: 70 }}>
                     {selectedStoragePlan.name}
                   </Typography>
                 </Tooltip>
                 <Tooltip title={selectedStoragePlan.period}>
-                  <Typography style={{ maxWidth: 48, width: 48 }}>
+                  <Typography style={{ maxWidth: 40, width: 40 }}>
                     {selectedStoragePlan.period}
                   </Typography>
                 </Tooltip>
                 <Tooltip title={selectedStoragePlan.expiration}>
-                  <Typography style={{ maxWidth: 108, width: 108 }}>
+                  <Typography style={{ maxWidth: 100, width: 100 }}>
                     {selectedStoragePlan.expiration}
                   </Typography>
                 </Tooltip>
