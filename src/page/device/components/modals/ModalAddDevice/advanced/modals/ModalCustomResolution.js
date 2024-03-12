@@ -18,6 +18,12 @@ const ModalCustomResolution = ({ open, handleClose, type, handleSubmit }) => {
     height: 0,
   });
 
+  const handleChange = (type, value) => {
+    setData((prev) => ({
+      ...prev,
+      [type]: value,
+    }));
+  };
   return (
     <Dialog
       open={open}
@@ -45,12 +51,16 @@ const ModalCustomResolution = ({ open, handleClose, type, handleSubmit }) => {
           <TextField
             variant="outlined"
             size="small"
-            onChange={(e) => setData()}
+            onChange={(e) => handleChange("width", e.target.value)}
           />
         </Box>
         <Box style={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography>Width</Typography>
-          <TextField variant="outlined" size="small" />
+          <Typography>Height</Typography>
+          <TextField
+            variant="outlined"
+            size="small"
+            onChange={(e) => handleChange("height", e.target.value)}
+          />
         </Box>
         <Box
           style={{

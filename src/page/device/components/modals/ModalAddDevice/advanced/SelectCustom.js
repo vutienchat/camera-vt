@@ -148,7 +148,6 @@ export default function SelectCustom({
   };
 
   const handleAddCustom = (data) => {
-    console.log("data", data);
     setValue(name, `${data.width}x${data.height}`);
   };
 

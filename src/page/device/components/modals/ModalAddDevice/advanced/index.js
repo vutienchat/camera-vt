@@ -128,7 +128,7 @@ const Advanced = () => {
           {streamConfig.map((it, indx) => (
             <React.Fragment key={indx}>
               {it.type === "select" ? (
-                <BaseFormSelect
+                <SelectCustom
                   key={`secondaryStream.${it.name}`}
                   list={Object.values(it.listData)}
                   width={155}
