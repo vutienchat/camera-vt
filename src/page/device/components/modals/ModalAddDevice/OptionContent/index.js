@@ -1,13 +1,13 @@
 import { Box, Grid, InputAdornment, TextField } from "@material-ui/core";
 import AddMode from "./AddMode";
 import BoxContent from "../../../BoxContent";
-import { SearchIcon } from "../../../../../../common/icons/SearchIcon";
 import { ReloadIcon } from "../../../../Icon";
 import DeviceItem from "./DeviceItem";
 import { listDevice } from "../../../../utils";
 import { DeviceContext } from "../../../DeviceProvider";
 import { useContext } from "react";
 import * as type from "../../../../reducers/type";
+import { SearchIcon } from "../../../../../../common/icons/SearchIcon";
 
 const OptionContent = () => {
   const { state, dispatch } = useContext(DeviceContext);

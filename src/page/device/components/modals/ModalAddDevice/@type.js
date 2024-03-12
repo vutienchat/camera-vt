@@ -35,6 +35,14 @@ export const defaultFormValue = {
   listZone: [],
   preset: data,
   tour: dataTour,
+  primaryStream: {
+    codeC: "H264",
+    resolution: "1920x1080",
+  },
+  secondaryStream: {
+    codeC: "H264",
+    resolution: "1920x1080",
+  },
 };
 
 export const schema = yup.object().shape({
@@ -54,3 +62,41 @@ export const schema = yup.object().shape({
     ),
   storagePlan: yup.string().required("Storage plan là trường bắt buộc"),
 });
+
+export const codecVideo = {
+  H264: {
+    label: "H264",
+    value: "H264",
+  },
+  H265: {
+    label: "H265",
+    value: "H265",
+  },
+  MJPEG: {
+    label: "MJPEG",
+    value: "MJPEG",
+  },
+};
+
+export const resolution = {
+  "320x180": {
+    label: "320x180",
+    value: "320x180",
+  },
+  "480x270": {
+    label: "480x270",
+    value: "480x270",
+  },
+  "800x450": {
+    label: "800x450",
+    value: "800x450",
+  },
+  "1280x720": {
+    label: "1280x720",
+    value: "1280x720",
+  },
+  "1920x1080": {
+    label: "1920x1080 (Recommended)",
+    value: "1920x1080",
+  },
+};
