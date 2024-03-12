@@ -1,14 +1,13 @@
-import { Box, FormControlLabel, Typography } from "@material-ui/core";
-import React, { useContext } from "react";
-import CustomSwitch from "../../../Accordion/CustomSwitch";
+import { Box, Typography, makeStyles } from "@material-ui/core";
+import React, { useContext, useState } from "react";
 import { DeviceContext } from "../../../DeviceProvider";
-import * as type from "../../../../reducers/type";
 import SelectContainTable from "../../../SelectContainTable";
 import { storagePlanHeader } from "../../../../utils";
-import BaseButton from "../../../BaseButton";
 import BaseFormGroup from "../../../BaseForm/BaseFormGroup";
-import { Controller, useFormContext } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import Select from "../../../Select";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
 
 const list = [
   {
@@ -55,22 +54,29 @@ const list = [
   },
 ];
 
-const Schedule = [
-  {
+const Schedule = {
+  0:{
     label: "Schedule 001",
-    id: 0,
+    value: 0,
   },
-];
+}
 
 const HeaderRecordTab = ({
   handleRecoding,
   selectedStoragePlan,
   handleClickColumns,
+  setIsOpenEditSchedule
 }) => {
   const { state } = useContext(DeviceContext);
   const {
     formState: { errors },
   } = useFormContext();
+ 
+  const classes = styles()
+
+  const handleOpenModalEditSchedule = () =>{
+    setIsOpenEditSchedule(true)
+  }
 
   return (
     <Box
@@ -82,7 +88,28 @@ const HeaderRecordTab = ({
       }}
     >
       <Box style={{ display: "flex", gap: 24 }}>
-        <FormControlLabel
+        <Box
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 10,
+          }}
+        >
+          <Typography>Recording:</Typography>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={state.switchState.recording}
+                onChange={handleRecoding}
+                name="gilad"
+                className={classes.switch}
+              />
+            }
+            label={state.switchState.recording ? "ON" : "OFF"}
+          />
+        </Box>
+        {/* <FormControlLabel
           control={
             <CustomSwitch
               checked={state.switchState.recording}
@@ -91,7 +118,7 @@ const HeaderRecordTab = ({
             />
           }
           label="Recording"
-        />
+        /> */}
         <Box
           style={{
             opacity: !state.switchState.recording && "0.3",
@@ -99,14 +126,14 @@ const HeaderRecordTab = ({
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            gap: 20,
+            gap: 10,
           }}
         >
           <BaseFormGroup
             label={"Storage Plan"}
             isRequired={true}
             wrap={false}
-            width={440}
+            width={410}
             customStyle={{ alignItems: "flex-start" }}
             showErrorMessage={
               Object.keys(selectedStoragePlan).length === 0 &&
@@ -117,10 +144,10 @@ const HeaderRecordTab = ({
             error={errors["storagePlan"]}
             component={
               <SelectContainTable
-                width={334}
+                width={300}
                 dropdownWidth={420}
                 searchBarType={"storagePlan"}
-                btnText={"-- Select --"}
+                btnText={"Select"}
                 list={list}
                 tableHeader={storagePlanHeader}
                 selectedStoragePlan={selectedStoragePlan}
@@ -137,11 +164,14 @@ const HeaderRecordTab = ({
             showErrorMessage={false}
             component={
               <Select
-                list={Schedule}
+                list={Object.values(Schedule)}
                 btnText={"Record All"}
                 width={200}
                 titleDropdownText={"All Feature"}
                 positionDropDown={"right"}
+                listObject={Schedule}
+                canEdit
+                handleOpenModalEditSchedule={handleOpenModalEditSchedule}
               />
             }
           />
@@ -151,4 +181,20 @@ const HeaderRecordTab = ({
   );
 };
 
+const styles = makeStyles({
+  switch:{
+    "& .MuiSwitch-colorSecondary.Mui-checked + .MuiSwitch-track":{
+      backgroundColor: "#9c9999",
+    },
+    "& .MuiSwitch-colorSecondary.Mui-checked":{
+      color: "#DD3D4B"
+    },
+    "& .MuiSwitch-switchBase":{
+      color:"#939393"
+    },
+    "& .MuiSwitch-track":{
+      backgroundColor: "#9c9999",
+    },
+  }
+})
 export default HeaderRecordTab;

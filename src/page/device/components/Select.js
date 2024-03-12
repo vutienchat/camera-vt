@@ -103,10 +103,13 @@ export default function Select({
   listObject,
   searchBarType,
   dropdownWidth,
+  canEdit,
+  handleOpenModalEditSchedule,
 }) {
   const classes = useStyles();
   const [isOpen, setIsOpen] = React.useState(false);
   const [selected, setSelected] = useState([]);
+  const [onMouseOver, setOnMouseOver] = useState(false);
 
   const handleClick = () => {
     setIsOpen((prev) => !prev);
@@ -136,6 +139,7 @@ export default function Select({
     setSelected(listChooseObject);
   };
 
+  console.log("onMouseHover", onMouseOver);
   return (
     <Box style={{ minWidth: width || "auto" }} key={searchBarType}>
       <ClickAwayListener onClickAway={handleClickAway}>
@@ -184,7 +188,15 @@ export default function Select({
                   list.map((item) => {
                     const isChecked = selected.includes(item.value);
                     return (
-                      <Box key={item.value}>
+                      <Box
+                        key={item.value}
+                        onMouseOver={() => {
+                          setOnMouseOver(true);
+                        }}
+                        onMouseLeave={() => {
+                          setOnMouseOver(false);
+                        }}
+                      >
                         <label
                           key={item.value}
                           className={`${classes.listItem} ${
@@ -205,17 +217,25 @@ export default function Select({
                           >
                             {item.label}
                           </Typography>
-                          <Box
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "space-between",
-                              gap: 15,  
-                            }}
-                          >
-                            <EditIcon />
-                            <RedTrashIcon />
-                          </Box>
+                          {canEdit && onMouseOver && (
+                            <Box
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                gap: 15,
+                              }}
+                            >
+                              <Box
+                                onClick={() => {
+                                  handleOpenModalEditSchedule(item);
+                                }}
+                              >
+                                <EditIcon />
+                              </Box>
+                              <RedTrashIcon />
+                            </Box>
+                          )}
                         </label>
                         <Divider style={{ width: "100%" }} />
                       </Box>

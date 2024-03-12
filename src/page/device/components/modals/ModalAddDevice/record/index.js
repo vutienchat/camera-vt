@@ -1,17 +1,45 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { days, hours } from "../../../../utils";
-import { Box, Typography } from "@material-ui/core";
+import { Box, Typography, makeStyles } from "@material-ui/core";
 
 import { DeviceContext } from "../../../DeviceProvider";
 import * as type from "../../../../reducers/type";
 import HeaderRecordTab from "./HeaderRecordTab";
 import BaseButton from "../../../BaseButton";
 import Checkbox from "@material-ui/core/Checkbox";
+import ModalEditSchedule from "./ModalEditSchedule";
+import ModalAddSchedule from "./ModalAddSchedule";
 
 const RecordDevice = () => {
   const { state, dispatch } = useContext(DeviceContext);
   const [selectedCells, setSelectedCells] = useState({});
   const [selectedStoragePlan, setSelectedStoragePlan] = useState({});
+  const [isOpenEditSchedule, setIsOpenEditSchedule] = useState(false);
+  const [isOpenAddSchedule, setIsOpenAddSchedule] = useState(false);
+
+  const enableApplyButton = useMemo(() => {
+    
+  }, [selectedCells]);
+  const classes = styles();
+  const isCheckedAll = useMemo(() => {
+    if (Object.keys(selectedCells).length === 0) return false;
+    const isChecked = Object.values(selectedCells).every(
+      (value) => value === true
+    );
+    if (Object.keys(selectedCells).length === 175 && isChecked) return true;
+  }, [selectedCells]);
+
+  const indeterminateCheckBox = useMemo(() => {
+    if (Object.keys(selectedCells).length === 0) return false;
+    const isChecked = Object.values(selectedCells).some(
+      (value) => value === true
+    );
+    const isCheckedAll = Object.values(selectedCells).every(
+      (value) => value === true
+    );
+    if (Object.keys(selectedCells).length === 175 && isCheckedAll) return false;
+    if (Object.keys(selectedCells).length > 0 && isChecked) return true;
+  }, [selectedCells]);
 
   const handleMouseDown = (event, day, hour) => {
     if (event.buttons === 1) {
@@ -46,22 +74,72 @@ const RecordDevice = () => {
     });
   };
 
+  const handleCheckAll = (event) => {
+    if (event.target.checked) {
+      setSelectedCells(() => {
+        const resultObject = {};
+        days.forEach((day) => {
+          hours.forEach((hour) => {
+            const key = `${day}-${hour}`;
+            resultObject[key] = true;
+          });
+        });
+        return resultObject;
+      });
+    } else {
+      setSelectedCells({});
+    }
+  };
+
+  const handleCheckIndeterminate = (event) => {
+    if (event.target.checked) {
+      setSelectedCells(() => {
+        const resultObject = {};
+        days.forEach((day) => {
+          hours.forEach((hour) => {
+            const key = `${day}-${hour}`;
+            resultObject[key] = true;
+          });
+        });
+        return resultObject;
+      });
+    }
+  };
+  const handleOpenModalAddSchedule = () => {
+    setIsOpenAddSchedule(true);
+  };
+  const handleCloseModalEditSchedule = () => {
+    setIsOpenEditSchedule(false);
+  };
+  const handleCloseModalAddSchedule = () => {
+    setIsOpenAddSchedule(false);
+  };
+
+  const handleEditSchedule = (data) => {
+    console.log("data", data);
+  };
+  const handleAddSchedule = (data) => {
+    console.log("data", data);
+  };
+
+  console.log("isOpenEditSchedule", isOpenEditSchedule);
   return (
     <div
       style={{
         display: "flex",
         flexDirection: "column",
         gap: 20,
+        marginTop: 5,
       }}
     >
       <HeaderRecordTab
         handleRecoding={handleRecoding}
         selectedStoragePlan={selectedStoragePlan}
         handleClickColumns={handleClickColumns}
+        setIsOpenEditSchedule={setIsOpenEditSchedule}
       />
       <Box
         style={{
-          border: "1px solid rgba(217, 217, 217, 1)",
           borderRadius: 8,
         }}
       >
@@ -70,14 +148,20 @@ const RecordDevice = () => {
             display: "flex",
             alignItems: "center",
             flexDirection: "row-reverse",
-            padding: "18px 10px 0px 10px",
+            padding: "0px 10px 0px 10px",
             gap: 10,
+            pointerEvents: !state.switchState.recording && "none",
           }}
         >
-          <BaseButton label={"Save As ..."} type={"normal"} colorBorder />
+          <BaseButton
+            label={"Save As ..."}
+            type={"normal"}
+            colorBorder
+            onClick={handleOpenModalAddSchedule}
+          />
           <BaseButton
             label={"Apply"}
-            type={true ? "redBackground" : "disable"}
+            type={false ? "redBackground" : "disable"}
           />
         </Box>
         <table
@@ -85,26 +169,43 @@ const RecordDevice = () => {
           style={{
             opacity: !state.switchState.recording && "0.3",
             pointerEvents: !state.switchState.recording && "none",
-            padding: "10px 10px 10px 10px",
-            borderSpacing: 0,
+            padding: "18px 10px 10px 10px",
           }}
         >
-          <thead >
+          <thead>
             <tr>
-              <th style={{backgroundColor: "#e5e5e5"}}>
-                <Checkbox
-                  indeterminate
-                  inputProps={{ "aria-label": "indeterminate checkbox" }}
-                />
+              <th style={{ backgroundColor: "#D3D3D3" }}>
+                {indeterminateCheckBox ? (
+                  <Checkbox
+                    className={classes.indeterminateCheckBox}
+                    indeterminate
+                    inputProps={{ "aria-label": "indeterminate checkbox" }}
+                    onChange={handleCheckIndeterminate}
+                  />
+                ) : (
+                  <Checkbox
+                    checked={isCheckedAll}
+                    onChange={handleCheckAll}
+                    className={classes.checkBox}
+                    style={{
+                      color:
+                        (Object.values(selectedCells).some(
+                          (value) => value === false
+                        ) ||
+                          Object.keys(selectedCells).length === 0) &&
+                        "white",
+                    }}
+                  />
+                )}
               </th>
               {hours.map((hour) => (
                 <th
                   key={hour}
                   style={{
                     width: 35,
-                    height: 15,
+                    height: 30,
                     fontWeight: 500,
-                    backgroundColor: "#e5e5e5"
+                    backgroundColor: "#D3D3D3",
                   }}
                 >
                   {hour}
@@ -117,9 +218,10 @@ const RecordDevice = () => {
               <tr key={day}>
                 <th
                   style={{
-                    width: 35,
-                    height: 15,
+                    width: 25,
+                    height: 25,
                     fontWeight: 500,
+                    background: "#D3D3D3",
                     color:
                       (index === 5 || index === 6) && " rgba(221, 61, 75, 1)",
                   }}
@@ -134,7 +236,7 @@ const RecordDevice = () => {
                       height: 20,
                       borderRadius: 2,
                       background: selectedCells[`${day}-${hour}`]
-                        ? "rgba(68, 170, 255, 1)"
+                        ? "#4E8FF7"
                         : "#E9E9E9",
                     }}
                     onMouseDown={(event) => handleMouseDown(event, day, hour)}
@@ -148,7 +250,7 @@ const RecordDevice = () => {
         </table>
         <Typography
           style={{
-            fontStyle: "italic",
+            // fontStyle: "italic",
             textAlign: "end",
             fontSize: 12,
             opacity: !state.switchState.recording && "0.3",
@@ -156,8 +258,8 @@ const RecordDevice = () => {
             paddingRight: 10,
           }}
         >
-          Hold Ctrl to select multiple. Hold Shift to select consecutive groups
-          of items
+          Hold “Ctrl” to select multiple. Hold “Shift” to select consecutive
+          groups of items
         </Typography>
         <Box
           style={{
@@ -209,8 +311,44 @@ const RecordDevice = () => {
           </Box>
         </Box>
       </Box>
+      {isOpenEditSchedule && (
+        <ModalEditSchedule
+          open={isOpenEditSchedule}
+          handleClose={handleCloseModalEditSchedule}
+          handleSubmit={handleEditSchedule}
+          type={"Edit"}
+          typeModal={"Schedule"}
+        />
+      )}
+      {isOpenAddSchedule && (
+        <ModalAddSchedule
+          open={isOpenAddSchedule}
+          handleClose={handleCloseModalAddSchedule}
+          handleSubmit={handleAddSchedule}
+          typeModal={"Schedule"}
+        />
+      )}
     </div>
   );
 };
 
+const styles = makeStyles({
+  indeterminateCheckBox: {
+    "& .MuiSvgIcon-root": {
+      color: "#f50057",
+    },
+    "& .MuiIconButton-label": {
+      width: 18,
+      height: 18,
+    },
+  },
+  checkBox: {
+    "& .MuiIconButton-label": {
+      width: 18,
+      height: 18,
+      backgroundColor: "white",
+      borderRadius: 2,
+    },
+  },
+});
 export default RecordDevice;
