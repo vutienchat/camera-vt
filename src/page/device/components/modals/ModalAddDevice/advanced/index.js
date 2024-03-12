@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import AccordionContent from "../../../Accordion";
-import { Box, Grid, TextField, Typography } from "@material-ui/core";
-import BaseFormSelect from "../../../BaseForm/BaseFormSelect";
+import { Box, InputAdornment, Typography } from "@material-ui/core";
 import { codecVideo, resolution } from "../@type";
 import BaseInputForm from "../../../BaseForm/BaseInput";
 import { useFormContext } from "react-hook-form";
-import ModalCustomResolution from "./modals/ModalCustomResolution";
 import SelectCustom from "./SelectCustom";
 
 const streamConfig = [
@@ -81,42 +79,34 @@ const Advanced = () => {
           {streamConfig.map((it, indx) => (
             <React.Fragment key={indx}>
               {it.type === "select" ? (
-                <React.Fragment>
-                  {it.name === "resolution" ? (
-                    <SelectCustom
-                      key={`primaryStream.${it.name}`}
-                      list={Object.values(it.listData)}
-                      width={140}
-                      dropdownWidth={150}
-                      listObject={it.listData}
-                      searchBarType={"aiFeature"}
-                      name={`primaryStream.${it.name}`}
-                      height={35}
-                      minHeight={35}
-                    />
-                  ) : (
-                    <BaseFormSelect
-                      key={`primaryStream.${it.name}`}
-                      list={Object.values(it.listData)}
-                      width={140}
-                      // btnText={it.label}
-                      dropdownWidth={150}
-                      // titleDropdownText={item.titleDropdownText}
-                      listObject={it.listData}
-                      searchBarType={"aiFeature"}
-                      name={`primaryStream.${it.name}`}
-                      height={35}
-                      minHeight={35}
-                      isSearch={false}
-                    />
-                  )}
-                </React.Fragment>
+                <SelectCustom
+                  key={`primaryStream.${it.name}`}
+                  list={Object.values(it.listData)}
+                  width={140}
+                  dropdownWidth={150}
+                  listObject={it.listData}
+                  searchBarType={"aiFeature"}
+                  name={`primaryStream.${it.name}`}
+                  height={35}
+                  minHeight={35}
+                  isShowCustom={it.name === "resolution"}
+                />
               ) : (
                 <BaseInputForm
                   name={`primaryStream.${it.name}`}
                   style={{ width: "140px" }}
                   variant="outlined"
                   size="small"
+                  type={"number"}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <Typography style={{ color: "#000", fontSize: "16px" }}>
+                          {it.name === "bitrate" ? "Kbps" : "FPS"}
+                        </Typography>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
               )}
             </React.Fragment>
@@ -131,7 +121,9 @@ const Advanced = () => {
         }}
       >
         <Box>
-          <Typography style={{ fontSize: 16, fontWeight: "bold", flex: 1 }}>
+          <Typography
+            style={{ fontSize: 16, fontWeight: "bold", minWidth: 146 }}
+          >
             Secondary stream:
           </Typography>
         </Box>
@@ -152,13 +144,12 @@ const Advanced = () => {
                   width={140}
                   btnText={it.label}
                   dropdownWidth={150}
-                  // titleDropdownText={item.titleDropdownText}
                   listObject={it.listData}
                   searchBarType={"aiFeature"}
                   name={`secondaryStream.${it.name}`}
                   height={35}
                   minHeight={35}
-                  isSearch={false}
+                  isShowCustom={it.name === "resolution"}
                 />
               ) : (
                 <BaseInputForm
@@ -166,6 +157,16 @@ const Advanced = () => {
                   style={{ width: "140px" }}
                   variant="outlined"
                   size="small"
+                  type={"number"}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <Typography style={{ color: "#000", fontSize: "16px" }}>
+                          {it.name === "bitrate" ? "Kbps" : "FPS"}
+                        </Typography>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
               )}
             </React.Fragment>

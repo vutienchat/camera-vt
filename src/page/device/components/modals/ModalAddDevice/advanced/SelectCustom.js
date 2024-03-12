@@ -95,7 +95,6 @@ const useStyles = makeStyles(() => ({
 export default function SelectCustom({
   width,
   btnText,
-  titleDropdownText,
   list,
   positionDropDown = "left",
   listObject,
@@ -105,6 +104,7 @@ export default function SelectCustom({
   height,
   minHeight,
   type,
+  isShowCustom,
 }) {
   const classes = useStyles();
   const [isOpen, setIsOpen] = React.useState(false);
@@ -185,9 +185,9 @@ export default function SelectCustom({
             }}
             endIcon={
               isOpen ? (
-                <UpIcon color="#939393" />
+                <UpIcon color="#939393" width={12} height={12} />
               ) : (
-                <DropDownIcon color="#939393" />
+                <DropDownIcon color="#939393" width={16} height={16} />
               )
             }
           >
@@ -202,7 +202,6 @@ export default function SelectCustom({
                 style={{
                   maxHeight: "200px",
                   overflowY: "auto",
-                  marginTop: 10,
                 }}
                 className={classes.menu}
               >
@@ -243,47 +242,49 @@ export default function SelectCustom({
                     </Typography>
                   </Box>
                 )}
-                <Box key={"custom"}>
-                  <label
-                    key={"custom"}
-                    className={`${classes.listItem} ${
-                      selected.length &&
-                      !Object.keys(listObject).includes(selected[0]) &&
-                      classes.isChecked
-                    }`}
-                    onClick={() => {
-                      setOpenModalCustom(true);
-                      //   handleChooseObject();
-                    }}
-                  >
-                    <Box style={{ display: "flex", flexDirection: "column" }}>
-                      <Typography
-                        style={{
-                          textOverflow: "ellipsis",
-                          whiteSpace: "nowrap",
-                          flex: 1,
-                          overflow: "hidden",
-                          fontSize: 14,
-                        }}
-                      >
-                        Customize ...
-                      </Typography>
-                      {selected.length &&
-                        !Object.keys(listObject).includes(selected[0]) && (
-                          <Typography
-                            style={{
-                              fontSize: "12px",
-                              color: "rgba(0, 0, 0, 0.5)",
-                              textAlign: "left",
-                            }}
-                          >
-                            ({selected[0]})
-                          </Typography>
-                        )}
-                    </Box>
-                  </label>
-                  <Divider style={{ width: "100%" }} />
-                </Box>
+                {isShowCustom && (
+                  <Box key={"custom"}>
+                    <label
+                      key={"custom"}
+                      className={`${classes.listItem} ${
+                        selected.length &&
+                        !Object.keys(listObject).includes(selected[0]) &&
+                        classes.isChecked
+                      }`}
+                      onClick={() => {
+                        setOpenModalCustom(true);
+                        //   handleChooseObject();
+                      }}
+                    >
+                      <Box style={{ display: "flex", flexDirection: "column" }}>
+                        <Typography
+                          style={{
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
+                            flex: 1,
+                            overflow: "hidden",
+                            fontSize: 14,
+                          }}
+                        >
+                          Customize ...
+                        </Typography>
+                        {selected.length &&
+                          !Object.keys(listObject).includes(selected[0]) && (
+                            <Typography
+                              style={{
+                                fontSize: "12px",
+                                color: "rgba(0, 0, 0, 0.5)",
+                                textAlign: "left",
+                              }}
+                            >
+                              ({selected[0]})
+                            </Typography>
+                          )}
+                      </Box>
+                    </label>
+                    <Divider style={{ width: "100%" }} />
+                  </Box>
+                )}
               </Box>
             </Box>
           ) : null}

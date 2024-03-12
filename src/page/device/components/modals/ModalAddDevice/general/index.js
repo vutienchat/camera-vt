@@ -14,6 +14,7 @@ import Select from "../../../Select";
 import { Feature } from "../../../../utils";
 import BaseFormSelect from "../../../BaseForm/BaseFormSelect";
 import SelectLocation from "../selectLocation";
+import AuthenticationForm from "../formData/AuthenForm";
 
 const VisionMode = [
   {
@@ -98,63 +99,7 @@ const GeneralTab = React.memo(() => {
       }}
     >
       <AccordionContent label={"Authentication"}>
-        <Grid container spacing={2}>
-          <Grid item xs={5}>
-            <BaseFormGroup
-              label={"Username"}
-              wrap={true}
-              showErrorMessage={true}
-              error={errors["password"]}
-              component={
-                <BaseInputForm
-                  name={"username"}
-                  style={{ width: "100%", flex: 1 }}
-                  variant="outlined"
-                  size="small"
-                />
-              }
-            />
-          </Grid>
-          <Grid item xs={5}>
-            <BaseFormGroup
-              label={"Password"}
-              wrap={true}
-              showErrorMessage={true}
-              error={errors["password"]}
-              component={
-                <BaseInputForm
-                  name={"password"}
-                  style={{ width: "100%", flex: 1 }}
-                  variant="outlined"
-                  size="small"
-                  type={"password"}
-                />
-              }
-            />
-          </Grid>
-          <Grid item xs={2}>
-            <Button
-              style={{
-                background: "#fff",
-                border: "solid 1px #DD3D4B",
-                width: 135,
-                height: 34,
-                marginTop: 25,
-              }}
-            >
-              <Typography
-                style={{
-                  fontSize: 14,
-                  fontWeight: 700,
-                  color: "#DD3D4B",
-                  textAlign: "center",
-                }}
-              >
-                Apply
-              </Typography>
-            </Button>
-          </Grid>
-        </Grid>
+        <AuthenticationForm />
       </AccordionContent>
       <DndProvider backend={HTML5Backend}>
         {isSelectedOne && (
