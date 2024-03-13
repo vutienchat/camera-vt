@@ -7,6 +7,7 @@ import TrashIcon from "../Icon/TrashIcon";
 import { tableData } from "../utils";
 import { exportExcel } from "../api";
 import ResyncIcon from "../Icon/ResyncIcon";
+import BlackTrashIcon from "../Icon/BlackTrashIcon";
 
 const FilterBar = () => {
   const classes = useStyles();
@@ -123,8 +124,8 @@ const FilterBar = () => {
         />
         <BaseButton
           label={"Delete"}
-          type={state.checkedItemList.length > 0 ? "redBackground" : "disable"}
-          component={<TrashIcon />}
+          type={state.checkedItemList.length > 0 ? "normal" : "disable"}
+          component={state.checkedItemList.length > 0 ? <BlackTrashIcon/> : <TrashIcon/>}
           onClick={handleOpenDeleteModal}
         />
       </Box>

@@ -2,7 +2,15 @@ import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/styles";
 import React from "react";
 
-const BaseButton = ({ label, type, component, onClick, width, submitType, colorBorder }) => {
+const BaseButton = ({
+  label,
+  type,
+  component,
+  onClick,
+  width,
+  submitType,
+  noRecoding,
+}) => {
   const classes = useStyles();
   let styleButton;
   if (type === "redBackground") {
@@ -11,8 +19,10 @@ const BaseButton = ({ label, type, component, onClick, width, submitType, colorB
     styleButton = classes.border;
   } else if (type === "disable") {
     styleButton = classes.disable;
-  }else if(type === "headerButton"){
+  } else if (type === "headerButton") {
     styleButton = classes.headerButton;
+  } else if (type === "colorBorder") {
+    styleButton = classes.colorBorder;
   }
   return (
     <Button
@@ -23,9 +33,7 @@ const BaseButton = ({ label, type, component, onClick, width, submitType, colorB
         textTransform: label !== "Import" && "none",
         fontWeight: 700,
         boxShadow: "none",
-        backgroundColor: colorBorder && "#FFD8DC",
-        color: colorBorder && " rgba(221, 61, 75, 1)",
-        border: colorBorder && "none"
+        backgroundColor: noRecoding && "#D3D3D3",
       }}
       className={styleButton}
       disabled={type === "disable"}
@@ -34,7 +42,7 @@ const BaseButton = ({ label, type, component, onClick, width, submitType, colorB
       onClick={onClick}
       type={submitType}
     >
-      {label}
+      <span style={{ color: noRecoding && "#939393" }}>{label}</span>
     </Button>
   );
 };
@@ -56,7 +64,7 @@ const useStyles = makeStyles(() => ({
       backgroundColor: "rgb(243,244,246)",
     },
   },
-  headerButton:{
+  headerButton: {
     backgroundColor: "#ffffff",
     border: "1px solid rgba(34, 34, 34, 0.1)",
     "&:hover": {
@@ -73,6 +81,11 @@ const useStyles = makeStyles(() => ({
     "&.MuiButton-contained.Mui-disabled": {
       backgroundColor: "rgb(0 0 0 / 43%)",
     },
+  },
+  colorBorder: {
+    backgroundColor: "#FFD8DC",
+    color: " rgba(221, 61, 75, 1)",
+    border: "none",
   },
 }));
 export default BaseButton;

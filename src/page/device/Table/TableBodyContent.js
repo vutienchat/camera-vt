@@ -291,12 +291,12 @@ const useTableBodyStyle = makeStyles({
   },
   rowTrafficItem: {
     height: 81,
-    "&:hover": { backgroundColor: "#fae2e4 !important" },
+    "&:hover": { backgroundColor: "#F6F4F5 !important" },
   },
   tableCellCustom: { padding: "12px 24px" },
   checkBoxed: {
     padding: 0,
-    "& svg": { color: "rgb(34,34,34)" },
+    "& svg": { color: "#C9C9C9" },
   },
   checked: {
     "& svg": { color: "#dd3d4b !important" },
@@ -308,7 +308,7 @@ const useTableBodyStyle = makeStyles({
     gap: 10,
     padding: "5px 10px",
     cursor: "pointer",
-    "&:hover": { backgroundColor: "#fae2e4 !important" },
+    "&:hover": { backgroundColor: "#F6F4F5 !important" },
   },
   poperText: {
     fontSize: 15,

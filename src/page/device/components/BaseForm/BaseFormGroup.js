@@ -79,16 +79,27 @@ const BaseFormGroup = ({
             //   marginLeft:  "auto",
           }}
         >
-          <Typography
-            color="error"
-            style={{
-              marginTop: wrap ? 5 : 20,
-              fontSize: 14,
-              marginLeft: wrap ? 0 : 110,
-            }}
-          >
-            {showErrorMessage && error ? error.message : " "}
-          </Typography>
+          {showErrorMessage && error ? (
+            <Typography
+              color="error"
+              style={{
+                marginTop: wrap ? 5 : 20,
+                fontSize: 14,
+                marginLeft: wrap ? 0 : 110,
+              }}
+            >
+              {error.message}
+            </Typography>
+          ) : (
+            <Typography
+              style={{
+                marginTop: wrap ? 5 : 20,
+                fontSize: 14,
+                marginLeft: wrap ? 0 : 110,
+                height: 21,
+              }}
+            ></Typography>
+          )}
         </Box>
       </Box>
     </Box>
