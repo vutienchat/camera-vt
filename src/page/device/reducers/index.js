@@ -37,11 +37,20 @@ const reducer = (state = initState, action) => {
   switch (action.type) {
     case type.SELECT_DEVICE: {
       let tempData = [...state.listDeviceSelected];
-      if (tempData.includes(action.payload)) {
-        tempData = tempData.filter((it) => it !== action.payload);
+      if (!action.payload.isMulti) {
+        tempData = [action.payload.payload];
       } else {
-        tempData.push(action.payload);
+        tempData.push(action.payload.payload);
       }
+      return {
+        ...state,
+        listDeviceSelected: [...tempData],
+      };
+    }
+    case type.REMOVE_DEVICE: {
+      let tempData = [...state.listDeviceSelected].filter(
+        (it) => it !== action.payload
+      );
       return {
         ...state,
         listDeviceSelected: [...tempData],

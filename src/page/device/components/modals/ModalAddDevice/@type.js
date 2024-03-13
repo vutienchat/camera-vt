@@ -28,6 +28,7 @@ export const defaultFormValue = {
   endIP: 255,
   ipAddress: ["192", "168", "0"],
   location: "60 Hoang Quoc Viet",
+  deviceName: "",
   line: {
     name: "",
     points: [],
