@@ -80,7 +80,7 @@ const AccordionStyle = makeStyles({
     boxShadow: "none",
     // height: 32,
     minHeight: 40,
-    background: "rgba(243, 244, 246, 1)",
+    background: "#fff",
     borderRadius: "4px",
     minWidth: 180,
 

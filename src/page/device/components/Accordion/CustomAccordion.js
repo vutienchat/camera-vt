@@ -1,187 +1,140 @@
 import {
-  // Accordion,
-  AccordionDetails,
   AccordionSummary,
   Box,
-  Grid,
   Typography,
   makeStyles,
   Checkbox,
-  Switch,
 } from "@material-ui/core";
 import Accordion from "@material-ui/core/Accordion";
 import React from "react";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import IconAccordion from "../../Icon/IconAccordion";
 import BaseInputForm from "../BaseForm/BaseInput";
 import BaseFormGroup from "../BaseForm/BaseFormGroup";
-
 import { useRef } from "react";
-import { useDrag, useDrop } from "react-dnd";
 import CustomSwitch from "./CustomSwitch";
+import SuccessIcon from "../../Icon/SuccessIcon";
+import FailedIcon from "../../Icon/FailedIcon";
 
-// import { CheckBox } from "@material-ui/icons";
+const CustomAccordion = React.memo(({ text, isSubLabel, type }) => {
+  const classes = AccordionStyle();
+  const [expanded, setExpanded] = React.useState("1");
+  const ref = useRef(null);
 
+  const renderIcon = (type) => {
+    if (type === "private") return <SuccessIcon />;
+    return <FailedIcon />;
+  };
 
-const CustomAccordion = React.memo(
-  ({ text, children, isSubLabel, index, moveCard, id }) => {
-    const classes = AccordionStyle();
-    const [expanded, setExpanded] = React.useState("1");
-    const ref = useRef(null);
-    const [{ handlerId }, drop] = useDrop({
-      accept: "card",
-      collect(monitor) {
-        return {
-          handlerId: monitor.getHandlerId(),
-        };
-      },
-      hover(item, monitor) {
-        if (!ref.current) {
-          return;
-        }
-        const dragIndex = item.index;
-        const hoverIndex = index;
-        // Don't replace items with themselves
-        if (dragIndex === hoverIndex) {
-          return;
-        }
-        // Determine rectangle on screen
-        const hoverBoundingRect = ref.current?.getBoundingClientRect();
-        // Get vertical middle
-        const hoverMiddleY =
-          (hoverBoundingRect.bottom - hoverBoundingRect.top) / 1;
-        // Determine mouse position
-        const clientOffset = monitor.getClientOffset();
-        // Get pixels to the top
-        const hoverClientY = clientOffset.y - hoverBoundingRect.top;
-        // Only perform the move when the mouse has crossed half of the items height
-        // When dragging downwards, only move when the cursor is below 50%
-        // When dragging upwards, only move when the cursor is above 50%
-        // Dragging downwards
-        if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
-          return;
-        }
-        // Dragging upwards
-        if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
-          return;
-        }
-        // Time to actually perform the action
-        moveCard(dragIndex, hoverIndex);
-        // Note: we're mutating the monitor item here!
-        // Generally it's better to avoid mutations,
-        // but it's good here for the sake of performance
-        // to avoid expensive index searches.
-        item.index = hoverIndex;
-      },
-    });
-    const [{ isDragging }, drag, DragPreview] = useDrag({
-      type: "card",
-      item: () => {
-        return { id, index };
-      },
-      collect: (monitor) => ({
-        isDragging: monitor.isDragging(),
-      }),
-    });
-    const opacity = isDragging ? 0 : 1;
-    drag(drop(ref));
-
-    const handleChange = (panel) => (event, newExpanded) => {
-      setExpanded(newExpanded ? panel : false);
-    };
-    return (
-      <Box
-        style={{ height: "auto", width: "100%" }}
-        ref={ref}
-        data-handler-id={handlerId}
+  const handleChange = (panel) => (event, newExpanded) => {
+    setExpanded(newExpanded ? panel : false);
+  };
+  return (
+    <Box style={{ height: "auto", width: "100%" }} ref={ref}>
+      <Accordion
+        className={classes.root}
+        // square
+        expanded={expanded === "1"}
+        onChange={handleChange("1")}
       >
-        <Accordion
-          className={classes.root}
-          // square
-          expanded={expanded === "1"}
-          onChange={handleChange("1")}
+        <AccordionSummary
+          aria-controls="panel1d-content"
+          id="panel1d-header"
+          aria-label="Expand"
+          IconButtonProps={{ edge: "start", children: <ExpandMoreIcon /> }}
         >
-          <AccordionSummary
-            aria-controls="panel1d-content"
-            id="panel1d-header"
-            aria-label="Expand"
-            IconButtonProps={{ edge: "start", children: <ExpandMoreIcon /> }}
+          <Box
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
+            }}
           >
-            <Box
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                width: "100%",
-              }}
-            >
-              <Box style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <IconAccordion />
-                <ExpandMoreIcon />
-                <Typography style={{ fontSize: 16, fontWeight: "bold" }}>
-                  {text}
-                </Typography>
-              </Box>
+            <Box style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <ExpandMoreIcon />
+              <Typography style={{ fontSize: 16, fontWeight: "bold" }}>
+                {text}
+              </Typography>
+            </Box>
 
-              {isSubLabel ? (
-                <Box
-                  style={{ display: "flex", alignItems: "center", gap: 15 }}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <CustomSwitch name="checkedB" />
-                  AI Streaming Out
-                </Box>
-              ) : (
-                <Box
-                  style={{
-                    width: 215,
-                  }}
-                  onClick={(e) => e.stopPropagation()}
-                ></Box>
-              )}
-
+            {isSubLabel ? (
               <Box
                 style={{ display: "flex", alignItems: "center", gap: 15 }}
                 onClick={(e) => e.stopPropagation()}
               >
                 <CustomSwitch name="checkedB" />
-                Video Event
+                AI Streaming Out
               </Box>
+            ) : (
               <Box
-                style={{ display: "flex", alignItems: "center", gap: 15 }}
+                style={{
+                  width: 215,
+                }}
                 onClick={(e) => e.stopPropagation()}
-              >
-                <Checkbox style={{ padding: 0 }} />
-                Camera Stream
-              </Box>
-            </Box>
-          </AccordionSummary>
-          <Box className="" style={{ gap: 20, padding: 10 }}>
+              ></Box>
+            )}
+
+            {/* <Box
+              style={{ display: "flex", alignItems: "center", gap: 15 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <CustomSwitch name="checkedB" />
+              Video Event
+            </Box> */}
+            {/* <Box
+              style={{ display: "flex", alignItems: "center", gap: 15 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Checkbox style={{ padding: 0 }} />
+              Camera Stream
+            </Box> */}
+          </Box>
+        </AccordionSummary>
+        <Box style={{ padding: 10 }}>
+          <Box
+            style={{
+              gap: 8,
+              display: "flex",
+              flexDirection: "column",
+              paddingLeft: 10,
+            }}
+          >
             <Box
               style={{
-                gap: 8,
                 display: "flex",
-                flexDirection: "column",
-                paddingLeft: 20,
+                justifyContent: "center",
+                alignItems: "center",
+                gap: 10,
               }}
             >
+              {renderIcon(type)}
               <BaseFormGroup
                 label={"Primary Stream"}
                 component={
                   <BaseInputForm
-                    name={"primaryStream"}
-                    style={{ width: "100%", flex: 1 }}
+                    name={`${type}.primaryStream`}
+                    style={{ width: "100%", minWidth: "540px" }}
                     variant="outlined"
                     size="small"
                   />
                 }
               />
+            </Box>
+            <Box
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: 10,
+              }}
+            >
+              {type === "private" ? <SuccessIcon /> : <FailedIcon />}
               <BaseFormGroup
                 label={" Secondary Stream"}
                 component={
                   <BaseInputForm
-                    name={"primaryStream"}
-                    style={{ width: "100%", flex: 1 }}
+                    name={`${type}.secondaryStream`}
+                    style={{ width: "100%", minWidth: "540px" }}
                     variant="outlined"
                     size="small"
                   />
@@ -189,11 +142,11 @@ const CustomAccordion = React.memo(
               />
             </Box>
           </Box>
-        </Accordion>
-      </Box>
-    );
-  }
-);
+        </Box>
+      </Accordion>
+    </Box>
+  );
+});
 
 const AccordionStyle = makeStyles({
   root: {
@@ -220,7 +173,6 @@ const AccordionStyle = makeStyles({
       paddingLeft: 5,
       backgroundColor: "#fff",
       paddingInline: 15,
-      paddingLeft: 45,
     },
   },
   track: {

@@ -5,16 +5,52 @@ import { ReloadIcon } from "../../../../Icon";
 import DeviceItem from "./DeviceItem";
 import { listDevice } from "../../../../utils";
 import { DeviceContext } from "../../../DeviceProvider";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import * as type from "../../../../reducers/type";
 import { SearchIcon } from "../../../../../../common/icons/SearchIcon";
+import ModalConfirmSelectDevice from "../../ModalConfirmSelectDevice";
+import { useFormContext } from "react-hook-form";
 
 const OptionContent = () => {
-  const { state, dispatch } = useContext(DeviceContext);
-  const handleSelectDevice = (data) => {
+  const { dispatch } = useContext(DeviceContext);
+  const {
+    formState: { isDirty },
+    reset,
+    setValue,
+    watch,
+  } = useFormContext();
+  const [isModalConfirm, setIsModalConfirm] = useState(false);
+  const [newDeviceSelect, setNewDeviceSelect] = useState();
+
+  const handleCheckChangeDevice = (isDirty, data, isMulti) => {
+    if (isDirty) {
+      setIsModalConfirm(true);
+      setNewDeviceSelect(data);
+    } else {
+      handleSelectDevice(data, isMulti);
+    }
+  };
+
+  const handleSelectDevice = (data, isMulti) => {
     dispatch({
       type: type.SELECT_DEVICE,
-      payload: data,
+      payload: { payload: data, isMulti: isMulti },
+    });
+    if (!isMulti) {
+      const deviceSelected = listDevice.find((it) => it.id === data);
+      if (!deviceSelected) return;
+      setValue("private", deviceSelected.private);
+      setValue("public", deviceSelected.public);
+      setValue("visualAI", deviceSelected.visualAI);
+    }
+  };
+
+  console.log(watch());
+
+  const handleRemoveSelectDevice = (id) => {
+    dispatch({
+      type: type.REMOVE_DEVICE,
+      payload: id,
     });
   };
 
@@ -74,12 +110,29 @@ const OptionContent = () => {
                   key={indx}
                   handleSelectDevice={handleSelectDevice}
                   data={device}
+                  handleRemoveSelectDevice={handleRemoveSelectDevice}
+                  handleCheckChangeDevice={handleCheckChangeDevice}
                 />
               </Grid>
             ))}
           </Grid>
         </Box>
       </BoxContent>
+      {isModalConfirm && (
+        <ModalConfirmSelectDevice
+          open={isModalConfirm}
+          handleClose={() => {
+            setIsModalConfirm(false);
+          }}
+          handleSubmit={() => {
+            if (newDeviceSelect !== undefined) {
+              handleSelectDevice(newDeviceSelect);
+              setIsModalConfirm(false);
+              reset();
+            }
+          }}
+        />
+      )}
     </Box>
   );
 };

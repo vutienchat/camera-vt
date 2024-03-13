@@ -919,4 +919,16 @@ export const listDevice = Array.from(Array(10)).map((_, indx) => ({
   vendor: "AXIS",
   added: indx % 2 === 0,
   firmware: "1.2.3",
+  private: {
+    primaryStream: `private primaryStream ${indx}`,
+    secondaryStream: `private secondaryStream ${indx}`,
+  },
+  public: {
+    primaryStream: `public primaryStream ${indx}`,
+    secondaryStream: `public secondaryStream ${indx}`,
+  },
+  visualAI: {
+    primaryStream: `visualAI primaryStream ${indx}`,
+    secondaryStream: `visualAI secondaryStream ${indx}`,
+  },
 }));

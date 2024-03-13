@@ -1,56 +1,67 @@
 import { makeStyles, Box } from "@material-ui/core";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { DeviceContext } from "../../../DeviceProvider";
+import { useFormContext } from "react-hook-form";
+import ModalConfirmSelectDevice from "../../ModalConfirmSelectDevice";
 // import "./style.css";
 
-const DeviceItem = React.memo(({ data, handleSelectDevice }) => {
-  const { state } = useContext(DeviceContext);
-  const isActive = state.listDeviceSelected.includes(data.id);
-  const classes = DeviceStyle();
+const DeviceItem = React.memo(
+  ({ data, handleRemoveSelectDevice, handleCheckChangeDevice }) => {
+    const {
+      formState: { isDirty },
+    } = useFormContext();
+    const { state } = useContext(DeviceContext);
+    const isActive = state.listDeviceSelected.includes(data.id);
+    const classes = DeviceStyle();
 
-  return (
-    <Box
-      className={`${classes.button} ${classes.button2} ${classes.root}`}
-      onClick={() => handleSelectDevice(data.id)}
-    >
+    return (
       <Box
-        className={`${classes.frame2}`}
-        style={{ background: isActive ? "rgba(221, 61, 75, 0.15) " : "" }}
+        className={`${classes.button} ${classes.button2} ${classes.root}`}
+        onClick={(e) => handleCheckChangeDevice(isDirty, data.id, e.ctrlKey)}
+        onContextMenu={(e) => {
+          e.preventDefault();
+          handleRemoveSelectDevice(data.id);
+        }}
       >
-        <Box className={classes.textWrapper}>
-          <Box className={classes.text}>Device model</Box>
-          {data.added && <Box className={classes.text2}>Added</Box>}
-        </Box>
-        <Box className={classes.frame3}>
-          <Box className={classes.frame4}>
-            <Box className={classes.divWrapper}>
-              <Box className={classes.text2}>Firmware</Box>
-            </Box>
-            <Box className={classes.frame5}>
-              <Box className={classes.text2}>{data.firmware}</Box>
-            </Box>
+        <Box
+          className={`${classes.frame2}`}
+          style={{ background: isActive ? "rgba(221, 61, 75, 0.15) " : "" }}
+        >
+          <Box className={classes.textWrapper}>
+            <Box className={classes.text}>Device model</Box>
+            {data.added && <Box className={classes.text2}>Added</Box>}
           </Box>
-          <Box className={classes.frame4}>
-            <Box className={classes.divWrapper}>
-              <Box className={classes.text2}>IP Address</Box>
+          <Box className={classes.frame3}>
+            <Box className={classes.frame4}>
+              <Box className={classes.divWrapper}>
+                <Box className={classes.text2}>Firmware</Box>
+              </Box>
+              <Box className={classes.frame5}>
+                <Box className={classes.text2}>{data.firmware}</Box>
+              </Box>
             </Box>
-            <Box className={classes.frame5}>
-              <Box className={classes.text2}>{data.ip}</Box>
+            <Box className={classes.frame4}>
+              <Box className={classes.divWrapper}>
+                <Box className={classes.text2}>IP Address</Box>
+              </Box>
+              <Box className={classes.frame5}>
+                <Box className={classes.text2}>{data.ip}</Box>
+              </Box>
             </Box>
-          </Box>
-          <Box className={classes.frame4}>
-            <Box className={classes.divWrapper}>
-              <Box className={classes.text2}>Vendor</Box>
-            </Box>
-            <Box className={classes.frame5}>
-              <Box className={classes.text2}>{data.vendor}</Box>
+            <Box className={classes.frame4}>
+              <Box className={classes.divWrapper}>
+                <Box className={classes.text2}>Vendor</Box>
+              </Box>
+              <Box className={classes.frame5}>
+                <Box className={classes.text2}>{data.vendor}</Box>
+              </Box>
             </Box>
           </Box>
         </Box>
       </Box>
-    </Box>
-  );
-});
+    );
+  }
+);
 
 const DeviceStyle = makeStyles({
   root: {

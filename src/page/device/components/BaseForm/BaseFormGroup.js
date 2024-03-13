@@ -71,15 +71,15 @@ const BaseFormGroup = ({
           </Box>
         </Box>
       </Grid>
-      <Box style={{ width: "100%" }}>
-        <Box
-          style={{
-            width: widthCustom || "100%",
-            position: "relative",
-            //   marginLeft:  "auto",
-          }}
-        >
-          {showErrorMessage && error ? (
+      {showErrorMessage && error && (
+        <Box style={{ width: "100%" }}>
+          <Box
+            style={{
+              width: widthCustom || "100%",
+              position: "relative",
+              //   marginLeft:  "auto",
+            }}
+          >
             <Typography
               color="error"
               style={{
@@ -88,20 +88,11 @@ const BaseFormGroup = ({
                 marginLeft: wrap ? 0 : 110,
               }}
             >
-              {error.message}
+              {showErrorMessage && error ? error.message : " "}
             </Typography>
-          ) : (
-            <Typography
-              style={{
-                marginTop: wrap ? 5 : 20,
-                fontSize: 14,
-                marginLeft: wrap ? 0 : 110,
-                height: 21,
-              }}
-            ></Typography>
-          )}
+          </Box>
         </Box>
-      </Box>
+      )}
     </Box>
   );
 };

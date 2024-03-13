@@ -9,11 +9,9 @@ import ModalConfiguration from "./components/modals/ModalConfiguration/ModalConf
 import ModalDeviceStatus from "./components/modals/ModalDeviceStatus";
 import { Feature, tableData } from "./utils";
 
-
 const Device = () => {
   const { state, dispatch } = Reducer();
 
-  console.log("chooseDevice", state.chooseDevice)
   const handleCheckData = (data) => {
     dispatch({
       type: "CHECKED_ITEM_LIST",
@@ -65,7 +63,6 @@ const Device = () => {
       ),
     };
   }, [tableData, state.pagination]);
-
 
   const handleDeleteDevice = () => {
     handleCheckData([]);

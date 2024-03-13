@@ -10,10 +10,11 @@ import { DeviceContext } from "../../../DeviceProvider";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { useFormContext } from "react-hook-form";
-import Select from "../../../Select";
 import { Feature } from "../../../../utils";
 import BaseFormSelect from "../../../BaseForm/BaseFormSelect";
 import SelectLocation from "../selectLocation";
+import AuthenticationForm from "../formData/AuthenForm";
+import FailedIcon from "../../../../Icon/FailedIcon";
 
 const VisionMode = [
   {
@@ -46,35 +47,10 @@ const GeneralTab = React.memo(() => {
   };
 
   const [cards, setCards] = useState([
-    { id: 1, text: "Private" },
-    { id: 2, text: "Public" },
-    { id: 3, text: "Visual AI" },
+    { id: 1, text: "Private", type: "private" },
+    { id: 2, text: "Public", type: "public" },
+    { id: 3, text: "Visual AI", type: "visualAI" },
   ]);
-
-  const renderCard = useCallback((card, index) => {
-    return (
-      <CustomAccordion
-        key={card.id}
-        index={index}
-        id={card.id}
-        text={card.text}
-        moveCard={moveCard}
-        isSubLabel={card.text === "Visual AI"}
-      />
-    );
-  }, []);
-
-  const moveCard = useCallback(
-    (dragIndex, hoverIndex) => {
-      setCards((prevCards) => {
-        const copiedCards = [...prevCards];
-        const [draggedCard] = copiedCards.splice(dragIndex, 1);
-        copiedCards.splice(hoverIndex, 0, draggedCard);
-        return copiedCards;
-      });
-    },
-    [setCards]
-  );
 
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -98,70 +74,24 @@ const GeneralTab = React.memo(() => {
       }}
     >
       <AccordionContent label={"Authentication"}>
-        <Grid container spacing={2}>
-          <Grid item xs={5}>
-            <BaseFormGroup
-              label={"Username"}
-              wrap={true}
-              showErrorMessage={true}
-              error={errors["password"]}
-              component={
-                <BaseInputForm
-                  name={"username"}
-                  style={{ width: "100%", flex: 1 }}
-                  variant="outlined"
-                  size="small"
-                />
-              }
-            />
-          </Grid>
-          <Grid item xs={5}>
-            <BaseFormGroup
-              label={"Password"}
-              wrap={true}
-              showErrorMessage={true}
-              error={errors["password"]}
-              component={
-                <BaseInputForm
-                  name={"password"}
-                  style={{ width: "100%", flex: 1 }}
-                  variant="outlined"
-                  size="small"
-                  type={"password"}
-                />
-              }
-            />
-          </Grid>
-          <Grid item xs={2}>
-            <Button
-              style={{
-                background: "#fff",
-                border: "solid 1px #DD3D4B",
-                width: 135,
-                height: 34,
-                marginTop: 25,
-              }}
-            >
-              <Typography
-                style={{
-                  fontSize: 14,
-                  fontWeight: 700,
-                  color: "#DD3D4B",
-                  textAlign: "center",
-                }}
-              >
-                Apply
-              </Typography>
-            </Button>
-          </Grid>
-        </Grid>
+        <AuthenticationForm />
       </AccordionContent>
       <DndProvider backend={HTML5Backend}>
         {isSelectedOne && (
           <AccordionContent label={"Streams"}>
-            {cards.map((it, indx) => renderCard(it, indx))}
+            {cards.map((it, indx) => (
+              <CustomAccordion
+                key={it.id}
+                index={indx}
+                id={it.id}
+                text={it.text}
+                isSubLabel={it.text === "Visual AI"}
+                type={it.type}
+              />
+            ))}
           </AccordionContent>
         )}
+        <FailedIcon />
       </DndProvider>
       <AccordionContent label={"Device Information"}>
         <Grid container spacing={2}>
