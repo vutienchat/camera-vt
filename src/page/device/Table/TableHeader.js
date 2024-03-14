@@ -62,8 +62,8 @@ const TableHeaderContent = () => {
   return (
     <TableHead
       style={{
-        backgroundColor: colorHeader && "rgba(221, 61, 75, 1)",
-        height: "40px",
+        backgroundColor: colorHeader ? "rgba(221, 61, 75, 1)" : "#EBEBEB",
+        height: "60px",
         texWrap: "nowrap",
       }}
     >
@@ -71,7 +71,9 @@ const TableHeaderContent = () => {
         {checkedAble && (
           <TableCell
             className={classes.checkbox}
-            style={{ backgroundColor: colorHeader && "rgb(221, 61, 75)" }}
+            style={{
+              backgroundColor: colorHeader ? "rgba(221, 61, 75, 1)" : "#EBEBEB",
+            }}
           >
             <Checkbox
               checked={isCheckedAll}
@@ -90,7 +92,9 @@ const TableHeaderContent = () => {
                 ...header.customStyles,
                 width: header.width,
                 padding: 10,
-                backgroundColor: colorHeader && "rgb(221, 61, 75)",
+                backgroundColor: colorHeader
+                  ? "rgba(221, 61, 75, 1)"
+                  : "#EBEBEB",
               }}
             >
               <Typography
@@ -162,13 +166,13 @@ const useTableHeaderStyle = makeStyles({
   sync: {
     textAlign: "end",
     minWidth: "125px",
-    // backgroundColor: "rgb(221, 61, 75)",
+    backgroundColor: "#EBEBEB",
     "& .MuiIconButton-label": { color: "#000" },
     "&.MuiTableCell-root": { padding: "0" },
   },
   checkBoxed: {
     padding: 0,
-    "& svg": { color: "rgb(34,34,34)" },
+    "& svg": { color: "#C9C9C9" },
   },
   checked: { "& svg": { color: "#dd3d4b !important" } },
   syncButton: {
@@ -176,6 +180,8 @@ const useTableHeaderStyle = makeStyles({
     height: 28,
     borderRadius: 2,
     marginRight: 5,
+    backgroundColor: "#ffff",
+    "&:hover": { backgroundColor: "#F6F4F5 !important" },
   },
 });
 export default TableHeaderContent;

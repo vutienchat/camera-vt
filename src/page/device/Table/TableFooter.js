@@ -61,6 +61,7 @@ const TableFooterContent = () => {
           page={pagination.page + 1}
           onChange={handleChangePage}
           className={classes.paginationCustom}
+
         />
       ) : (
         <CustomPagination
@@ -147,7 +148,10 @@ const useTableFooterStyle = makeStyles({
       color: "white",
     },
     "& .MuiPaginationItem-root": { fontWeight: 600 },
-    color: "#939393",
+    "& .MuiPaginationItem-page":{
+      color: "#939393",
+    }
+    
   },
   selectPerPage: {
     "& .MuiInput-underline:before": { border: "none" },

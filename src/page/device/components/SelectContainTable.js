@@ -130,6 +130,7 @@ const SelectContainTable = ({
   tableHeader,
   selectedStoragePlan,
   handleClickColumns,
+  noRecoding,
 }) => {
   const classes = useStyles();
   const [isOpen, setIsOpen] = useState(false);
@@ -161,6 +162,7 @@ const SelectContainTable = ({
         <div className={classes.root}>
           <Button
             type="button"
+            style={{backgroundColor: noRecoding && "#D3D3D3"}}
             onClick={handleClick}
             variant="outlined"
             className={classes.btnDropdown}

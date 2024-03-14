@@ -105,6 +105,7 @@ export default function Select({
   dropdownWidth,
   canEdit,
   handleOpenModalEditSchedule,
+  noRecoding,
 }) {
   const classes = useStyles();
   const [isOpen, setIsOpen] = React.useState(false);
@@ -139,7 +140,6 @@ export default function Select({
     setSelected(listChooseObject);
   };
 
-  console.log("onMouseHover", onMouseOver);
   return (
     <Box style={{ minWidth: width || "auto" }} key={searchBarType}>
       <ClickAwayListener onClickAway={handleClickAway}>
@@ -147,6 +147,7 @@ export default function Select({
           <Button
             type="button"
             onClick={handleClick}
+            style={{backgroundColor: noRecoding && "#D3D3D3"}}
             variant="outlined"
             className={classes.btnDropdown}
             endIcon={

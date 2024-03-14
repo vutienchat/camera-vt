@@ -16,11 +16,20 @@ const RecordDevice = () => {
   const [selectedStoragePlan, setSelectedStoragePlan] = useState({});
   const [isOpenEditSchedule, setIsOpenEditSchedule] = useState(false);
   const [isOpenAddSchedule, setIsOpenAddSchedule] = useState(false);
+  const [enableApplyButton, setEnableApplyButton] = useState(false);
 
-  const enableApplyButton = useMemo(() => {
-    
-  }, [selectedCells]);
   const classes = styles();
+  
+  const enableTable = useMemo(() => {
+    const isSelectedStoragePlan =
+      Object.keys(selectedStoragePlan).length === 0 &&
+      selectedStoragePlan.constructor === Object;
+    if(isSelectedStoragePlan ||  !state.switchState.recording){
+      return true
+    }else{
+      return false
+    }
+  }, [selectedStoragePlan, state.switchState.recording]);
   const isCheckedAll = useMemo(() => {
     if (Object.keys(selectedCells).length === 0) return false;
     const isChecked = Object.values(selectedCells).every(
@@ -122,14 +131,12 @@ const RecordDevice = () => {
     console.log("data", data);
   };
 
-  console.log("isOpenEditSchedule", isOpenEditSchedule);
   return (
     <div
       style={{
         display: "flex",
         flexDirection: "column",
-        gap: 20,
-        marginTop: 5,
+        marginTop: 10,
       }}
     >
       <HeaderRecordTab
@@ -137,6 +144,7 @@ const RecordDevice = () => {
         selectedStoragePlan={selectedStoragePlan}
         handleClickColumns={handleClickColumns}
         setIsOpenEditSchedule={setIsOpenEditSchedule}
+        noRecoding={!state.switchState.recording}
       />
       <Box
         style={{
@@ -155,21 +163,25 @@ const RecordDevice = () => {
         >
           <BaseButton
             label={"Save As ..."}
-            type={"normal"}
+            type={"colorBorder"}
             colorBorder
             onClick={handleOpenModalAddSchedule}
+            noRecoding={!state.switchState.recording}
           />
-          <BaseButton
-            label={"Apply"}
-            type={false ? "redBackground" : "disable"}
-          />
+          {!isCheckedAll && (
+            <BaseButton
+              label={"Apply"}
+              type={enableApplyButton ? "redBackground" : "disable"}
+              noRecoding={!state.switchState.recording}
+            />
+          )}
         </Box>
         <table
           className="schedule-table"
           style={{
-            opacity: !state.switchState.recording && "0.3",
-            pointerEvents: !state.switchState.recording && "none",
-            padding: "18px 10px 10px 10px",
+            opacity: enableTable && "0.5",
+            pointerEvents: enableTable && "none",
+            padding: "25px 10px 10px 10px",
           }}
         >
           <thead>
@@ -180,12 +192,18 @@ const RecordDevice = () => {
                     className={classes.indeterminateCheckBox}
                     indeterminate
                     inputProps={{ "aria-label": "indeterminate checkbox" }}
-                    onChange={handleCheckIndeterminate}
+                    onChange={(e) => {
+                      handleCheckIndeterminate(e);
+                      setEnableApplyButton(true);
+                    }}
                   />
                 ) : (
                   <Checkbox
                     checked={isCheckedAll}
-                    onChange={handleCheckAll}
+                    onChange={(e) => {
+                      handleCheckAll(e);
+                      setEnableApplyButton(true);
+                    }}
                     className={classes.checkBox}
                     style={{
                       color:
@@ -239,8 +257,14 @@ const RecordDevice = () => {
                         ? "#4E8FF7"
                         : "#E9E9E9",
                     }}
-                    onMouseDown={(event) => handleMouseDown(event, day, hour)}
-                    onMouseEnter={(event) => handleMouseEnter(event, day, hour)}
+                    onMouseDown={(event) => {
+                      handleMouseDown(event, day, hour);
+                      setEnableApplyButton(true);
+                    }}
+                    onMouseEnter={(event) => {
+                      handleMouseEnter(event, day, hour);
+                      setEnableApplyButton(true);
+                    }}
                     onMouseUp={handleMouseUp}
                   ></td>
                 ))}
@@ -252,8 +276,8 @@ const RecordDevice = () => {
           style={{
             // fontStyle: "italic",
             textAlign: "end",
-            fontSize: 12,
-            opacity: !state.switchState.recording && "0.3",
+            fontSize: 14,
+            opacity: !state.switchState.recording && "0.5",
             pointerEvents: !state.switchState.recording && "none",
             paddingRight: 10,
           }}

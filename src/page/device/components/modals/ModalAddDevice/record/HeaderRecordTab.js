@@ -55,28 +55,29 @@ const list = [
 ];
 
 const Schedule = {
-  0:{
+  0: {
     label: "Schedule 001",
     value: 0,
   },
-}
+};
 
 const HeaderRecordTab = ({
   handleRecoding,
   selectedStoragePlan,
   handleClickColumns,
-  setIsOpenEditSchedule
+  setIsOpenEditSchedule,
+  noRecoding,
 }) => {
   const { state } = useContext(DeviceContext);
   const {
     formState: { errors },
   } = useFormContext();
- 
-  const classes = styles()
 
-  const handleOpenModalEditSchedule = () =>{
-    setIsOpenEditSchedule(true)
-  }
+  const classes = styles();
+
+  const handleOpenModalEditSchedule = () => {
+    setIsOpenEditSchedule(true);
+  };
 
   return (
     <Box
@@ -93,6 +94,8 @@ const HeaderRecordTab = ({
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            marginBottom: 30,
+            width: 180,
             gap: 10,
           }}
         >
@@ -131,13 +134,16 @@ const HeaderRecordTab = ({
         >
           <BaseFormGroup
             label={"Storage Plan"}
-            isRequired={true}
+            isRequired={noRecoding ? false : true}
             wrap={false}
             width={410}
+            color={"black"}
             customStyle={{ alignItems: "flex-start" }}
             showErrorMessage={
-              Object.keys(selectedStoragePlan).length === 0 &&
-              selectedStoragePlan.constructor === Object
+              noRecoding
+                ? false
+                : Object.keys(selectedStoragePlan).length === 0 &&
+                  selectedStoragePlan.constructor === Object
                 ? true
                 : false
             }
@@ -152,6 +158,7 @@ const HeaderRecordTab = ({
                 tableHeader={storagePlanHeader}
                 selectedStoragePlan={selectedStoragePlan}
                 handleClickColumns={handleClickColumns}
+                noRecoding={noRecoding}
               />
             }
           />
@@ -167,11 +174,12 @@ const HeaderRecordTab = ({
                 list={Object.values(Schedule)}
                 btnText={"Record All"}
                 width={200}
-                titleDropdownText={"All Feature"}
+                titleDropdownText={"Record All"}
                 positionDropDown={"right"}
                 listObject={Schedule}
                 canEdit
                 handleOpenModalEditSchedule={handleOpenModalEditSchedule}
+                noRecoding={noRecoding}
               />
             }
           />
@@ -182,19 +190,19 @@ const HeaderRecordTab = ({
 };
 
 const styles = makeStyles({
-  switch:{
-    "& .MuiSwitch-colorSecondary.Mui-checked + .MuiSwitch-track":{
+  switch: {
+    "& .MuiSwitch-colorSecondary.Mui-checked + .MuiSwitch-track": {
       backgroundColor: "#9c9999",
     },
-    "& .MuiSwitch-colorSecondary.Mui-checked":{
-      color: "#DD3D4B"
+    "& .MuiSwitch-colorSecondary.Mui-checked": {
+      color: "#DD3D4B",
     },
-    "& .MuiSwitch-switchBase":{
-      color:"#939393"
+    "& .MuiSwitch-switchBase": {
+      color: "#939393",
     },
-    "& .MuiSwitch-track":{
+    "& .MuiSwitch-track": {
       backgroundColor: "#9c9999",
     },
-  }
-})
+  },
+});
 export default HeaderRecordTab;
