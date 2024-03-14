@@ -2,14 +2,14 @@ import React from "react";
 
 const FailedIcon = () => (
   <svg
-    xmlns="http://www.w3.org/2000/svg"
+    // xmlns="http://www.w3.org/2000/svg"
     // xmlns:xlink="http://www.w3.org/1999/xlink"
     width="16"
     height="16"
     viewBox="0 0 16 16"
   >
     <defs>
-      <clipPath id="clipPath">
+      <clipPath id="clipPath1">
         <rect
           id="Rectangle_6807"
           data-name="Rectangle 6807"

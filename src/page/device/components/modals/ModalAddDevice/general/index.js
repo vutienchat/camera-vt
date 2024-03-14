@@ -1,5 +1,5 @@
-import React, { useCallback, useContext, useState } from "react";
-import { Box, Button, Grid, Tooltip, Typography } from "@material-ui/core";
+import React, { useContext, useState } from "react";
+import { Box, Grid, Tooltip, Typography } from "@material-ui/core";
 import BaseFormGroup from "../../../BaseForm/BaseFormGroup";
 import BaseInputForm from "../../../BaseForm/BaseInput";
 import CustomAccordion from "../../../Accordion/CustomAccordion";
@@ -7,8 +7,6 @@ import AccordionContent from "../../../Accordion";
 import MapCustom from "../../../maps/Map";
 import BaseFormRadio from "../../../BaseForm/BaseFormRadio";
 import { DeviceContext } from "../../../DeviceProvider";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 import { useFormContext } from "react-hook-form";
 import { Feature } from "../../../../utils";
 import BaseFormSelect from "../../../BaseForm/BaseFormSelect";
@@ -76,23 +74,21 @@ const GeneralTab = React.memo(() => {
       <AccordionContent label={"Authentication"}>
         <AuthenticationForm />
       </AccordionContent>
-      <DndProvider backend={HTML5Backend}>
-        {isSelectedOne && (
-          <AccordionContent label={"Streams"}>
-            {cards.map((it, indx) => (
-              <CustomAccordion
-                key={it.id}
-                index={indx}
-                id={it.id}
-                text={it.text}
-                isSubLabel={it.text === "Visual AI"}
-                type={it.type}
-              />
-            ))}
-          </AccordionContent>
-        )}
-        <FailedIcon />
-      </DndProvider>
+      {isSelectedOne && (
+        <AccordionContent label={"Streams"}>
+          {cards.map((it, indx) => (
+            <CustomAccordion
+              key={it.id}
+              index={indx}
+              id={it.id}
+              text={it.text}
+              isSubLabel={it.text === "Visual AI"}
+              type={it.type}
+            />
+          ))}
+        </AccordionContent>
+      )}
+      <FailedIcon />
       <AccordionContent label={"Device Information"}>
         <Grid container spacing={2}>
           <Grid item xs={6}>
