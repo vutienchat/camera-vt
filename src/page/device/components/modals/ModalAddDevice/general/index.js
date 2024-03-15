@@ -12,7 +12,8 @@ import { Feature } from "../../../../utils";
 import BaseFormSelect from "../../../BaseForm/BaseFormSelect";
 import SelectLocation from "../selectLocation";
 import AuthenticationForm from "../formData/AuthenForm";
-import FailedIcon from "../../../../Icon/FailedIcon";
+import { streamTypeOption } from "../@type";
+import AIFeatureForm from "../formData/AIFeatureForm";
 
 const VisionMode = [
   {
@@ -60,6 +61,7 @@ const GeneralTab = React.memo(() => {
     setAnchorEl(null);
   };
   const openLocation = Boolean(anchorEl);
+  const isIPC = deviceType === "IPC";
 
   return (
     <Box
@@ -88,7 +90,6 @@ const GeneralTab = React.memo(() => {
           ))}
         </AccordionContent>
       )}
-      <FailedIcon />
       <AccordionContent label={"Device Information"}>
         <Grid container spacing={2}>
           <Grid item xs={6}>
@@ -112,12 +113,11 @@ const GeneralTab = React.memo(() => {
               component={
                 <BaseFormSelect
                   key={"streamType"}
-                  list={Object.values(Feature)}
+                  list={Object.values(streamTypeOption)}
                   width={425}
                   btnText={"Stream Type"}
                   dropdownWidth={395}
-                  // titleDropdownText={item.titleDropdownText}
-                  listObject={Feature}
+                  listObject={streamTypeOption}
                   searchBarType={"aiFeature"}
                   name={"streamType"}
                 />
@@ -156,27 +156,60 @@ const GeneralTab = React.memo(() => {
               }
             />
           </Grid>
-          {deviceType === "IPC" && (
-            <Grid item xs={6}>
-              <BaseFormGroup
-                label={"Feature Type"}
-                wrap={true}
-                component={
-                  <BaseFormSelect
-                    key={"featureType"}
-                    list={Object.values(Feature)}
-                    width={425}
-                    btnText={"Feature Type"}
-                    dropdownWidth={395}
-                    // titleDropdownText={item.titleDropdownText}
-                    listObject={Feature}
-                    searchBarType={"aiFeature"}
-                    name={"featureType"}
+
+          <Grid item container xs={6}>
+            {isSelectedOne && (
+              <Grid item>
+                <BaseFormGroup
+                  label={"Camera Address"}
+                  wrap={true}
+                  isRequired={true}
+                  showErrorMessage={true}
+                  error={errors["cameraAddress"]}
+                  component={
+                    <BaseInputForm
+                      name={"cameraAddress"}
+                      style={{ width: "425px", flex: 1 }}
+                      variant="outlined"
+                      size="small"
+                    />
+                  }
+                />
+              </Grid>
+            )}
+
+            <Grid item container>
+              {isIPC && (
+                <Grid item>
+                  <BaseFormGroup
+                    label={"Feature Type"}
+                    wrap={true}
+                    component={
+                      <BaseFormSelect
+                        key={"featureType"}
+                        list={Object.values(Feature)}
+                        width={425}
+                        btnText={"Feature Type"}
+                        dropdownWidth={395}
+                        listObject={Feature}
+                        searchBarType={"aiFeature"}
+                        name={"featureType"}
+                      />
+                    }
                   />
-                }
-              />
+
+                  <Grid item style={{ marginTop: 10 }}>
+                    <BaseFormRadio
+                      label={"Vision Mode"}
+                      options={VisionMode}
+                      name="VisionMode"
+                      wrap={true}
+                    />
+                  </Grid>
+                </Grid>
+              )}
             </Grid>
-          )}
+          </Grid>
 
           <Grid item xs={6} onClick={handleClick}>
             <BaseFormGroup
@@ -207,52 +240,20 @@ const GeneralTab = React.memo(() => {
                 </Tooltip>
               }
             />
-          </Grid>
-        </Grid>
-        <Grid container spacing={2}>
-          {deviceType === "IPC" && (
-            <Grid item container spacing={1} direction="column" xs={6}>
-              <Grid item>
-                <BaseFormRadio
-                  label={"Vision Mode"}
-                  options={VisionMode}
-                  name="VisionMode"
-                  wrap={true}
-                />
-              </Grid>
-              <Grid item>
-                <BaseFormGroup
-                  label={"AI Feature"}
-                  wrap={true}
-                  component={
-                    <BaseFormSelect
-                      key={"aiFeature"}
-                      list={Object.values(Feature)}
-                      width={"100%"}
-                      btnText={"AI Feature"}
-                      dropdownWidth={395}
-                      // titleDropdownText={item.titleDropdownText}
-                      listObject={Feature}
-                      searchBarType={"aiFeature"}
-                      name={"aiFeature"}
-                    />
-                  }
-                />
-              </Grid>
+            <Grid item xs={6} style={{ padding: 15 }}>
+              <MapCustom
+                location={location}
+                setMarkerAddress={setMarkerAddress}
+                markerPosition={markerPosition}
+                setMarkerPosition={setMarkerPosition}
+                setMaps={() => {}}
+              />
             </Grid>
-          )}
-
-          <Grid item xs={6} style={{ padding: 15 }}>
-            <MapCustom
-              location={location}
-              setMarkerAddress={setMarkerAddress}
-              markerPosition={markerPosition}
-              setMarkerPosition={setMarkerPosition}
-              setMaps={() => {}}
-            />
           </Grid>
         </Grid>
       </AccordionContent>
+      {isIPC && <AIFeatureForm />}
+
       {openLocation && (
         <SelectLocation
           open={openLocation}

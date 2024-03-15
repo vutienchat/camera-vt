@@ -6,7 +6,7 @@ import { useFormContext } from "react-hook-form";
 
 const ZoneLineController = React.memo(() => {
   const { watch } = useFormContext();
-  const { line, listZone } = watch();
+  const { line, zone } = watch();
   const [canDraw, setCanDraw] = useState(null);
 
   const listZoneLine = React.useMemo(() => {
@@ -15,10 +15,10 @@ const ZoneLineController = React.memo(() => {
       listData = [{ ...line, type: "line" }];
     }
     if (canDraw === 1) {
-      listData = [...listZone];
+      listData = [...zone];
     }
     return listData;
-  }, [line.name, listZone, canDraw]);
+  }, [line, line.name, zone, canDraw]);
 
   return (
     <Box
@@ -43,8 +43,9 @@ const ZoneLineController = React.memo(() => {
               flexWrap: "wrap",
             }}
           >
-            {listZoneLine.map((it) => (
+            {listZoneLine.map((it, indx) => (
               <Typography
+                key={indx}
                 style={{
                   fontSize: "14px",
                   textAlign: "center",

@@ -35,7 +35,10 @@ const BaseInputForm = ({
             onChange={(event) => {
               if (type === "number" && isNaN(event.target.value)) return;
               onChange(
-                event.target.value.slice(0, length || event.target.value.length)
+                event.target.value
+                  .slice(0, length || event.target.value.length)
+                  .replace(/^\s+/, "")
+                  .replace(/\s+$/, " ")
               );
             }}
             onKeyDown={(event) => {

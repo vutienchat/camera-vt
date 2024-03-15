@@ -21,7 +21,7 @@ const BaseFormRadio = ({ name, label, options, wrap, ...props }) => {
         style={{ paddingBottom: 20 }}
         direction={wrap ? "column" : "row"}
       >
-        <Grid item style={{ fontWeight: 600, fontSize: 16 }}>
+        <Grid item style={{ fontWeight: "bold", fontSize: 16 }}>
           {label}
         </Grid>
         <Grid item style={{ paddingBlock: 0 }}>
@@ -32,7 +32,7 @@ const BaseFormRadio = ({ name, label, options, wrap, ...props }) => {
             render={({ field }) => {
               return (
                 <FormControl component="fieldset">
-                  <RadioGroup {...field} name={name} row>
+                  <RadioGroup {...field} name={name} row {...props}>
                     {(options || []).map((it, indx) => (
                       <FormControlLabel
                         value={it.value}

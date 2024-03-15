@@ -20,7 +20,7 @@ const FinalDraw = React.memo(({ canDraw, setCanDraw }) => {
   const stageRef = useRef(null);
   const { watch, setValue, getValues } = useFormContext();
   const line = watch("line");
-  const listZone = watch("listZone");
+  const listZone = watch("zone");
   const [points, setPoints] = useState([]);
   const [filledAreaPoints, setFilledAreaPoints] = useState([]);
   const [centerLine, setCenterLine] = useState([]);
@@ -44,15 +44,29 @@ const FinalDraw = React.memo(({ canDraw, setCanDraw }) => {
   });
 
   useEffect(() => {
-    if (line && line.points && line.points.length) {
-      setLines(line.points);
+    if (line && line.coordinate && line.coordinate.length) {
+      setLines(convertToObject(line.coordinate));
     }
   }, [line]);
 
   useEffect(() => {
     if (!listZone || !listZone.length) return;
-    setZones(listZone);
+    const convertData = listZone.map((it) => ({
+      ...it,
+      points: convertToObject(it.coordinate),
+    }));
+    setZones(convertData);
   }, [listZone]);
+
+  const convertToDimensionalArr = (arr) => {
+    if (!arr || !arr.length) return [];
+    return arr.map((point) => [point.x, point.y]);
+  };
+
+  const convertToObject = (arr) => {
+    if (!arr || !arr.length) return [];
+    return arr.map((point) => ({ x: point[0], y: point[1] }));
+  };
 
   const handleMouseMove = (e) => {
     const stage = e.target.getStage();
@@ -144,8 +158,9 @@ const FinalDraw = React.memo(({ canDraw, setCanDraw }) => {
       setPointIndex(null);
       setIsDrag(false);
       setFilledAreaPoints([]);
-      setValue("line.points", lines);
-      setValue("listZone", zone);
+      // setValue("line.points", lines);
+      setValue("line.coordinate", lines);
+      setValue("zone", zone);
     }
 
     if (
@@ -163,7 +178,7 @@ const FinalDraw = React.memo(({ canDraw, setCanDraw }) => {
     }
     if (isUpdatePoint) return;
     if (canDraw === 0) {
-      if (lines.length < 2 && line.points && line.points.length < 2) {
+      if (lines.length < 2 && line.coordinate && line.coordinate.length < 2) {
         setLines([...lines, pointerPos]);
         setFilledAreaPoints([...lines, pointerPos]);
       } else if (lines.length === 2) {
@@ -288,12 +303,13 @@ const FinalDraw = React.memo(({ canDraw, setCanDraw }) => {
       setLines([]);
       setFilledAreaPoints([]);
       setValue("line.name", "");
-      setValue("line.points", []);
+      setValue("line.coordinate", []);
     }
   };
 
   const handleAddLine = (data) => {
-    setValue("line.points", lines);
+    const newDataLine = convertToDimensionalArr([...lines]);
+    setValue("line.coordinate", newDataLine);
     setValue("line.name", data);
     setIsOpenModalLine((prev) => ({ ...prev, open: false }));
     setFilledAreaPoints([]);
@@ -301,9 +317,13 @@ const FinalDraw = React.memo(({ canDraw, setCanDraw }) => {
 
   const handleAddZone = (data) => {
     if (selectedLine === null) return;
-    const listZone = _.cloneDeep(getValues("listZone"));
+    const listZone = _.cloneDeep(getValues("zone"));
     listZone[selectedLine] = data;
-    setValue("listZone", listZone);
+    const convertData = listZone.map((it) => ({
+      ...it,
+      coordinate: convertToDimensionalArr(it.points),
+    }));
+    setValue("zone", convertData);
     setZones([...listZone]);
     setIsOpenModalZone((prev) => ({ ...prev, open: false }));
     setSelectedLine(null);
@@ -339,14 +359,14 @@ const FinalDraw = React.memo(({ canDraw, setCanDraw }) => {
         if (canDraw === 0 && isDrag) {
           setLines([]);
           setFilledAreaPoints([]);
-          setValue("line", {});
+          setValue("line", { name: "", points: [] });
           return;
         }
         if (selectedLine === null) return;
         const tempData = _.cloneDeep(zone);
         tempData.splice(selectedLine, 1);
         setZones(tempData);
-        setValue("listZone", tempData);
+        setValue("zone", tempData);
         setFilledAreaPoints([]);
         setSelectedLine(null);
         // setCanDraw(null);
@@ -358,7 +378,7 @@ const FinalDraw = React.memo(({ canDraw, setCanDraw }) => {
         setLines([]);
         setFilledAreaPoints([]);
         setCanDraw(null);
-        setValue("listZone", []);
+        setValue("zone", []);
         setValue("line", { name: "", points: [] });
         setZones([]);
         setPoints([]);
@@ -503,11 +523,21 @@ const FinalDraw = React.memo(({ canDraw, setCanDraw }) => {
             setIsDraw(true);
             setPoints([]);
             setFilledAreaPoints([]);
-            setZones((prev) => {
-              const tempData = [...prev];
-              tempData.pop();
-              return tempData;
-            });
+            if (isOpenModalZone.type === typeModal.add) {
+              setZones((prev) => {
+                const tempData = [...prev];
+                tempData.pop();
+                return tempData;
+              });
+              return;
+            } else {
+              setZones((prev) => {
+                const tempData = [...prev];
+                return tempData;
+              });
+
+              return;
+            }
           }}
           handleSubmit={handleAddZone}
         />

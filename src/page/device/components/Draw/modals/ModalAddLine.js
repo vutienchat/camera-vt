@@ -77,10 +77,11 @@ const ModalAddLine = ({ open, handleClose, type, handleSubmit }) => {
                 placeholder="Name"
                 value={data}
                 onChange={(e) => {
-                  setData(e.target.value);
+                  setData(e.target.value.slice(0, 50));
                 }}
                 variant="outlined"
                 size="small"
+                autoFocus
               />
             </Grid>
           </Grid>
