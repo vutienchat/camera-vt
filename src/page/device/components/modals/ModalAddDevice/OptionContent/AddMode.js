@@ -4,14 +4,19 @@ import {
   Checkbox,
   FormControlLabel,
   Grid,
+  TextField,
   Typography,
 } from "@material-ui/core";
-import React from "react";
+import React, { useState } from "react";
 import BaseFormGroup from "../../../BaseForm/BaseFormGroup";
 import BaseInputForm from "../../../BaseForm/BaseInput";
 import { useFormContext } from "react-hook-form";
 import BaseFormRadio from "../../../BaseForm/BaseFormRadio";
 import FormIpAddress from "../../../BaseForm/FormIpAddress";
+import { listDevice } from "../../../../utils";
+
+const regex =
+  /^((\d{1,3}\.){3}\d{1,3}|\b(?:[a-zA-Z0-9-]+\.){1,}[a-zA-Z]{2,}\b)(:\d+)?(\/\w+)*$/;
 
 const addModeOption = [
   {
@@ -24,17 +29,41 @@ const addModeOption = [
   },
 ];
 
-const AddMode = () => {
+const AddMode = ({ setListDeviceScanned }) => {
   const {
     watch,
     setValue,
     formState: { errors },
+    register,
   } = useFormContext();
-  const { addingMode, isDefaultPort, ipAddress } = watch();
+  const { addingMode } = watch();
 
-  const setIPAddress = (data) => {
-    setValue("ipAddress", data);
+  const [dataScan, setDataScan] = useState({
+    address: "",
+    ipAddress: ["192", "168", "0"],
+    startIP: 1,
+    endIP: 255,
+    port: "",
+  });
+
+  const handleChange = (data, type) => {
+    console.log(data, type);
+    setDataScan((prev) => ({ ...prev, [type]: data }));
   };
+
+  console.log("data", dataScan);
+
+  const isDisable =
+    addingMode === "KnowAddress" && !dataScan.address ? true : false;
+
+  const handleScan = () => {
+    setListDeviceScanned(listDevice);
+    Object.keys(dataScan).forEach((it) => {
+      register(it, { value: dataScan[it] });
+    });
+  };
+
+  console.log("ww", watch());
 
   return (
     <Box
@@ -65,13 +94,14 @@ const AddMode = () => {
               showErrorMessage={true}
               error={errors["address"]}
               component={
-                <BaseInputForm
-                  name={"address"}
+                <TextField
                   length={255}
                   variant="outlined"
                   size="small"
                   placeholder="IP / Hostname / RTSP link"
                   fullWidth
+                  value={dataScan.address}
+                  onChange={(e) => handleChange(e.target.value, "address")}
                 />
               }
             />
@@ -95,8 +125,9 @@ const AddMode = () => {
                     <FormIpAddress
                       type={"startIP"}
                       label={"Start"}
-                      ipAddress={ipAddress}
-                      setIPAddress={setIPAddress}
+                      ipAddress={dataScan.ipAddress}
+                      handleChange={handleChange}
+                      valueIp={dataScan.startIP}
                     />
                   }
                 />
@@ -111,8 +142,9 @@ const AddMode = () => {
                     <FormIpAddress
                       type={"endIP"}
                       label={"End"}
-                      ipAddress={ipAddress}
-                      setIPAddress={setIPAddress}
+                      ipAddress={dataScan.ipAddress}
+                      handleChange={handleChange}
+                      valueIp={dataScan.endIP}
                     />
                   }
                 />
@@ -127,15 +159,19 @@ const AddMode = () => {
               wrap={true}
               width={135}
               component={
-                <BaseInputForm
-                  name={"port"}
+                <TextField
+                  // name={"port"}
                   variant="outlined"
                   size="small"
                   fullWidth
-                  disabled={isDefaultPort ? true : false}
                   placeholder="- - - -"
                   length={5}
-                  type={"number"}
+                  // type={"number"}
+                  value={dataScan.port}
+                  onChange={(e) => {
+                    if (isNaN(Number(e.target.value))) return;
+                    handleChange(e.target.value.slice(0, 5), "port");
+                  }}
                 />
               }
             />
@@ -149,6 +185,8 @@ const AddMode = () => {
                 height: 34,
                 marginTop: 20,
               }}
+              disabled={isDisable}
+              onClick={handleScan}
             >
               <Typography
                 style={{
@@ -162,85 +200,8 @@ const AddMode = () => {
               </Typography>
             </Button>
           </Grid>
-          {/* <Grid item style={{ paddingTop: 35 }}>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  name="isDefaultPort"
-                  checked={isDefaultPort}
-                  onChange={(e) => {
-                    setValue("isDefaultPort", e.target.checked);
-                    setValue("port", "");
-                  }}
-                />
-              }
-              label="Default"
-            />
-          </Grid> */}
         </Grid>
       </Grid>
-      {/* <Grid container spacing={2}>
-        <Grid item>
-          <BaseFormGroup
-            label={"Username"}
-            wrap={true}
-            showErrorMessage={true}
-            error={errors["username"]}
-            width={135}
-            customStyle={{ alignItems: "flex-start" }}
-            component={
-              <BaseInputForm
-                name={"username"}
-                variant="outlined"
-                size="small"
-                fullWidth
-                length={255}
-              />
-            }
-          />
-        </Grid>
-        <Grid item>
-          <BaseFormGroup
-            label={"Password"}
-            wrap={true}
-            width={135}
-            showErrorMessage={true}
-            error={errors["password"]}
-            component={
-              <BaseInputForm
-                name={"password"}
-                variant="outlined"
-                size="small"
-                fullWidth
-                type="password"
-                length={255}
-              />
-            }
-          />
-        </Grid>
-        <Grid item style={{ paddingTop: 12 }}>
-          <Button
-            style={{
-              background: "#fff",
-              border: "solid 1px #DD3D4B",
-              width: 150,
-              height: 40,
-              marginTop: 20,
-            }}
-          >
-            <Typography
-              style={{
-                fontSize: 14,
-                fontWeight: 700,
-                color: "#DD3D4B",
-                textAlign: "center",
-              }}
-            >
-              Scan Device
-            </Typography>
-          </Button>
-        </Grid>
-      </Grid> */}
     </Box>
   );
 };

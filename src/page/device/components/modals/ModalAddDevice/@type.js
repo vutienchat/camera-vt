@@ -62,20 +62,15 @@ export const defaultFormValue = {
   lat: 10,
   deviceType: "IPC",
   note: "",
-  recordScheduleId: null,
   recordScheduleStatus: null,
+  recordScheduleId: null,
   storagePlaneId: null,
   zone: [],
   addingMode: "KnowAddress",
-  address: "",
+  // address: "",
   username: "",
   password: "",
   VisionMode: "DayCamera",
-  isDefaultPort: true,
-  port: "",
-  startIP: 1,
-  endIP: 255,
-  ipAddress: ["192", "168", "0"],
   location: "60 Hoang Quoc Viet",
   line: {
     name: "",
@@ -217,3 +212,83 @@ export const streamTypeOption = {
     value: "P2P",
   },
 };
+
+const dataObject = {
+  "Wed-3": true,
+  "Wed-9": true,
+  "Wed-10": true,
+  "Wed-17": true,
+  "Fri-17": true,
+  "Sat-17": true,
+  "Sat-9": true,
+  "Sat-8": true,
+  "Sat-7": true,
+  "Sat-6": true,
+  "Sat-5": false,
+  "Sat-4": true,
+  "Fri-3": true,
+  "Sun-0": true,
+  "Sun-11": true,
+  "Sun-14": true,
+  "Sun-15": true,
+  "Sun-22": true,
+  "Wed-22": true,
+  "Mon-21": true,
+  "Mon-20": true,
+  "Mon-14": true,
+  "Mon-13": true,
+  "Mon-12": true,
+  "Mon-11": true,
+  "Tue-11": true,
+  "Tue-10": true,
+  "Tue-9": true,
+  "Tue-5": true,
+  "Tue-4": true,
+  "Mon-3": true,
+};
+
+const convertData = (obj) => {
+  const newData = {};
+  Object.keys(obj).forEach((key) => {
+    if (obj[key]) {
+      const [day, time] = key.split("-");
+      const timeRange = `${time}-${time}`;
+      const lowerDay = day.toLowerCase();
+      if (!newData[lowerDay]) {
+        newData[lowerDay] = [timeRange];
+      } else {
+        const lastRange =
+          newData[lowerDay][newData[lowerDay].length - 1].split("-");
+        const start = parseInt(lastRange[0]);
+        const end = parseInt(lastRange[1]);
+
+        if (parseInt(time) === end + 1) {
+          newData[lowerDay][newData[lowerDay].length - 1] = `${start}-${time}`;
+        } else {
+          newData[lowerDay].push(timeRange);
+        }
+      }
+    }
+  });
+  return newData;
+};
+
+const convertBackToObject = (newData) => {
+  const dataObject = {};
+  if (!newData) return;
+  Object.entries(newData).forEach(([day, timeRanges]) => {
+    timeRanges.forEach((timeRange) => {
+      const [start, end] = timeRange.split("-");
+      for (let i = parseInt(start); i <= parseInt(end); i++) {
+        const key = `${day.charAt(0).toUpperCase()}${day.slice(1)}-${i}`;
+        dataObject[key] = true;
+      }
+    });
+  });
+  return dataObject;
+};
+
+console.log(
+  "convertBackToObject",
+  convertBackToObject(convertData(dataObject))
+);

@@ -34,8 +34,7 @@ const GeneralTab = React.memo(() => {
     formState: { errors },
   } = useFormContext();
   const { deviceType, location } = watch();
-  const isSelectedOne =
-    state.listDeviceSelected && state.listDeviceSelected.length === 1;
+  const isSelectMulti = state.listDeviceSelected.length > 1;
   const [markerPosition, setMarkerPosition] = useState({
     lat: 21.046215,
     lng: 105.785733,
@@ -76,7 +75,7 @@ const GeneralTab = React.memo(() => {
       <AccordionContent label={"Authentication"}>
         <AuthenticationForm />
       </AccordionContent>
-      {isSelectedOne && (
+      {!isSelectMulti && (
         <AccordionContent label={"Streams"}>
           {cards.map((it, indx) => (
             <CustomAccordion
@@ -158,7 +157,7 @@ const GeneralTab = React.memo(() => {
           </Grid>
 
           <Grid item container xs={6}>
-            {isSelectedOne && (
+            {!isSelectMulti && (
               <Grid item>
                 <BaseFormGroup
                   label={"Camera Address"}
@@ -168,7 +167,7 @@ const GeneralTab = React.memo(() => {
                   error={errors["cameraAddress"]}
                   component={
                     <BaseInputForm
-                      name={"cameraAddress"}
+                      name={"camRTSPAddr"}
                       style={{ width: "425px", flex: 1 }}
                       variant="outlined"
                       size="small"

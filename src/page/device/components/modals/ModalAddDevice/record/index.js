@@ -19,15 +19,15 @@ const RecordDevice = () => {
   const [enableApplyButton, setEnableApplyButton] = useState(false);
 
   const classes = styles();
-  
+
   const enableTable = useMemo(() => {
     const isSelectedStoragePlan =
       Object.keys(selectedStoragePlan).length === 0 &&
       selectedStoragePlan.constructor === Object;
-    if(isSelectedStoragePlan ||  !state.switchState.recording){
-      return true
-    }else{
-      return false
+    if (isSelectedStoragePlan || !state.switchState.recording) {
+      return true;
+    } else {
+      return false;
     }
   }, [selectedStoragePlan, state.switchState.recording]);
   const isCheckedAll = useMemo(() => {
@@ -130,6 +130,8 @@ const RecordDevice = () => {
   const handleAddSchedule = (data) => {
     console.log("data", data);
   };
+
+  console.log("sdfsdf", selectedCells);
 
   return (
     <div
