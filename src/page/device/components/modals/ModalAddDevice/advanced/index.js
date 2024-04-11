@@ -33,7 +33,6 @@ const streamConfig = [
 
 const Advanced = () => {
   const { watch } = useFormContext();
-  console.log(watch());
 
   return (
     <AccordionContent label={"Video Stream Configuration"}>

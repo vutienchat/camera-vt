@@ -1,6 +1,7 @@
 import React from "react";
 import { Line } from "react-konva";
 import RenderArrow from "./RenderArrow";
+// ("[[517.8923163164574, 263.0867919921875], [1124.892277724439, 310.0867919921875], [866.8922941276363, 188.0867919921875]]");
 
 const RenderTriangle = ({
   points,
@@ -38,9 +39,9 @@ const RenderTriangle = ({
         lineCap="round"
         lineJoin="round"
       />
-      {centerLine.length > 0 && (
-        <RenderArrow p1={centerLine[0]} p2={centerLine[1]} />
-      )}
+      {/* {centerLine.length > 0 && ( */}
+      <RenderArrow p1={centerLine[0]} p2={centerLine[1]} />
+      {/* )} */}
       {points.length === 4 && (
         <RenderArrow
           p1={

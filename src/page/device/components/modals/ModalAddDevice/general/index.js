@@ -33,11 +33,11 @@ const GeneralTab = React.memo(() => {
     setValue,
     formState: { errors },
   } = useFormContext();
-  const { deviceType, location } = watch();
+  const { deviceType, location, lat, lng } = watch();
   const isSelectMulti = state.listDeviceSelected.length > 1;
   const [markerPosition, setMarkerPosition] = useState({
-    lat: 21.046215,
-    lng: 105.785733,
+    lng,
+    lat,
   });
 
   const setMarkerAddress = (text) => {
@@ -242,9 +242,7 @@ const GeneralTab = React.memo(() => {
             <Grid item xs={6} style={{ padding: 15 }}>
               <MapCustom
                 location={location}
-                setMarkerAddress={setMarkerAddress}
                 markerPosition={markerPosition}
-                setMarkerPosition={setMarkerPosition}
                 setMaps={() => {}}
               />
             </Grid>
