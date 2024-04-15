@@ -25,7 +25,6 @@ const ModalAddZone = ({ open, handleClose, type, handleSubmit, zoneIndex }) => {
     ...zoneIndex,
     level: zoneIndex.level || 1,
   });
-
   return (
     <Dialog
       open={open}
@@ -79,6 +78,7 @@ const ModalAddZone = ({ open, handleClose, type, handleSubmit, zoneIndex }) => {
                 onChange={(e) => {
                   setData((prev) => ({ ...prev, name: e.target.value }));
                 }}
+                autoFocus
               />
             </Grid>
           </Grid>
@@ -151,12 +151,14 @@ const ModalAddZone = ({ open, handleClose, type, handleSubmit, zoneIndex }) => {
               <FormControl className={classes.selectPerPage}>
                 <NativeSelect
                   style={{ width: 120, height: 34 }}
-                  // value={presetItem.presetId}
-                  onChange={(e) => {}}
+                  value={data.time}
+                  onChange={(e) => {
+                    setData((prev) => ({ ...prev, time: e.target.value }));
+                  }}
                 >
                   {Object.values(timeZone).map((it, index) => (
                     <option key={index} value={it.id}>
-                      {index + 1}
+                      {it.label}
                     </option>
                   ))}
                 </NativeSelect>

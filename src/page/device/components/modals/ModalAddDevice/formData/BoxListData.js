@@ -1,11 +1,11 @@
 import { Box, Typography } from "@material-ui/core";
 import React from "react";
 
-const BoxListData = ({ label, children }) => {
+const BoxListData = ({ label, children, width }) => {
   return (
     <Box
       style={{
-        width: "auto",
+        width: width || "auto",
         position: "relative",
         padding: "12px 16px",
         border: "solid 1px #858C94 ",

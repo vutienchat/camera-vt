@@ -918,6 +918,7 @@ export const listDevice = Array.from(Array(10)).map((_, indx) => ({
   ip: "179.229.40.98",
   vendor: "AXIS",
   added: indx % 2 === 0,
+  port: 80,
   firmware: "1.2.3",
   private: {
     primaryStream: `private primaryStream ${indx}`,

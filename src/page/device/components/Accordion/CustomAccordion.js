@@ -14,6 +14,7 @@ import { useRef } from "react";
 import CustomSwitch from "./CustomSwitch";
 import SuccessIcon from "../../Icon/SuccessIcon";
 import FailedIcon from "../../Icon/FailedIcon";
+import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 
 const CustomAccordion = React.memo(({ text, isSubLabel, type }) => {
   const classes = AccordionStyle();
@@ -22,7 +23,7 @@ const CustomAccordion = React.memo(({ text, isSubLabel, type }) => {
 
   const renderIcon = (type) => {
     if (type === "private") return <SuccessIcon />;
-    return <FailedIcon />;
+    return <HighlightOffIcon style={{ color: "#DD3D4B", fontSize: "16px" }} />;
   };
 
   const handleChange = (panel) => (event, newExpanded) => {
@@ -128,7 +129,7 @@ const CustomAccordion = React.memo(({ text, isSubLabel, type }) => {
                 gap: 10,
               }}
             >
-              {type === "private" ? <SuccessIcon /> : <FailedIcon />}
+              {type === "private" ? <SuccessIcon /> : <Checkbox />}
               <BaseFormGroup
                 label={" Secondary Stream"}
                 component={

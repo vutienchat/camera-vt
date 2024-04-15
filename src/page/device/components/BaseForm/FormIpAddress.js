@@ -3,12 +3,10 @@ import React, { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
 const FormIpAddress = React.forwardRef(
-  ({ type, label, ipAddress, setIPAddress }, ref) => {
-    const { control, watch, register } = useFormContext();
+  ({ type, label, ipAddress, handleChange, valueIp }, ref) => {
     const formClasses = formStyle();
 
     const [isHideInput, setIsHideInput] = useState(false);
-    const valueData = watch(type);
 
     const handleInputChange = (event, index, type) => {
       const { value } = event.target;
@@ -24,7 +22,7 @@ const FormIpAddress = React.forwardRef(
           document.getElementById(`ipPart${type}`).focus();
         }
         if (Number(value) > 255) return;
-        setIPAddress(newIPAddress);
+        handleChange(newIPAddress, "ipAddress");
       }
     };
     return (
@@ -39,7 +37,7 @@ const FormIpAddress = React.forwardRef(
           borderRadius: "8px",
         }}
         onClick={() => {
-          if (ipAddress.every((it) => it === "") && !valueData) {
+          if (ipAddress.every((it) => it === "") && !valueIp) {
             setIsHideInput(true);
             setTimeout(() => {
               document.getElementById(`ipPart0${type}`).focus();
@@ -51,7 +49,7 @@ const FormIpAddress = React.forwardRef(
         }}
         onBlur={() => setIsHideInput(false)}
       >
-        {ipAddress.every((it) => it === "") && !valueData && !isHideInput ? (
+        {ipAddress.every((it) => it === "") && !valueIp && !isHideInput ? (
           <span style={{ color: "#c4c4c4" }}>{label} address</span>
         ) : (
           <React.Fragment>
@@ -77,30 +75,29 @@ const FormIpAddress = React.forwardRef(
                 }
               />
             ))}
-            <Controller
+            {/* <Controller
               control={control}
               key={type}
               name={type}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  className={formClasses.root}
-                  type="text"
-                  id={`ipPart${type}`}
-                  name={type}
-                  value={field.value}
-                  maxLength="3"
-                  onChange={(e) => {
-                    if (isNaN(e.target.value) || Number(e.target.value) > 255)
-                      return;
-
-                    field.onChange(e.target.value);
-                  }}
-                  style={{ border: "none", width: 30, fontSize: 14 }}
-                  inputRef={field.ref}
-                />
-              )}
+              render={({ field }) => ( */}
+            <Input
+              // {...field}
+              className={formClasses.root}
+              type="text"
+              id={`ipPart${type}`}
+              // name={type}
+              value={valueIp}
+              maxLength="3"
+              onChange={(e) => {
+                if (isNaN(e.target.value) || Number(e.target.value) > 255)
+                  return;
+                handleChange(e.target.value, type);
+              }}
+              style={{ border: "none", width: 30, fontSize: 14 }}
+              // inputRef={field.ref}
             />
+            {/* )}
+            /> */}
           </React.Fragment>
         )}
       </Box>

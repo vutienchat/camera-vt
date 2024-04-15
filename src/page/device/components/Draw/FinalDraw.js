@@ -2,7 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import { Stage, Layer, Ellipse, Line } from "react-konva";
 import simplify from "simplify-js";
 import _ from "lodash";
-import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
+import {
+  TransformComponent,
+  TransformWrapper,
+  useControls,
+} from "react-zoom-pan-pinch";
 import { Box, Grid } from "@material-ui/core";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import { LineIcon, RefreshIcon, ZoneIcon } from "../../Icon";
@@ -18,19 +22,25 @@ import RenderLineZone from "./RenderLineZone";
 const FinalDraw = React.memo(({ canDraw, setCanDraw }) => {
   const imageRef = useRef(null);
   const stageRef = useRef(null);
+  // const { instance, zoomIn, zoomOut, ...rest } = useControls();
   const { watch, setValue, getValues } = useFormContext();
   const line = watch("line");
-  const listZone = watch("listZone");
+  const listZone = watch("zone");
+  const videoRef = useRef(null);
+  const resizableElementRef = useRef(null);
   const [points, setPoints] = useState([]);
   const [filledAreaPoints, setFilledAreaPoints] = useState([]);
   const [centerLine, setCenterLine] = useState([]);
   const [lines, setLines] = useState([]);
   const [zone, setZones] = useState([]);
+  const [lastDragPosition, setLastDragPosition] = useState({ x: 0, y: 0 });
+  const [initialPosition, setInitialPosition] = useState({ x: 0, y: 0 });
+  const [scaleZoom, setScaleZoom] = useState(0);
+  const [wrapperKey, setWrapperKey] = useState(Date.now());
   const [isDrag, setIsDrag] = useState(false);
   const [pointIndex, setPointIndex] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isDraw, setIsDraw] = useState(false);
-  const [lastDragPosition, setLastDragPosition] = useState({ x: 0, y: 0 });
   const [selectedLine, setSelectedLine] = useState(null);
   const [isUpdatePoint, setIsUpdatePoint] = useState(false);
   const [isPointAdded, setIsPointAdded] = useState(false);
@@ -42,17 +52,63 @@ const FinalDraw = React.memo(({ canDraw, setCanDraw }) => {
     open: false,
     type: typeModal.add,
   });
+  const [frameImage, setFrameImage] = useState({
+    elementWidth: 1500,
+    elementHeight: 1200,
+    loadFrameImage: false,
+  });
 
   useEffect(() => {
-    if (line && line.points && line.points.length) {
-      setLines(line.points);
+    const handleResize = () => {
+      const heightScreen = resizableElementRef.current.offsetHeight;
+      const widthScreen = resizableElementRef.current.offsetWidth;
+      //const scaleFirst = parseFloat((heightScreen / frameImage.elementHeight).toFixed(1))
+      const scaleFirst = parseFloat(
+        (widthScreen / frameImage.elementWidth).toFixed(1)
+      );
+      const scaleElementWidth = frameImage.elementWidth * scaleFirst;
+      const scaleElementHeight = frameImage.elementHeight * scaleFirst;
+
+      const positionX = (widthScreen - scaleElementWidth) / 2;
+      const positionY = (heightScreen - scaleElementHeight) / 2;
+      setScaleZoom(scaleFirst);
+      setInitialPosition({ x: positionX, y: positionY });
+      // setTransformState({
+      //   scale: scaleFirst,
+      //   positionX: positionX,
+      //   positionY: positionY
+      // })
+      setWrapperKey(Date.now());
+    };
+
+    handleResize();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [frameImage]);
+
+  useEffect(() => {
+    if (line && line.coordinate && line.coordinate.length) {
+      setLines(convertToObject(line.coordinate));
     }
   }, [line]);
 
   useEffect(() => {
     if (!listZone || !listZone.length) return;
-    setZones(listZone);
+    const convertData = listZone.map((it) => ({
+      ...it,
+      points: convertToObject(it.coordinate),
+    }));
+    setZones(convertData);
   }, [listZone]);
+
+  const convertToDimensionalArr = (arr) => {
+    if (!arr || !arr.length) return [];
+    return arr.map((point) => [point.x, point.y]);
+  };
+
+  const convertToObject = (arr) => {
+    if (!arr || !arr.length) return [];
+    return arr.map((point) => ({ x: point[0], y: point[1] }));
+  };
 
   const handleMouseMove = (e) => {
     const stage = e.target.getStage();
@@ -63,6 +119,7 @@ const FinalDraw = React.memo(({ canDraw, setCanDraw }) => {
     if (canDraw === 0 && tempLines.length === 2) {
       const midPoint = getMidpoint(tempLines[0], tempLines[1]);
       if (midPoint) {
+        console.log("[midPoint, { x, y }]", [midPoint, { x, y }]);
         setCenterLine([midPoint, { x, y }]);
       }
       return;
@@ -144,8 +201,9 @@ const FinalDraw = React.memo(({ canDraw, setCanDraw }) => {
       setPointIndex(null);
       setIsDrag(false);
       setFilledAreaPoints([]);
-      setValue("line.points", lines);
-      setValue("listZone", zone);
+      // setValue("line.points", lines);
+      setValue("line.coordinate", lines);
+      setValue("zone", zone);
     }
 
     if (
@@ -163,7 +221,7 @@ const FinalDraw = React.memo(({ canDraw, setCanDraw }) => {
     }
     if (isUpdatePoint) return;
     if (canDraw === 0) {
-      if (lines.length < 2 && line.points && line.points.length < 2) {
+      if (lines.length < 2 && line.coordinate && line.coordinate.length < 2) {
         setLines([...lines, pointerPos]);
         setFilledAreaPoints([...lines, pointerPos]);
       } else if (lines.length === 2) {
@@ -288,12 +346,13 @@ const FinalDraw = React.memo(({ canDraw, setCanDraw }) => {
       setLines([]);
       setFilledAreaPoints([]);
       setValue("line.name", "");
-      setValue("line.points", []);
+      setValue("line.coordinate", []);
     }
   };
 
   const handleAddLine = (data) => {
-    setValue("line.points", lines);
+    const newDataLine = convertToDimensionalArr([...lines]);
+    setValue("line.coordinate", newDataLine);
     setValue("line.name", data);
     setIsOpenModalLine((prev) => ({ ...prev, open: false }));
     setFilledAreaPoints([]);
@@ -301,9 +360,13 @@ const FinalDraw = React.memo(({ canDraw, setCanDraw }) => {
 
   const handleAddZone = (data) => {
     if (selectedLine === null) return;
-    const listZone = _.cloneDeep(getValues("listZone"));
+    const listZone = _.cloneDeep(getValues("zone"));
     listZone[selectedLine] = data;
-    setValue("listZone", listZone);
+    const convertData = listZone.map((it) => ({
+      ...it,
+      coordinate: convertToDimensionalArr(it.points),
+    }));
+    setValue("zone", convertData);
     setZones([...listZone]);
     setIsOpenModalZone((prev) => ({ ...prev, open: false }));
     setSelectedLine(null);
@@ -339,14 +402,14 @@ const FinalDraw = React.memo(({ canDraw, setCanDraw }) => {
         if (canDraw === 0 && isDrag) {
           setLines([]);
           setFilledAreaPoints([]);
-          setValue("line", {});
+          setValue("line", { name: "", points: [] });
           return;
         }
         if (selectedLine === null) return;
         const tempData = _.cloneDeep(zone);
         tempData.splice(selectedLine, 1);
         setZones(tempData);
-        setValue("listZone", tempData);
+        setValue("zone", tempData);
         setFilledAreaPoints([]);
         setSelectedLine(null);
         // setCanDraw(null);
@@ -358,7 +421,7 @@ const FinalDraw = React.memo(({ canDraw, setCanDraw }) => {
         setLines([]);
         setFilledAreaPoints([]);
         setCanDraw(null);
-        setValue("listZone", []);
+        setValue("zone", []);
         setValue("line", { name: "", points: [] });
         setZones([]);
         setPoints([]);
@@ -367,9 +430,19 @@ const FinalDraw = React.memo(({ canDraw, setCanDraw }) => {
     },
   ];
 
+  console.log("line", lines);
   return (
-    <Box style={{ width: "100%", height: "100%", position: "relative" }}>
+    <Box
+      style={{
+        width: 900,
+        height: 500,
+        position: "relative",
+        minHeight: 500,
+      }}
+      ref={resizableElementRef}
+    >
       <TransformWrapper
+        key={wrapperKey}
         doubleClick={{
           disabled: true,
         }}
@@ -377,8 +450,21 @@ const FinalDraw = React.memo(({ canDraw, setCanDraw }) => {
           lockAxisX: true,
           lockAxisY: true,
         }}
+        initialScale={scaleZoom}
+        initialPositionY={initialPosition.y}
+        initialPositionX={initialPosition.x}
+        minScale={0.2}
+        // onZoomStart={() => {
+        //   zoomIn(0.1);
+        // }}
       >
-        <TransformComponent>
+        <TransformComponent
+          wrapperStyle={{ width: "100%", height: "100%" }}
+          contentStyle={{
+            width: `${frameImage.elementWidth}px`,
+            height: `${frameImage.elementHeight}px`,
+          }}
+        >
           <div
             onContextMenu={(e) => e.preventDefault()}
             onDoubleClick={(e) => onDblClickStage(e, selectedLine)}
@@ -390,15 +476,14 @@ const FinalDraw = React.memo(({ canDraw, setCanDraw }) => {
               backgroundPosition: "center",
               backgroundRepeat: "no-repeat",
               backgroundSize: "cover",
+              // width: "100%",
               width: "100%",
-              minWidth: 900,
-              minHeight: 500,
               position: "relative",
             }}
           >
             <Stage
-              width={900}
-              height={500}
+              width={frameImage.elementWidth}
+              height={frameImage.elementHeight}
               onMouseDown={(e) => handleMouseDown(e, selectedLine)}
               onMousemove={handleMouseMove}
               onMouseup={handleMouseUp}
@@ -448,6 +533,7 @@ const FinalDraw = React.memo(({ canDraw, setCanDraw }) => {
                     stroke="black"
                   />
                 )}
+
                 <RenderTriangle
                   points={lines}
                   canDraw={canDraw}
@@ -503,11 +589,21 @@ const FinalDraw = React.memo(({ canDraw, setCanDraw }) => {
             setIsDraw(true);
             setPoints([]);
             setFilledAreaPoints([]);
-            setZones((prev) => {
-              const tempData = [...prev];
-              tempData.pop();
-              return tempData;
-            });
+            if (isOpenModalZone.type === typeModal.add) {
+              setZones((prev) => {
+                const tempData = [...prev];
+                tempData.pop();
+                return tempData;
+              });
+              return;
+            } else {
+              setZones((prev) => {
+                const tempData = [...prev];
+                return tempData;
+              });
+
+              return;
+            }
           }}
           handleSubmit={handleAddZone}
         />

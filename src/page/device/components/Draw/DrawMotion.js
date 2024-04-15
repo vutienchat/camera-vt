@@ -1,16 +1,22 @@
 import _ from "lodash";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Ellipse, Layer, Line, Rect, Stage } from "react-konva";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { sensitivity } from "./@type";
+import { useFormContext } from "react-hook-form";
 
-const DrawMotion = ({ typeSensitivity }, ref) => {
+const DrawMotion = ({ typeSensitivity, points, setPoint }, ref) => {
   const imageRef = useRef(null);
-  const [points, setPoint] = useState([]);
-  // const [currentLinePoints, setCurrentLinePoints] = useState([]);
+  const { setValue, watch, getValues } = useFormContext();
+  // const [points, setPoint] = useState([]);
   const [lines, setLines] = useState([]);
   const [filledAreaPoints, setFilledAreaPoints] = useState([]);
   const [isPointAdded, setIsPointAdded] = useState(false);
+
+  const typeMotion = getValues(typeSensitivity);
+  useEffect(() => {
+    setPoint(typeMotion.points);
+  }, [typeSensitivity]);
 
   const handleStageClick = (e) => {
     const stage = e.target.getStage();
@@ -56,14 +62,12 @@ const DrawMotion = ({ typeSensitivity }, ref) => {
 
   const handleMouseDown = (e, selectedLine) => {
     const stage = e.target.getStage();
-    const { x, y } = stage.getPointerPosition();
-    // setLines([...lines, { points: [{ x, y }] }]);
   };
+
   const handleMouseUp = (e) => {
-    // setIsDragging(false);
-    // setIsUpdatePoint(false);
-    // setPointIndex(null);
-    // Automatically close the last line by connecting its last point to its first point
+    setValue(typeSensitivity, {
+      points: points,
+    });
   };
 
   return (

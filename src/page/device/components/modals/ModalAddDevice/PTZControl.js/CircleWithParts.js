@@ -13,6 +13,7 @@ const useStyles = makeStyles((theme) => ({
     position: "absolute",
     overflow: "hidden",
     border: "solid 2px #DDDDDD",
+    transform: `rotate(25deg)`,
   },
   part: {
     position: "absolute",
@@ -48,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
   },
   icons: {
     position: "absolute",
-    inset: "10px",
+    inset: "5px",
     fontSize: "2rem",
     cursor: "default",
   },

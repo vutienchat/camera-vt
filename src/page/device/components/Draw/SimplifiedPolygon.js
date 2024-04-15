@@ -236,7 +236,7 @@ const DrawingComponent = () => {
         setFilledAreaPoints([]);
         setCanDraw(null);
         setPoints([]);
-        setValue("listZone", []);
+        setValue("zone", []);
         setValue("line", {});
       },
     },
@@ -270,9 +270,9 @@ const DrawingComponent = () => {
 
   const handleAddZone = (data) => {
     if (selectedLine === null) return;
-    const listZone = _.cloneDeep(getValues("listZone"));
+    const listZone = _.cloneDeep(getValues("zone"));
     listZone[selectedLine] = data;
-    setValue("listZone", listZone);
+    setValue("zone", listZone);
     setLines([...listZone]);
     setIsOpenModalZone(false);
     setSelectedLine(null);

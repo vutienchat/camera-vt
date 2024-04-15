@@ -38,7 +38,7 @@ function MapCustom({
   const [isDragging, setIsDragging] = useState(false);
   const [open, setOpen] = useState(true);
   const [map, setMap] = useState();
-  const [positionMark, setPositionMark] = useState(markerPosition);
+  // const [positionMark, setPositionMark] = useState(markerPosition);
 
   const onLoad = React.useCallback(function callback(map) {
     const bounds = new window.google.maps.LatLngBounds(center);
@@ -63,26 +63,9 @@ function MapCustom({
       lat: e.latLng.lat(),
       lng: e.latLng.lng(),
     };
-    setPositionMark(newMarkerPosition);
-    getAddressMarker(newMarkerPosition);
+    setMarkerPosition(newMarkerPosition);
     setOpen(true);
   };
-
-  const getAddressMarker = async (position) => {
-    const geocoder = new window.google.maps.Geocoder();
-    await geocoder
-      .geocode({
-        location: {
-          lng: position.lng,
-          lat: position.lat,
-        },
-      })
-      .then(({ results }) => {
-        setMarkerAddress(results[0].formatted_address);
-        return results[0].formatted_address;
-      });
-  };
-
   return isLoaded ? (
     <GoogleMap
       mapContainerStyle={containerStyle}
@@ -103,7 +86,7 @@ function MapCustom({
       mapContainerClassName={classes.root}
     >
       <Marker
-        position={positionMark}
+        position={markerPosition}
         draggable={!!isDrag}
         onDragEnd={handleMarkerDragEnd}
       >

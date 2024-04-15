@@ -48,6 +48,7 @@ function AuthenticationForm() {
               size="small"
               value={dataAuth.username}
               style={{ width: 280 }}
+              placeholder="Username"
               onChange={(e) => {
                 handleChange("username", e.target.value.slice(0, 255));
               }}
@@ -63,6 +64,7 @@ function AuthenticationForm() {
             <TextField
               type={!isHiddenText ? "password" : "text"}
               style={{ width: 280 }}
+              placeholder="Password"
               InputProps={{
                 endAdornment: (
                   <InputAdornment

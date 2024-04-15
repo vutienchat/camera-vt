@@ -16,6 +16,7 @@ import {
   LoadScript,
   useLoadScript,
 } from "@react-google-maps/api";
+import { useFormContext } from "react-hook-form";
 const placesLibrary = ["places"];
 
 const SelectLocation = ({
@@ -28,17 +29,39 @@ const SelectLocation = ({
   setMarkerPosition,
 }) => {
   const classes = useStyles();
+  const { setValue } = useFormContext();
   const [searchKey, setSearchKey] = useState("");
   //   const [searchResult, setSearchResult] = useState("");
+  const [newMarkerPosition, setNewMarkerPosition] = useState({
+    ...markerPosition,
+  });
   const [map, setMap] = useState(null);
   const [autocomplete, setAutocomplete] = useState(null);
   const inputRef = useRef(null);
+
+  console.log("markerPosition", markerPosition);
+
+  const getAddressMarker = async (position) => {
+    const geocoder = new window.google.maps.Geocoder();
+    await geocoder
+      .geocode({
+        location: {
+          lng: position.lng,
+          lat: position.lat,
+        },
+      })
+      .then(({ results }) => {
+        setMarkerAddress(results[0].formatted_address);
+        return results[0].formatted_address;
+      });
+  };
 
   return (
     <Popover
       //   id={"simple-popper"}
       open={open}
       anchorEl={anchorEl}
+      onClose={handleClose}
       className={classes.paper}
       anchorOrigin={{
         vertical: "bottom",
@@ -60,8 +83,8 @@ const SelectLocation = ({
             <MapCustom
               location={location}
               setMarkerAddress={setMarkerAddress}
-              markerPosition={markerPosition}
-              setMarkerPosition={setMarkerPosition}
+              markerPosition={newMarkerPosition}
+              setMarkerPosition={setNewMarkerPosition}
               isDrag={true}
               map={map}
               setMaps={setMap}
@@ -85,7 +108,19 @@ const SelectLocation = ({
               <BaseButton
                 label={"Confirm"}
                 type={"redBackground"}
-                onClick={() => {}}
+                onClick={() => {
+                  setNewMarkerPosition(newMarkerPosition);
+                  if (
+                    newMarkerPosition &&
+                    Object.keys(newMarkerPosition).length
+                  ) {
+                    Object.keys(newMarkerPosition).forEach((it) => {
+                      setValue(it, newMarkerPosition[it]);
+                    });
+                  }
+                  getAddressMarker(newMarkerPosition);
+                  handleClose();
+                }}
               />
             </Grid>
             <Grid item xs={4}>

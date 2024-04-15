@@ -12,12 +12,14 @@ import ModalAddSchedule from "./ModalAddSchedule";
 
 const RecordDevice = () => {
   const { state, dispatch } = useContext(DeviceContext);
-  const [selectedCells, setSelectedCells] = useState({});
+  const [selectedCells, setSelectedCells] = useState({
+    "Wed-10": true,
+    "Wed-9": true,
+  });
   const [selectedStoragePlan, setSelectedStoragePlan] = useState({});
   const [isOpenEditSchedule, setIsOpenEditSchedule] = useState(false);
   const [isOpenAddSchedule, setIsOpenAddSchedule] = useState(false);
   const [enableApplyButton, setEnableApplyButton] = useState(false);
-
   const classes = styles();
 
   const enableTable = useMemo(() => {
@@ -131,6 +133,26 @@ const RecordDevice = () => {
     console.log("data", data);
   };
 
+  const b = {
+    "Wed-10": true,
+    "Wed-9": true,
+  };
+
+  const filteredB = Object.keys(selectedCells)
+    .filter((key) => selectedCells[key] === true)
+    .reduce((obj, key) => {
+      obj[key] = true;
+      return obj;
+    }, {});
+
+  // Kiểm tra xem các phần tử trong filteredB có giống với các phần tử trong object a không
+  const isSame = Object.entries(filteredB).every(([key, value]) => {
+    // Kiểm tra xem key có tồn tại trong filteredB không và giá trị của nó có phải true không
+    return key in b && b[key] === value;
+  });
+
+  console.log(isSame); // false
+  console.log("filteredB", filteredB);
   return (
     <div
       style={{
@@ -394,3 +416,9 @@ const styles = makeStyles({
   },
 });
 export default RecordDevice;
+
+const newData = {
+  mon: ["0-0", "3-5", "22-24"],
+  tue: ["0-0", "4-4", "9-9"],
+  web: ["0-0", "2-3", "5-5"],
+};

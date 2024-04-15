@@ -24,7 +24,7 @@ const BaseInputForm = ({
       key={name}
       name={name}
       render={({ field }) => {
-        const { onChange, ref } = field;
+        const { onChange, ref, value } = field;
         return (
           <TextField
             {...register(name)}
@@ -32,10 +32,19 @@ const BaseInputForm = ({
             type={
               type && type === "password" && !isHiddenText ? "password" : "text"
             }
+            value={value}
             onChange={(event) => {
-              if (type === "number" && isNaN(event.target.value)) return;
+              const value = event.target.value;
+              if (type === "number" && isNaN(Number(value))) return;
+              // if (validateText && !validateText.test(value)) {
+              //   console.log(validateText.test(value));
+              //   return;
+              // }
               onChange(
-                event.target.value.slice(0, length || event.target.value.length)
+                value
+                  .slice(0, length || value.length)
+                  .replace(/^\s+/, "")
+                  .replace(/\s+$/, " ")
               );
             }}
             onKeyDown={(event) => {

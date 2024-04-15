@@ -59,7 +59,14 @@ const ModalAddDevice = React.memo(({ open = true, handleClose }) => {
                 />
               </Box>
             </DialogTitle>
-            <Box style={{ padding: 20, display: "flex", gap: 15 }}>
+            <Box
+              style={{
+                padding: 20,
+                display: "flex",
+                gap: 15,
+                alignItems: "flex-start",
+              }}
+            >
               <OptionContent />
               <FormData />
             </Box>

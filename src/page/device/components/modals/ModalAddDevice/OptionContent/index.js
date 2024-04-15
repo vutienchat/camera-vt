@@ -18,9 +18,11 @@ const OptionContent = () => {
     reset,
     setValue,
     watch,
+    getValues,
   } = useFormContext();
   const [isModalConfirm, setIsModalConfirm] = useState(false);
   const [newDeviceSelect, setNewDeviceSelect] = useState();
+  const [listDeviceScanned, setListDeviceScanned] = useState([]);
 
   const handleCheckChangeDevice = (isDirty, data, isMulti) => {
     if (isDirty) {
@@ -42,10 +44,18 @@ const OptionContent = () => {
       setValue("private", deviceSelected.private);
       setValue("public", deviceSelected.public);
       setValue("visualAI", deviceSelected.visualAI);
+      setValue("deviceName", deviceSelected.ip);
+      setValue("camRTSPAddr", `${deviceSelected.ip}:${deviceSelected.port}`);
+    } else {
+      const addingMode = getValues("addingMode");
+      const address = getValues("address");
+      const ip = getValues("ipAddress");
+      const port = getValues("port");
+      const ipScan = addingMode === "KnowAddress" ? address : ip.join(".");
+      setValue("deviceName", ipScan);
+      setValue("camRTSPAddr", `${ipScan}:${port}`);
     }
   };
-
-  console.log(watch());
 
   const handleRemoveSelectDevice = (id) => {
     dispatch({
@@ -62,9 +72,9 @@ const OptionContent = () => {
         flexDirection: "column",
       }}
     >
-      <AddMode />
+      <AddMode setListDeviceScanned={setListDeviceScanned} />
       <BoxContent title={"Device List"}>
-        <Box>
+        <Box style={{ minHeight: 500 }}>
           <Grid
             item
             container
@@ -104,7 +114,7 @@ const OptionContent = () => {
               overflowX: "hidden",
             }}
           >
-            {listDevice.map((device, indx) => (
+            {listDeviceScanned.map((device, indx) => (
               <Grid item key={indx}>
                 <DeviceItem
                   key={indx}
