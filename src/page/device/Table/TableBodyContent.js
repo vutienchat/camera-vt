@@ -131,7 +131,7 @@ const TableBodyContent = () => {
         return (
           <TableRow
             key={dataBody.id}
-            style={{ backgroundColor: isChecked ? "#fae2e4" : "transparent" }}
+            style={{ backgroundColor: isChecked ? "#F6F4F5" : "transparent" }}
             className={classes.rowTrafficItem}
           >
             {checkedAble && (

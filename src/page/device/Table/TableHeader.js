@@ -60,7 +60,7 @@ const TableHeaderContent = () => {
   };
 
   return (
-    <TableHead
+    <TableHead 
       style={{
         backgroundColor: colorHeader ? "rgba(221, 61, 75, 1)" : "#EBEBEB",
         height: "60px",

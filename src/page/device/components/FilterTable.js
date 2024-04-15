@@ -98,7 +98,7 @@ const FilterBar = () => {
           </Box>
         )}
       </Box>
-      <Box style={{ display: "flex", gap: 25 }}>
+      <Box  style={{ display: "flex", gap: 25 }}>
         <BaseButton
           label={"+ Add Device"}
           type={"redBackground"}

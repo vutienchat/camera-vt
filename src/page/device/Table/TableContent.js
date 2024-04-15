@@ -19,7 +19,7 @@ const TableContent = ({
   pagination,
   dispatch,
   iconPagination,
-  colorHeader
+  colorHeader,
 }) => {
   const data = {
     colorHeader,
@@ -38,7 +38,10 @@ const TableContent = ({
   const classes = useStyles();
   return (
     <TableCommonContext.Provider value={data}>
-      <TableContainer component={Box}>
+      <TableContainer
+        component={Box}
+        style={{ boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)" }}
+      >
         <Box
           className={classes.customScrollbar}
           style={{

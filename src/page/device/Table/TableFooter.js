@@ -132,7 +132,7 @@ const useTableFooterStyle = makeStyles({
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingTop: "15px",
+    padding: "15px 10px",
   },
   leftContent: {
     marginRight: "auto",

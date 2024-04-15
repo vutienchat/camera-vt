@@ -99,7 +99,7 @@ const useStyles = makeStyles(() => ({
   },
   rowTrafficItem: {
     height: 60,
-    "&:hover": { backgroundColor: "#fae2e4 !important" },
+    "&:hover": { backgroundColor: "#ffffff !important" },
     "& .MuiTableCell-root": {
       borderBottom: "3px solid #ffffff",
       borderTop: "3px solid #ffffff",
@@ -136,6 +136,7 @@ const SelectContainTable = ({
   const [isOpen, setIsOpen] = useState(false);
   const [textSearch, setTextSearch] = useState("");
   const [listFilter, setListFilter] = useState(list);
+  const [mouseOn, setMouseOn] = useState(false);
 
   useEffect(() => {
     if (textSearch) {
@@ -155,14 +156,13 @@ const SelectContainTable = ({
     setIsOpen(false);
   };
 
-
   return (
     <Box style={{ minWidth: width || "auto" }} key={searchBarType}>
       <ClickAwayListener onClickAway={handleClickAway}>
         <div className={classes.root}>
           <Button
             type="button"
-            style={{backgroundColor: noRecoding && "#D3D3D3"}}
+            style={{ backgroundColor: noRecoding && "#D3D3D3" }}
             onClick={handleClick}
             variant="outlined"
             className={classes.btnDropdown}
@@ -273,11 +273,6 @@ const SelectContainTable = ({
                           return (
                             <TableRow
                               key={dataBody.id}
-                              style={{
-                                backgroundColor: isChecked
-                                  ? "#fae2e4"
-                                  : "transparent",
-                              }}
                               className={classes.rowTrafficItem}
                             >
                               {tableHeader.map((head) => {
@@ -296,8 +291,8 @@ const SelectContainTable = ({
                                       cursor: handleClickColumns
                                         ? "pointer"
                                         : "auto",
-                                      backgroundColor:
-                                        " rgba(34, 34, 34, 0.05)",
+                                      // backgroundColor:
+                                      //   " rgba(34, 34, 34, 0.05)",
                                       borderTopLeftRadius:
                                         head.name === "Name" && "15px",
                                       borderBottomLeftRadius:
@@ -312,6 +307,8 @@ const SelectContainTable = ({
                                       borderLeft:
                                         head.name === "Name" &&
                                         "5px solid #ffffff",
+                                      backgroundColor:
+                                        (isChecked || mouseOn) && "#fae2e4",
                                     }}
                                     className={classes.tableCellCustom}
                                     onClick={() => {

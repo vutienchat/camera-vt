@@ -19,15 +19,15 @@ const RecordDevice = () => {
   const [enableApplyButton, setEnableApplyButton] = useState(false);
 
   const classes = styles();
-  
+
   const enableTable = useMemo(() => {
     const isSelectedStoragePlan =
       Object.keys(selectedStoragePlan).length === 0 &&
       selectedStoragePlan.constructor === Object;
-    if(isSelectedStoragePlan ||  !state.switchState.recording){
-      return true
-    }else{
-      return false
+    if (isSelectedStoragePlan || !state.switchState.recording) {
+      return true;
+    } else {
+      return false;
     }
   }, [selectedStoragePlan, state.switchState.recording]);
   const isCheckedAll = useMemo(() => {
@@ -176,7 +176,7 @@ const RecordDevice = () => {
             />
           )}
         </Box>
-        <table
+        <div
           className="schedule-table"
           style={{
             opacity: enableTable && "0.5",
@@ -184,9 +184,15 @@ const RecordDevice = () => {
             padding: "25px 10px 10px 10px",
           }}
         >
-          <thead>
-            <tr>
-              <th style={{ backgroundColor: "#D3D3D3" }}>
+          <div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <div className={classes.tableItem} style={{ width: 50 }}>
                 {indeterminateCheckBox ? (
                   <Checkbox
                     className={classes.indeterminateCheckBox}
@@ -215,44 +221,48 @@ const RecordDevice = () => {
                     }}
                   />
                 )}
-              </th>
+              </div>
               {hours.map((hour) => (
-                <th
-                  key={hour}
+                <div key={hour} className={classes.tableItem}>
+                  {hour}
+                </div>
+              ))}
+            </div>
+          </div>
+          <div>
+            {days.map((day, index) => (
+              <div
+                key={day}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <div
                   style={{
-                    width: 35,
+                    width: 50,
                     height: 30,
                     fontWeight: 500,
-                    backgroundColor: "#D3D3D3",
-                  }}
-                >
-                  {hour}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {days.map((day, index) => (
-              <tr key={day}>
-                <th
-                  style={{
-                    width: 25,
-                    height: 25,
-                    fontWeight: 500,
+                    marginTop: 3,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
                     background: "#D3D3D3",
                     color:
                       (index === 5 || index === 6) && " rgba(221, 61, 75, 1)",
                   }}
                 >
                   {day}
-                </th>
+                </div>
                 {hours.map((hour) => (
-                  <td
+                  <div
                     key={`${day}-${hour}`}
                     style={{
-                      width: 35,
-                      height: 20,
+                      width: 30,
+                      height: 30,
                       borderRadius: 2,
+                      marginTop: 3,
                       background: selectedCells[`${day}-${hour}`]
                         ? "#4E8FF7"
                         : "#E9E9E9",
@@ -266,12 +276,12 @@ const RecordDevice = () => {
                       setEnableApplyButton(true);
                     }}
                     onMouseUp={handleMouseUp}
-                  ></td>
+                  ></div>
                 ))}
-              </tr>
+              </div>
             ))}
-          </tbody>
-        </table>
+          </div>
+        </div>
         <Typography
           style={{
             // fontStyle: "italic",
@@ -373,6 +383,14 @@ const styles = makeStyles({
       backgroundColor: "white",
       borderRadius: 2,
     },
+  },
+  tableItem: {
+    width: 30,
+    height: 30,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#D3D3D3",
   },
 });
 export default RecordDevice;
