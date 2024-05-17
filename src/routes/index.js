@@ -1,4 +1,6 @@
+import HistoryEvent from "../page/historyEvent/HistoryEvent";
 import LiveView from "../page/liveView";
+import AuthScreen from "../page/loginSmartHome/modules/AuthScreen";
 import { Customer } from "../page/mangament/Customer/Customer";
 import { Device } from "../page/mangament/Device";
 import { Role } from "../page/mangament/Role";
@@ -15,4 +17,6 @@ export const routes = [
   { path: "/map", element: Map },
   { path: "/masterMap", element: MasterMap },
   { path: "/masterMapLeaf", element: MasterMapLeaf },
+  { path: "/historyEvent", element: HistoryEvent },
+  { path: "/loginSmartHome", element: AuthScreen },
 ];

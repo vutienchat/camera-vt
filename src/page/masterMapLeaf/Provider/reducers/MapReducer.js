@@ -12,6 +12,7 @@ export const cameraOnMapReducer = (state, action) => {
         listPopUpCameraOpen: action.payload,
       };
     case MapsActionTypes.PLACES:
+      console.log("action.payload", action.payload);
       return {
         ...state,
         places: action.payload,

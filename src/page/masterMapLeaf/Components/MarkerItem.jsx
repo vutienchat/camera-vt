@@ -10,6 +10,7 @@ import ContentPopUpCamera from "../../masterMap/Content/ContentPopUpCamera";
 const MarkerItem = ({ place, handleOpenEditModal }) => {
   const { listPopUpCameraOpen } = useCameraOnMapContext();
   const markerRef = useRef(null);
+  const popupRef = useRef(null);
 
   const dispatch = useDipatch();
 
@@ -31,6 +32,8 @@ const MarkerItem = ({ place, handleOpenEditModal }) => {
     () => ({
       click() {
         const marker = markerRef.current;
+
+        console.log({ markerRef });
 
         const selectedMarker = marker._popup._wrapper;
 
@@ -58,6 +61,10 @@ const MarkerItem = ({ place, handleOpenEditModal }) => {
     []
   );
 
+  console.log({
+    listPopUpCameraOpen,
+  });
+
   return (
     <Box style={{ position: "relative" }}>
       <Marker
@@ -70,7 +77,12 @@ const MarkerItem = ({ place, handleOpenEditModal }) => {
         icon={customIcon}
         eventHandlers={eventHandlers}
       >
-        <Popup autoClose={false} closeButton={false} closeOnClick={false}>
+        <Popup
+          autoClose={false}
+          closeButton={false}
+          closeOnClick={false}
+          keepInView={false}
+        >
           <ContentPopUpCamera
             place={place}
             handleOpenEditModal={handleOpenEditModal}

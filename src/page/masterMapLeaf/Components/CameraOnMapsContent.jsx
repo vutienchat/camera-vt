@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useListMarkersData from "../../../hooks/api/useListMarkers";
 import { useCameraOnMapContext, useDipatch } from "../Provider/CameraOnMapMngt";
 import { MapsActionTypes } from "../Provider/reducers/MapReducer";
-import { LayersControl, MapContainer, TileLayer } from "react-leaflet";
+import { MapContainer, TileLayer } from "react-leaflet";
 import MarkerItem from "./MarkerItem";
+import { fetchAddress } from "../utils/common";
 
 const latDefault = 21.0677385;
 const lngDefault = 105.8114404;
@@ -34,30 +35,26 @@ const CameraOnMapsContent = () => {
   const { data: markerList } = useListMarkersData();
   const dispatch = useDipatch();
 
+  const rootRef = useRef(null);
+
   const { places } = useCameraOnMapContext();
 
   const [placeSelected, setPlaceSelected] = useState();
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
 
   const getAddressMarker = async (position) => {
-    const geocoder = new window.google.maps.Geocoder();
-
-    const response = await geocoder
-      .geocode({
-        location: {
-          lng: position.lng,
-          lat: position.lat,
-        },
-      })
-      .then(({ results }) => {
-        return results[0].formatted_address;
-      });
+    const response = await fetchAddress({
+      lng: position.lng,
+      lat: position.lat,
+    });
 
     return response;
   };
 
   useEffect(() => {
     if (!markerList) return;
+
+    const devices = [...places];
 
     markerList.forEach((marker) => {
       marker.deviceList.forEach(async (device) => {
@@ -67,28 +64,25 @@ const CameraOnMapsContent = () => {
             lat: device.lat,
           });
 
+          devices.push({
+            ...device,
+            name: addressMarker,
+          });
           dispatch({
             type: MapsActionTypes.PLACES,
-            payload: [
-              ...places,
-              {
-                ...device,
-                name: addressMarker,
-              },
-            ],
+            payload: [...devices],
           });
         } else {
+          devices.push({
+            ...device,
+            name: "380 Đường Lạc Long Quân, Xuân La, Tây Hồ, Hà Nội",
+            lat: latDefault,
+            lng: lngDefault,
+          });
+
           dispatch({
             type: MapsActionTypes.PLACES,
-            payload: [
-              ...places,
-              {
-                ...device,
-                name: "380 Đường Lạc Long Quân, Xuân La, Tây Hồ, Hà Nội",
-                lat: latDefault,
-                lng: lngDefault,
-              },
-            ],
+            payload: [...devices],
           });
         }
       });
@@ -109,15 +103,11 @@ const CameraOnMapsContent = () => {
     <MapContainer center={defaultProps.center} zoom={16} scrollWheelZoom={true}>
       <TileLayer attribution={maptiler.atrribution} url={maptiler.url} />
       {places.map((place) => (
-        <LayersControl position="topright">
-          <LayersControl.Overlay name="Marker with popup">
-            <MarkerItem
-              key={place.id}
-              place={place}
-              handleOpenEditModal={handleOpenEditModal}
-            />
-          </LayersControl.Overlay>
-        </LayersControl>
+        <MarkerItem
+          key={place.id}
+          place={place}
+          handleOpenEditModal={handleOpenEditModal}
+        />
       ))}
     </MapContainer>
   );
