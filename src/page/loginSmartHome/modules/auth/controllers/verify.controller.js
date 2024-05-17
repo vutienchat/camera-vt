@@ -5,7 +5,7 @@ import {
   useAuthContext,
   useAuthDispatch,
 } from "../../../libs/provider/AuthProvider";
-import { sendOtp, verifyOtp } from "../../../libs/data/auth";
+import { loginSmartHome, sendOtp, verifyOtp } from "../../../libs/data/auth";
 import { useMutation } from "@tanstack/react-query";
 import useGetAppId from "../../../libs/hooks/useGetAppId";
 import { AuthAction } from "../../../libs/models/common";
@@ -36,10 +36,22 @@ const useVerifyController = () => {
       if (success) {
         const dataJson = JSON.parse(data);
 
-        if (dataJson.code === 2001) {
-          verifyForm.setError("otp", {
-            message: "Mã OTP không chính xác. Vui lòng thử lại.",
-          });
+        if (dataJson.code) {
+          if (dataJson.code === 2001) {
+            verifyForm.setError("otp", {
+              message: "Mã OTP không chính xác. Vui lòng thử lại.",
+            });
+          } else {
+          }
+        } else {
+          if (dataJson.correct) {
+            loginSmartHome({
+              ...userInfo,
+              appId,
+            }).then((res) => {
+              alert("Đăng nhập thành công");
+            });
+          }
         }
       } else {
         console.log(data);
@@ -70,6 +82,12 @@ const useVerifyController = () => {
         if (dataJson.code === 2001) {
           verifyForm.setError("otp", {
             message: "Mã OTP không chính xác. Vui lòng thử lại.",
+          });
+        }
+
+        if (dataJson.code === 2008) {
+          verifyForm.setError("otp", {
+            message: "Mã OTP hết hạn. Vui lòng thử lại.",
           });
         }
       }
