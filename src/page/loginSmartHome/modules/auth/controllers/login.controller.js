@@ -90,7 +90,12 @@ const useLoginController = () => {
         if (dataJson.code === 2013) {
           loginForm.setError("password", {
             type: "manual",
-            message: dataJson.message,
+            message: "Số điện thoại hoặc mật khẩu không chính xác",
+          });
+
+          loginForm.setError("identifier", {
+            type: "manual",
+            message: "",
           });
 
           if (captchaImage !== "") {
@@ -144,6 +149,7 @@ const useLoginController = () => {
     loginMutate,
 
     handleLogin,
+    handleGetCaptcha,
   };
 };
 

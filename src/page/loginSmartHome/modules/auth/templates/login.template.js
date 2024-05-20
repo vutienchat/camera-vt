@@ -16,12 +16,14 @@ import {
   useAuthDispatch,
 } from "../../../libs/provider/AuthProvider";
 import AppInstallModal from "../components/modals/AppInstallModal";
+import ResetIconOtp from "../../../libs/assets/ResetOtpIcon";
 
 const LoginTemplate = () => {
   const classes = useStyles();
   const dispatch = useAuthDispatch();
   const { captchaImage } = useAuthContext();
-  const { loginForm, loginMutate, handleLogin } = useLoginController();
+  const { loginForm, loginMutate, handleLogin, handleGetCaptcha } =
+    useLoginController();
 
   const handleOpenAppInstallModal = () => {
     dispatch({
@@ -69,9 +71,15 @@ const LoginTemplate = () => {
                 style={{
                   margin: "auto",
                   width: "fit-content",
+                  display: "flex",
+                  gap: "10px",
+                  cursor: "pointer",
                 }}
               >
-                <img src={captchaImage} alt="Catcha_Image" />
+                <img src={captchaImage || ""} alt="Catcha_Image" />
+                <Box onClick={handleGetCaptcha}>
+                  <ResetIconOtp />
+                </Box>
               </Box>
               <BaseInputForm
                 name="captcha"

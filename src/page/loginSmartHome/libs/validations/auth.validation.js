@@ -11,7 +11,7 @@ const loginSchema = yup.object().shape({
 const verifySchema = yup.object().shape({
   otp: yup
     .string()
-    .required("Vui lòng không để trống mã OTP.")
+    .required("Vui lòng nhập mã OTP.")
     .matches(/^[0-9]{6}$/, "Mã OTP không hợp lệ."),
 });
 

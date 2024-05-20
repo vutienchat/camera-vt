@@ -9,6 +9,9 @@ import { loginSmartHome, sendOtp, verifyOtp } from "../../../libs/data/auth";
 import { useMutation } from "@tanstack/react-query";
 import useGetAppId from "../../../libs/hooks/useGetAppId";
 import { AuthAction } from "../../../libs/models/common";
+import { getMessageOtp } from "../../../libs/utils/message";
+
+const arrCodeOtp = [2001, 2008, 2009, 2024];
 
 const useVerifyController = () => {
   const { userInfo, messageOverOtp } = useAuthContext();
@@ -72,22 +75,10 @@ const useVerifyController = () => {
       if (success) {
         const dataJson = JSON.parse(data);
 
-        if (dataJson.code === 2024) {
+        if (arrCodeOtp.includes(dataJson.code)) {
           dispatch({
             type: AuthAction.MESSAGE_OVER_OTP,
-            payload: "Bạn đã dùng tối đa số OTP trong ngày",
-          });
-        }
-
-        if (dataJson.code === 2001) {
-          verifyForm.setError("otp", {
-            message: "Mã OTP không chính xác. Vui lòng thử lại.",
-          });
-        }
-
-        if (dataJson.code === 2008) {
-          verifyForm.setError("otp", {
-            message: "Mã OTP hết hạn. Vui lòng thử lại.",
+            payload: getMessageOtp(dataJson.code),
           });
         }
       }
