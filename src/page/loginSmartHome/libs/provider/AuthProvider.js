@@ -13,8 +13,12 @@ const initialState = {
     identifier: "",
     password: "",
   },
-  messageOverOtp: "",
+  messageOverOtp: {
+    code: 0,
+    message: "",
+  },
   appId: "",
+  statusResend: false,
 };
 
 export const AuthContext = createContext(initialState);
@@ -54,6 +58,11 @@ export function authReducer(authProvider, action) {
       return {
         ...authProvider,
         appId: action.payload,
+      };
+    case AuthAction.STATUS_RESEND:
+      return {
+        ...authProvider,
+        statusResend: action.payload,
       };
     default:
       throw Error("Unknown action: " + action.type);

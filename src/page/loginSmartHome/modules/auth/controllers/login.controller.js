@@ -10,11 +10,16 @@ import {
 } from "../../../libs/provider/AuthProvider";
 import { AuthAction, AuthTabPanel } from "../../../libs/models/common";
 import useGetAppId from "../../../libs/hooks/useGetAppId";
+import dayjs from "dayjs";
+
+// const { useState } = React;
 
 const useLoginController = () => {
   const { captchaImage } = useAuthContext();
   const dispatch = useAuthDispatch();
   const appId = useGetAppId();
+
+  // const [counterCaptcha, setCounterCaptcha] = useState(0);
 
   const loginForm = useForm({
     defaultValues: {
@@ -34,7 +39,6 @@ const useLoginController = () => {
               type: AuthAction.CATPCHA_STATUS,
               payload: "data:image/jpeg;base64," + res.data,
             });
-            loginForm.setValue("captcha", "");
           }
         } else {
           console.log(res);
@@ -52,11 +56,54 @@ const useLoginController = () => {
       if (success) {
         const dataJson = JSON.parse(data);
 
+        if (dataJson.otpError && dataJson.otpError === 9999) {
+          const time = dayjs(dataJson.lastOTP).unix() + 5 * 60 - dayjs().unix();
+
+          dispatch({
+            type: AuthAction.MESSAGE_OVER_OTP,
+            payload: {
+              code: 2008,
+              message: `Bạn đã nhập sai mã OTP quá 5 lần, vui lòng chờ ${time} để thử lại`,
+            },
+          });
+
+          return;
+        }
+
         if (dataJson.code === 2024) {
           dispatch({
             type: AuthAction.MESSAGE_OVER_OTP,
-            payload: "Bạn đã dùng tối đa số OTP trong ngày",
+            payload: {
+              code: 2024,
+              message: "Bạn đã dùng tối đa số OTP trong ngày",
+            },
           });
+
+          dispatch({
+            type: AuthAction.STATUS_RESEND,
+            payload: true,
+          });
+        } else if (dataJson.code === 2023) {
+          dispatch({
+            type: AuthAction.MESSAGE_OVER_OTP,
+            payload: {
+              code: 2023,
+              message: "Sai mã xác minh, vui lòng thử lại.",
+            },
+          });
+        } else if (dataJson.code === 2008) {
+          if (dataJson.otpError && dataJson.otpError === 9999) {
+            const time =
+              dayjs(dataJson.lastOTP).unix() + 5 * 60 - dayjs().unix();
+
+            dispatch({
+              type: AuthAction.MESSAGE_OVER_OTP,
+              payload: {
+                code: 2008,
+                message: `Bạn đã nhập sai mã OTP quá 5 lần, vui lòng chờ ${time} để thử lại`,
+              },
+            });
+          }
         }
       }
     });
@@ -98,12 +145,18 @@ const useLoginController = () => {
             message: "",
           });
 
+          // setCounterCaptcha((prev) => prev + 1);
+
           if (captchaImage !== "") {
+            loginForm.setValue("captcha", "");
+
             handleGetCaptcha();
           }
         }
 
         if (dataJson.code === 3005) {
+          loginForm.setValue("captcha", "");
+
           handleGetCaptcha();
         }
 

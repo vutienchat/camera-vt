@@ -84,7 +84,12 @@ const AuthTemplate = () => {
         )}
       </Box>
       {authTab === AuthTabPanel.VERIFY && (
-        <Box>
+        <Box
+          sx={{
+            width: "409px",
+            height: "408px",
+          }}
+        >
           <img src="/images/background_otp.png" alt="bg_verify" />
         </Box>
       )}

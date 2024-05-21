@@ -16,4 +16,5 @@ export const AuthAction = {
   USER_INFO: "USER_INFO",
   MESSAGE_OVER_OTP: "MESSAGE_OVER_OTP",
   APP_ID: "APP_ID",
+  STATUS_RESEND: "STATUS_RESEND",
 };
