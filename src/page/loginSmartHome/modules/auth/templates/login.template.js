@@ -17,6 +17,7 @@ import {
 } from "../../../libs/provider/AuthProvider";
 import AppInstallModal from "../components/modals/AppInstallModal";
 import ResetIconOtp from "../../../libs/assets/ResetOtpIcon";
+import extendedDayJs from "../../../../../utils/dayjs";
 
 const LoginTemplate = () => {
   const classes = useStyles();

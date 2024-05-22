@@ -19,6 +19,7 @@ const initialState = {
   },
   appId: "",
   statusResend: false,
+  timeExpired: 0,
 };
 
 export const AuthContext = createContext(initialState);
@@ -63,6 +64,11 @@ export function authReducer(authProvider, action) {
       return {
         ...authProvider,
         statusResend: action.payload,
+      };
+    case AuthAction.TIME_EXPIRED:
+      return {
+        ...authProvider,
+        timeExpired: action.payload,
       };
     default:
       throw Error("Unknown action: " + action.type);

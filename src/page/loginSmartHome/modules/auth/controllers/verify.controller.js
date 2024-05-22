@@ -7,12 +7,15 @@ import { useMutation } from "@tanstack/react-query";
 import useGetAppId from "../../../libs/hooks/useGetAppId";
 import { getMessageOtp } from "../../../libs/utils/message";
 import { useState } from "react";
+import useExpiredController from "./expired.controller";
 
 const arrCodeOtp = [2001, 2008, 2009, 2024];
 
 const useVerifyController = () => {
   const { userInfo } = useAuthContext();
   const [isCountOver, setCountOver] = useState(false);
+
+  const { handleExpired } = useExpiredController();
 
   const appId = useGetAppId();
 
@@ -37,6 +40,14 @@ const useVerifyController = () => {
         const dataJson = JSON.parse(data);
 
         if (dataJson.code) {
+          if (dataJson.code === 2023 || dataJson.code === 2008) {
+            if (dataJson.otpError && dataJson.otpError === 9999) {
+              handleExpired(dataJson.lastOTP);
+
+              return;
+            }
+          }
+
           if (arrCodeOtp.includes(dataJson.code)) {
             verifyForm.setError("otp", {
               type: "manual",
@@ -53,8 +64,6 @@ const useVerifyController = () => {
             });
           }
         }
-      } else {
-        console.log(data);
       }
     },
   });

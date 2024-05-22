@@ -10,7 +10,7 @@ import {
 } from "../../../libs/provider/AuthProvider";
 import { AuthAction, AuthTabPanel } from "../../../libs/models/common";
 import useGetAppId from "../../../libs/hooks/useGetAppId";
-import dayjs from "dayjs";
+import useExpiredController from "./expired.controller";
 
 // const { useState } = React;
 
@@ -18,6 +18,7 @@ const useLoginController = () => {
   const { captchaImage } = useAuthContext();
   const dispatch = useAuthDispatch();
   const appId = useGetAppId();
+  const { handleExpired } = useExpiredController();
 
   // const [counterCaptcha, setCounterCaptcha] = useState(0);
 
@@ -57,15 +58,7 @@ const useLoginController = () => {
         const dataJson = JSON.parse(data);
 
         if (dataJson.otpError && dataJson.otpError === 9999) {
-          const time = dayjs(dataJson.lastOTP).unix() + 5 * 60 - dayjs().unix();
-
-          dispatch({
-            type: AuthAction.MESSAGE_OVER_OTP,
-            payload: {
-              code: 2008,
-              message: `Bạn đã nhập sai mã OTP quá 5 lần, vui lòng chờ ${time} để thử lại`,
-            },
-          });
+          handleExpired(dataJson.lastOTP);
 
           return;
         }
@@ -88,21 +81,19 @@ const useLoginController = () => {
             type: AuthAction.MESSAGE_OVER_OTP,
             payload: {
               code: 2023,
-              message: "Sai mã xác minh, vui lòng thử lại.",
+              message: `Bạn đã nhập sai mã OTP quá 5 lần, vui lòng chờ 05:00 để thử lại`,
             },
+          });
+
+          dispatch({
+            type: AuthAction.TIME_EXPIRED,
+            payload: 300,
           });
         } else if (dataJson.code === 2008) {
           if (dataJson.otpError && dataJson.otpError === 9999) {
-            const time =
-              dayjs(dataJson.lastOTP).unix() + 5 * 60 - dayjs().unix();
+            handleExpired(dataJson.lastOTP);
 
-            dispatch({
-              type: AuthAction.MESSAGE_OVER_OTP,
-              payload: {
-                code: 2008,
-                message: `Bạn đã nhập sai mã OTP quá 5 lần, vui lòng chờ ${time} để thử lại`,
-              },
-            });
+            return;
           }
         }
       }

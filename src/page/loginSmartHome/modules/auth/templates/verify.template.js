@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import useVerifyController from "../controllers/verify.controller";
 import { Controller, FormProvider } from "react-hook-form";
 import OTPInput from "react-otp-input";
@@ -10,13 +10,16 @@ import {
   useAuthDispatch,
 } from "../../../libs/provider/AuthProvider";
 import { AuthAction, AuthTabPanel } from "../../../libs/models/common";
+import useExpiredController from "../controllers/expired.controller";
 
 const totalSeconds = 2 * 60 + 0;
 
 const VerifyTemplate = () => {
-  const { userInfo, messageOverOtp, statusResend } = useAuthContext();
+  const { userInfo, messageOverOtp, statusResend, timeExpired } =
+    useAuthContext();
   const { verifyForm, isCountOver, setCountOver, handleVerify } =
     useVerifyController();
+  const { handleResetExpired } = useExpiredController();
   const dispatch = useAuthDispatch();
 
   const [remainingSeconds, setRemainingSeconds] = useState(totalSeconds);
@@ -31,6 +34,12 @@ const VerifyTemplate = () => {
     }
   };
 
+  useEffect(() => {
+    if (timeExpired === 0) return;
+
+    setRemainingSeconds(timeExpired);
+  }, [timeExpired]);
+
   const handleReSendOtp = () => {
     sendOtp({ phone: userInfo.identifier });
   };
@@ -41,6 +50,7 @@ const VerifyTemplate = () => {
       type: AuthAction.STATUS_RESEND,
       payload: false,
     });
+    handleResetExpired();
   }, []);
 
   const handleResend = () => {
@@ -201,6 +211,8 @@ const VerifyTemplate = () => {
                   type: AuthAction.TAB,
                   payload: AuthTabPanel.LOGIN,
                 });
+
+                handleResetExpired();
               }}
             >
               Hủy bỏ
