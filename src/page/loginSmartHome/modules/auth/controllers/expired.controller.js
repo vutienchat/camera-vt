@@ -19,6 +19,11 @@ const useExpiredController = () => {
       type: AuthAction.TIME_EXPIRED,
       payload: 0,
     });
+
+    dispatch({
+      type: AuthAction.STATUS_RESEND,
+      payload: false,
+    });
   };
 
   const handleExpired = (timeOtp) => {

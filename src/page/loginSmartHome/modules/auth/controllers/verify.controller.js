@@ -55,6 +55,12 @@ const useVerifyController = () => {
             });
           }
         } else {
+          if (dataJson.otpError && dataJson.otpError === 9999) {
+            handleExpired(dataJson.lastOTP);
+
+            return;
+          }
+
           if (dataJson.correct) {
             loginSmartHome({
               ...userInfo,

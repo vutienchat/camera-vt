@@ -8,6 +8,12 @@ const loginSchema = yup.object().shape({
   password: yup.string().required("Vui lòng không để trống mật khẩu."),
 });
 
+const catpchaSchema = yup.object().shape({
+  captcha: yup.string().required("Vui lòng nhập mã Captcha."),
+});
+
+const loginCombine = loginSchema.concat(catpchaSchema);
+
 const verifySchema = yup.object().shape({
   otp: yup
     .string()
@@ -15,4 +21,4 @@ const verifySchema = yup.object().shape({
     .matches(/^[0-9]{6}$/, "Mã OTP không hợp lệ."),
 });
 
-export { loginSchema, verifySchema };
+export { loginSchema, verifySchema, catpchaSchema, loginCombine };

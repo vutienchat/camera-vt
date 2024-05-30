@@ -63,13 +63,6 @@ const VerifyTemplate = () => {
     });
     setCountOver(false);
     setRemainingSeconds(totalSeconds);
-
-    setTimeout(() => {
-      dispatch({
-        type: AuthAction.STATUS_RESEND,
-        payload: false,
-      });
-    }, 2 * 60 * 1000);
   };
 
   return (
@@ -108,7 +101,11 @@ const VerifyTemplate = () => {
                 numInputs={6}
                 inputType="tel"
                 renderInput={(props) => (
-                  <input {...props} onKeyDown={handleInputKeyDown} />
+                  <input
+                    {...props}
+                    onKeyDown={handleInputKeyDown}
+                    placeholder="0"
+                  />
                 )}
               />
             );

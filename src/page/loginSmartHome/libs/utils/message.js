@@ -7,9 +7,9 @@ const getMessageOtp = (code) => {
     case 2008:
       return "Mã OTP hết hạn. Vui lòng thử lại.";
     case 2009:
-      return "Sai mã xác minh, vui lòng thử lại.";
+      return "Mã OTP không chính xác. Vui lòng thử lại.";
     case 2023:
-      return "Sai mã xác minh, vui lòng thử lại.";
+      return "Mã OTP không chính xác. Vui lòng thử lại";
     default:
       return "";
   }

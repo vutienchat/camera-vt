@@ -17,7 +17,6 @@ import {
 } from "../../../libs/provider/AuthProvider";
 import AppInstallModal from "../components/modals/AppInstallModal";
 import ResetIconOtp from "../../../libs/assets/ResetOtpIcon";
-import extendedDayJs from "../../../../../utils/dayjs";
 
 const LoginTemplate = () => {
   const classes = useStyles();
@@ -31,6 +30,15 @@ const LoginTemplate = () => {
       type: AuthAction.STATUS_MODAL,
       payload: true,
     });
+  };
+
+  const handleResetCaptcha = () => {
+    if (captchaImage !== "") {
+      dispatch({
+        type: AuthAction.CATPCHA_STATUS,
+        payload: "",
+      });
+    }
   };
 
   return (
@@ -49,6 +57,8 @@ const LoginTemplate = () => {
             label="Số điện thoại"
             type={InputKey.phone}
             placeholder="Nhập số điện thoại"
+            customCallBack={handleResetCaptcha}
+            maxLength={10}
             isRequired
           />
 
@@ -86,8 +96,9 @@ const LoginTemplate = () => {
                 name="captcha"
                 label="Mã Captcha"
                 type={InputKey.captcha}
-                placeholder="Nhập các ký tự trong hình"
+                placeholder="Nhập mã captcha"
                 isRequired
+                maxLength={10}
               />
             </Box>
           )}

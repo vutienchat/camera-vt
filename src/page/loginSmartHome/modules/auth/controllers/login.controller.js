@@ -1,7 +1,10 @@
 import React from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { loginSchema } from "../../../libs/validations/auth.validation";
+import {
+  loginCombine,
+  loginSchema,
+} from "../../../libs/validations/auth.validation";
 import { getCatpcha, loginSmartHome, sendOtp } from "../../../libs/data/auth";
 import { useMutation } from "@tanstack/react-query";
 import {
@@ -11,6 +14,7 @@ import {
 import { AuthAction, AuthTabPanel } from "../../../libs/models/common";
 import useGetAppId from "../../../libs/hooks/useGetAppId";
 import useExpiredController from "./expired.controller";
+import extendedDayJs from "../../../../../utils/dayjs";
 
 // const { useState } = React;
 
@@ -26,9 +30,10 @@ const useLoginController = () => {
     defaultValues: {
       identifier: "",
       password: "",
+      captcha: "",
     },
     mode: "onChange",
-    resolver: yupResolver(loginSchema),
+    resolver: yupResolver(captchaImage !== "" ? loginCombine : loginSchema),
   });
 
   const handleGetCaptcha = () => {
@@ -59,6 +64,19 @@ const useLoginController = () => {
 
         if (dataJson.otpError && dataJson.otpError === 9999) {
           handleExpired(dataJson.lastOTP);
+
+          return;
+        }
+
+        if (dataJson.otpError && dataJson.otpError === 8888) {
+          const time = extendedDayJs(dataJson.lastOTP)
+            .utc()
+            .diff(extendedDayJs().local().add(7, "hours"), "seconds");
+
+          dispatch({
+            type: AuthAction.TIME_EXPIRED,
+            payload: time,
+          });
 
           return;
         }
@@ -128,7 +146,7 @@ const useLoginController = () => {
         if (dataJson.code === 2013) {
           loginForm.setError("password", {
             type: "manual",
-            message: "Số điện thoại hoặc mật khẩu không chính xác",
+            message: "Mật khẩu hoặc số điện thoại không khớp.",
           });
 
           loginForm.setError("identifier", {

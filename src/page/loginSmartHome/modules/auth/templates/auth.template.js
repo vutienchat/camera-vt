@@ -77,11 +77,14 @@ const AuthTemplate = () => {
             </Typography>
           </React.Fragment>
         )}
-        {authTab === AuthTabPanel.LOGIN ? (
+        <div
+          style={{
+            display: authTab === AuthTabPanel.LOGIN ? "block" : "none",
+          }}
+        >
           <LoginTemplate />
-        ) : (
-          <VerifyTemplate />
-        )}
+        </div>
+        {authTab !== AuthTabPanel.LOGIN && <VerifyTemplate />}
       </Box>
       {authTab === AuthTabPanel.VERIFY && (
         <Box
