@@ -30,6 +30,7 @@ import ModalPlayTask from "../modal/ModalPlayTask";
 import ViewSideEvent from "./ViewSideEvent";
 import { LiveViewContext } from "../../page/liveView";
 import ViewLayout from "../../page/liveView2/components/ViewLayout";
+import ViewTrackingRealtime from "./ViewTrackingRealtime";
 
 const drawerWidth = 344;
 const useStyles = makeStyles((theme) => ({
@@ -456,7 +457,7 @@ const SideBar = ({
         );
         break;
       case "layout":
-        view = <ViewLayout />;
+        view = <ViewTrackingRealtime />;
         break;
       default:
         view = <ViewSideDevice classes={classes} />;
