@@ -1,12 +1,6 @@
 import Box from "@material-ui/core/Box";
 import { makeStyles } from "@material-ui/styles";
-import React, {
-  Fragment,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 
 import Toast from "./Toast";
 
@@ -27,7 +21,8 @@ const useStyles = makeStyles(() => ({
 const Toastify = () => {
   const classes = useStyles();
   const containerRef = useRef(null);
-  const [toast, setToast] = useState([]);
+  const [toasts, setToasts] = useState([]);
+  const queueRef = useRef([]);
   const [collapsed, setIsCollapsed] = useState(true);
 
   const pause = () => {
@@ -52,10 +47,26 @@ const Toastify = () => {
   };
 
   const handleCloseToast = (id) => {
-    setToast((prev) => prev.filter((item) => item !== id));
+    setToasts((prevToasts) => {
+      const newToasts = prevToasts.filter((item) => item !== id);
+
+      if (queueRef.current.length > 0) {
+        const nextToast = queueRef.current.shift();
+        newToasts.push(nextToast);
+      }
+      return newToasts;
+    });
   };
 
-  useLayoutEffect(() => {
+  const handleAddToast = () => {
+    if (toasts.length < 5) {
+      setToasts((prevToasts) => [...prevToasts, new Date().getTime()]);
+    } else {
+      queueRef.current.push(new Date().getTime());
+    }
+  };
+
+  useEffect(() => {
     if (containerRef.current) {
       const nodes = containerRef.current.querySelectorAll(
         ".toastify-toast-item"
@@ -64,31 +75,24 @@ const Toastify = () => {
       let usedHeight = 0;
       let prevS = 0;
 
-      Array.from(nodes)
-        // .reverse()
-        .forEach((n, i) => {
-          const node = n;
-          node.classList.add("toastify__toast--stacked");
+      Array.from(nodes).forEach((n, i) => {
+        const node = n;
+        node.classList.add("toastify__toast--stacked");
 
-          prevS = (nodes.length - i) * 0.025;
+        prevS = (nodes.length - i) * 0.025;
 
-          const y =
-            usedHeight * (collapsed ? 0.2 : 1) + (collapsed ? 0 : gap * i);
-          node.style.top = `${y}px`;
-          node.style.scale = `${1 - (collapsed ? prevS : 0)}`;
-
-          usedHeight += node.offsetHeight;
-        });
+        const y =
+          usedHeight * (collapsed ? 0.2 : 1) + (collapsed ? 0 : gap * i);
+        node.style.top = `${y}px`;
+        node.style.scale = `${1 - (collapsed ? prevS : 0)}`;
+        usedHeight += node.offsetHeight;
+      });
     }
-  }, [collapsed, toast]);
+  }, [collapsed, toasts]);
 
   return (
     <Fragment>
-      <button
-        onClick={() => setToast((prev) => [...prev, new Date().getTime()])}
-      >
-        notifi
-      </button>
+      <button onClick={() => handleAddToast()}>notifi</button>
       <Box
         ref={containerRef}
         className={classes.toastify}
@@ -98,7 +102,7 @@ const Toastify = () => {
         }}
         onMouseLeave={() => collapseAll()}
       >
-        {toast.map((data) => (
+        {toasts.map((data) => (
           <Toast data={data} onCloseToast={handleCloseToast} key={data} />
         ))}
       </Box>

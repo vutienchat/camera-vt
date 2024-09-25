@@ -9,7 +9,6 @@ const useStyles = makeStyles(() => ({
     position: "relative",
     minHeight: 64,
     marginBottom: 15,
-    borderRadius: 4,
     cursor: "pointer",
     display: "flex",
     justifyContent: "space-between",
@@ -18,7 +17,7 @@ const useStyles = makeStyles(() => ({
     color: "#ffffff",
     boxSizing: "border-box",
     borderRadius: 12,
-    // border: "1px solid #F3CDC8",
+    border: "1px solid #F3CDC8",
   },
 
   toastifyProgressBar: {
@@ -31,6 +30,7 @@ const useStyles = makeStyles(() => ({
     transformOrigin: "left",
     animation: "Toastify__trackProgress__trackProgress linear 5s forwards",
     background: "#F3CDC8",
+    borderRadius: 12,
   },
 }));
 
@@ -38,6 +38,12 @@ const Toast = ({ onCloseToast, data }) => {
   const classes = useStyles();
   const toastRef = useRef(null);
   const [closing, setClosing] = useState(false);
+
+  const handleCloseToast = () => {
+    toastRef.current.classList.remove("toastify-slideIn");
+    toastRef.current.classList.add("toastify-out-right");
+    setClosing(true);
+  };
 
   return (
     <Paper
@@ -48,20 +54,12 @@ const Toast = ({ onCloseToast, data }) => {
       }}
     >
       {data}
-      <Box
-        onClick={() => {
-          onCloseToast(data);
-        }}
-      >
+      <Box onClick={handleCloseToast}>
         <CloseIcon />
       </Box>
       <Box
         className={`${classes.toastifyProgressBar} toastify-progress-bar`}
-        onAnimationEnd={(e) => {
-          toastRef.current.classList.remove("toastify-slideIn");
-          //   toastRef.current.classList.add("toastify-out-right");
-          //   setClosing(true);
-        }}
+        onAnimationEnd={handleCloseToast}
       ></Box>
     </Paper>
   );

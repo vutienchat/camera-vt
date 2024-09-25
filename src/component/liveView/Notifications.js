@@ -9,8 +9,6 @@ import Typography from "@material-ui/core/Typography";
 
 import CustomSwitch from "./CustomSwitch";
 import NotificationsContents from "./NotificationsContents";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 const DATA = [
   {
@@ -82,7 +80,6 @@ const Notifications = () => {
 
   return (
     <Fragment>
-      <ToastContainer />
       <IconButton onClick={handleClick}>
         <Badge badgeContent={4} color="primary">
           <NotificationsNoneIcon />
@@ -103,7 +100,7 @@ const Notifications = () => {
         }}
         PaperProps={{}}
       >
-        <Box sx={{ width: 400 }} onClick={() => toast("Wow so easy!")}>
+        <Box sx={{ width: 400 }}>
           <Box
             sx={{
               display: "flex",
