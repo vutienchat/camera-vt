@@ -1,0 +1,134 @@
+.switch-container {
+  display: flex;
+  align-items: center;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-weight: bold;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #4caf50;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+.text {
+  font-size: 12px;
+  user-select: none;
+}
+
+@keyframes Toastify__trackProgress__trackProgress {
+  0% {
+    transform: scaleX(1);
+  }
+
+  100% {
+    transform: scaleX(0);
+  }
+}
+
+.toastify-out-right {
+  animation: Toastify-OutRight linear 1s forwards;
+}
+
+.toastify-slideIn {
+  animation: Toastify-slideIn linear 0.5s forwards;
+}
+
+@keyframes Toastify-OutRight {
+  20% {
+    opacity: 1;
+    transform: translate3d(20px, 0, 0);
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(2000px, 0, 0);
+  }
+}
+
+@keyframes Toastify-slideIn {
+  from,
+  60%,
+  75%,
+  90%,
+  to {
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+  from {
+    opacity: 0;
+    transform: translate3d(300px, 0, 0);
+  }
+  30% {
+    opacity: 0.8;
+    transform: translate3d(100px, 0, 0);
+  }
+  60% {
+    opacity: 1;
+    transform: translate3d(-25px, 0, 0);
+  }
+  75% {
+    transform: translate3d(10px, 0, 0);
+  }
+  90% {
+    transform: translate3d(-5px, 0, 0);
+  }
+  to {
+    transform: none;
+  }
+}
+
+.toastify__toast--stacked {
+  position: absolute !important;
+  width: 100%;
+  transition-duration: 0.3s !important;
+  transition-property: scale, top !important;
+}
+
+.toastify-toast-item::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: calc(12 * 1px);
+  bottom: 100%;
+  cursor: auto;
+}

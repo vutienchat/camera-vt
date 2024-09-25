@@ -23,6 +23,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import HumanEventDetails from "./HumanEventDetails";
 import Tracking from "./Tracking";
 import FilterDetails from "./FilterDetails";
+import InputNumber from "./InputNumber";
 
 const useStyles = makeStyles((theme) => ({
   DialogContent: {
@@ -447,7 +448,7 @@ const Content = (props) => {
         }}
       >
         <ContentLiveView {...props} />
-        <Dialog open={true} maxWidth={"xl"} scroll="paper">
+        {/* <Dialog open={true} maxWidth={"xl"} scroll="paper">
           <Box
             sx={{
               width: 1464,
@@ -473,18 +474,18 @@ const Content = (props) => {
               <Box className={classes.contentLeft}>abc</Box>
               <Box className={classes.contentRight}>
                 <FilterDetails />
-                {/* <Tracking /> */}
-                {/* <HumanEventDetails /> */}
-                {/* <HistoryDetails /> */}
+                <Box sx={{ width: 96 }}>
+                  <InputNumber
+                    unit="s"
+                    onChange={(value) => {
+                      console.log(value);
+                    }}
+                  />
+                </Box>
               </Box>
             </DialogContent>
           </Box>
-        </Dialog>
-        {/* <Tracking /> */}
-        {/* <HumanEventDetails /> */}
-        {/* <Box>
-          <HistoryDetails />
-        </Box> */}
+        </Dialog> */}
       </Box>
     </React.Fragment>
   );

@@ -25,6 +25,9 @@ import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import PopupLayout from "./PopupLayout";
 import { defaultData } from "./@type";
 import { LiveView2Context } from "../../page/liveView2";
+import Notifications from "./Notifications";
+import Toastify from "./Toastify";
+import "./style.css";
 export const dataHeader = [
   {
     id: 0,
@@ -456,6 +459,7 @@ const HeaderLiveView = (props) => {
               width: 500,
             }}
           >
+            <Toastify />
             <Box
               style={{
                 display: "flex",
@@ -493,6 +497,16 @@ const HeaderLiveView = (props) => {
             >
               <FullscreenIcon style={{ fontSize: 32, color: "#f50057" }} />
               <Typography>Full screen</Typography>
+            </Box>
+            <Box
+              style={{
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Notifications />
             </Box>
           </Box>
         </Box>

@@ -55,7 +55,7 @@ const isSubstring = (value, filter) => {
 };
 
 const areStringsEqual = (value, filter) => {
-  return value ? value === filter : false;
+  return value ? value.toLowerCase() === filter.toLowerCase() : false;
 };
 
 const matchesInArray = (filterArray, value) => {
@@ -64,7 +64,7 @@ const matchesInArray = (filterArray, value) => {
 };
 
 const parseRange = (range) => {
-  const [min, max] = range.split("-").map(Number);
+  const [min, max] = range.split("-").map((r) => parseInt(r));
   return [min, max];
 };
 
@@ -72,23 +72,23 @@ const isInRanges = (value, ranges) => {
   if (!ranges) return true;
   if (!value) return false;
   return ranges.some(([min, max]) => {
-    return value >= min && value <= max;
+    return value >= min && max ? value <= max : true;
   });
 };
 
 const filterDefault = {
-  // age: ["9-12", "13-16"],
+  age: ["9-12", "13-16", "55+"],
   // gender: ["Female", "Other", "UnDetach"],
   // clothing: ["T-Shirt", "Jacket"],
   // clothingColor: ["White", "Gray"],
   // emotion: ["UnHappy", "Other", "UnDetach"],
   // raceRecognition: ["Asian", "Western"],
   // nationality: ["Other", "UnDetach"],
-  // vehicleType: ["Bicycle", "Truck"],
+  // vehicleType: ["Moto"],
   // vehicleModel: ["Sedan", "Crossover"],
-  // vehicleColor: ["Pink", "Purple"],
-  inputHuman: "chat",
-  // inputVehicle: "30A15614",
+  // vehicleColor: ["Pink", "Purple", "silver"],
+  // inputHuman: "chat",
+  inputVehicle: "30L21751",
 };
 
 const FilterDetails = () => {
@@ -105,10 +105,10 @@ const FilterDetails = () => {
 
   useEffect(() => {
     const parsedFilterRangesAge = filters.age && filters.age.map(parseRange);
+    console.log({ parsedFilterRangesAge });
     const data = TRACKING_REAL_TIME.filter((item) => {
       if ([3, 11].includes(item.type)) {
         const subData = JSON.parse(item.stringDescription || "{}");
-        console.log({ subData, item: item.description });
         const bbox =
           item.description &&
           item.description.bboxes &&
@@ -123,7 +123,8 @@ const FilterDetails = () => {
         const inputHumanMatch = isSubstring(bbox.fullName, filters.inputHuman);
         const genderMatch = matchesInArray(filters.gender, bbox.gender);
         const emotionMatch = matchesInArray(filters.emotion, bbox.emotion);
-        const ageMatch = isInRanges(bbox.age, parsedFilterRangesAge);
+        const age = (item.description && item.description.age) || null;
+        const ageMatch = isInRanges(age, parsedFilterRangesAge);
         const raceRecognitionMatch = matchesInArray(
           filters.raceRecognition,
           subBbox.race
@@ -133,6 +134,10 @@ const FilterDetails = () => {
           filters.clothingColor,
           subBbox.clothingColor
         );
+        const nationalityMatch = matchesInArray(
+          filters.nationality,
+          item.nationality
+        );
 
         return (
           inputHumanMatch &&
@@ -141,12 +146,43 @@ const FilterDetails = () => {
           ageMatch &&
           raceRecognitionMatch &&
           clothingMatch &&
-          clothingColorMatch
+          clothingColorMatch &&
+          nationalityMatch
         );
       }
       if ([7, 100, 101, 103, 104].includes(item.type)) {
+        if (![200, 201, 202].includes(item.subType)) {
+          const subData = JSON.parse(item.stringDescription || "{}");
+          const inputHumanMatch = isSubstring(
+            [7, 103, 104].includes(item.type)
+              ? subData.label
+              : subData.licencePlate,
+            filters.inputVehicle
+          );
+          const vehicleTypeMatch = matchesInArray(
+            filters.vehicleType,
+            subData.vehicleType
+          );
+          const vehicleColorMatch = matchesInArray(
+            filters.vehicleColor,
+            subData.vehicleColor
+          );
+          const vehicleModelMatch = matchesInArray(
+            filters.vehicleModel,
+            subData.vehicleModel
+          );
+          return (
+            inputHumanMatch &&
+            vehicleTypeMatch &&
+            vehicleColorMatch &&
+            vehicleModelMatch
+          );
+        }
+      }
+      if (item.type === 102) {
         return true;
       }
+      return false;
     });
     console.log(data);
   }, [filters]);

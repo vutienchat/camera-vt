@@ -260,7 +260,7 @@ export const TRACKING_REAL_TIME = [
     deviceId: "fe2b4b10e2a711ee86bf024209624052",
     videoId: "0",
     description: {
-      age: 0,
+      age: 60,
       gender: null,
       bboxes: [
         {
@@ -323,11 +323,79 @@ export const TRACKING_REAL_TIME = [
     },
 
     stringDescription:
-      '{"bboxes":[{"age":0,"ageBinProb":0.0,"ageProb":0.0,"alignRatio":0.0,"conf":0.69961,"distanceEyesRatio":0.0,"eyeDistance":5.266509056091309,"eyeRatio":0.4248671531677246,"faceProb":0.99967647,"feature":null,"featureDistUnknown":0.0,"finalProb":0.95502543,"fullName":"Phạm Thanh Tuấn","gender":"","genderProb":0.0,"groupType":"1","index":-1,"iou":0.0,"iouUnknonwn":0.0,"isInsideProcessArea":true,"isMask":0,"label":"tuanpt11","labelMapWhileSent":"[]","landmarks":[null,null,null,null,null],"lastFrExecuted":1721121644520,"maxAge":0,"meanOfBrightness":0.0,"minAge":0,"min_distance":0.7751,"noseRatio":0.0,"pairAlign":null,"personId":"1c872a10f65411ee9cb83afdc3cd602b","pitchDeg":0.0,"ratioDistance":0.0,"recognizedDate":{"date":{"day":16,"month":7,"year":2024},"time":{"hour":16,"minute":20,"nano":520000000,"second":44}},"rollDeg":0.0,"searchCountWhileSent":1,"sharpness":0.0,"stdOfBrightness":0.0,"timeProcessFromInitTrack":200,"timeProcessFromInitTrackTotal":200,"trackId_WhileSent":0,"x1":413.64877,"x2":426.04443,"y1":46.948494,"y2":62.471695,"yawDeg":0.0}],"labelMap":"[]","msgId":"7cbdf9f0af9f11eebe6f3afdc3cd602b_fdfr_1721121644520","time":1721121644521,"timeFromInitTrack":200,"trackID":422,"videoId":"7cbdf9f0af9f11eebe6f3afdc3cd602b_fdfr_1721121644517"}',
+      '{"bboxes":[{"age":20,"ageBinProb":0.0,"ageProb":0.0,"alignRatio":0.0,"conf":0.69961,"distanceEyesRatio":0.0,"eyeDistance":5.266509056091309,"eyeRatio":0.4248671531677246,"faceProb":0.99967647,"feature":null,"featureDistUnknown":0.0,"finalProb":0.95502543,"fullName":"Phạm Thanh Tuấn","gender":"","genderProb":0.0,"groupType":"1","index":-1,"iou":0.0,"iouUnknonwn":0.0,"isInsideProcessArea":true,"isMask":0,"label":"tuanpt11","labelMapWhileSent":"[]","landmarks":[null,null,null,null,null],"lastFrExecuted":1721121644520,"maxAge":0,"meanOfBrightness":0.0,"minAge":0,"min_distance":0.7751,"noseRatio":0.0,"pairAlign":null,"personId":"1c872a10f65411ee9cb83afdc3cd602b","pitchDeg":0.0,"ratioDistance":0.0,"recognizedDate":{"date":{"day":16,"month":7,"year":2024},"time":{"hour":16,"minute":20,"nano":520000000,"second":44}},"rollDeg":0.0,"searchCountWhileSent":1,"sharpness":0.0,"stdOfBrightness":0.0,"timeProcessFromInitTrack":200,"timeProcessFromInitTrackTotal":200,"trackId_WhileSent":0,"x1":413.64877,"x2":426.04443,"y1":46.948494,"y2":62.471695,"yawDeg":0.0}],"labelMap":"[]","msgId":"7cbdf9f0af9f11eebe6f3afdc3cd602b_fdfr_1721121644520","time":1721121644521,"timeFromInitTrack":200,"trackID":422,"videoId":"7cbdf9f0af9f11eebe6f3afdc3cd602b_fdfr_1721121644517"}',
     type: 3,
     autoAlarm: false,
     vip: false,
     createDate: 1725007039741,
     lastModified: 1725007039744,
   },
+  {
+    id: "991248f066b911efac4362e5749098c7",
+    deviceId: "d6df63d02eb411ef95bebaf7db86dba7",
+    videoId: "-1",
+    thumbnail: {
+      status: 1,
+      bucketName: "its-event-20240830",
+      objectName: null,
+      fileName:
+        "d6df63d02eb411ef95bebaf7db86dba7/9911fad066b911efac4362e5749098c7.jpg",
+      fileSize: 272901,
+      fileExtension: "jpg",
+      fileURL:
+        "http://ivmscdn.viettel.io/its-event-20240830/d6df63d02eb411ef95bebaf7db86dba7/9911fad066b911efac4362e5749098c7.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240830T102119Z&X-Amz-SignedHeaders=host&X-Amz-Expires=604800&X-Amz-Credential=XSROT83XKOFRFNYV8IYD%2F20240830%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=416c81eb6fc884793940781cf97c0be9665fa8790c70049607d1a3f8952d0e23",
+      fileURLCeph:
+        "http://ivmscdn.viettel.io/its-event-20240830/d6df63d02eb411ef95bebaf7db86dba7/9911fad066b911efac4362e5749098c7.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240830T102119Z&X-Amz-SignedHeaders=host&X-Amz-Expires=604800&X-Amz-Credential=XSROT83XKOFRFNYV8IYD%2F20240830%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=416c81eb6fc884793940781cf97c0be9665fa8790c70049607d1a3f8952d0e23",
+      fileLocalURL: null,
+      fileMinioURL: null,
+      parentId: null,
+      fileURLExpirationDate: "2024-09-06T10:21:19.512+00:00",
+      fileChecksum: "97504afa6493a06c62f303ea89dcabee",
+      fileURLExpired: false,
+    },
+    type: 100,
+    subType: 8,
+    autoAlarm: false,
+    vip: false,
+    fullImageId: "1725013274904_200",
+    cropImageId: "1725013274904_201",
+    detailImageId: "1725013274904_202",
+    parentId: "1725013274904_203",
+    stringDescription:
+      '{"trackId":"5601", "licencePlate":"30L21751", "vehicleType":"car", "vehicleColor":"silver", "plateColor":"white"}',
+    createDate: 1725013279512,
+    lastModified: 1725013279512,
+  },
+  //   {
+  //     "id": "9d47401066b911efbd0a320af853c64f",
+  //     "deviceId": "d6df63d02eb411ef95bebaf7db86dba7",
+  //     "videoId": "-1",
+  //     "thumbnail": {
+  //         "status": 1,
+  //         "bucketName": "its-event-20240830",
+  //         "objectName": null,
+  //         "fileName": "d6df63d02eb411ef95bebaf7db86dba7/9d46f1f066b911efbd0a320af853c64f.jpg",
+  //         "fileSize": 267169,
+  //         "fileExtension": "jpg",
+  //         "fileURL": "http://ivmscdn.viettel.io/its-event-20240830/d6df63d02eb411ef95bebaf7db86dba7/9d46f1f066b911efbd0a320af853c64f.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240830T102126Z&X-Amz-SignedHeaders=host&X-Amz-Expires=604800&X-Amz-Credential=XSROT83XKOFRFNYV8IYD%2F20240830%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=7ae560571a226fa2056254675d39ce6af04ec25296905dec5ac841c48e3f6199",
+  //         "fileURLCeph": "http://ivmscdn.viettel.io/its-event-20240830/d6df63d02eb411ef95bebaf7db86dba7/9d46f1f066b911efbd0a320af853c64f.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240830T102126Z&X-Amz-SignedHeaders=host&X-Amz-Expires=604800&X-Amz-Credential=XSROT83XKOFRFNYV8IYD%2F20240830%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=7ae560571a226fa2056254675d39ce6af04ec25296905dec5ac841c48e3f6199",
+  //         "fileLocalURL": null,
+  //         "fileMinioURL": null,
+  //         "parentId": null,
+  //         "fileURLExpirationDate": "2024-09-06T10:21:26.575+00:00",
+  //         "fileChecksum": "02376d18b5bdbafb480b3de270c2d827",
+  //         "fileURLExpired": false
+  //     },
+  //     "type": 100,
+  //     "subType": 8,
+  //     "autoAlarm": false,
+  //     "vip": false,
+  //     "fullImageId": "1725013264446_200",
+  //     "cropImageId": "1725013264446_201",
+  //     "detailImageId": "1725013264446_202",
+  //     "parentId": "1725013264446_203",
+  //     "stringDescription": "{\"trackId\":\"5597\", \"licencePlate\":\"unknown\", \"vehicleType\":\"moto\", \"vehicleColor\":\"unknown\", \"plateColor\":\"unknown\"}",
+  //     "createDate": 1725013286575,
+  //     "lastModified": 1725013286575
+  // }
 ];
