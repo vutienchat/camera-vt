@@ -1,25 +1,10 @@
-import Box from "@material-ui/core/Box";
-import { makeStyles } from "@material-ui/styles";
 import React, { Fragment, useEffect, useRef, useState } from "react";
+import Box from "@material-ui/core/Box";
 
 import Toast from "./Toast";
-
-const useStyles = makeStyles(() => ({
-  toastify: {
-    zIndex: 9999,
-    "-webkit-transform": "translateZ(9999)",
-    position: "fixed",
-    padding: "4px",
-    width: 320,
-    boxSizing: " border-box",
-    color: "#fff",
-    top: "1em",
-    right: "1em",
-  },
-}));
+import "./toastify.css";
 
 const Toastify = () => {
-  const classes = useStyles();
   const containerRef = useRef(null);
   const [toasts, setToasts] = useState([]);
   const queueRef = useRef([]);
@@ -85,6 +70,7 @@ const Toastify = () => {
           usedHeight * (collapsed ? 0.2 : 1) + (collapsed ? 0 : gap * i);
         node.style.top = `${y}px`;
         node.style.scale = `${1 - (collapsed ? prevS : 0)}`;
+        node.style.zIndex = `${collapsed ? 1 : -y}`;
         usedHeight += node.offsetHeight;
       });
     }
@@ -95,7 +81,7 @@ const Toastify = () => {
       <button onClick={() => handleAddToast()}>notifi</button>
       <Box
         ref={containerRef}
-        className={classes.toastify}
+        className="toastify"
         onMouseEnter={() => {
           setIsCollapsed(false);
           pause();

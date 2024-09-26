@@ -1,14 +1,20 @@
-import React, { Fragment, useState } from "react";
-import NotificationsNoneIcon from "@material-ui/icons/NotificationsNone";
+import React, { Fragment, useRef, useState } from "react";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+import DoneAllIcon from "@material-ui/icons/DoneAll";
+import DvrIcon from "@material-ui/icons/Dvr";
+import CancelPresentationIcon from "@material-ui/icons/CancelPresentation";
+import NotificationsNoneIcon from "@material-ui/icons/NotificationsNone";
+import List from "@material-ui/core/List";
 import Box from "@material-ui/core/Box";
 import Badge from "@material-ui/core/Badge";
 import Popover from "@material-ui/core/Popover";
+import ListItem from "@material-ui/core/ListItem";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 
 import CustomSwitch from "./CustomSwitch";
 import NotificationsContents from "./NotificationsContents";
+import ModalNotificationsSettings from "../ModalNotificationsSettings";
 
 const DATA = [
   {
@@ -66,7 +72,9 @@ const DATA = [
 ];
 
 const Notifications = () => {
+  const notificationsSettigsRef = useRef(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorElShowSetting, setAnchorElShowSetting] = useState(null);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -74,6 +82,10 @@ const Notifications = () => {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleOpenModalNotificationsSettings = () => {
+    notificationsSettigsRef.current.open();
   };
 
   const id = Boolean(anchorEl) ? "simple-popover" : undefined;
@@ -110,9 +122,49 @@ const Notifications = () => {
             }}
           >
             <Typography style={{ fontSize: 21 }}>Notifications</Typography>
-            <IconButton>
+            <IconButton
+              onClick={(event) => {
+                setAnchorElShowSetting(event.currentTarget);
+              }}
+              style={{ outline: "none" }}
+            >
               <MoreHorizIcon />
             </IconButton>
+            <Popover
+              open={Boolean(anchorElShowSetting)}
+              anchorEl={anchorElShowSetting}
+              onClose={() => {
+                setAnchorElShowSetting(null);
+              }}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "center",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "center",
+              }}
+            >
+              <Box style={{ width: 360 }}>
+                <List style={{ padding: 10 }}>
+                  <ListItem button style={{ gap: 8 }}>
+                    <DoneAllIcon /> <Typography>Mark all as read</Typography>
+                  </ListItem>
+                  <ListItem button style={{ gap: 8 }}>
+                    <CancelPresentationIcon />
+                    <Typography>Notification settings</Typography>
+                  </ListItem>
+                  <ListItem
+                    button
+                    style={{ gap: 8 }}
+                    onClick={handleOpenModalNotificationsSettings}
+                  >
+                    <DvrIcon />
+                    <Typography>Open notifications</Typography>
+                  </ListItem>
+                </List>
+              </Box>
+            </Popover>
           </Box>
           <Box
             sx={{
@@ -133,6 +185,7 @@ const Notifications = () => {
           <NotificationsContents contents={DATA} />
         </Box>
       </Popover>
+      <ModalNotificationsSettings ref={notificationsSettigsRef} />
     </Fragment>
   );
 };

@@ -172,7 +172,7 @@ const NotificationsContents = ({ contents }) => {
         <Box style={{ width: 360 }}>
           <List style={{ padding: 10 }}>
             <ListItem button style={{ gap: 8 }}>
-              <DoneAllIcon /> <Typography>Mark all as read</Typography>
+              <DoneAllIcon /> <Typography>Mark as read</Typography>
             </ListItem>
             <ListItem button style={{ gap: 8 }}>
               <CancelPresentationIcon />{" "}
