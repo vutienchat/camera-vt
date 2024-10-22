@@ -11,6 +11,8 @@ import HeatmapInsights from "../page/heatmapInsights";
 import HistoryEvent from "../page/historyEvent";
 import LiveView2 from "../page/liveView2";
 import Device from "../page/device";
+import Notificaions from "../page/notifications";
+import UnitManagement from "../page/unitManagement";
 
 export const routes = [
   { path: "/customer", element: Customer },
@@ -27,4 +29,6 @@ export const routes = [
   { path: "/history-event", element: HistoryEvent },
   { path: "/live-view2", element: LiveView2 },
   { path: "/live-view1", element: LiveView },
+  { path: "/notifications", element: Notificaions },
+  { path: "/unitManagement", element: UnitManagement },
 ];

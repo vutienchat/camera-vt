@@ -3,7 +3,15 @@ import { Route, Routes } from "react-router-dom";
 // import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "./App.css";
 import { routes } from "./routes";
-import { Box } from "@material-ui/core";
+import { Box, createTheme, ThemeProvider } from "@material-ui/core";
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#DD3D4B",
+    },
+  },
+});
 
 function App() {
   useEffect(() => {
@@ -17,14 +25,16 @@ function App() {
 
   return (
     <React.Fragment>
-      <Box style={{ padding: 10 }}>
-        <Routes>
-          {routes.map((r, i) => {
-            const Page = r.element;
-            return <Route key={i} path={r.path} element={<Page />} />;
-          })}
-        </Routes>
-      </Box>
+      <ThemeProvider theme={theme}>
+        <Box>
+          <Routes>
+            {routes.map((r, i) => {
+              const Page = r.element;
+              return <Route key={i} path={r.path} element={<Page />} />;
+            })}
+          </Routes>
+        </Box>
+      </ThemeProvider>
       {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </React.Fragment>
   );
