@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: "0 0 10px 0 rgba(117,115,115,0.16)",
     flex: 1,
     borderRadius: 8,
-    minWidth: 1028,
+    // minWidth: 1028,
   },
   tabs: {
     display: "flex",
@@ -48,14 +48,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 const TABS = ["Department", "Job title", "Shift", "Holidays"];
 
-const ConfigGroupCompany = () => {
+const ConfigGroupCompany = ({ treeNodes }) => {
   const classes = useStyles();
   const [tabActive, setTabActive] = useState(TABS[0]);
 
   const renderContentByTab = () => {
     switch (tabActive) {
       case TABS[0]:
-        return <TableDepartment />;
+        return <TableDepartment treeNodes={treeNodes} />;
       case TABS[1]:
         return "Job title";
       case TABS[2]:
@@ -63,7 +63,7 @@ const ConfigGroupCompany = () => {
       case TABS[3]:
         return "Holidays";
       default:
-        return <TableDepartment />;
+        return <TableDepartment treeNodes={treeNodes} />;
     }
   };
 

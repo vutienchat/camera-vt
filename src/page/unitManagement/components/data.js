@@ -1,4 +1,4 @@
-export const treeNodes = [
+export const TREE_NODES = [
   {
     id: "defbbbb0b34c11eeb6150242bae6ed32",
     parent: "",

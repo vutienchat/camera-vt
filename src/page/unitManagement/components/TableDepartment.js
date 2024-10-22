@@ -15,7 +15,6 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TablePagination from "@material-ui/core/TablePagination";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
-import { treeNodes } from "./data";
 import useFilters from "../utils/filters";
 
 const useStyles = makeStyles({
@@ -40,6 +39,13 @@ const useStyles = makeStyles({
     paddingBlock: 0,
     border: "none",
   },
+  ao: {
+    position: "absolute",
+    top: "100%",
+    left: 0,
+    height: 2,
+    backgroundColor: "#ffffff",
+  },
 });
 
 function buildTree(nodes, parentId = "") {
@@ -48,9 +54,9 @@ function buildTree(nodes, parentId = "") {
     if (node.parent === parentId) {
       const children = buildTree(nodes, node.id);
       if (children.length) {
-        node.children = children; // Gán các nút con
+        node.children = children;
       }
-      result.push(node); // Thêm nút vào kết quả
+      result.push(node);
     }
   });
   return result;
@@ -68,7 +74,7 @@ const getPaginatedData = ({ page, pageSize }, data) => {
   };
 };
 
-const TableDepartment = () => {
+const TableDepartment = ({ treeNodes }) => {
   const classes = useStyles();
   const { filters, onPageChange, onPageSizeChange } = useFilters();
   const [totalPages, setTotalPages] = useState(0);
@@ -88,8 +94,46 @@ const TableDepartment = () => {
   }, [filters]);
 
   useEffect(() => {
-    console.log({ openNodes });
-  }, [openNodes]);
+    onPageChange(1);
+  }, [treeNodes]);
+
+  const handleToggle = (nodeId) => {
+    setOpenNodes((prevOpenNodes) => {
+      const isCurrentlyOpen = prevOpenNodes[nodeId];
+
+      // Function to toggle children nodes
+      const toggleChildren = (nodes, targetId, shouldOpen) => {
+        const result = {};
+        nodes.forEach((node) => {
+          if (node.parent === targetId) {
+            result[node.id] = shouldOpen;
+            if (node.children) {
+              Object.assign(
+                result,
+                toggleChildren(node.children, node.id, shouldOpen)
+              );
+            }
+          }
+        });
+        return result;
+      };
+
+      // If the parent is closing, close all its children
+      if (isCurrentlyOpen) {
+        return {
+          ...prevOpenNodes,
+          [nodeId]: false,
+          ...toggleChildren(treeNodes, nodeId, false),
+        };
+      }
+
+      // Otherwise, just toggle the parent
+      return {
+        ...prevOpenNodes,
+        [nodeId]: !prevOpenNodes[nodeId],
+      };
+    });
+  };
 
   const renderRows = (data, level = 0) => {
     return data.map((node) => (
@@ -98,7 +142,7 @@ const TableDepartment = () => {
           department={node}
           level={level + 1}
           openNodes={openNodes}
-          setOpenNodes={setOpenNodes}
+          onToggle={handleToggle}
         />
         {node.children && renderRows(node.children, level + 1)}
       </Fragment>
@@ -111,11 +155,11 @@ const TableDepartment = () => {
         <Table stickyHeader size="small">
           <TableHead>
             <TableRow>
-              <TableCell>
-                <Typography></Typography>
-              </TableCell>
+              <TableCell
+                style={{ paddingRight: 0, paddingLeft: 0 }}
+              ></TableCell>
               <TableCell style={{ width: "100%" }}>
-                <Typography>Department Name</Typography>
+                <Typography noWrap>Department Name</Typography>
               </TableCell>
               <TableCell>
                 <Typography noWrap>Check-In</Typography>
@@ -178,17 +222,8 @@ const TableDepartment = () => {
 
 export default TableDepartment;
 
-const Row = ({ department, level, openNodes, setOpenNodes }) => {
-  console.log({ level });
+const Row = ({ department, level, openNodes, onToggle }) => {
   const classes = useStyles();
-  const handleToggle = (nodeId, parentId) => {
-    console.log({ nodeId });
-    setOpenNodes((prevOpenNodes) => ({
-      ...prevOpenNodes,
-      [nodeId]: !prevOpenNodes[nodeId],
-      [parentId]: prevOpenNodes[parentId] ? prevOpenNodes[parentId] : false,
-    }));
-  };
 
   const classTableCell =
     openNodes[department.id] || level === 1 || openNodes[department.parent]
@@ -197,32 +232,43 @@ const Row = ({ department, level, openNodes, setOpenNodes }) => {
 
   const isCollapse =
     openNodes[department.id] || level === 1 || openNodes[department.parent];
+
   return (
     <TableRow key={department.id}>
       <TableCell
-        className={classTableCell}
-        style={{ paddingLeft: `${level * 20}px`, paddingRight: 0 }}
+        className={`${classTableCell}`}
+        style={{
+          paddingLeft: `${level * 15}px`,
+          paddingRight: 0,
+          position: "relative",
+        }}
       >
         <Collapse in={isCollapse} timeout="auto" unmountOnExit>
           {Array.isArray(department.children) &&
             department.children.length > 0 && (
-              <IconButton
-                aria-label="expand row"
-                size="small"
-                onClick={() => handleToggle(department.id, department.parent)}
-              >
-                {openNodes[department.id] ? (
-                  <KeyboardArrowUpIcon />
-                ) : (
-                  <KeyboardArrowDownIcon />
-                )}
-              </IconButton>
+              <Fragment>
+                {/* <Box
+                  className={classes.ao}
+                  style={{ width: `${level * 15}px` }}
+                ></Box> */}
+                <IconButton
+                  aria-label="expand row"
+                  size="small"
+                  onClick={() => onToggle(department.id)}
+                >
+                  {openNodes[department.id] ? (
+                    <KeyboardArrowUpIcon />
+                  ) : (
+                    <KeyboardArrowDownIcon />
+                  )}
+                </IconButton>
+              </Fragment>
             )}
         </Collapse>
       </TableCell>
       <TableCell className={classTableCell}>
         <Collapse in={isCollapse} timeout="auto" unmountOnExit>
-          <Typography>{department.text}</Typography>
+          <Typography noWrap>{department.text}</Typography>
         </Collapse>
       </TableCell>
       <TableCell className={classTableCell} align="center">

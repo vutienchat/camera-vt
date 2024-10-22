@@ -35,12 +35,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ListGroupCompany = () => {
+const ListGroupCompany = ({ onChange }) => {
   const classes = useStyles();
   const [selectedIndex, setSelectedIndex] = React.useState(1);
 
   const handleListItemClick = (_, index) => {
     setSelectedIndex(index);
+    onChange();
   };
 
   return (
