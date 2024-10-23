@@ -1,0 +1,135 @@
+.toastify {
+  z-index: 9999;
+  position: fixed;
+  padding: 4px;
+  width: 320px;
+  box-sizing: border-box;
+  color: #fff;
+  top: 1em;
+  right: 1em;
+}
+
+.toastify .toastifyToast {
+  position: relative;
+  min-height: 64px;
+  margin-bottom: 15px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  background-color: #d65745;
+  padding: 15px;
+  color: #ffffff;
+  box-sizing: border-box;
+  border-radius: 8px;
+  border: 1px solid #f3cdc8;
+}
+
+.toastify-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  z-index: 9999;
+  transform-origin: left;
+  animation: Toastify__trackProgress__trackProgress linear 5s forwards;
+  background: #f3cdc8;
+  border-radius: 18px;
+}
+
+.toastify-out-right {
+  animation: Toastify-OutRight linear 1s forwards;
+}
+
+.toastify-slideIn {
+  animation: Toastify-slideIn linear 0.5s forwards;
+}
+
+.toastify__toast--stacked {
+  position: absolute !important;
+  width: 100%;
+  transition-duration: 0.3s !important;
+  transition-property: scale, top !important;
+}
+
+.toastify__toast--stacked::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: calc(12 * 1px);
+  bottom: 100%;
+  cursor: auto;
+}
+
+.toastify__toast--stacked::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  transform: scaleY(3);
+  z-index: -1;
+  transform-origin: bottom;
+}
+
+@keyframes Toastify-OutRight {
+  20% {
+    opacity: 1;
+    transform: translate3d(20px, 0, 0);
+    /* margin-left: 20px; */
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(2000px, 0, 0);
+    /* margin-left: 2000px; */
+  }
+}
+
+@keyframes Toastify-slideIn {
+  from,
+  60%,
+  75%,
+  90%,
+  to {
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+  from {
+    opacity: 0;
+    transform: translate3d(300px, 0, 0);
+    /* margin-left: 300px; */
+  }
+  30% {
+    opacity: 0.8;
+    transform: translate3d(100px, 0, 0);
+    /* margin-left: 100px; */
+  }
+  60% {
+    opacity: 1;
+    transform: translate3d(-25px, 0, 0);
+    /* margin-left: -25px; */
+  }
+  75% {
+    transform: translate3d(10px, 0, 0);
+    /* margin-left: 10px; */
+  }
+  90% {
+    transform: translate3d(-5px, 0, 0);
+    /* margin-left: -5px; */
+  }
+  to {
+    transform: none;
+    /* margin-left: 0; */
+  }
+}
+
+@keyframes Toastify__trackProgress__trackProgress {
+  0% {
+    transform: scaleX(1);
+  }
+
+  100% {
+    transform: scaleX(0);
+  }
+}

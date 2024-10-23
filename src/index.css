@@ -1106,3 +1106,23 @@ a.vtmapgl-ctrl-logo.vtmapgl-compact {
   width: 100%;
   height: 100%;
 }
+
+.map-container-events {
+  height: 100%;
+  width: 100%;
+}
+
+.map-container-events .gm-ui-hover-effect {
+  display: none !important;
+}
+.marker-event {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  transform: translate(-0.6px, -7px);
+  font-weight: 700;
+}

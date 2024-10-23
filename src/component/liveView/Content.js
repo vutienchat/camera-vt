@@ -6,13 +6,54 @@ import React, {
   useEffect,
   useCallback,
 } from "react";
-import { Box, Typography } from "@material-ui/core";
+import {
+  Box,
+  Dialog,
+  DialogContent,
+  Divider,
+  Typography,
+} from "@material-ui/core";
 import { ScreenTask } from ".";
 import GridLayout from "react-grid-layout";
 import { Responsive, WidthProvider } from "react-grid-layout";
 // import "./styles.css";
 import "/node_modules/react-grid-layout/css/styles.css";
 import "/node_modules/react-resizable/css/styles.css";
+import { makeStyles } from "@material-ui/core/styles";
+import HumanEventDetails from "./HumanEventDetails";
+import Tracking from "./Tracking";
+import FilterDetails from "./FilterDetails";
+import InputNumber from "./InputNumber";
+
+const useStyles = makeStyles((theme) => ({
+  DialogContent: {
+    padding: 0,
+    flex: "1 1 auto",
+    position: "relative",
+    display: "flex",
+  },
+  contentLeft: {
+    boxSizing: "border-box",
+    width: 245,
+    position: "sticky",
+    inset: 0,
+    borderRight: "2px solid #E2E2E2",
+    padding: "16px 16px 16px 24px ",
+  },
+  contentRight: {
+    flex: "1 1 auto",
+  },
+  contentRightInfo: {
+    borderLeft: "2px solid #E2E2E2",
+  },
+  infoItem: {
+    display: "flex",
+    justifyContent: "space-between",
+    "&+&": {
+      paddingTop: 10,
+    },
+  },
+}));
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
@@ -392,6 +433,8 @@ const ContentLiveView = memo((props) => {
 const Content = (props) => {
   const { isFullScreen } = props;
 
+  const classes = useStyles();
+
   return (
     <React.Fragment>
       <Box
@@ -405,6 +448,44 @@ const Content = (props) => {
         }}
       >
         <ContentLiveView {...props} />
+        {/* <Dialog open={true} maxWidth={"xl"} scroll="paper">
+          <Box
+            sx={{
+              width: 1464,
+              height: 800,
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <Box>
+              <Typography
+                style={{
+                  fontSize: 21,
+                  fontWeight: "bold",
+                  padding: "20px 0 10px 0",
+                }}
+                align="center"
+              >
+                Human Event Details
+              </Typography>
+              <Divider />
+            </Box>
+            <DialogContent className={classes.DialogContent}>
+              <Box className={classes.contentLeft}>abc</Box>
+              <Box className={classes.contentRight}>
+                <FilterDetails />
+                <Box sx={{ width: 96 }}>
+                  <InputNumber
+                    unit="s"
+                    onChange={(value) => {
+                      console.log(value);
+                    }}
+                  />
+                </Box>
+              </Box>
+            </DialogContent>
+          </Box>
+        </Dialog> */}
       </Box>
     </React.Fragment>
   );
