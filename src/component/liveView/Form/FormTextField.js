@@ -10,6 +10,7 @@ const FormTextField = (props) => {
     required,
     validate,
     defaultValue,
+    InputProps,
     ...rest
   } = props;
 
@@ -36,6 +37,10 @@ const FormTextField = (props) => {
       value={value}
       name={name}
       inputRef={ref}
+      InputProps={{
+        style: { height: "48px" },
+        ...InputProps,
+      }}
       {...rest}
     />
   );

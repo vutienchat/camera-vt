@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Fragment, useMemo, useState } from "react";
 import AddIcon from "@material-ui/icons/Add";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
@@ -7,6 +7,10 @@ import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
 import TableDepartment from "./TableDepartment";
+import TableHolidays from "./TableHolidays";
+import ModalHolidays from "./Modals/ModalHolidays";
+import sleep from "../../../utils/sleep";
+import ModalDepartment from "./Modals/ModalDepartment";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -51,47 +55,170 @@ const TABS = ["Department", "Job title", "Shift", "Holidays"];
 const ConfigGroupCompany = ({ treeNodes }) => {
   const classes = useStyles();
   const [tabActive, setTabActive] = useState(TABS[0]);
+  const [openModalHolidays, setOpenModalHolidays] = useState(false);
+  const [openModalDepartment, setOpenModalDepartment] = useState(false);
+  const [initialDataEdit, setInitialDataEdit] = useState(null);
+
+  const handleOpenModalAddAndEditHolidays = (holidays) => {
+    setOpenModalHolidays(true);
+    holidays && setInitialDataEdit(holidays);
+  };
+
+  const handleOpenModalAddAndEditDepartment = (department) => {
+    setOpenModalDepartment(true);
+    department && setInitialDataEdit(department);
+  };
 
   const renderContentByTab = () => {
     switch (tabActive) {
       case TABS[0]:
-        return <TableDepartment treeNodes={treeNodes} />;
+        return {
+          content: <TableDepartment treeNodes={treeNodes} />,
+          button: (
+            <Button variant="contained" color="primary" startIcon={<AddIcon />}>
+              New Department
+            </Button>
+          ),
+        };
       case TABS[1]:
         return "Job title";
       case TABS[2]:
         return "Shift";
       case TABS[3]:
-        return "Holidays";
+        return <TableHolidays />;
       default:
-        return <TableDepartment treeNodes={treeNodes} />;
+        return {
+          content: <TableDepartment treeNodes={treeNodes} />,
+          button: (
+            <Button variant="contained" color="primary" startIcon={<AddIcon />}>
+              New Department
+            </Button>
+          ),
+        };
     }
   };
 
+  const contents = useMemo(() => {
+    switch (tabActive) {
+      case TABS[0]:
+        return {
+          content: (
+            <TableDepartment
+              treeNodes={treeNodes}
+              onOpenModalAddAndEditDepartment={
+                handleOpenModalAddAndEditDepartment
+              }
+            />
+          ),
+          button: (
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<AddIcon />}
+              onClick={() => {
+                handleOpenModalAddAndEditDepartment();
+              }}
+            >
+              New Department
+            </Button>
+          ),
+        };
+      case TABS[1]:
+        return {
+          content: <TableDepartment treeNodes={treeNodes} />,
+          button: (
+            <Button variant="contained" color="primary" startIcon={<AddIcon />}>
+              New Job Title
+            </Button>
+          ),
+        };
+      case TABS[2]:
+        return {
+          content: <TableDepartment treeNodes={treeNodes} />,
+          button: (
+            <Button variant="contained" color="primary" startIcon={<AddIcon />}>
+              New Department
+            </Button>
+          ),
+        };
+      case TABS[3]:
+        return {
+          content: (
+            <TableHolidays
+              onOpenModalAddAndEditHolidays={handleOpenModalAddAndEditHolidays}
+            />
+          ),
+          button: (
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<AddIcon />}
+              onClick={() => handleOpenModalAddAndEditHolidays()}
+            >
+              New Holiday
+            </Button>
+          ),
+        };
+      default:
+        return {
+          content: <TableDepartment treeNodes={treeNodes} />,
+          button: (
+            <Button variant="contained" color="primary" startIcon={<AddIcon />}>
+              New Department
+            </Button>
+          ),
+        };
+    }
+  }, [tabActive, treeNodes]);
+
+  const handleResetInitialDataEdit = async () => {
+    await sleep(100);
+    setInitialDataEdit(null);
+  };
+
   return (
-    <Paper className={classes.root}>
-      <Box>
-        <Box className={classes.tabs}>
-          <Box sx={{ display: "flex" }}>
-            {TABS.map((tab) => (
-              <Box
-                key={tab}
-                className={`${classes.tab} ${tab === tabActive && "selected"}`}
-                onClick={() => {
-                  setTabActive(tab);
-                }}
-              >
-                <Typography component="div">{tab}</Typography>
-              </Box>
-            ))}
+    <Fragment>
+      <Paper className={classes.root}>
+        <Box>
+          <Box className={classes.tabs}>
+            <Box sx={{ display: "flex" }}>
+              {TABS.map((tab) => (
+                <Box
+                  key={tab}
+                  className={`${classes.tab} ${
+                    tab === tabActive && "selected"
+                  }`}
+                  onClick={() => {
+                    setTabActive(tab);
+                  }}
+                >
+                  <Typography component="div">{tab}</Typography>
+                </Box>
+              ))}
+            </Box>
+            {contents.button}
           </Box>
-          <Button variant="contained" color="primary" startIcon={<AddIcon />}>
-            New Department
-          </Button>
+          <Divider />
         </Box>
-        <Divider />
-      </Box>
-      {renderContentByTab()}
-    </Paper>
+        {contents.content}
+      </Paper>
+      <ModalHolidays
+        open={openModalHolidays}
+        initialDataEdit={initialDataEdit}
+        onClose={() => {
+          setOpenModalHolidays(false);
+          handleResetInitialDataEdit();
+        }}
+      />
+      <ModalDepartment
+        open={openModalDepartment}
+        initialDataEdit={initialDataEdit}
+        onClose={() => {
+          setOpenModalDepartment(false);
+          handleResetInitialDataEdit();
+        }}
+      />
+    </Fragment>
   );
 };
 

@@ -13,9 +13,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
 import TableContainer from "@material-ui/core/TableContainer";
 import TablePagination from "@material-ui/core/TablePagination";
-import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
-import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+import ArrowRightIcon from "@material-ui/icons/ArrowRight";
 import useFilters from "../utils/filters";
+import EditIcon from "../icons/EditIcon";
+import DeleteIcon from "../icons/DeleteIcon";
 
 const useStyles = makeStyles({
   TableContainerWrapper: {
@@ -34,6 +36,13 @@ const useStyles = makeStyles({
         fontWeight: "bold",
       },
     },
+    "& .MuiTableBody-root .MuiTableRow-root:hover .MuiTableCell-root": {
+      backgroundColor: "#F6F4F5",
+    },
+    "& .MuiTableBody-root .MuiTableRow-root:hover $rowActios": {
+      display: "flex",
+      backgroundColor: "#F6F4F5",
+    },
   },
   tableCellCollapse: {
     paddingBlock: 0,
@@ -45,6 +54,15 @@ const useStyles = makeStyles({
     left: 0,
     height: 2,
     backgroundColor: "#ffffff",
+  },
+  rowActios: {
+    display: "none",
+    position: "absolute",
+    inset: 0,
+    backgroundColor: "#ffffff",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 1,
   },
 });
 
@@ -74,7 +92,7 @@ const getPaginatedData = ({ page, pageSize }, data) => {
   };
 };
 
-const TableDepartment = ({ treeNodes }) => {
+const TableDepartment = ({ treeNodes, onOpenModalAddAndEditDepartment }) => {
   const classes = useStyles();
   const { filters, onPageChange, onPageSizeChange } = useFilters();
   const [totalPages, setTotalPages] = useState(0);
@@ -91,10 +109,12 @@ const TableDepartment = ({ treeNodes }) => {
     setTotalPages(totalPages);
     setListDepartment(data);
     setTotalItem(totalItems);
-  }, [filters]);
+  }, [filters, treeNodes]);
 
   useEffect(() => {
-    onPageChange(1);
+    return () => {
+      onPageChange(1);
+    };
   }, [treeNodes]);
 
   const handleToggle = (nodeId) => {
@@ -143,6 +163,7 @@ const TableDepartment = ({ treeNodes }) => {
           level={level + 1}
           openNodes={openNodes}
           onToggle={handleToggle}
+          onOpenModalAddAndEditDepartment={onOpenModalAddAndEditDepartment}
         />
         {node.children && renderRows(node.children, level + 1)}
       </Fragment>
@@ -222,7 +243,13 @@ const TableDepartment = ({ treeNodes }) => {
 
 export default TableDepartment;
 
-const Row = ({ department, level, openNodes, onToggle }) => {
+const Row = ({
+  department,
+  level,
+  openNodes,
+  onToggle,
+  onOpenModalAddAndEditDepartment,
+}) => {
   const classes = useStyles();
 
   const classTableCell =
@@ -257,9 +284,9 @@ const Row = ({ department, level, openNodes, onToggle }) => {
                   onClick={() => onToggle(department.id)}
                 >
                   {openNodes[department.id] ? (
-                    <KeyboardArrowUpIcon />
+                    <ArrowDropDownIcon />
                   ) : (
-                    <KeyboardArrowDownIcon />
+                    <ArrowRightIcon />
                   )}
                 </IconButton>
               </Fragment>
@@ -291,9 +318,30 @@ const Row = ({ department, level, openNodes, onToggle }) => {
           <Checkbox />
         </Collapse>
       </TableCell>
-      <TableCell className={classTableCell} align="center">
+      <TableCell
+        className={classTableCell}
+        align="center"
+        style={{ position: "relative" }}
+      >
         <Collapse in={isCollapse} timeout="auto" unmountOnExit>
           <Checkbox />
+          <Box className={classes.rowActios}>
+            <IconButton
+              size="small"
+              style={{ marginRight: 24 }}
+              onClick={() => {
+                onOpenModalAddAndEditDepartment({
+                  HolidayDate: "20-10-2024",
+                  holidayName: "VTC",
+                });
+              }}
+            >
+              <EditIcon />
+            </IconButton>
+            <IconButton size="small">
+              <DeleteIcon />
+            </IconButton>
+          </Box>
         </Collapse>
       </TableCell>
     </TableRow>
