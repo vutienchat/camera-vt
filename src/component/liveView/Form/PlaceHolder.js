@@ -12,8 +12,8 @@ const styles = (theme) => ({
   },
 });
 
-const PlaceHolder = ({ classes }) => {
-  return <span className={classes.placeholder}>PlaceHolder</span>;
+const PlaceHolder = ({ classes, children }) => {
+  return <span className={classes.placeholder}>{children}</span>;
 };
 
 export default withStyles(styles)(PlaceHolder);

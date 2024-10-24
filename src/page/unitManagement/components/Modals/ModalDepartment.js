@@ -87,7 +87,7 @@ const ModalDepartment = (props) => {
     >
       <Box
         sx={{
-          width: 580,
+          width: 600,
           padding: "23px  32px 32px",
           boxSizing: "border-box",
         }}

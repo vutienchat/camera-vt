@@ -1,4 +1,4 @@
-import { forwardRef, Fragment, useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useController, useFormContext } from "react-hook-form";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -21,6 +21,7 @@ const FormSelect = (props) => {
     getOptionDisabled,
     onSelect,
     required,
+    PaperProps,
     ...rest
   } = props;
 
@@ -31,13 +32,18 @@ const FormSelect = (props) => {
     fieldState: { error },
   } = useController({ name, control });
 
-  const entries = options.reduce((acc, option, i) => {
-    const value = renderValue(option);
-    const label = renderLabel(option);
-    const disabled = (getOptionDisabled && getOptionDisabled(option)) || false;
-    acc[value] = { value, label, disabled, key: i };
-    return acc;
-  }, {});
+  const entries = useMemo(
+    () =>
+      options.reduce((acc, option, i) => {
+        const value = renderValue(option);
+        const label = renderLabel(option);
+        const disabled =
+          (getOptionDisabled && getOptionDisabled(option)) || false;
+        acc[value] = { value, label, disabled, key: i };
+        return acc;
+      }, {}),
+    [getOptionDisabled, options, renderLabel, renderValue]
+  );
 
   // Rollback
   useEffect(() => {
@@ -69,29 +75,27 @@ const FormSelect = (props) => {
           getContentAnchorEl: null,
           PaperProps: {
             style: {
-              maxHeight: 48 * 4.5,
+              maxHeight: 34 * 10,
             },
+            ...PaperProps,
           },
         }}
         renderValue={(value) => {
           if (!(value in entries)) {
             return <PlaceHolder>{!disabled && placeholder}</PlaceHolder>;
           }
-          return <Fragment>{entries[value].label}</Fragment>;
+          return entries[value].label;
         }}
+        style={{ height: 48 }}
+        variant="outlined"
         {...others}
         {...rest}
-        value={value in entries ? value : -1}
+        value={value in entries ? value : ""}
         onChange={(event) => {
           onChange(event);
           onSelect && onSelect(event.target.value);
         }}
       >
-        {options.length > 0 && placeholder && (
-          <PlainMenuItem value={-1} sx={{ display: "none" }}>
-            {placeholder}
-          </PlainMenuItem>
-        )}
         {Object.keys(entries).map((valueKey) => {
           const { value, label, disabled, key } = entries[valueKey];
           return (
@@ -107,10 +111,5 @@ const FormSelect = (props) => {
     </FormControl>
   );
 };
-
-const PlainMenuItem = forwardRef((props, ref) => {
-  const { selected, ...rest } = props;
-  return <MenuItem ref={ref} disabled selected={false} {...rest} />;
-});
 
 export default FormSelect;

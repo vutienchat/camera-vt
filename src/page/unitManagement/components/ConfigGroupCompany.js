@@ -6,6 +6,8 @@ import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
+
+import FormShift from "./FormShift";
 import TableDepartment from "./TableDepartment";
 import TableHolidays from "./TableHolidays";
 import ModalHolidays from "./Modals/ModalHolidays";
@@ -20,7 +22,6 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: "0 0 10px 0 rgba(117,115,115,0.16)",
     flex: 1,
     borderRadius: 8,
-    // minWidth: 1028,
   },
   tabs: {
     display: "flex",
@@ -69,35 +70,6 @@ const ConfigGroupCompany = ({ treeNodes }) => {
     department && setInitialDataEdit(department);
   };
 
-  const renderContentByTab = () => {
-    switch (tabActive) {
-      case TABS[0]:
-        return {
-          content: <TableDepartment treeNodes={treeNodes} />,
-          button: (
-            <Button variant="contained" color="primary" startIcon={<AddIcon />}>
-              New Department
-            </Button>
-          ),
-        };
-      case TABS[1]:
-        return "Job title";
-      case TABS[2]:
-        return "Shift";
-      case TABS[3]:
-        return <TableHolidays />;
-      default:
-        return {
-          content: <TableDepartment treeNodes={treeNodes} />,
-          button: (
-            <Button variant="contained" color="primary" startIcon={<AddIcon />}>
-              New Department
-            </Button>
-          ),
-        };
-    }
-  };
-
   const contents = useMemo(() => {
     switch (tabActive) {
       case TABS[0]:
@@ -125,7 +97,7 @@ const ConfigGroupCompany = ({ treeNodes }) => {
         };
       case TABS[1]:
         return {
-          content: <TableDepartment treeNodes={treeNodes} />,
+          content: "",
           button: (
             <Button variant="contained" color="primary" startIcon={<AddIcon />}>
               New Job Title
@@ -134,7 +106,7 @@ const ConfigGroupCompany = ({ treeNodes }) => {
         };
       case TABS[2]:
         return {
-          content: <TableDepartment treeNodes={treeNodes} />,
+          content: <FormShift />,
           button: (
             <Button variant="contained" color="primary" startIcon={<AddIcon />}>
               New Department

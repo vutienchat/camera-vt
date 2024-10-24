@@ -1,19 +1,30 @@
-import { Fragment } from "react";
-import Typography from "@mui/material/Typography";
-import FormLabelMui, { formLabelClasses } from "@mui/material/FormLabel";
+import React, { Fragment } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import FormLabelMui from "@material-ui/core/FormLabel";
+import Typography from "@material-ui/core/Typography";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    "& .MuiFormLabel-asterisk": {
+      color: theme.palette.error.main,
+    },
+  },
+}));
 
 const FormLabel = (props) => {
-  const { title, name, children, ...rest } = props;
+  const { title, name, children, className, ...rest } = props;
+  const classes = useStyles();
 
   return (
     <Fragment>
       <FormLabelMui
         sx={{
-          [`& .${formLabelClasses.asterisk}`]: {
+          [`& `]: {
             color: "error.main",
           },
         }}
         htmlFor={name}
+        className={`${classes.root} ${className}`}
         {...rest}
       >
         <Typography

@@ -259,7 +259,8 @@ const Row = ({
 
   const isCollapse =
     openNodes[department.id] || level === 1 || openNodes[department.parent];
-
+  const Check1 = false;
+  const Check2 = false;
   return (
     <TableRow key={department.id}>
       <TableCell
@@ -300,7 +301,10 @@ const Row = ({
       </TableCell>
       <TableCell className={classTableCell} align="center">
         <Collapse in={isCollapse} timeout="auto" unmountOnExit>
-          <Checkbox />
+          <Checkbox
+            indeterminate={Check1 !== Check2}
+            checked={Check1 || Check2}
+          />
         </Collapse>
       </TableCell>
       <TableCell className={classTableCell} align="center">

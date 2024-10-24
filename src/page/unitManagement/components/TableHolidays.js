@@ -74,7 +74,7 @@ const TableHolidays = ({ onOpenModalAddAndEditHolidays }) => {
                 <TableCell style={{ width: "20%" }}>
                   <Typography noWrap>Day</Typography>
                 </TableCell>
-                <TableCell style={{ width: 100 }}></TableCell>
+                <TableCell style={{ width: 120 }}></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

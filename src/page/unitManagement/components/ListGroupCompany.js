@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
     gap: 8,
     minWidth: 0, // Important to prevent horizontal scrolling
   },
+  listItemSelected: {},
 }));
 
 const ListGroupCompany = ({ onChange }) => {
@@ -73,6 +74,11 @@ const ListGroupCompany = ({ onChange }) => {
                 button
                 selected={selectedIndex === index}
                 onClick={(event) => handleListItemClick(event, index)}
+                style={{
+                  ...(selectedIndex === index && {
+                    backgroundColor: "#ec1b2e14",
+                  }),
+                }}
               >
                 <Tooltip title="Delete">
                   <Box className={classes.listItemBox}>

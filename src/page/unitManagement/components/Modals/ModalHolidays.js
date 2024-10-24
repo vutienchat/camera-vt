@@ -14,7 +14,6 @@ import FormLabel from "../FormLabel";
 import Form from "../../../../component/Form";
 import BaseButton from "../../../device/components/BaseButton";
 import FormTextField from "../../../../component/liveView/Form/FormTextField";
-import FormSelect from "../../../../component/liveView/Form/FormSelect";
 
 const schema = yup.object().shape({
   holidayName: yup.string().required().default(""),
@@ -28,26 +27,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-
-const generateTimeOptions = () => {
-  const times = [];
-  let hour = 0;
-  let minute = 30;
-
-  while (hour < 24 || (hour === 23 && minute <= 30)) {
-    const timeLabel = `${hour.toString().padStart(2, "0")}:${minute
-      .toString()
-      .padStart(2, "0")}`;
-    times.push(timeLabel);
-    minute += 30;
-    if (minute >= 60) {
-      minute = 0;
-      hour += 1;
-    }
-  }
-
-  return times;
-};
 
 const ModalHolidays = (props) => {
   const classes = useStyles();
@@ -99,16 +78,6 @@ const ModalHolidays = (props) => {
           </IconButton>
         </Box>
         <Form form={form} onFinish={handleSubmit}>
-          <FormSelect
-            name="startTime"
-            label="Start Time"
-            options={generateTimeOptions()}
-            renderLabel={(option) => option}
-            renderValue={(option) => option}
-            variant="outlined"
-            required
-          />
-
           <FormGroup className={classes.formGroup}>
             <FormLabel
               name="holidayName"
